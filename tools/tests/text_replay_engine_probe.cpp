@@ -7,6 +7,7 @@
 #include "graphics/PhysicalScreen.h"
 #include "graphics/TextReplay.h"
 #include "graphics/DirtyCanvas.h"
+#include "graphics/MemoryImageCache.h"
 #include <vector>
 #include <filesystem>
 #include <fstream>
@@ -20,12 +21,14 @@ extern "C" void pvzh1_text_replay_probe(){
  auto* screen=H1GetPhysicalScreen(device->GetScreenImage());auto* target=screen->Target();
  ImageFont* fonts[]={dynamic_cast<ImageFont*>(FONT_HOUSEOFTERROR28),dynamic_cast<ImageFont*>(FONT_HOUSEOFTERROR16),dynamic_cast<ImageFont*>(FONT_DWARVENTODCRAFT18GREENINSET)};
  for(auto* font:fonts){Check(font!=nullptr,"missing real font");H1TextReplayForget(font);}
- unsigned cases=0;const int alphas[]={0,1,8,9,128,192,239,255};
+ unsigned cases=0;bool sawReducedA8=false;const int alphas[]={0,1,8,9,128,192,239,255};
  for(unsigned frame=0;frame<240;++frame){
-  auto* font=fonts[(frame/8)%3];const Color color(253,245,173,alphas[frame%8]);
-  const std::string text=(frame%2)?"Click on the falling sun to collect it!":"Sun 50, AAVV 0123456789";
+  auto* font=fonts[(frame/8)%3];const bool white=(frame/8)%2;const Color color(white?255:253,white?255:245,white?255:173,alphas[frame%8]);
+  const char* labels[]={"Click on the falling sun to collect it!","Sun 50, AAVV 0123456789","点击收集掉落的阳光！","向日葵 50，豌豆射手"};
+  const std::string text=labels[frame%4];
   std::vector<uint32_t> expected;uint32_t targetDelta=0,logicalDelta=0;
   for(bool fast:{false,true}){
+   H1ImageCacheStorageAlphaTestEnable(fast);
    H1TextReplayTestEnable(fast);auto* pixels=target->GetBits();
    for(unsigned i=0;i<H1ScreenWidth*H1ScreenHeight;++i)pixels[i]=((i%5?255u:0u)<<24)|((i*0x13759bu+frame*0x71933u)&0xffffffu);target->BitsChanged();
    Graphics g(screen);g.mTransX=(frame/24)%2?.375f:0.f;g.mTransY=(frame/48)%2?-.25f:0.f;
@@ -33,6 +36,7 @@ extern "C" void pvzh1_text_replay_probe(){
    const Color old=g.GetColor();const bool oldColorize=g.GetColorizeImages();
    const uint32_t beforeTarget=target->mBitsChangedCount,beforeLogical=screen->mBitsChangedCount;
    font->DrawStringEx(&g,63,333,text,color,nullptr,nullptr);
+   if(fast)for(auto& layer:font->mFontData->mFontLayerList){H1ImageCacheStorageStats stats{};if(layer.mH1CJKFont&&H1ImageCacheGetStorageStats(dynamic_cast<MemoryImage*>((Image*)layer.mImage),&stats)&&stats.bytes&&stats.bytes==size_t(stats.storageWidth)*stats.storageHeight)sawReducedA8=true;}
    const int measured=font->StringWidth(text);
    H1TextReplayTestEnable(false);const int originalWidth=font->StringWidth(text);H1TextReplayTestEnable(fast);
    Check(measured==originalWidth,"cached font metrics changed string width");
@@ -46,6 +50,7 @@ extern "C" void pvzh1_text_replay_probe(){
   }
  }
  Check(pvzh1_text_replay_diagnostic[0]>30,"no warm text replay occurred");
+ Check(sawReducedA8,"no real CJK A8 representation exercised");
  const unsigned hits=pvzh1_text_replay_diagnostic[0],stores=pvzh1_text_replay_diagnostic[2];
  // Font generation invalidation and an optional partial-allocation failure.
  for(auto* font:fonts)H1TextReplayForget(font);
@@ -64,5 +69,5 @@ extern "C" void pvzh1_text_replay_probe(){
  for(auto* item:fonts)H1TextReplayForget(item);
  device->mScreenImage=std::move(saved);H1TextReplayTestEnable(true);
  std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"text-replay-verification.json");
- out<<"{\"passed\":true,\"whole_frame_cases\":"<<cases<<",\"warm_hits\":"<<hits<<",\"captures\":"<<stores<<",\"changing_background\":true,\"alpha_thresholds\":true,\"fractional_translation\":true,\"clip\":true,\"mutation_counts\":true,\"allocation_failure_latched\":true,\"overflow_rejected\":true,\"released_bytes\":0}\n";
+ out<<"{\"passed\":true,\"whole_frame_cases\":"<<cases<<",\"warm_hits\":"<<hits<<",\"captures\":"<<stores<<",\"reduced_A8_vs_ARGB_reference\":true,\"changing_background\":true,\"alpha_thresholds\":true,\"fractional_translation\":true,\"clip\":true,\"mutation_counts\":true,\"allocation_failure_latched\":true,\"overflow_rejected\":true,\"released_bytes\":0}\n";
 }

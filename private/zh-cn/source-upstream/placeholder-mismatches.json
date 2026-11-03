@@ -1,0 +1,276 @@
+{
+  "PEASHOOTER_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Damage:{STAT} normal\n{SHORTLINE}\n{FLAVOR}How can a single plant grow and shoot so many peas so quickly? Peashooter says, \n\"Hard work, commitment, and a healthy, well-balanced breakfast of sunlight and high-fiber \ncarbon dioxide make it all possible.\"",
+    "chinese": "{SHORTLINE}\n{KEYWORD}伤害：{STAT}中等\n{SHORTLINE}\n{FLAVOR}一棵植物，怎么能如此快地生长，并发射如此多的豌豆呢？豌豆射手说：{STAT}\n“努力工作，奉献自己，加上一份阳光，高纤维和二氧化碳均衡搭配，这种健康早餐让一切皆成可能。”",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 1,
+      "{STAT}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 1,
+      "{STAT}": 2,
+      "{FLAVOR}": 1
+    }
+  },
+  "TANGLE_KELP_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Damage:{STAT} massive\n{KEYWORD}Usage:{STAT} single use, on contact\n{AQUATIC}Must be planted in water\n{SHORTLINE}\n{FLAVOR}\"I'm totally invisible,\" Tangle Kelp thinks to himself. \"I'll hide here just below the surface and \nnobody will see me.\" His friends tell him they can see him perfectly well, but he'll never change.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}伤害：{STAT}极高\n{KEYWORD}用法：{STAT}一次性使用，接触后生效\n必须种植在水中\n{SHORTLINE}\n{FLAVOR}“我是完全隐形的，”缠绕水草自己想，“我就藏在水面下，没人会看到我。”他的朋友告诉他，他们可以清楚地看到他。不过缠绕水草似乎不想改变自己的看法。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{AQUATIC}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{FLAVOR}": 1
+    }
+  },
+  "JALAPENO_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Damage:{STAT} massive\n{KEYWORD}Range:{STAT} all zombies in a lane\n{KEYWORD}Usage:{STAT} single use, instant\n{SHORTLINE}\n{FLAVOR}\"NNNNNGGGGGG!!!!!!!!\" Jalapeno says. He's not going to explode, not this time. But soon. Oh, so soon. \nIt's close. He knows it, he can feel it, his whole life's been leading up to this moment.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}伤害：{STAT}极高\n{KEYWORD}范围：{STAT}整条线上的僵尸\n用法：{STAT}一次性使用，立即生效\n{SHORTLINE}\n{FLAVOR}“嘎嘎嘎嘎嘎嘎嘎！！！”火爆辣椒说。他现在不会爆炸，因为还不到时候，不过快了，喔~，快了快了，快到了。是的，他感受到了，他一生都在等待这个时刻！",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 3,
+      "{STAT}": 3,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 3,
+      "{FLAVOR}": 1
+    }
+  },
+  "CABBAGE_PULT_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Damage:{STAT} normal\n{KEYWORD}Range:{STAT} lobbed\n{SHORTLINE}\n{FLAVOR}Cabbage-pult is okay with launching cabbages at zombies. It's what he's paid for, after all, and \nhe's good at it. He just doesn't understand how the zombies get up on the roof in the first place.",
+    "chinese": "{SHORTLINE}\n伤害：{STAT}中等\n范围：{STAT}抛掷\n{SHORTLINE}\n{FLAVOR}卷心菜投手用小卷心菜漂亮地砸僵尸。他以此赚钱，毕竟，他擅长这个。只是首先他不明白僵尸们是怎么爬上屋顶的。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{STAT}": 2,
+      "{FLAVOR}": 1
+    }
+  },
+  "WINTER_MELON_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Damage:{STAT} very heavy\n{KEYWORD}Range:{STAT} lobbed\n{KEYWORD}Firing Speed:{STAT} 1/2x\n{KEYWORD}Special:{STAT} melons damage and freeze nearby enemies on impact\n{KEYWORD}Must be planted on melon-pults\n{SHORTLINE}\n{FLAVOR}Winter Melon tries to calm his nerves. He hears the zombies approach. Will he make it? Will anyone make it?",
+    "chinese": "{SHORTLINE}\n{KEYWORD}伤害：{STAT}非常高\n{KEYWORD}范围：{STAT}投掷\n{KEYWORD}发射速度：{STAT}1/2倍速\n特点：{STAT}击中后造成范围伤害并减速\n{KEYWORD}必须被种植在西瓜投手上\n{SHORTLINE}\n{FLAVOR}冰西瓜试着让自己紧绷的神经冷静下来。他听到僵尸的接近。他能做到么？有人能做到么？",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 5,
+      "{STAT}": 4,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 4,
+      "{STAT}": 4,
+      "{FLAVOR}": 1
+    }
+  },
+  "BUCKETHEAD_ZOMBIE_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Toughness:{STAT} high {1370}\n{KEYMETAL}Weakness:{METAL} magnet-shroom\n{SHORTLINE}\n{FLAVOR}Buckethead Zombie always wore a bucket. Part of it was to assert his uniqueness \nin an uncaring world. Mostly he just forgot it was there in the first place.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度：{STAT}高 {1370}\n{KEYWORD}弱点：{STAT}磁力菇\n{SHORTLINE}\n{FLAVOR}铁桶僵尸经常戴着水桶，部分原因是想让自己在这个冷漠的世界里显得独一无二。但实际上，他经常只是忘记了那铁桶扣在他头上而已。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 1,
+      "{STAT}": 1,
+      "{KEYMETAL}": 1,
+      "{METAL}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{FLAVOR}": 1
+    }
+  },
+  "SCREEN_DOOR_ZOMBIE_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Toughness:{STAT} low {270}\n{KEYWORD}Screen Door Toughness:{STAT} high {1100}\n{KEYWORD}Weakness:{STAT} fume-shroom{METAL} and magnet-shroom{KEYWORD}\n{SHORTLINE}\n{FLAVOR}He got his screen door from the last inexpertly defended home he visited, after he ATE THE HOMEOWNER'S BRAINS.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度：{STAT}低 {270}\n{KEYWORD}铁丝网门强度：{STAT}高{1100}\n{KEYWORD}弱点：{STAT}大喷菇{METAL}和磁力菇\n{SHORTLINE}\n{FLAVOR}铁网门僵尸上次拜访过的房主防守并不专业，在吃掉那房主的脑子后拿走了他家的铁栅门。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 4,
+      "{STAT}": 3,
+      "{METAL}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 3,
+      "{STAT}": 3,
+      "{METAL}": 1,
+      "{FLAVOR}": 1
+    }
+  },
+  "FOOTBALL_ZOMBIE_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Toughness:{STAT} very high {1670}\n{KEYWORD}Speed:{STAT} fast\n{KEYMETAL}Weakness:{METAL} magnet-shroom\n{SHORTLINE}\n{FLAVOR}Football Zombie gives 110 percent whenever he's on the field. He's a team player \nwho delivers both offensively and defensively. He has no idea what a football is.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度：{STAT}很高{1670}\n{KEYWORD}速度：{STAT}快\n{KEYWORD}弱点：{STAT}磁力菇\n{SHORTLINE}\n{FLAVOR}在球场上,橄榄球僵尸表现出110%的激情。作为一名队员，他进攻防守样样在行。虽然他完全不知道橄榄球是什么。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{KEYMETAL}": 1,
+      "{METAL}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 3,
+      "{STAT}": 3,
+      "{FLAVOR}": 1
+    }
+  },
+  "SNORKEL_ZOMBIE_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Toughness:{STAT} low {270}\n{KEYWORD}Special:{STAT} submerges to avoid attacks\n{AQUATIC}Only appears in the pool\n{SHORTLINE}\n{FLAVOR}Zombies don't breathe. They don't need air. So why does Snorkel Zombie need a snorkel to swim underwater?{KEYWORD}\n{FLAVOR}Answer: peer pressure.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度：{STAT}低{270}\n{KEYWORD}特点：{STAT}潜水以避免遭到攻击\n{AQUATIC}只在水池关卡出现\n{SHORTLINE}\n{FLAVOR}僵尸不呼吸。他们不需要空气。那么为什么潜水僵尸需要一套潜水装置来潜水呢？\n{FLAVOR}答案：{STAT} 同行的压力。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 3,
+      "{STAT}": 2,
+      "{AQUATIC}": 1,
+      "{FLAVOR}": 2
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 3,
+      "{AQUATIC}": 1,
+      "{FLAVOR}": 2
+    }
+  },
+  "ZOMBONI_DESCRIPTION": {
+    "english": "{KEYWORD}Toughness:{STAT} high {1350}\n{KEYWORD}Special:{STAT} crushes plants, leaves an ice trail\n{SHORTLINE}\n{FLAVOR}Not to be mistaken for a Zamboni® brand ice resurfacing machine.  Zamboni® and the image of the ice-resurfacing machine are registered trademarks of Frank J. Zamboni & Co., Inc., and \"Zomboni\" is used with permission.  For all your non-zombie-related ice resurfacing needs, visit www.zamboni.com!",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度：{STAT}高{1350}\n{KEYWORD}特点：{STAT}碾压植物，留下冰道\n{SHORTLINE}\n{FLAVOR}不要误会，这不是Zamboni牌浇冰机。Zamboni以及其浇冰机图案都是Frank J， Zamboni & Co，, Inc，的注册商标，\n而雪橇车僵尸们自然已取得授权。如果你有任何与僵尸无关的浇冰需求，请浏览www，zamboni，com！僵尸。",
+    "en_tokens": {
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{SHORTLINE}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{FLAVOR}": 1
+    }
+  },
+  "JACK_IN_THE_BOX_ZOMBIE_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Toughness:{STAT} medium {500}\n{KEYWORD}Speed:{STAT} fast\n{KEYWORD}Special:{STAT} jack-in-the-box explodes\n{KEYMETAL}Weakness:{METAL} magnet-shroom\n{SHORTLINE}\n{FLAVOR}This zombie shivers, not because he's cold but because he's crazy.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度：{STAT}中{500}\n{KEYWORD}速度：{STAT}快\n{KEYWORD}特点：{STAT}打开玩偶匣会爆炸\n{KEYWORD}弱点：{STAT}磁力菇\n{SHORTLINE}\n{FLAVOR}这种僵尸令人不寒而栗，不是因为他的冰冷身躯，而是因为他的疯狂。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 3,
+      "{STAT}": 3,
+      "{KEYMETAL}": 1,
+      "{METAL}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 4,
+      "{STAT}": 4,
+      "{FLAVOR}": 1
+    }
+  },
+  "POGO_ZOMBIE_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Toughness:{STAT} medium {500}\n{KEYWORD}Special:{STAT} hops over plants\n{KEYMETAL}Weakness:{METAL} magnet-shroom\n{SHORTLINE}\n{FLAVOR}Sproing! Sproing! Sproing! That's the sound of a powerful and effective zombie doing what he does best.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度：{STAT}中{500}\n{KEYWORD}特点：{STAT}跃过植物\n{KEYWORD}弱点：{STAT}磁力菇\n{SHORTLINE}\n{FLAVOR}蹦！ 蹦！ 蹦！ 那是蹦蹦僵尸发出的有力且有效的声音。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 2,
+      "{STAT}": 2,
+      "{KEYMETAL}": 1,
+      "{METAL}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 3,
+      "{STAT}": 3,
+      "{FLAVOR}": 1
+    }
+  },
+  "BOSS_DESCRIPTION": {
+    "english": "{SHORTLINE}\n{KEYWORD}Toughness (in Zombot shell):{STAT} extreme\n{SHORTLINE}\n{FLAVOR}Edgar George Zomboss achieved his Doctorate in Thanatology in only two years. Quickly mastering \nthanatological technology, he built his fearsome Zombot and set about establishing absolute dominance of his local subdivision.",
+    "chinese": "{SHORTLINE}\n{KEYWORD}强度（受僵尸机器人保护）：{STAT}极高\n{KEYWORD}\n{FLAVOR}僵尸博士乔治-埃德加只花了两年就获得了死亡学的博士学位。很快就掌握了\n死亡学的技术，他制造了一只恐怖的巨型僵尸机器人，着手建立起一个独裁的地方势力。",
+    "en_tokens": {
+      "{SHORTLINE}": 2,
+      "{KEYWORD}": 1,
+      "{STAT}": 1,
+      "{FLAVOR}": 1
+    },
+    "zh_tokens": {
+      "{SHORTLINE}": 1,
+      "{KEYWORD}": 2,
+      "{STAT}": 1,
+      "{FLAVOR}": 1
+    }
+  },
+  "CRAZY_DAVE_303": {
+    "english": "Crazy Dave's Twiddydinkies is open for business! {MOUTH_SMALL_SMILE}",
+    "chinese": "疯子戴夫的闪闪亮杂货店正式营业了！",
+    "en_tokens": {
+      "{MOUTH_SMALL_SMILE}": 1
+    },
+    "zh_tokens": {}
+  },
+  "CRAZY_DAVE_304": {
+    "english": "Have a look! See if you can't find something you like! {MOUTH_SMALL_SMILE}",
+    "chinese": "来瞧一瞧！你是否找到了一些你喜欢的东西！",
+    "en_tokens": {
+      "{MOUTH_SMALL_SMILE}": 1
+    },
+    "zh_tokens": {}
+  },
+  "CRAZY_DAVE_2000": {
+    "english": "{NO_SOUND}{NO_CLICK}Plant these on your repeaters to turn them into gatling peas! Gatling peas shoot four peas at a time!",
+    "chinese": "{NO_CLICK}把这些种在你的双重射手上，把它变成机枪射手！机枪射手一次能射出4颗豌豆！",
+    "en_tokens": {
+      "{NO_SOUND}": 1,
+      "{NO_CLICK}": 1
+    },
+    "zh_tokens": {
+      "{NO_CLICK}": 1
+    }
+  },
+  "CRAZY_DAVE_2414": {
+    "english": "{SHAKE}Because I'm CRAAAZY!!!!!{MOUTH_BIG_SMILE}",
+    "chinese": "因为我疯了！！！！！{MOUTH_BIG_SMILE}",
+    "en_tokens": {
+      "{SHAKE}": 1,
+      "{MOUTH_BIG_SMILE}": 1
+    },
+    "zh_tokens": {
+      "{MOUTH_BIG_SMILE}": 1
+    }
+  },
+  "CRAZY_DAVE_2502": {
+    "english": "BREAK IT LIKE YOU MEAN IT, HARVEY! {SCREAM}",
+    "chinese": "就按照你的意愿去打破它吧，哈维！",
+    "en_tokens": {
+      "{SCREAM}": 1
+    },
+    "zh_tokens": {}
+  },
+  "CRAZY_DAVE_2601": {
+    "english": "{SHOW_FERTILIZER}I'll give you some fertilizer for stopping by!",
+    "chinese": "我会顺便给你一些化肥的！",
+    "en_tokens": {
+      "{SHOW_FERTILIZER}": 1
+    },
+    "zh_tokens": {}
+  }
+}

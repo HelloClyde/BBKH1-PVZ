@@ -61,8 +61,11 @@ extern "C" void pvzp_present_argb(const uint32_t *pixels,int w,int h){
     volatile uint32_t *out=fn?fn(info,0):nullptr;
     if(!out||info[1]!=480||info[2]!=272||info[3]!=1920||info[5]!=32||!pixels||w<=0||h<=0){pvzp_diagnostic[3]=2;return;}
     static H1PresentationMap mapping;
-    if(!dirtyPresentation.Present(out,pixels,w,h,pointer_x,pointer_y,mapping,h1DirtyCanvas.Presentation(pixels)))
-        H1PresentMapped(out,pixels,w,h,pointer_x,pointer_y,mapping);
+    // H1 is a touch screen: pointer coordinates still drive input, while the
+    // LCD presentation has no mouse/crosshair overlay.
+    constexpr int hiddenPointer=-32768;
+    if(!dirtyPresentation.Present(out,pixels,w,h,hiddenPointer,hiddenPointer,mapping,h1DirtyCanvas.Presentation(pixels)))
+        H1PresentMapped(out,pixels,w,h,hiddenPointer,hiddenPointer,mapping);
     pvzh1_dirty_present_diagnostic[0]=1;
     pvzh1_dirty_present_diagnostic[1]=dirtyPresentation.ResidentBytes();
     pvzh1_dirty_present_diagnostic[2]=dirtyPresentation.fullFrames;

@@ -52,8 +52,8 @@
       "path": "image-metadata.h1x",
       "format": "H1X2 version2, 32-byte logical/physical records",
       "files": 2480,
-      "bytes": 156913,
-      "sha256": "fc092dd43870df16c4fd4856eeffc64d1256955517cc3da2da70807984e8a04f",
+      "bytes": 157348,
+      "sha256": "412570e0ed228f1cd3cd6520c2475e74c02886f3f4557458c464f6d53a94a30c",
       "actual_file_header_comparisons": 2480
     },
     "reanim/zombie_hand.reanim": {
@@ -66,5 +66,7 @@
       "sha256": "8a3565f3fe3a5c5a29f61b39dd9629cd2ed324551d9357018108da19bb05419c",
       "source": "private\\widescreen\\source\\award-outpaint-v1.png"
     }
-  }
+  },
+  "locale": "zh_CN",
+  "localization_manifest": "zh-cn-manifest.json"
 }

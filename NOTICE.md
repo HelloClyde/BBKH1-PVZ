@@ -27,6 +27,16 @@ Plants vs. Zombies 及其原版图像、动画、美术、音乐、声音和字�
 
 SDK 独立位于 `sdk/` 子模块，来源与固定提交见 `SDK.json`，沿用其自身许可证和 NOTICE。本仓库的独立路径入口与资源清单不包含固件/NAND、个人存档或工具链二进制。
 
+## 简体中文文本和界面资源
+
+- 主要来源：[Bamcane/re-plants-vs-zombies](https://github.com/Bamcane/re-plants-vs-zombies)，固定提交 `0f6bbd39302acf69484ba8b3e071724e35cfba17`，`pak/properties/LawnStrings.txt` 和同目录树的中文界面图片。
+- 补充来源：[gonewx/pvz](https://github.com/gonewx/pvz)，固定提交 `897a279082c5e5549b6959eab7f4ae82e8b696b1`，中文文本及带透明通道的原始界面 PNG。
+- 逐图 Git blob 标识、来源路径和文本输入保存在 `private/zh-cn/source-upstream/`；移植中补充和修订的文案位于 `localization/overrides.zh_CN.json`。
+
+这些原版中文资源仍属于其各自权利人，不因来源仓库开放或本项目收录而取得本项目代码的 LGPL 许可。仓库保持私有。
+
+中文点阵字形使用 [Noto CJK](https://github.com/notofonts/noto-cjk) 的 `NotoSansCJKsc-Regular.otf`，固定提交 `f8d157532fbfaeda587e826d4cd5b21a49186f7c`，原始路径 `Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf`。字体文件存于 `assets/fonts/`，遵循 SIL Open Font License 1.1，全文见 `licenses/NotoSansCJK-OFL.txt`。字形离线栅格化后收入共享图集，H1 无需加载 OTF 或运行 FreeType。
+
 ## libxmp
 
 - 来源：<https://github.com/libxmp/libxmp>

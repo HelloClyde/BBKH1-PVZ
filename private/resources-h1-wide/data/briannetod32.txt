@@ -4,11 +4,11 @@ Define CharList
    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
    'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '~', '`',
    '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{',
-   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', 'Á', '¢', '£', '´',
-   '¤', '©', '¨', 'À', 'Ë', 'ç', 'å', 'Ì', '€', '', '®', '‚', 'é', 'ƒ', 'æ', 'è',
-   'í', 'ê', 'ë', 'ì', '¥', '„', 'ñ', 'î', 'ï', 'Í', '…', '¯', 'ô', 'ò', 'ó', '†',
-   '¥', '§', 'ˆ', '‡', '‰', '‹', 'Š', 'Œ', '¾', '', '', '', '', '‘', '“', '’',
-   '”', '•', '¥', '–', '˜', '—', '™', '›', 'š', '¿', '', 'œ', '', 'Ÿ', '¥', 'Ø', 'Û');
+   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', 'Ã', 'Â¢', 'Â£', 'Â´',
+   'Â¤', 'Â©', 'Â¨', 'Ã€', 'Ã‹', 'Ã§', 'Ã¥', 'ÃŒ', 'â‚¬', 'ï¿½', 'Â®', 'â€š', 'Ã©', 'Æ’', 'Ã¦', 'Ã¨',
+   'Ã­', 'Ãª', 'Ã«', 'Ã¬', 'Â¥', 'â€', 'Ã±', 'Ã®', 'Ã¯', 'Ã', 'â€¦', 'Â¯', 'Ã´', 'Ã²', 'Ã³', 'â€ ',
+   'Â¥', 'Â§', 'Ë†', 'â€¡', 'â€°', 'â€¹', 'Å ', 'Å’', 'Â¾', 'ï¿½', 'ï¿½', 'Å½', 'ï¿½', 'â€˜', 'â€œ', 'â€™',
+   'â€', 'â€¢', 'Â¥', 'â€“', 'Ëœ', 'â€”', 'â„¢', 'â€º', 'Å¡', 'Â¿', 'ï¿½', 'Å“', 'Å¾', 'Å¸', 'Â¥', 'Ã˜', 'Ã›');
 
 Define WidthList
  (  23,  26,  26,  21,  25,  23,  29,  25,  10,  23,  27,  25,  27,  23,  25,  22,
@@ -91,7 +91,7 @@ LayerSetImage             Outline 'BrianneTod32Outline';
 LayerSetAscent            Outline 42;
 LayerSetCharWidths        Outline CharList WidthList;
 LayerSetCharWidths        Outline (' ') (11);
-LayerSetCharWidths        Outline ('Ê') (11);
+LayerSetCharWidths        Outline ('ÃŠ') (11);
 LayerSetImageMap          Outline CharList RectList;
 LayerSetCharOffsets       Outline CharList OffsetList;
 LayerSetAscentPadding     Outline 3;
@@ -104,7 +104,7 @@ LayerSetImage             Main 'BrianneTod32';
 LayerSetAscent            Main 42;
 LayerSetCharWidths        Main CharList WidthList;
 LayerSetCharWidths        Main (' ') (11);
-LayerSetCharWidths        Main ('Ê') (11);
+LayerSetCharWidths        Main ('ÃŠ') (11);
 LayerSetImageMap          Main CharList RectList;
 LayerSetCharOffsets       Main CharList OffsetList;
 LayerSetAscentPadding     Main 3;
@@ -112,3 +112,22 @@ LayerSetLineSpacingOffset Main 3;
 LayerSetPointSize         Main 32;
 
 SetDefaultPointSize  32;
+
+CreateLayer H1ZhOutline;
+LayerSetImage H1ZhOutline 'h1zh15o';
+LayerSetAscent H1ZhOutline 42;
+LayerSetPointSize H1ZhOutline 32;
+LayerSetHeight H1ZhOutline 54;
+LayerSetColorMult H1ZhOutline (0.0, 0.0, 0.0, 1.0);
+LayerSetH1CJK H1ZhOutline 'data/h1zh15o.h1f' 6;
+LayerSetAscentPadding H1ZhOutline 3;
+LayerSetLineSpacingOffset H1ZhOutline 3;
+CreateLayer H1ZhMain;
+LayerSetImage H1ZhMain 'h1zh15';
+LayerSetAscent H1ZhMain 42;
+LayerSetPointSize H1ZhMain 32;
+LayerSetHeight H1ZhMain 54;
+LayerSetColorMult H1ZhMain (1.0, 1.0, 1.0, 1.0);
+LayerSetH1CJK H1ZhMain 'data/h1zh15.h1f' 6;
+LayerSetAscentPadding H1ZhMain 3;
+LayerSetLineSpacingOffset H1ZhMain 3;

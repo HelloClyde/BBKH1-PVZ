@@ -1,0 +1,2526 @@
+{
+  "schema": "h1-pvz-zh-cn-1",
+  "original_keys": 1121,
+  "translated_keys": 1121,
+  "extra_UI_keys": 17,
+  "placeholder_and_animation_directives_preserved": true,
+  "localized_images": [
+    {
+      "path": "images/achievements_pedestal.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Achievements_pedestal.webp",
+      "bytes": 18680,
+      "sha256": "bf53a97b17384aaa2719e3c5c6fbc18c44dfcb40def228664516a4c12ed59cbf",
+      "logical": [
+        139,
+        165
+      ],
+      "storage": [
+        63,
+        74
+      ]
+    },
+    {
+      "path": "images/achievements_pedestal_press.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Achievements_pedestal_press.webp",
+      "bytes": 18680,
+      "sha256": "bf6fcfb8339e6fc0eff8469b60d214387301bc88f5b76296504c10ee32050543",
+      "logical": [
+        139,
+        165
+      ],
+      "storage": [
+        63,
+        74
+      ]
+    },
+    {
+      "path": "images/almanac_closebutton.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Almanac_CloseButton.webp",
+      "bytes": 1952,
+      "sha256": "b14022f777c3c04560638c6bdee0b9ecf487739e71fe39c5e59d0f2a41f6f59e",
+      "logical": [
+        89,
+        26
+      ],
+      "storage": [
+        40,
+        12
+      ]
+    },
+    {
+      "path": "images/almanac_closebuttonhighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Almanac_CloseButtonHighlight.webp",
+      "bytes": 1952,
+      "sha256": "cb0ee9fd2c582a0accd1c921021d0c9e5ffe3ee7cd039babe1cf724b6e96447c",
+      "logical": [
+        89,
+        26
+      ],
+      "storage": [
+        40,
+        12
+      ]
+    },
+    {
+      "path": "images/almanac_indexbutton.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Almanac_IndexButton.webp",
+      "bytes": 3584,
+      "sha256": "0d0de475fca366cd4b0760702c081802cc203054a7246a230e56969c948083af",
+      "logical": [
+        164,
+        26
+      ],
+      "storage": [
+        74,
+        12
+      ]
+    },
+    {
+      "path": "images/almanac_indexbuttonhighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Almanac_IndexButtonHighlight.webp",
+      "bytes": 3584,
+      "sha256": "79d0d79f9ac61943cc93f223d05c2168c8c9067e9ec1406d9802270d25e8c634",
+      "logical": [
+        164,
+        26
+      ],
+      "storage": [
+        74,
+        12
+      ]
+    },
+    {
+      "path": "images/challenge_background.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Challenge_Background.webp",
+      "bytes": 291632,
+      "sha256": "8fa4772066275de4081aa8321f543fbfe3384631ff7664a7cde52776f7d7e8b5",
+      "logical": [
+        800,
+        600
+      ],
+      "storage": [
+        360,
+        270
+      ]
+    },
+    {
+      "path": "images/credits_playbutton.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Credits_PlayButton.webp",
+      "bytes": 2948,
+      "sha256": "3bfafcb5a12b3f2d21b1d28ec938977c0720bb8d3a329ee3789b64cd82985ebe",
+      "logical": [
+        59,
+        61
+      ],
+      "storage": [
+        27,
+        27
+      ]
+    },
+    {
+      "path": "images/credits_zombienote.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Credits_ZombieNote.webp",
+      "bytes": 578381,
+      "sha256": "d78d8925133d22d492fa5ddbfaf55f9ca7a5a5aa7fd05531a9474a8319fc68fa",
+      "logical": [
+        537,
+        359
+      ],
+      "storage": [
+        537,
+        359
+      ]
+    },
+    {
+      "path": "images/credits_zombienoteblack.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Credits_ZombieNoteBlack.webp",
+      "bytes": 578381,
+      "sha256": "9d94aacb3c5c0fc644f1578eabfa8a65893b5eab4ef3c03878d07abd4f6a0f80",
+      "logical": [
+        537,
+        359
+      ],
+      "storage": [
+        537,
+        359
+      ]
+    },
+    {
+      "path": "images/pvz_logo.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/PvZ_Logo.jpg",
+      "bytes": 49172,
+      "sha256": "8855e41d7d7be242297903214075ea370eb248938fed61ccd33f13eab120b854",
+      "logical": [
+        700,
+        116
+      ],
+      "storage": [
+        315,
+        52
+      ]
+    },
+    {
+      "path": "images/pvz_logo.h1a",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/PvZ_Logo.jpg",
+      "bytes": 65552,
+      "sha256": "cdf6738e7aef0284aa98fb084b9e47fa6d9e4808541849d509219af1ca36b805",
+      "logical": [
+        700,
+        116
+      ],
+      "storage": [
+        315,
+        52
+      ]
+    },
+    {
+      "path": "images/pvz_logo_.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/PvZ_Logo_.png",
+      "bytes": 49172,
+      "sha256": "08b40f6390eed4497f92d67a1fa5cbf404c49e8efe698a3519bf75b69e701481",
+      "logical": [
+        700,
+        116
+      ],
+      "storage": [
+        315,
+        52
+      ]
+    },
+    {
+      "path": "images/selectorscreen_almanac.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/SelectorScreen_Almanac.webp",
+      "bytes": 8132,
+      "sha256": "92b7afa00ca07faeb0aa2fc39673012bddf8a3dca46d939e61678f90c5fa7331",
+      "logical": [
+        99,
+        99
+      ],
+      "storage": [
+        45,
+        45
+      ]
+    },
+    {
+      "path": "images/selectorscreen_almanachighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/SelectorScreen_AlmanacHighlight.webp",
+      "bytes": 8132,
+      "sha256": "dbf9ef2f4eb9e5ed3751cf936ba273fb04c592e16fc6c3adf9dcb2120ad86cae",
+      "logical": [
+        99,
+        99
+      ],
+      "storage": [
+        45,
+        45
+      ]
+    },
+    {
+      "path": "images/selectorscreen_help1.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/SelectorScreen_Help1.png",
+      "bytes": 912,
+      "sha256": "8dfa5f5260cee590971657357f0098250a0b74ec9a5d3e711d7895e89ed0cd92",
+      "logical": [
+        48,
+        22
+      ],
+      "storage": [
+        22,
+        10
+      ]
+    },
+    {
+      "path": "images/selectorscreen_help2.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/SelectorScreen_Help2.png",
+      "bytes": 912,
+      "sha256": "f8197fa558905f9edb9397f26b102893dce61b0e4c7e1062e1bc6dc34790c876",
+      "logical": [
+        48,
+        22
+      ],
+      "storage": [
+        22,
+        10
+      ]
+    },
+    {
+      "path": "images/selectorscreen_levelnumbers.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/SelectorScreen_LevelNumbers.webp",
+      "bytes": 1760,
+      "sha256": "32b688657eddcb81cb1b35b40bfea7279b424ace6c6e675064a60519212faacf",
+      "logical": [
+        120,
+        17
+      ],
+      "storage": [
+        54,
+        8
+      ]
+    },
+    {
+      "path": "images/selectorscreen_options1.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/SelectorScreen_Options1.png",
+      "bytes": 2048,
+      "sha256": "de8be3f6575084aec4ea8302f2f01bb56038d4db103792de75f99d4f03a5cfb9",
+      "logical": [
+        81,
+        31
+      ],
+      "storage": [
+        36,
+        14
+      ]
+    },
+    {
+      "path": "images/selectorscreen_options2.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/SelectorScreen_Options2.png",
+      "bytes": 2048,
+      "sha256": "97d75e203ac0b3f4940a8181d7739b547d0084722fb4e0a87a38528932362fb4",
+      "logical": [
+        81,
+        31
+      ],
+      "storage": [
+        36,
+        14
+      ]
+    },
+    {
+      "path": "images/selectorscreen_quit1.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/SelectorScreen_Quit1.png",
+      "bytes": 1040,
+      "sha256": "a9bdde6ce2e4537262aca76e92e958c446e2a752fddf6049386c03bb6ce9e114",
+      "logical": [
+        47,
+        27
+      ],
+      "storage": [
+        21,
+        12
+      ]
+    },
+    {
+      "path": "images/selectorscreen_quit2.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/images/SelectorScreen_Quit2.png",
+      "bytes": 1040,
+      "sha256": "09454356ab5a332976817eda11654c09ed5eab4b4c6c80821c532a5325596038",
+      "logical": [
+        47,
+        27
+      ],
+      "storage": [
+        21,
+        12
+      ]
+    },
+    {
+      "path": "images/selectorscreen_store.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/SelectorScreen_Store.webp",
+      "bytes": 9472,
+      "sha256": "3b63dec2b697b586ad30e37809c7adb838c40c75d4f0b80284f495030cf681a5",
+      "logical": [
+        130,
+        89
+      ],
+      "storage": [
+        59,
+        40
+      ]
+    },
+    {
+      "path": "images/selectorscreen_storehighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/SelectorScreen_StoreHighlight.webp",
+      "bytes": 9472,
+      "sha256": "34786d7bc57f92eabb162343c885c6a7f50c953a6d6871b4e7e4bd6346220e48",
+      "logical": [
+        130,
+        89
+      ],
+      "storage": [
+        59,
+        40
+      ]
+    },
+    {
+      "path": "images/selectorscreen_zengarden.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/SelectorScreen_ZenGarden.webp",
+      "bytes": 25144,
+      "sha256": "8903f5c02f19e9c145c066ba48711d1d35ea43d45daf77ff9ae907b4842ebf89",
+      "logical": [
+        191,
+        163
+      ],
+      "storage": [
+        86,
+        73
+      ]
+    },
+    {
+      "path": "images/selectorscreen_zengardenhighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/SelectorScreen_ZenGardenHighlight.webp",
+      "bytes": 25144,
+      "sha256": "0b75611e0c60dd704e17ee608f5fa518d6458d9999a1da3811d224ea27b8dbef",
+      "logical": [
+        191,
+        163
+      ],
+      "storage": [
+        86,
+        73
+      ]
+    },
+    {
+      "path": "images/store_mainmenubutton.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_MainMenuButton.webp",
+      "bytes": 8960,
+      "sha256": "25737945e64c1476cc0f849dd2db7cfec8289d616dfd3f7bed6cc8fc8b9f8cf2",
+      "logical": [
+        138,
+        80
+      ],
+      "storage": [
+        62,
+        36
+      ]
+    },
+    {
+      "path": "images/store_mainmenubuttondown.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_MainMenuButtonDown.webp",
+      "bytes": 8960,
+      "sha256": "0b5cfd9456dd86e8cfc9646aa6a484c8d89e39dd47ef91940906664b2c1cc306",
+      "logical": [
+        138,
+        80
+      ],
+      "storage": [
+        62,
+        36
+      ]
+    },
+    {
+      "path": "images/store_mainmenubuttonhighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_MainMenuButtonHighlight.webp",
+      "bytes": 8960,
+      "sha256": "237509ee14b280e0ec3a22dbcb6b172ab4a0d16c96f27071cc80f74f196b64a8",
+      "logical": [
+        138,
+        80
+      ],
+      "storage": [
+        62,
+        36
+      ]
+    },
+    {
+      "path": "images/store_nextbutton.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_NextButton.webp",
+      "bytes": 9060,
+      "sha256": "8a4eae5514e2870d47689923ea7c4c497dba2209c6b34ea03f7c596c8206bbf1",
+      "logical": [
+        136,
+        83
+      ],
+      "storage": [
+        61,
+        37
+      ]
+    },
+    {
+      "path": "images/store_nextbuttondisabled.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_NextButtonDisabled.webp",
+      "bytes": 9060,
+      "sha256": "5584fe4d5a1bc5e328891cf0af28857a4a42d3aa964298db9fcf7ba9f3e2844d",
+      "logical": [
+        136,
+        83
+      ],
+      "storage": [
+        61,
+        37
+      ]
+    },
+    {
+      "path": "images/store_nextbuttonhighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_NextButtonHighlight.webp",
+      "bytes": 9060,
+      "sha256": "955b85899a887e896d666dc81253df385d74c6811a619d635032373857ffe646",
+      "logical": [
+        136,
+        83
+      ],
+      "storage": [
+        61,
+        37
+      ]
+    },
+    {
+      "path": "images/store_prevbutton.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_PrevButton.webp",
+      "bytes": 5880,
+      "sha256": "a2520a190dc1c2480691438540bb5837c785cc5feb286f466a40d4c0167f0fd2",
+      "logical": [
+        96,
+        75
+      ],
+      "storage": [
+        43,
+        34
+      ]
+    },
+    {
+      "path": "images/store_prevbuttondisabled.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_PrevButtonDisabled.webp",
+      "bytes": 5880,
+      "sha256": "fe00762cf6a57736e52be7c76292d27e7c056fe5287a9f4e37ef5f2ccca7a99a",
+      "logical": [
+        96,
+        75
+      ],
+      "storage": [
+        43,
+        34
+      ]
+    },
+    {
+      "path": "images/store_prevbuttonhighlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_PrevButtonHighlight.webp",
+      "bytes": 5880,
+      "sha256": "4c2d1f92ca06c136ffbc72f7121b6c25ab2095de45fe6bb7d7c501e8cfa7965b",
+      "logical": [
+        96,
+        75
+      ],
+      "storage": [
+        43,
+        34
+      ]
+    },
+    {
+      "path": "images/store_sign.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Store_Sign.webp",
+      "bytes": 51328,
+      "sha256": "19cfc2d5412dc9128a2408b207635dceaa4a8a711369146431fb31bcf8703ecf",
+      "logical": [
+        508,
+        124
+      ],
+      "storage": [
+        229,
+        56
+      ]
+    },
+    {
+      "path": "images/zombiefinalnoteblack.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieFinalNoteBlack.webp",
+      "bytes": 525830,
+      "sha256": "71b1225bb37b3e08a9ff7e4d4605da328a85ea0e7bd05df4fd3a4d0f322fec02",
+      "logical": [
+        546,
+        321
+      ],
+      "storage": [
+        546,
+        321
+      ]
+    },
+    {
+      "path": "images/zombienote.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNote.webp",
+      "bytes": 169376,
+      "sha256": "86ca208cf0e70249c0d43409329d888a4cbaf07c41233854615dd7608cd34600",
+      "logical": [
+        654,
+        427
+      ],
+      "storage": [
+        294,
+        192
+      ]
+    },
+    {
+      "path": "images/zombienote.h1a",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNote.webp",
+      "bytes": 225824,
+      "sha256": "c0ded2a0af88a3ef6e34a88b0501b58fb1052a2f6792fc515014fa710149622d",
+      "logical": [
+        654,
+        427
+      ],
+      "storage": [
+        294,
+        192
+      ]
+    },
+    {
+      "path": "images/zombienote1.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNote1.webp",
+      "bytes": 554216,
+      "sha256": "5b17938ca04bd14eafd065fabc9b3c4f319b33009551d7e6ab9a553ed41f5479",
+      "logical": [
+        537,
+        344
+      ],
+      "storage": [
+        537,
+        344
+      ]
+    },
+    {
+      "path": "images/zombienote2.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNote2.webp",
+      "bytes": 565982,
+      "sha256": "433c2fbdd4bdb9cee0c5065c591535e4a14e140e149a004513a7f37fbb7af951",
+      "logical": [
+        550,
+        343
+      ],
+      "storage": [
+        550,
+        343
+      ]
+    },
+    {
+      "path": "images/zombienote3.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNote3.webp",
+      "bytes": 621674,
+      "sha256": "254123c9998632e5ebb3671913922af4f11b74ab45167d157a621374dd2f4835",
+      "logical": [
+        574,
+        361
+      ],
+      "storage": [
+        574,
+        361
+      ]
+    },
+    {
+      "path": "images/zombienote4.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNote4.webp",
+      "bytes": 614132,
+      "sha256": "b21c7bf9a72bf00379a415f8d0659291f7bb5b06ac81b34050a423cd178f592a",
+      "logical": [
+        575,
+        356
+      ],
+      "storage": [
+        575,
+        356
+      ]
+    },
+    {
+      "path": "images/zombienoteblack1.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNoteBlack1.webp",
+      "bytes": 554216,
+      "sha256": "b1997effef30270cd310c6dcd57d337bfb92f6e46a2b8b3cd9cc10cad2e5a913",
+      "logical": [
+        537,
+        344
+      ],
+      "storage": [
+        537,
+        344
+      ]
+    },
+    {
+      "path": "images/zombienoteblack2.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNoteBlack2.webp",
+      "bytes": 565982,
+      "sha256": "f25c2f1f49d245a49852e0bfcf1657053eccb045829d786e9cc084d771971de5",
+      "logical": [
+        550,
+        343
+      ],
+      "storage": [
+        550,
+        343
+      ]
+    },
+    {
+      "path": "images/zombienoteblack3.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNoteBlack3.webp",
+      "bytes": 621674,
+      "sha256": "d757feaa374c56b1bcc002417d7b80c892a3cfeb9b44dec75faf5cd2466b9847",
+      "logical": [
+        574,
+        361
+      ],
+      "storage": [
+        574,
+        361
+      ]
+    },
+    {
+      "path": "images/zombienoteblack4.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNoteBlack4.webp",
+      "bytes": 614132,
+      "sha256": "546e68edcc0344b9fc1b251ee081188f8b9ada2c1cba94d8adceaf21e628df73",
+      "logical": [
+        575,
+        356
+      ],
+      "storage": [
+        575,
+        356
+      ]
+    },
+    {
+      "path": "images/zombienotehelp.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNoteHelp.webp",
+      "bytes": 512633,
+      "sha256": "5a612704cea273f7281bcef6e3b010ad4301f2b69961d0df184597376583c3b8",
+      "logical": [
+        529,
+        323
+      ],
+      "storage": [
+        529,
+        323
+      ]
+    },
+    {
+      "path": "images/zombienotehelpblack.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNoteHelpBlack.webp",
+      "bytes": 512633,
+      "sha256": "858f64440f0e1e172f0eecd00735d2f99f25c821e8fad48ff2f0ec51c8fe9a31",
+      "logical": [
+        529,
+        323
+      ],
+      "storage": [
+        529,
+        323
+      ]
+    },
+    {
+      "path": "images/zombienotesmall.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNoteSmall.webp",
+      "bytes": 3252,
+      "sha256": "32974d3badb300c80cc5704c25e7d12edddec9d1a47767e77a851f63ce3dc86b",
+      "logical": [
+        78,
+        52
+      ],
+      "storage": [
+        35,
+        23
+      ]
+    },
+    {
+      "path": "images/zombienote_.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/ZombieNote_.webp",
+      "bytes": 169376,
+      "sha256": "f389abb281a603c30c9b21adb6426d8dd931d622ba6a154bd0096390adf4fe8d",
+      "logical": [
+        654,
+        427
+      ],
+      "storage": [
+        294,
+        192
+      ]
+    },
+    {
+      "path": "images/zombiefinalnote.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/Zombiefinalnote.webp",
+      "bytes": 525830,
+      "sha256": "82857e65ab48e32f5deaba6427d1cece0a5c9b48cdcdf1ac2b8b0e6f39b13c13",
+      "logical": [
+        546,
+        321
+      ],
+      "storage": [
+        546,
+        321
+      ]
+    },
+    {
+      "path": "images/acheesements_back_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_back_highlight.webp",
+      "bytes": 3056,
+      "sha256": "0258618e30a79b557bf64bc64d84ec0782ad980d36f1e989c17140b15bdab9f2",
+      "logical": [
+        93,
+        39
+      ],
+      "storage": [
+        42,
+        18
+      ]
+    },
+    {
+      "path": "images/acheesements_bejeweled.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_bejeweled.webp",
+      "bytes": 145472,
+      "sha256": "9ac6e4256fc8c8c44a42ddc085fa00ae530a631d16822cc4d45f77fab1b2c367",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/acheesements_bookworm.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_bookworm.webp",
+      "bytes": 145472,
+      "sha256": "80ab02559447cb3e398ad9317e3b6540f7b3df329cfa430dee0499a97349d750",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/acheesements_china.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_china.webp",
+      "bytes": 145472,
+      "sha256": "22cc3c24d1e06c418c4505a7a67293bc724f5b2106ff1f27ce6171dbd5dcb0f8",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/acheesements_chuzzle.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_chuzzle.webp",
+      "bytes": 145472,
+      "sha256": "249ba559a868ddd9205f82673492004163b1d37a7da26b9df4374616a808e391",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/acheesements_hole_tile.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_hole_tile.webp",
+      "bytes": 145472,
+      "sha256": "1641eda4de033b2d8382274b90273056d721d5748c46ca342e682921e81f98d4",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/acheesements_icons.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_icons.webp",
+      "bytes": 105832,
+      "sha256": "4a0574f4bff2ceae2bbd19295b2c4c0728392a1fdb130f84985528ba1792b46f",
+      "logical": [
+        512,
+        256
+      ],
+      "storage": [
+        230,
+        115
+      ]
+    },
+    {
+      "path": "images/acheesements_more_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_more_button.webp",
+      "bytes": 8888,
+      "sha256": "da23d161380fb32b7774399e1e86a5511b50dc33a9128549246d3d9c9b8b868c",
+      "logical": [
+        92,
+        120
+      ],
+      "storage": [
+        41,
+        54
+      ]
+    },
+    {
+      "path": "images/acheesements_more_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_more_button_highlight.webp",
+      "bytes": 8888,
+      "sha256": "7e977d7ca4daa4cc98bd51f3e6b2442c5b6305f4911c9d35e52752a954024250",
+      "logical": [
+        92,
+        120
+      ],
+      "storage": [
+        41,
+        54
+      ]
+    },
+    {
+      "path": "images/acheesements_more_rock.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_more_rock.webp",
+      "bytes": 8888,
+      "sha256": "a841511519326d87f46d16d728518e18929a63cd03fdeabdff8a23bef81fadb4",
+      "logical": [
+        92,
+        120
+      ],
+      "storage": [
+        41,
+        54
+      ]
+    },
+    {
+      "path": "images/acheesements_peggle.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_peggle.webp",
+      "bytes": 145472,
+      "sha256": "c7ffa1e9a0a019818d412dc83e95ea88333a8caadcb20be870ece0f5cf514a54",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/acheesements_pipe.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_pipe.webp",
+      "bytes": 145472,
+      "sha256": "c5b304bb4d5492ff8cff338a35c5573ac4851c7f9af09dba42ec4ed5c0e31f44",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/acheesements_top_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_top_button.webp",
+      "bytes": 8888,
+      "sha256": "fb26c0143b8d0baeb176b1fadff6cb09b7f5d8a815064b2a1be60b14c7d5de42",
+      "logical": [
+        92,
+        120
+      ],
+      "storage": [
+        41,
+        54
+      ]
+    },
+    {
+      "path": "images/acheesements_top_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_top_button_highlight.webp",
+      "bytes": 8888,
+      "sha256": "8de16aa72f75ef5146b5ccdcbe80c2817634103f9039f06a1f9cf5cc59a68647",
+      "logical": [
+        92,
+        120
+      ],
+      "storage": [
+        41,
+        54
+      ]
+    },
+    {
+      "path": "images/acheesements_zuma.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/acheesements_zuma.webp",
+      "bytes": 145472,
+      "sha256": "1c0ef6e4bbdc1b71b7f0fdd0c09590530a6521f653e10f4051a2ba87301fbe34",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/options_backtogamebutton0.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_backtogamebutton0.webp",
+      "bytes": 29192,
+      "sha256": "537c41a66fd516aabbc971b7778a39a715079558aadc3cdfa45a60051d11476b",
+      "logical": [
+        360,
+        100
+      ],
+      "storage": [
+        162,
+        45
+      ]
+    },
+    {
+      "path": "images/options_backtogamebutton2.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_backtogamebutton2.webp",
+      "bytes": 29192,
+      "sha256": "fc7682f3504dd8599bb9a6ce5fb75fef1c06b49e46b0b2d6f3457ad2970d001b",
+      "logical": [
+        360,
+        100
+      ],
+      "storage": [
+        162,
+        45
+      ]
+    },
+    {
+      "path": "images/options_checkbox0.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_checkbox0.webp",
+      "bytes": 1400,
+      "sha256": "5cfb4904a550d75006c73ce634dc379be78a7b3fbe3ccff96c308ab8cf9843a8",
+      "logical": [
+        42,
+        39
+      ],
+      "storage": [
+        19,
+        18
+      ]
+    },
+    {
+      "path": "images/options_checkbox1.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_checkbox1.webp",
+      "bytes": 1400,
+      "sha256": "c84bbb0ae454115981441ba62f6dfadc0e444e088358cdd722940ccd6ee963fc",
+      "logical": [
+        42,
+        39
+      ],
+      "storage": [
+        19,
+        18
+      ]
+    },
+    {
+      "path": "images/options_menuback.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_menuback.webp",
+      "bytes": 127712,
+      "sha256": "b669731e2ef6f0fd6e41c2afe59a514d2950dcb990a13804b604744a667e8f57",
+      "logical": [
+        423,
+        498
+      ],
+      "storage": [
+        190,
+        224
+      ]
+    },
+    {
+      "path": "images/options_menuback.h1a",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_menuback.webp",
+      "bytes": 170272,
+      "sha256": "4eca46c4a4a93f3afba916a447877ad50177ee55d42905a27ec3b7bf3602ad32",
+      "logical": [
+        423,
+        498
+      ],
+      "storage": [
+        190,
+        224
+      ]
+    },
+    {
+      "path": "images/options_menuback_.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_menuback_.webp",
+      "bytes": 127712,
+      "sha256": "43e6f8d6ed2fd892f28eb922489d0ea19672ff90d21ea4237c884ce700fc59aa",
+      "logical": [
+        423,
+        498
+      ],
+      "storage": [
+        190,
+        224
+      ]
+    },
+    {
+      "path": "images/options_sliderknob2.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_sliderknob2.webp",
+      "bytes": 552,
+      "sha256": "60cdf427f34c4b1abc456a30213ef7ea46bdf6ae55c4db0082b164a08a11f17f",
+      "logical": [
+        22,
+        29
+      ],
+      "storage": [
+        10,
+        13
+      ]
+    },
+    {
+      "path": "images/options_sliderslot.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/options_sliderslot.webp",
+      "bytes": 1252,
+      "sha256": "f5f3755b4ce0bc54c5b6904220ae070c34ef6c673abbdad514b5937100d42a4e",
+      "logical": [
+        135,
+        10
+      ],
+      "storage": [
+        61,
+        5
+      ]
+    },
+    {
+      "path": "images/quickplay_back_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_back_button.webp",
+      "bytes": 1800,
+      "sha256": "6d8887f1516b4b978ab0cbcfed34f003a792dbb59ddeb680d55180ae2d912710",
+      "logical": [
+        76,
+        28
+      ],
+      "storage": [
+        34,
+        13
+      ]
+    },
+    {
+      "path": "images/quickplay_back_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_back_button_highlight.webp",
+      "bytes": 1800,
+      "sha256": "b07fe5d29d645b4ebe28714bd79cbd4a5455f5b5a7892355cbbdd22adcd8eb3a",
+      "logical": [
+        76,
+        28
+      ],
+      "storage": [
+        34,
+        13
+      ]
+    },
+    {
+      "path": "images/quickplay_minigames_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_minigames_button.webp",
+      "bytes": 78440,
+      "sha256": "d3a415d569357e28070830a608b7d4456a919d86026f47d0e0c6f22b1a43503b",
+      "logical": [
+        360,
+        269
+      ],
+      "storage": [
+        162,
+        121
+      ]
+    },
+    {
+      "path": "images/quickplay_minigames_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_minigames_button_highlight.webp",
+      "bytes": 78440,
+      "sha256": "136b3968792bc9d4629e907eba10b55d64e13ba921be71e1d759eee3d35b5fa5",
+      "logical": [
+        360,
+        269
+      ],
+      "storage": [
+        162,
+        121
+      ]
+    },
+    {
+      "path": "images/quickplay_puzzles_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_puzzles_button.webp",
+      "bytes": 54752,
+      "sha256": "646bfecb26682e390251b593bd9d001fe7aa972bf689d99aa1a8e5d248ad046b",
+      "logical": [
+        381,
+        177
+      ],
+      "storage": [
+        171,
+        80
+      ]
+    },
+    {
+      "path": "images/quickplay_puzzles_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_puzzles_button_highlight.webp",
+      "bytes": 54752,
+      "sha256": "d9d59338fa07e91be6d0258a543e41e9c3d951c0b1104e6fd1aeb596c533f174",
+      "logical": [
+        381,
+        177
+      ],
+      "storage": [
+        171,
+        80
+      ]
+    },
+    {
+      "path": "images/quickplay_survival_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_survival_button.webp",
+      "bytes": 100352,
+      "sha256": "1d97e84b02e7bd30140ba2ad72728ad5cbfc541067e8f5c67d1880cd5221fd08",
+      "logical": [
+        488,
+        253
+      ],
+      "storage": [
+        220,
+        114
+      ]
+    },
+    {
+      "path": "images/quickplay_survival_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/quickplay_survival_button_highlight.webp",
+      "bytes": 100352,
+      "sha256": "d6f293708bbe08d8da1dfe29809a0a053dcb04803038f564dc3dd9990c287685",
+      "logical": [
+        488,
+        253
+      ],
+      "storage": [
+        220,
+        114
+      ]
+    },
+    {
+      "path": "images/selectorscreen_achievements_bg.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/selectorscreen_achievements_bg.webp",
+      "bytes": 145472,
+      "sha256": "e6d7d05ba99d3a62456dbbd70b3fd5a7f9351dc476c3546d35dafd630169cd54",
+      "logical": [
+        800,
+        225
+      ],
+      "storage": [
+        360,
+        101
+      ]
+    },
+    {
+      "path": "images/zenshopbutton.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zenshopbutton.webp",
+      "bytes": 5128,
+      "sha256": "6a4639a352293beccde0606c4125e3f52f2735abd985d6b5dfc49d06683832bc",
+      "logical": [
+        109,
+        57
+      ],
+      "storage": [
+        49,
+        26
+      ]
+    },
+    {
+      "path": "images/zenshopbutton_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zenshopbutton_highlight.webp",
+      "bytes": 5128,
+      "sha256": "ef3b219679dfaf0367791179e2f43fbdcad8374df0da427b4713aa078c0571ac",
+      "logical": [
+        109,
+        57
+      ],
+      "storage": [
+        49,
+        26
+      ]
+    },
+    {
+      "path": "images/zombatar_accept_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_accept_button.webp",
+      "bytes": 1616,
+      "sha256": "d118781827a0edfbfde7169aa88fce8f0e0e541b32ea16e2abdb1d4e0c5ed691",
+      "logical": [
+        98,
+        26
+      ],
+      "storage": [
+        44,
+        12
+      ]
+    },
+    {
+      "path": "images/zombatar_accept_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_accept_button_highlight.webp",
+      "bytes": 1616,
+      "sha256": "28f9ec040fbd9cef72b58d9c26d1e38557d8eee2c1bd29fcaf8d2f3004d2ecf3",
+      "logical": [
+        98,
+        26
+      ],
+      "storage": [
+        44,
+        12
+      ]
+    },
+    {
+      "path": "images/zombatar_accessory_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_accessory_button.webp",
+      "bytes": 3416,
+      "sha256": "97bfe8e71058f4ab6576ff93d39dbd3321180e7a9bc24867ef8ff68880751d7a",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_accessory_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_accessory_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "2448952847b3e3777917af34c39980b2a079b20d96be9d97bf58bf553e1c15c9",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_accessory_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_accessory_button_over.webp",
+      "bytes": 3416,
+      "sha256": "2ac12640b54df019eaf4035794fa4e6d74849c7b675ba4ff8756ba2783292c3c",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_back_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_back_button.webp",
+      "bytes": 1616,
+      "sha256": "f3bed2b8a9c1a9fb0b9e593392fdc25b7434c4ad3256a01d1b510127585417e8",
+      "logical": [
+        98,
+        26
+      ],
+      "storage": [
+        44,
+        12
+      ]
+    },
+    {
+      "path": "images/zombatar_back_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_back_button_highlight.webp",
+      "bytes": 1616,
+      "sha256": "1336fab8f44513fe73f4d4d5d7cbf16d7e8852a5fae27f55a1af80cb46e40fbd",
+      "logical": [
+        98,
+        26
+      ],
+      "storage": [
+        44,
+        12
+      ]
+    },
+    {
+      "path": "images/zombatar_backdrops_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_backdrops_button.webp",
+      "bytes": 3416,
+      "sha256": "3c55d7994591da3956a4d7e0853fa5242a316aaedd369bea07654c8cecd90a3c",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_backdrops_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_backdrops_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "98596143466b2539fb79c7328a1bd5866ac7d037e17a0ae05634f79e4fbf06e9",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_backdrops_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_backdrops_button_over.webp",
+      "bytes": 3416,
+      "sha256": "2466c837adb932dd284442ec803b7e968bb7d7ac5df11744491196b840065e17",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_begin_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_begin_button.webp",
+      "bytes": 2592,
+      "sha256": "464767321487d5494143df72799ec5c09dc41d4f0d44d7b4215dcafb94f4e154",
+      "logical": [
+        88,
+        35
+      ],
+      "storage": [
+        40,
+        16
+      ]
+    },
+    {
+      "path": "images/zombatar_begin_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_begin_button_highlight.webp",
+      "bytes": 2592,
+      "sha256": "731de9cd320738d987548072a1b64ff6960fb90028f1486ca1ac13d9b8f82366",
+      "logical": [
+        88,
+        35
+      ],
+      "storage": [
+        40,
+        16
+      ]
+    },
+    {
+      "path": "images/zombatar_clothes_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_clothes_button.webp",
+      "bytes": 3416,
+      "sha256": "018cc8dbf120d0e403c894e3c3f067abe273c10ca76560c62d4ee2837c1c713d",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_clothes_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_clothes_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "d4a34c3af24848c7827e9ffe888b0d7e5d120c49226be81b4349bb3e4d450b28",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_clothes_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_clothes_button_over.webp",
+      "bytes": 3416,
+      "sha256": "ff5dd9d5e3aa8941922a05623b047e0a3f2286029442a9504862299e0ffdf628",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_eyewear_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_eyewear_button.webp",
+      "bytes": 3416,
+      "sha256": "2a59b1127675ea045a90fe1bb442afe065f277aad5f933d00646b8afbac3a335",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_eyewear_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_eyewear_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "d30c61036277a27b176ff2fd494edeee7e6b0cefc7f1a75ae5912e9d699af41b",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_eyewear_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_eyewear_button_over.webp",
+      "bytes": 3416,
+      "sha256": "53d89df49b02f1fb207f7d2fc969ffc55b97a15dd1fe5650db6c2c696b70cc35",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_fhair_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_fhair_button.webp",
+      "bytes": 3416,
+      "sha256": "df4d521ed95191f597a4352a9399fbfb047bc37f6933c33e2f551670442baa79",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_fhair_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_fhair_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "0f1824bb30d0da63eb217bf09fa9b19b7cf33703957345e607a50412f21a5872",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_fhair_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_fhair_button_over.webp",
+      "bytes": 3416,
+      "sha256": "b93aa5910179b62ac387dd692ce3ed77e3e25e8a06ca6da779c88b7553b2cb62",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_finished_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_finished_button.webp",
+      "bytes": 1688,
+      "sha256": "1e055cac7f25c928f9fb137af1ca02001a878492ef89e6ed52f4cc3214e20c2b",
+      "logical": [
+        103,
+        26
+      ],
+      "storage": [
+        46,
+        12
+      ]
+    },
+    {
+      "path": "images/zombatar_finished_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_finished_button_highlight.webp",
+      "bytes": 1688,
+      "sha256": "bdf53631bd8d0e2b79420978841ed107fa0949c6160141781b31db8ed462c334",
+      "logical": [
+        103,
+        26
+      ],
+      "storage": [
+        46,
+        12
+      ]
+    },
+    {
+      "path": "images/zombatar_hair_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_hair_button.webp",
+      "bytes": 3416,
+      "sha256": "ccc41a9d3924559369863b2099651950e0945fd79c3dc4bc3585d5253a009a79",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_hair_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_hair_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "16d1664a541e8094e9351476c83194bca95325310e02c7dfd90d8d0277ef63f2",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_hair_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_hair_button_over.webp",
+      "bytes": 3416,
+      "sha256": "51fe1f3ab78d0344e30e09f340c095e5d7b76b3277f51f0a3d2e06e9e398362b",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_hats_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_hats_button.webp",
+      "bytes": 3416,
+      "sha256": "6f551520d2285c4a38bcb22ad62cc82082d0e2d3e53c67cf35d2f23ae59bda69",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_hats_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_hats_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "cf321511a61dc9b4f45493ab67b7d9ce8295af4c80068f80d44f5871d220f565",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_hats_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_hats_button_over.webp",
+      "bytes": 3416,
+      "sha256": "a6ce4a1ce6fe07b554eba68067edb2f6c14a1b67dc6963da332764b9757d8388",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_logo.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_logo.webp",
+      "bytes": 46400,
+      "sha256": "26bf79ca25b614b08e597ba474375bc98aeae1039487de88e1736d5d7a4c7598",
+      "logical": [
+        357,
+        160
+      ],
+      "storage": [
+        161,
+        72
+      ]
+    },
+    {
+      "path": "images/zombatar_mainmenuback_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_mainmenuback_highlight.webp",
+      "bytes": 8392,
+      "sha256": "f0911204e75fd86fa6f9ab13553d2471f73c587e9c8064a301d479f438228837",
+      "logical": [
+        210,
+        49
+      ],
+      "storage": [
+        95,
+        22
+      ]
+    },
+    {
+      "path": "images/zombatar_newzombie_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_newzombie_button.webp",
+      "bytes": 7592,
+      "sha256": "0e6745299d5962d29973e36a6d31aea177ffcf96de896d9ef626ea031cee9b2b",
+      "logical": [
+        234,
+        39
+      ],
+      "storage": [
+        105,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_newzombie_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_newzombie_button_highlight.webp",
+      "bytes": 7592,
+      "sha256": "f32a2a07c6efc1ab53985ceba24271f90d0af1a26b5c21af185045474cc06269",
+      "logical": [
+        234,
+        39
+      ],
+      "storage": [
+        105,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_next_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_next_button.webp",
+      "bytes": 1052,
+      "sha256": "94567ae5dff85206de40756b83e5b8670390f7cfba95307dc42ec9664b8a51bc",
+      "logical": [
+        33,
+        38
+      ],
+      "storage": [
+        15,
+        17
+      ]
+    },
+    {
+      "path": "images/zombatar_next_button_disabled.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_next_button_disabled.webp",
+      "bytes": 4656,
+      "sha256": "a35d41852a0df871ac130ade6214f2ff755374e81e535ec4313b04b8b242cfdc",
+      "logical": [
+        75,
+        75
+      ],
+      "storage": [
+        34,
+        34
+      ]
+    },
+    {
+      "path": "images/zombatar_next_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_next_button_highlight.webp",
+      "bytes": 1052,
+      "sha256": "81982e27a6343bd77679a201570c6a74d58433e2817afb36e6cd9b1cb9565436",
+      "logical": [
+        33,
+        38
+      ],
+      "storage": [
+        15,
+        17
+      ]
+    },
+    {
+      "path": "images/zombatar_prev_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_prev_button.webp",
+      "bytes": 1052,
+      "sha256": "c20e4d0d30e2b2887437343be54ae72d0a87c545dfc90fef1e45c31f8b83fddd",
+      "logical": [
+        33,
+        38
+      ],
+      "storage": [
+        15,
+        17
+      ]
+    },
+    {
+      "path": "images/zombatar_prev_button_disabled.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_prev_button_disabled.webp",
+      "bytes": 4656,
+      "sha256": "b7ac83e7b7d2b1642f57713eb14e199fc6552b30541dab7ba0e9a2227f45e431",
+      "logical": [
+        75,
+        75
+      ],
+      "storage": [
+        34,
+        34
+      ]
+    },
+    {
+      "path": "images/zombatar_prev_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_prev_button_highlight.webp",
+      "bytes": 1052,
+      "sha256": "e4103eb254d15bc30e2fadc52fb7f2cea6325310ca6fbcf43a0c12226fde1c37",
+      "logical": [
+        33,
+        38
+      ],
+      "storage": [
+        15,
+        17
+      ]
+    },
+    {
+      "path": "images/zombatar_skin_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_skin_button.webp",
+      "bytes": 3416,
+      "sha256": "c65d751c981836bfbb16dbd993713e77a61b0faa4dd5de341f30ebf92a8e573a",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_skin_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_skin_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "8bb72b901637e579c057e18c1d0dbe1819ec34d587fea9e7f28cc6c1355b0ac5",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_tidbits_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_tidbits_button.webp",
+      "bytes": 3416,
+      "sha256": "bd04024619aed2b3b049250ba2fcfe8ba4dca323b280dd850e8e8b72474b5054",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_tidbits_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_tidbits_button_highlight.webp",
+      "bytes": 3416,
+      "sha256": "4a8bae19d63c4ed3d268a4a437b710afde49ad008679fbcd2b7b66b9fb2236e6",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_tidbits_button_over.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_tidbits_button_over.webp",
+      "bytes": 3416,
+      "sha256": "fab4cedba2158df4cf69059abedbc1752b8e1fab91e557bd6b387acefa403600",
+      "logical": [
+        104,
+        39
+      ],
+      "storage": [
+        47,
+        18
+      ]
+    },
+    {
+      "path": "images/zombatar_view_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_view_button.webp",
+      "bytes": 1904,
+      "sha256": "dcafb252d53d162298e85e46d88a1809fa68f6dd796ab32d8680c2eacca8387b",
+      "logical": [
+        115,
+        26
+      ],
+      "storage": [
+        52,
+        12
+      ]
+    },
+    {
+      "path": "images/zombatar_view_button_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/images/zombatar_view_button_highlight.webp",
+      "bytes": 1904,
+      "sha256": "a6bb14493029d72ebb77a9f5190ece4404b230a8d585b7942e19d1bfdf3ede0b",
+      "logical": [
+        115,
+        26
+      ],
+      "storage": [
+        52,
+        12
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_adventure_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Adventure_button.webp",
+      "bytes": 37920,
+      "sha256": "49dd81ca939206eda251a28f94c8e47982ea0050d9c1e3c37bdb2a9329beb9b9",
+      "logical": [
+        329,
+        143
+      ],
+      "storage": [
+        148,
+        64
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_adventure_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Adventure_highlight.webp",
+      "bytes": 37920,
+      "sha256": "63b507cc8d39225205bf7c30326b9c520ee7b137ad83bb73121146162458dbfb",
+      "logical": [
+        329,
+        143
+      ],
+      "storage": [
+        148,
+        64
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_challenges_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Challenges_button.webp",
+      "bytes": 28412,
+      "sha256": "40a70891b316ac7e17938ded47b801d409adbcdd70ce92ee82333840305c2035",
+      "logical": [
+        286,
+        122
+      ],
+      "storage": [
+        129,
+        55
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_challenges_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Challenges_highlight.webp",
+      "bytes": 28412,
+      "sha256": "a0b52b8b9b845b9a1ab9229399447fda240c8bfbdf147063a0e88a2a0ce20587",
+      "logical": [
+        286,
+        122
+      ],
+      "storage": [
+        129,
+        55
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_leaves.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Leaves.webp",
+      "bytes": 12128,
+      "sha256": "cb67e8ac6d45aa2a0e3f769d3becb47aa82681ad6331797be3e25752002ecd35",
+      "logical": [
+        240,
+        62
+      ],
+      "storage": [
+        108,
+        28
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_startadventure_button1.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_StartAdventure_Button1.webp",
+      "bytes": 39368,
+      "sha256": "7ea4ce8fa79dc84e012b417da85d38dd7be520d5e8355b0aaf4c36dc3cd65b32",
+      "logical": [
+        331,
+        146
+      ],
+      "storage": [
+        149,
+        66
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_startadventure_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_StartAdventure_Highlight.webp",
+      "bytes": 39368,
+      "sha256": "9104fe7f6a19d41391b34544c8a4342164a3c85df49cf8a6b33abb9782b4707d",
+      "logical": [
+        331,
+        146
+      ],
+      "storage": [
+        149,
+        66
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_survival_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Survival_button.webp",
+      "bytes": 33872,
+      "sha256": "62c563498a18b5d4965011110c4d5be2330f8061864aac4b582f287f2bf511d4",
+      "logical": [
+        313,
+        133
+      ],
+      "storage": [
+        141,
+        60
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_survival_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Survival_highlight.webp",
+      "bytes": 33872,
+      "sha256": "ae0901b29a203af371dbaeaab18834fad17fb7dace3dd12ff97748399d8c9970",
+      "logical": [
+        313,
+        133
+      ],
+      "storage": [
+        141,
+        60
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_vasebreaker_button.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_Vasebreaker_button.webp",
+      "bytes": 26432,
+      "sha256": "0df0efd1a2e9087d8f16e1633e0235e2ade5f895377f2423c7d06d44fab72f42",
+      "logical": [
+        266,
+        123
+      ],
+      "storage": [
+        120,
+        55
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_woodsign1.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_WoodSign1.webp",
+      "bytes": 35936,
+      "sha256": "e21e1efaea3d831c45298af99876063a68f78f7c241ed7719dfe6416aa2dab0c",
+      "logical": [
+        293,
+        150
+      ],
+      "storage": [
+        132,
+        68
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_woodsign2.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_WoodSign2.webp",
+      "bytes": 16800,
+      "sha256": "f42c71df6a869cf08814af0aa82770456b68b946be2ad29daafa99e82613c5c7",
+      "logical": [
+        291,
+        71
+      ],
+      "storage": [
+        131,
+        32
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_woodsign2_press.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_WoodSign2_press.webp",
+      "bytes": 16800,
+      "sha256": "51b317335a91ca30b148ae581d40ed0b75da6be686e2e0fbf6587f998681857a",
+      "logical": [
+        291,
+        71
+      ],
+      "storage": [
+        131,
+        32
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_woodsign3.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_WoodSign3.webp",
+      "bytes": 18680,
+      "sha256": "4847f2485635b345206ac3a2b395fd1962a6ca4d1cc500643a1318aa799c2413",
+      "logical": [
+        279,
+        83
+      ],
+      "storage": [
+        126,
+        37
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_woodsign3_press.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_WoodSign3_press.webp",
+      "bytes": 18680,
+      "sha256": "c17676dc8c921e9e1860b2573b28b1346752707153004840e9447080db7ed22f",
+      "logical": [
+        279,
+        83
+      ],
+      "storage": [
+        126,
+        37
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_almanac_key_shadow.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_almanac_key_shadow.webp",
+      "bytes": 16232,
+      "sha256": "54e6f57fbf12fbaf430fa1bda405a2dbc3847d1c92cfab2e8e5d2456ae5dc383",
+      "logical": [
+        181,
+        110
+      ],
+      "storage": [
+        81,
+        50
+      ]
+    },
+    {
+      "path": "reanim/selectorscreen_vasebreaker_highlight.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/SelectorScreen_vasebreaker_highlight.webp",
+      "bytes": 26432,
+      "sha256": "6f652344fba33739e4b267e3447a6eec4bd9ef9a3490cf48ebdbccb10652b65c",
+      "logical": [
+        266,
+        123
+      ],
+      "storage": [
+        120,
+        55
+      ]
+    },
+    {
+      "path": "reanim/startplant.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/reanim/StartPlant.png",
+      "bytes": 32432,
+      "sha256": "ce610a7fcd9135ca04558903aea22d941ca8011076f1c7588457a506cd647962",
+      "logical": [
+        300,
+        133
+      ],
+      "storage": [
+        135,
+        60
+      ]
+    },
+    {
+      "path": "reanim/startready.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/reanim/StartReady.png",
+      "bytes": 32432,
+      "sha256": "4eef8cc6d562146ab699d66a3185595b26eee49c6de1f324c16a774ddb2dbdf9",
+      "logical": [
+        300,
+        133
+      ],
+      "storage": [
+        135,
+        60
+      ]
+    },
+    {
+      "path": "reanim/startset.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/reanim/StartSet.png",
+      "bytes": 32432,
+      "sha256": "07f345dfa91ba1bcf6bf7477d8854fb4c18c671382e3b4dbdb0752a3af5f0fe2",
+      "logical": [
+        300,
+        133
+      ],
+      "storage": [
+        135,
+        60
+      ]
+    },
+    {
+      "path": "reanim/zombieswon.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/reanim/ZombiesWon.jpg",
+      "bytes": 160814,
+      "sha256": "d39ca8e4ec774d0441fad7dcd5f07c35a73a8e9460d0b05176bee3c2778de7ed",
+      "logical": [
+        564,
+        468
+      ],
+      "storage": [
+        254,
+        211
+      ]
+    },
+    {
+      "path": "reanim/zombieswon.h1a",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/reanim/ZombiesWon.jpg",
+      "bytes": 214408,
+      "sha256": "3bf722fcb428c022ab668a2577d8a64a8040aba0644d3dffeb07dd19a7918dc9",
+      "logical": [
+        564,
+        468
+      ],
+      "storage": [
+        254,
+        211
+      ]
+    },
+    {
+      "path": "reanim/zombieswonscreen.h1i",
+      "source": "private/zh-cn/source-upstream/bamcane/reanim/ZombiesWonScreen.webp",
+      "bytes": 228,
+      "sha256": "2607ff727c27919aaec17da673fe6ce6ed6ee964f06e6f734066f8b2beddb953",
+      "logical": [
+        16,
+        16
+      ],
+      "storage": [
+        7,
+        7
+      ]
+    },
+    {
+      "path": "reanim/zombieswon_.h1i",
+      "source": "private/zh-cn/source-upstream/gonewx/assets/reanim/ZombiesWon_.png",
+      "bytes": 160814,
+      "sha256": "e4bc9aca42ee264098882fb1f712e6d8ba5d7e1358ecaff01f59bdce7c455dad",
+      "logical": [
+        564,
+        468
+      ],
+      "storage": [
+        254,
+        211
+      ]
+    }
+  ],
+  "fonts": {
+    "glyphs": 1416,
+    "characters": "—‘’“”•…、。一三上下不与丑专且世业东丝两严个中丰临为主久么义之乎乏乐乔也习书买乱乳了予争事二于云互五些亡交产享亮亲人什仅仇今介仍从仔他付仙代令以们件价任份仿休优伙会伞传伤伦伴似伽但位低住佑体何余佛作你佳使供依侧侵便促保信修倍倒候值做停健偶像僵儿允兄充兆先光克免入全公六共关兴兵其具典养内册再冒军农冠冬冰决况冷冻准减几凡凶出击分切划列则刚创初删利别到制刷刺刻剂前剧剩剪副割力办功加务动助努励劲势勇包化匙匣匹区医十升半卑单卖南博卜卡卫危即却卷历厉压厌厚原厢去参又叉及友双反发取受变叙口古句另只叫召可台史右叶号司叹吃各合同名后吐向吓吗吞否吧含听启吸吹吻吼呃呆告员呢周味呵呼命咀和咖咪咬品哇哈响哑哟哥哦哪唔唤售唱啃商啊啡啥啦喂善喔喜喵喷嗨嗯嗷嘎嘭嘴嘿噜噢器嚼四回因团园困围固图圆圈土在地场圾均坏坐坑块坚坟坪垃型垒埃埋城域培基堂堆塌塘塞填境墓墙增壁士声壳壶处备复外多夜够大天太夫失头夹奇奉奋奖套女她好如妨始威婆婪子字存孢季学孩它宇守安完官宙定宜宝实宠宣室害家容寂密富寒察对寻导射将小少尔尖尚尝就尸尺尽尾居屋屏展属履山岁川工左巧巨巫差己已币布师希帜帝带帮常幕干平年并幸幻幼庆序应底店度座庭康建开异弃弄弊式引弗弟张弱弹强归当录形影役往待很律得御微德心必忌忍志忘忙忧快念态怎怒怕怖思急性怨怪怯总恋恐恒恢恨息恰恶悉悍悲情惊惑想愈愉意感愿慌慎慢慧懂懒戏成我或战戴户房所扁手才扎打扔扣执扫扭扮扶批找承技把投抛护报抱担拉拍拒拓拔拖拜拥择括拾拿持按挑挖挡挤挥挺捡换授掉掌排掘接推掷描提握搞搬搭摆摇摔摧摩撑播擅操攒支收改攻放效敌救教敢散敬数敲整文斗料断斯新方施旁旅旋族旗无日早时明易星是显晚普景晴智暂暗暴更曾替最有朋服望期木未末本术朵机朽杀杂权杆束条来杯松板极林枚果枪架柄某柔查栅标栏树栗校株样格栽桃框案桌档桨桩桶梦梯检棋森棵植椒楚榄榨槽模樱橄橇橡檐次欢欧止正此步死殊残段毁母每比毕毛气氧水永求池沉沙没河油治法泡波注泳洁洒洞洲活派浇测济浏浓浪浮海涂消深混淹添清温渴游溅源满滴漂漏演漠潜潮激灌火灭灯灿炬炮炸点烁烂烈烛烟烤烧热焕然照熟爆爬爱爵父爷爽片版牌牙牛物特犯狂狗狡独狮猛猪猫献率玉王玩环现玻珍球理琴瑞璃瓜瓶甚生用由甲申电男画界留略疗疯痴瘦瘫登白的皆皮皱盆益盏监盒盔盖盛目盯盲直相盾眉看真眠眼着睛睡瞅瞧知短石矿码研砰破砸础硬确碍碎碑碟碰碳碾磁示礼社祝神票禁福离秀私种科秘积称移程稍究空穿突窃窗窝立竖站竞竟童端笑第等答签简算管篮簧米类粉粒粗精糊糕糖系素索紧累红纤约级纯纸纽线练组细终绍经结绕给络绝统继续维绷缓编缠缩缸缺罐网罕置美群老考者而耐耳耶聊职聚聪肉肚股肤肥肩肯育胆背胎胜胞胡胰能脆脑脚脱腐腺腾腿自臭至致舍舞般良色艺节花芽苗若苦英茂范茄茸草荐莱莲获菇菊菜菲萝营落著葵蒜藏蘑虑虫虽蛋蜗蜡螺行街衡补表袋被袭裁装西要覆见观规视览觉角解触言警计认讨让训议记讲讶许论设访证识诉试诚话该诫误诱说请诺读谁调谊谢谨豆豌豚象豪贝贞负责败账货质贪购贴贵费贺贼资赌赐赖赚赛赞赢走赶起超越趣足跃跑距跟跨路跳踏踢踩蹈蹦身躯躲车转轮轻载较辆辑输辣辨边达迅过迎运近返还这进远违连迪述迷追退送适逃逆选透途通速造遇道遗遛遭避那邻郁郊部都鄙配酵酷醒采释里重野量金鉴钢钥钮钱钻铁铠铲银链销锁锄锋错锤锹镇长门闪闭问闯闲间闷队防阳阵阶阿附际降限院除险陶陷随隐隔障隧难集雨雪雷雾需震霸青静非靠面韧音页顶顺须顾顿领频颗题颜额颤风飙飞食餐馆首马驱验骑髓高鬼魅魔鱼鲁鸣鸭麻黄黑黠鼠鼹齿龄！（），．：；？",
+    "descriptors": [
+      {
+        "descriptor": "briannetod12.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "briannetod16.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "briannetod32.txt",
+        "glyphs": 1416,
+        "physical_point_size": 15,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 16,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "briannetod32black.txt",
+        "glyphs": 1416,
+        "physical_point_size": 15,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 16,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "continuumbold14.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "continuumbold14outback.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft12.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft15.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft18.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft18brightgreeninset.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft18greeninset.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft18yellow.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft24.txt",
+        "glyphs": 1416,
+        "physical_point_size": 12,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 13,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft36brightgreeninset.txt",
+        "glyphs": 1416,
+        "physical_point_size": 17,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 18,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "dwarventodcraft36greeninset.txt",
+        "glyphs": 1416,
+        "physical_point_size": 17,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 18,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "houseofterror16.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "houseofterror20.txt",
+        "glyphs": 1416,
+        "physical_point_size": 10,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 11,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "houseofterror28.txt",
+        "glyphs": 1416,
+        "physical_point_size": 14,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 15,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "pico129.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      },
+      {
+        "descriptor": "pix118bold.txt",
+        "glyphs": 1416,
+        "physical_point_size": 9,
+        "original_Latin_glyph_metrics_preserved": true,
+        "CJK_line_height_minimum_pixels": 10,
+        "shared_compact_metrics": true,
+        "glyph_objects_created_only_on_use": true
+      }
+    ],
+    "atlases": [
+      {
+        "name": "h1zh09",
+        "baseline": 24,
+        "logical_cell": [
+          29,
+          33
+        ],
+        "size": 9,
+        "style": "normal",
+        "bytes": 280832,
+        "metrics_file": "h1zh09.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh15o",
+        "baseline": 36,
+        "logical_cell": [
+          42,
+          49
+        ],
+        "size": 15,
+        "style": "outline",
+        "bytes": 601952,
+        "metrics_file": "h1zh15o.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh15",
+        "baseline": 36,
+        "logical_cell": [
+          42,
+          49
+        ],
+        "size": 15,
+        "style": "normal",
+        "bytes": 601952,
+        "metrics_file": "h1zh15.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh09o",
+        "baseline": 24,
+        "logical_cell": [
+          29,
+          33
+        ],
+        "size": 9,
+        "style": "outline",
+        "bytes": 280832,
+        "metrics_file": "h1zh09o.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh12",
+        "baseline": 31,
+        "logical_cell": [
+          36,
+          40
+        ],
+        "size": 12,
+        "style": "normal",
+        "bytes": 414752,
+        "metrics_file": "h1zh12.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh17",
+        "baseline": 40,
+        "logical_cell": [
+          47,
+          53
+        ],
+        "size": 17,
+        "style": "normal",
+        "bytes": 725792,
+        "metrics_file": "h1zh17.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh10o",
+        "baseline": 27,
+        "logical_cell": [
+          31,
+          36
+        ],
+        "size": 10,
+        "style": "outline",
+        "bytes": 322592,
+        "metrics_file": "h1zh10o.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh10",
+        "baseline": 27,
+        "logical_cell": [
+          31,
+          36
+        ],
+        "size": 10,
+        "style": "normal",
+        "bytes": 322592,
+        "metrics_file": "h1zh10.h1f",
+        "metrics_bytes": 33992
+      },
+      {
+        "name": "h1zh14",
+        "baseline": 34,
+        "logical_cell": [
+          40,
+          47
+        ],
+        "size": 14,
+        "style": "normal",
+        "bytes": 544352,
+        "metrics_file": "h1zh14.h1f",
+        "metrics_bytes": 33992
+      }
+    ]
+  },
+  "metadata_index": {
+    "path": "image-metadata.h1x",
+    "format": "H1X2 version2, 32-byte logical/physical records",
+    "files": 2489,
+    "bytes": 157348,
+    "sha256": "412570e0ed228f1cd3cd6520c2475e74c02886f3f4557458c464f6d53a94a30c",
+    "actual_file_header_comparisons": 2489
+  },
+  "selector_bundle": {
+    "bytes": 2039728,
+    "sha256": "7d80e98aecc7bfe364f62c4bc9f7ff94d4ec9d3ba3ee6e4af1e09268e4485ad4",
+    "original_vs_replay_checks": 309,
+    "codec_roundtrip_checks": 103
+  }
+}

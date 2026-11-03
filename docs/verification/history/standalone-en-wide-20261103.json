@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "clean_git_checkout": true,
+  "source_commit": "b7f0d52114b301fa428dfc3798345d1dac6d3e94",
+  "sdk_commit": "067fe072477861dfc8949d7b1a55279fb92d2548",
+  "compiled_sources": 176,
+  "toolchain": "GNU MIPS GCC 15.2.0; explicitly reused existing installation",
+  "runtime": "Newlib 4.6.0.20260123 / libstdc++ 15.2.0; explicitly reused already built and audited installation",
+  "runtime_libraries": {
+    "libc.a": "bd1e68e53a86ad744ed4cc9b6af0f9e6591e7c27891420cc915c90eaa1ffae31",
+    "libm.a": "7a5cffa03ef854c124ba8a557fc802e13297fd140313afabf2ccb7c98e5be9e4",
+    "libstdc++.a": "8659215bfde4ef585a9dafa7443ee5f346443f4bb5d22f3e84b36ada4f56925f",
+    "libsupc++.a": "c592e375cc22cdb5c1f5403316e4487981789e5bbbf69afe6386e23976d59442"
+  },
+  "gp_audit_passed": true,
+  "bda_envelope_valid": true,
+  "bda_bytes": 3306052,
+  "bda_sha256": "bb339ae62fa9fdab6596e570c4a1320724d93b3a822adc286c8a1ba4fe03021d",
+  "matches_physical_H1_tested_BDA": true,
+  "full_dependency_bootstrap_rerun": false,
+  "firmware_image_required": false,
+  "command": "python tools/build_widescreen.py --toolchain <existing-GCC-bin> --prefix <existing-runtime-prefix> --jobs 6",
+  "scope": "Clean committed application+SDK rebuild; byte identical to hardware evidence. No new hardware session or dependency bootstrap."
+}

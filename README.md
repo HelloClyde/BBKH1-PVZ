@@ -14,7 +14,7 @@
 
 也支持 `A:\应用\数据\游戏\PVZ\`。程序优先选中 A 盘有效资源根目录，否则选 B 盘；资源与存档整次运行使用同一根目录。要使用 B 盘，应避免 A 盘同时留有旧的有效 PVZ 资源根目录。
 
-触摸直接点击；方向键移动指针，确认键或 Z 点击；Enter 对应原版回车，Esc/返回键对应原版返回。当前游戏文字为英文。
+触摸直接点击；Enter 对应原版回车，Esc/返回键对应原版返回。H1 不绘制鼠标十字光标，选卡、种植预览照常显示。当前版本已汉化文本与界面图片，中文字体和图片均离线处理。
 
 可生成完整 A/B 安装包：
 
@@ -52,6 +52,8 @@ python tools/package_install.py --bda dist/H1PVZPortable.bda
 
 ![主机运行的宽屏奖励页](docs/screenshots/host-award.png)
 
+![主机原始图鉴的中文排版夹具](docs/screenshots/host-almanac-zh-cn.png)
+
 ## 依赖
 
 - 使用成品：H1 / Y100 V1.41，完整运行资源；无需额外固件文件或插件。
@@ -62,22 +64,25 @@ python tools/package_install.py --bda dist/H1PVZPortable.bda
 
 ## 验证
 
-仓库成品及独立目录重新编译的 BDA 均为：
+当前中文成品的 BDA 为：
 
-`bb339ae62fa9fdab6596e570c4a1320724d93b3a822adc286c8a1ba4fe03021d`
+`d424df6de94c95ea1f3112d6f4e750106a6c14f36016b95c94f7ac569074f96e`
 
-真机 20 秒窗口：主菜单 **21.82 FPS**、首关旧存档继续场景 **28.35 FPS**；窗口内没有资源读取。触摸 Menu、B 盘资源载入/存档读回、正常退出与内存释放已检查。完整主机运行通过旧 V4 存档载入、种植、投射物命中、触摸暂停/恢复、奖励页和下一关。未逐项测试全部关卡、模式或高密度战斗。
+当前无光标中文版本的真机 20 秒窗口：主菜单 **22.71 FPS**、首关旧存档继续场景 **28.76 FPS**；窗口内没有资源读取、图片重载或内存申请失败。触摸 Menu、B 盘资源载入/存档读回、正常退出与内存释放已检查。完整主机运行通过旧 V4 存档载入、种植、投射物命中、触摸暂停/恢复、奖励页和下一关。未逐项测试全部关卡、模式或高密度战斗。
 
 记录位于 [docs/verification](docs/verification)，来源与测试范围见 [宽屏记录](docs/H1-WIDESCREEN-20261103.md)。CI 的 `Validate snapshot` 校验 SDK、上游源码、完整资源字节和 BDA 文件格式；它不代表一次新的真机测试或原生编译。
 
 ## 资源与许可
 
-- `private/resources-h1-wide/`：完整运行资源，3,117 个文件、97,431,871 字节。
-- `private/source/`：原始资源输入；`private/widescreen/`：扩图源图与提示词。
+- `private/resources-h1-wide/`：完整中文运行资源，3,138 个文件、101,932,088 字节。
+- `private/source/`：原始资源输入；`private/widescreen/`：扩图源图与提示词；`private/zh-cn/`：中文图片和文本来源。
+- `localization/`：语言基线与文案补充；`assets/fonts/`：重新生成中文字形所需的 Noto 原字体，H1 安装不需要 OTF 文件。
 - `provenance/`：运行资源与源素材完整文件校验清单。
 - 不含个人 `userdata`、存储卡镜像、固件/NAND、工具链、账户凭据或开发缓存。
 
 移植代码与上游代码的许可、原版素材的权利归属分别见 [NOTICE.md](NOTICE.md)、[LICENSE](LICENSE) 和 [COPYING](COPYING)。本私有仓库收录资源不表示这些资源获得 LGPL 许可或自由再分发授权。
+
+中文覆盖范围、字形检查、旧存档提示转换及重新生成步骤见 [汉化记录](docs/H1-ZH-CN-20261103.md)。
 
 ## 感谢
 

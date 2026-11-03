@@ -13,7 +13,8 @@ def main():
  resources=read(ROOT/'provenance/resources.json');base=ROOT/resources['directory']
  members=[('A/应用/程序/H1PVZPortable.bda',bda)]
  members.extend(('B/应用/数据/游戏/PVZ/'+name,base/name) for name in resources['files'])
- members.extend((name,ROOT/name) for name in ('README.md','NOTICE.md','SDK.json','docs/verification/final-native-verification.json'))
+ members.extend((name,ROOT/name) for name in ('README.md','NOTICE.md','LICENSE','COPYING','SDK.json','docs/verification/final-native-verification.json'))
+ members.extend((path.relative_to(ROOT).as_posix(),path) for path in sorted((ROOT/'licenses').rglob('*')) if path.is_file())
  expected={name:sha(path) for name,path in members}
  with zipfile.ZipFile(output,'x',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
   for name,path in members:z.write(path,name)

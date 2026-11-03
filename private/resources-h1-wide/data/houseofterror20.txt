@@ -4,11 +4,11 @@ Define CharList
    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
    'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '~', '`',
    '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{',
-   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', 'Á', '¢', '£', '´',
-   '¤', '©', '¨', 'À', 'Ë', 'ç', 'å', 'Ì', '€', '', '®', '‚', 'é', 'ƒ', 'æ', 'è',
-   'í', 'ê', 'ë', 'ì', '¥', '„', 'ñ', 'î', 'ï', 'Í', '…', '¯', 'ô', 'ò', 'ó', '†',
-   '¥', '§', 'ˆ', '‡', '‰', '‹', 'Š', 'Œ', '¾', '', '', '', '', '‘', '“', '’',
-   '”', '•', '¥', '–', '˜', '—', '™', '›', 'š', '¿', '', 'œ', '', 'Ÿ', '¥', 'Ø', 'Û');
+   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', 'Ã', 'Â¢', 'Â£', 'Â´',
+   'Â¤', 'Â©', 'Â¨', 'Ã€', 'Ã‹', 'Ã§', 'Ã¥', 'ÃŒ', 'â‚¬', 'ï¿½', 'Â®', 'â€š', 'Ã©', 'Æ’', 'Ã¦', 'Ã¨',
+   'Ã­', 'Ãª', 'Ã«', 'Ã¬', 'Â¥', 'â€', 'Ã±', 'Ã®', 'Ã¯', 'Ã', 'â€¦', 'Â¯', 'Ã´', 'Ã²', 'Ã³', 'â€ ',
+   'Â¥', 'Â§', 'Ë†', 'â€¡', 'â€°', 'â€¹', 'Å ', 'Å’', 'Â¾', 'ï¿½', 'ï¿½', 'Å½', 'ï¿½', 'â€˜', 'â€œ', 'â€™',
+   'â€', 'â€¢', 'Â¥', 'â€“', 'Ëœ', 'â€”', 'â„¢', 'â€º', 'Å¡', 'Â¿', 'ï¿½', 'Å“', 'Å¾', 'Å¸', 'Â¥', 'Ã˜', 'Ã›');
 
 Define WidthList
  (  13,  12,  11,  13,  11,  12,  11,  13,   7,  11,  13,  10,  16,  13,  11,  13,
@@ -111,3 +111,22 @@ LayerSetLineSpacingOffset Main 0;
 LayerSetPointSize         Main 20;
 
 SetDefaultPointSize  20;
+
+CreateLayer H1ZhOutline;
+LayerSetImage H1ZhOutline 'h1zh10o';
+LayerSetAscent H1ZhOutline 31;
+LayerSetPointSize H1ZhOutline 20;
+LayerSetHeight H1ZhOutline 43;
+LayerSetColorMult H1ZhOutline (0.0, 0.0, 0.0, 1.0);
+LayerSetH1CJK H1ZhOutline 'data/h1zh10o.h1f' 4;
+LayerSetAscentPadding H1ZhOutline 3;
+LayerSetLineSpacingOffset H1ZhOutline 0;
+CreateLayer H1ZhMain;
+LayerSetImage H1ZhMain 'h1zh10';
+LayerSetAscent H1ZhMain 31;
+LayerSetPointSize H1ZhMain 20;
+LayerSetHeight H1ZhMain 43;
+LayerSetColorMult H1ZhMain (1.0, 1.0, 1.0, 1.0);
+LayerSetH1CJK H1ZhMain 'data/h1zh10.h1f' 4;
+LayerSetAscentPadding H1ZhMain 3;
+LayerSetLineSpacingOffset H1ZhMain 0;

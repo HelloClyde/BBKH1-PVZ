@@ -5,6 +5,7 @@
 !/private/source/
 !/private/resources-h1-wide/
 !/private/widescreen/
+!/private/zh-cn/
 !/private/resource-tree.json
 **/__pycache__/
 *.py[cod]

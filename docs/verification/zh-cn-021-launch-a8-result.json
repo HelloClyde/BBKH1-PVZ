@@ -1,0 +1,510 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "desktop_run",
+        "path": "A:\\应用\\程序\\H1PVZPortable.bda"
+      },
+      {
+        "kind": "wait",
+        "seconds": 5
+      },
+      {
+        "kind": "read",
+        "address": "0x83c00020",
+        "bytes": 48
+      },
+      {
+        "kind": "read",
+        "address": "0x83dfc220",
+        "bytes": 64
+      },
+      {
+        "kind": "read",
+        "address": "0x83defb08",
+        "bytes": 64
+      },
+      {
+        "kind": "read",
+        "address": "0x83dfac84",
+        "bytes": 64
+      },
+      {
+        "kind": "snapshot"
+      },
+      {
+        "kind": "screenshot",
+        "output": "021-launch-a8.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-03T14:46:15.036338+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "desktop_run",
+        "path": "A:\\应用\\程序\\H1PVZPortable.bda"
+      },
+      "result": {
+        "path": "A:\\应用\\程序\\H1PVZPortable.bda",
+        "operation": "desktop_run",
+        "before": {
+          "job_id": 27,
+          "kind": 1,
+          "state": 4,
+          "error": 0,
+          "menu_idle": 1,
+          "app_index": 4294967295,
+          "entry_count": 14,
+          "return_code": 0,
+          "state_name": "done"
+        },
+        "completed": true,
+        "request_sent": true,
+        "job_id": 28,
+        "status": {
+          "job_id": 28,
+          "kind": 2,
+          "state": 3,
+          "error": 0,
+          "menu_idle": 0,
+          "app_index": 105,
+          "entry_count": 15,
+          "return_code": 0,
+          "state_name": "running"
+        },
+        "payload_started": true,
+        "elapsed_seconds": 0.7349999999860302
+      },
+      "started_monotonic": 465755.953,
+      "finished_monotonic": 465756.703
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 5
+      },
+      "result": {
+        "waited_seconds": 5
+      },
+      "started_monotonic": 465756.703,
+      "finished_monotonic": 465761.703
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83c00020",
+        "bytes": 48
+      },
+      "result": {
+        "address": "0x83c00020",
+        "bytes": 48,
+        "hex": "e0ffbd271c00bfaf1800bcaf2540a003fc831d3cd0ebbd27e0ffbd271800a8afa3e9f70c000000001800bd8f1800bc8f"
+      },
+      "started_monotonic": 465761.703,
+      "finished_monotonic": 465761.718
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83dfc220",
+        "bytes": 64
+      },
+      "result": {
+        "address": "0x83dfc220",
+        "bytes": 64,
+        "hex": "78fdbd278002beaf25f0a0037802b3af8402bfaf7c02b4af7402b2af7002b1af6c02b0af9402c7af2000073c0300e7242438a7002598a0009002c6af0100e72c"
+      },
+      "started_monotonic": 465761.718,
+      "finished_monotonic": 465761.734
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83defb08",
+        "bytes": 64
+      },
+      "result": {
+        "address": "0x83defb08",
+        "bytes": 64,
+        "hex": "80ffbd277800beaf6800b4af25f0a0036400b3af6000b2af5800b0af7c00bfaf7400b7af7000b6af6c00b5af5c00b1af25a08000020004242580a000dfe6f70c"
+      },
+      "started_monotonic": 465761.734,
+      "finished_monotonic": 465761.734
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83dfac84",
+        "bytes": 64
+      },
+      "result": {
+        "address": "0x83dfac84",
+        "bytes": 64,
+        "hex": "fa83023c90b6438c4200601400000000d8ffbd27010003241800b1af1400b0afeb83113cfa83103c2400bfaf2000beaf1c00b2af25f0a0034cf7242674b11026"
+      },
+      "started_monotonic": 465761.734,
+      "finished_monotonic": 465761.734
+    },
+    {
+      "action": {
+        "kind": "snapshot"
+      },
+      "result": {
+        "started_monotonic": 465761.734,
+        "utc": "2026-11-03T14:46:20.813836+00:00",
+        "pvzp_diagnostic": [
+          1347833905,
+          1,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_diagnostic": [
+          1347836496,
+          2,
+          0,
+          1255487,
+          1255875,
+          10,
+          1,
+          66,
+          31,
+          886,
+          24,
+          2210577232,
+          0,
+          0,
+          0,
+          65536
+        ],
+        "pvzh1_cache_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_cache_pressure_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_storage_texture_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_physical_screen_diagnostic": [
+          1,
+          480,
+          272,
+          1060,
+          600,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_pressure_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_native_charge": [
+          1888356,
+          1888356
+        ],
+        "pvzh1_render_plan_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_profile_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_profile_clock": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_hole_diagnostic": [
+          1211189318,
+          83,
+          0,
+          10,
+          16384,
+          16384,
+          16384,
+          16384,
+          0,
+          4294967295,
+          0,
+          21269196
+        ],
+        "pvz_runtime_small_pool_diagnostic": [
+          1211191372,
+          68,
+          68,
+          8303,
+          771888,
+          1120446,
+          1120448,
+          1120448,
+          68,
+          0,
+          0,
+          20405,
+          20337,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_io_diagnostic": [
+          44,
+          44,
+          33,
+          215,
+          220160,
+          216112,
+          1,
+          1024,
+          44,
+          0,
+          0,
+          215,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_asset_layout_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_xmp_load_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_axis_span_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_selector_offline_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_selector_cull_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_dirty_present_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_dirty_canvas_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_text_replay_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_font_metric_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_selector_retained_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "finished_monotonic": 465761.906
+      },
+      "started_monotonic": 465761.734,
+      "finished_monotonic": 465761.906
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "021-launch-a8.png"
+      },
+      "result": {
+        "token": 136,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 3188503,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 219649,
+          "requests": 445,
+          "protocol_bytes_sent": 12460,
+          "protocol_bytes_received": 233889,
+          "elapsed_seconds": 8.90700000000652,
+          "decoded_bytes_per_second": 58632.53620743435,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 8.96899999998277,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261103-zh-cn\\021-launch-a8.png",
+        "snapshot_sha256": "66b20d25de1f08d7a13990d45b8d513edd766c164f595f4ff52a960f2c3a222a",
+        "png_sha256": "851beefda8382b01a3ef085cb5dc64483c1f79ec5d87fdc2301687d3be7e8eb4"
+      },
+      "started_monotonic": 465761.906,
+      "finished_monotonic": 465770.984
+    }
+  ],
+  "ok": true
+}

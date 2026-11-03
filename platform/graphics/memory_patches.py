@@ -383,3 +383,7 @@ def apply(source_root):
     spec=importlib.util.spec_from_file_location('pvzh1_reduced_texture_cells',reduced_patch)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     module.apply(framework.parent)
+    alpha_patch=Path(__file__).with_name('alpha_storage_patches.py')
+    spec=importlib.util.spec_from_file_location('pvzh1_alpha_storage',alpha_patch)
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    module.apply(framework.parent)

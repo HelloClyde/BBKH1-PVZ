@@ -77,6 +77,7 @@ struct Source {
     uint32_t width=0,height=0;
     uint32_t storageWidth=0,storageHeight=0;
     std::unique_ptr<uint32_t[]> storageBits;
+    std::unique_ptr<unsigned char[]> storageAlpha;
     uint64_t storageRevision=NextStorageRevision();
     bool storageSanded=false;
     uint64_t storageLoads=0,storageBlits=0,storageARGBLoads=0;
@@ -100,7 +101,7 @@ struct Source {
     Source(const Source&)=delete;
     ~Source(){ClearRGB();ClearFontPages();}
     bool Reduced()const{return storageWidth!=width||storageHeight!=height;}
-    void ClearStorage(){storageRevision=0;storageBits.reset();storageSanded=false;}
+    void ClearStorage(){storageRevision=0;storageBits.reset();storageAlpha.reset();storageSanded=false;}
     void ClearRGB(){
         if(rgbPages)for(std::size_t i=0;i<rgbPageCount;++i)delete[] rgbPages[i];
         rgbPages.reset();rgbPageCount=rgbBytes=0;
@@ -126,6 +127,7 @@ Cache *cacheInstance=nullptr;
 bool pressureInProgress=false;
 bool reducedPackConfigured=false,reducedPack=false;
 #ifdef PVZ_HOST_RUNNER
+bool storageAlphaEnabled=true;
 int rgbAllocFailure=-1,rgbReadFailure=-1;
 int alphaAllocFailure=-1,alphaReadFailure=-1;
 int fontAllocFailure=-1,fontReadFailure=-1;
@@ -154,6 +156,7 @@ std::size_t Size(MemoryImage *image,const Source *source=nullptr)
     if(source&&source->rgbPages)size+=source->rgbBytes+source->rgbPageCount*sizeof(unsigned char*);
     if(source&&source->fontPages)size+=source->fontBytes+source->fontPageCount*sizeof(uint32_t*);
     if(source&&source->storageBits)size+=(std::size_t)source->storageWidth*source->storageHeight*4+4;
+    if(source&&source->storageAlpha)size+=(std::size_t)source->storageWidth*source->storageHeight;
     return size;
 }
 /* The size of one real backing allocation, rather than the sum of separate
@@ -176,6 +179,7 @@ std::size_t LargestBuffer(MemoryImage *image,const Source *source=nullptr)
         if(source->fontBytes)largest=std::max(largest,std::min(FontPageBytes,source->fontBytes));
     }
     if(source&&source->storageBits)largest=std::max(largest,(std::size_t)source->storageWidth*source->storageHeight*4+4);
+    if(source&&source->storageAlpha)largest=std::max(largest,(std::size_t)source->storageWidth*source->storageHeight);
     return largest;
 }
 std::size_t Recount()
@@ -194,6 +198,7 @@ std::size_t Recount()
         if(pair.second.rasterStorage){rasterBytes+=pair.second.fontBytes;if(pair.second.fontPages)rasterPages+=pair.second.fontPageCount;}
         else{fontPageBytes+=pair.second.fontBytes;if(pair.second.fontPages)fontPages+=pair.second.fontPageCount;}
         if(pair.second.storageBits){storageBytes+=(std::size_t)pair.second.storageWidth*pair.second.storageHeight*4+4;++storageSources;}
+        if(pair.second.storageAlpha){storageBytes+=(std::size_t)pair.second.storageWidth*pair.second.storageHeight;++storageSources;}
     }
     pvzh1_alpha_palette_diagnostic[0]=(uint32_t)alphaBytes;pvzh1_alpha_palette_diagnostic[1]=(uint32_t)alphaSources;
     pvzh1_rgba_font_palette_diagnostic[0]=(uint32_t)fontBytes;pvzh1_rgba_font_palette_diagnostic[1]=(uint32_t)fontSources;
@@ -506,7 +511,7 @@ bool H1ImageCacheLoad(MemoryImage *image)
     /* Generic pixel consumers require the original contiguous ARGB format.
      * Release RGB pages before its allocation, never retain both copies. */
     if(found->second.rgbPages||found->second.fontPages){found->second.ClearRGB();found->second.ClearFontPages();Recount();}
-    if(found->second.storageBits){found->second.ClearStorage();Recount();}
+    if(found->second.storageBits||found->second.storageAlpha){found->second.ClearStorage();Recount();}
     /* Let upstream GetBits expand its lossless palette and release the index
      * table. Reloading here would retain both ARGB and the palette buffers. */
     if(image->mBits||(image->mColorIndices&&image->mColorTable))return true;
@@ -692,6 +697,32 @@ void H1ImageCacheConfigureReducedPack()
         (info.storage_width!=info.width||info.storage_height!=info.height);
 }
 bool H1ImageCacheReducedPack(){return reducedPackConfigured&&reducedPack;}
+bool H1ImageCachePrepareStorageAlpha(MemoryImage *image,const unsigned char **alpha,uint32_t *width,uint32_t *height)
+{
+    if(alpha)*alpha=nullptr;
+    if(!alpha||!width||!height||!cacheInstance||!image)return false;
+#ifdef PVZ_HOST_RUNNER
+    if(!storageAlphaEnabled)return false;
+#endif
+    auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
+    auto& source=found->second;
+    if(!source.Reduced()||!source.alphaPaletteEligible||(uint32_t(source.alphaColor)&0xffffffu)!=0xffffffu||!source.alphaPath.empty()||
+       image->mFilePath!=source.path||image->mWidth!=int(source.width)||image->mHeight!=int(source.height)||image->mBits||image->mColorIndices||image->mColorTable||source.storageBits||image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData)return false;
+    H1ImageCacheTouch(image);
+    if(!source.storageAlpha){
+        H1Image input;if(!h1_image_open(&input,source.path.c_str(),source.autoAlpha,source.alphaColor))return false;
+        if(input.info.width!=source.width||input.info.height!=source.height||input.info.storage_width!=source.storageWidth||input.info.storage_height!=source.storageHeight){h1_image_close(&input);return false;}
+        const size_t area=size_t(source.storageWidth)*source.storageHeight;
+        auto data=std::unique_ptr<unsigned char[]>(new(std::nothrow) unsigned char[area]);
+        const bool ok=data&&h1_image_load_storage_alpha(&input,data.get(),area);h1_image_close(&input);
+        if(!ok){++cacheInstance->stats.loadFailures;return false;}
+        source.storageAlpha=std::move(data);source.storageRevision=NextStorageRevision();
+        if(!image->mForcedMode){image->mHasAlpha=image->mHasTrans=false;for(size_t i=0;i<area;++i){auto a=source.storageAlpha[i];if(!a)image->mHasTrans=true;else if(a!=255)image->mHasAlpha=true;}}
+        ++cacheInstance->stats.loads;++source.storageLoads;++pvzh1_storage_texture_diagnostic[2];cacheInstance->loadedPixelBytes+=area;
+        pvzh1_storage_texture_diagnostic[3]+=uint32_t(area);pvzh1_storage_texture_diagnostic[7]=std::max(uint32_t(pvzh1_storage_texture_diagnostic[7]),uint32_t(area));Recount();
+    }
+    *alpha=source.storageAlpha.get();*width=source.storageWidth;*height=source.storageHeight;++pvzh1_storage_texture_diagnostic[5];return true;
+}
 bool H1ImageCachePrepareStorageTexture(MemoryImage *image,const uint32_t **bits,uint32_t *width,uint32_t *height)
 {
     if(bits)*bits=nullptr;
@@ -701,6 +732,13 @@ bool H1ImageCachePrepareStorageTexture(MemoryImage *image,const uint32_t **bits,
     if(!source.Reduced()||!source.alphaPath.empty()||image->mFilePath!=source.path||
        image->mWidth!=(int)source.width||image->mHeight!=(int)source.height||image->mBits||
        image->mColorIndices||image->mColorTable||image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData)return false;
+    // The command cache asks for dense storage before the triangle sampler.
+    // Keep eligible white masks on the A8 path instead of expanding them here.
+    if(!source.storageBits&&source.alphaPaletteEligible&&(uint32_t(source.alphaColor)&0xffffffu)==0xffffffu
+#ifdef PVZ_HOST_RUNNER
+       &&storageAlphaEnabled
+#endif
+    )return false;
     H1ImageCacheTouch(image);
     if(!LoadStorage(image,source))return false;
     *bits=source.storageBits.get();*width=source.storageWidth;*height=source.storageHeight;
@@ -722,7 +760,7 @@ bool H1ImageCacheGetStorageStats(MemoryImage *image,H1ImageCacheStorageStats *st
     if(!stats||!image||!cacheInstance)return false;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
     const Source& source=found->second;if(!source.Reduced())return false;
-    *stats={source.storageBits?(std::size_t)source.storageWidth*source.storageHeight*4+4:0,
+    *stats={(source.storageBits?(std::size_t)source.storageWidth*source.storageHeight*4+4:0)+(source.storageAlpha?(std::size_t)source.storageWidth*source.storageHeight:0),
         source.width,source.height,source.storageWidth,source.storageHeight,
         source.storageLoads,source.storageBlits,source.storageARGBLoads};
     return true;
@@ -778,6 +816,9 @@ bool H1ImageCacheSandingStorage(MemoryImage *image,void (*sanding)(Image*),H1San
     if(!source.Reduced()||!source.alphaPath.empty()||image->mBits||image->mColorIndices||image->mColorTable||
        image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData)return false;
     H1ImageCacheTouch(image);source.sandingAverage=average;cacheInstance->sanding=sanding;
+    // White A8 masks have no visible RGB edge to modify. Generic GetBits still
+    // applies the saved recipe; physical nearest sampling needs only alpha.
+    if(source.alphaPaletteEligible&&(uint32_t(source.alphaColor)&0xffffffu)==0xffffffu){source.sanded=true;if(image->mHasTrans)++image->mBitsChangedCount;return true;}
     if(!LoadStorage(image,source)||!SandStorage(image,source))return false;
     source.sanded=true;++image->mBitsChangedCount;return true;
 }
@@ -823,6 +864,7 @@ bool H1ImageCacheGetFontPageStats(MemoryImage *image,H1ImageCacheFontPageStats *
     return true;
 }
 #ifdef PVZ_HOST_RUNNER
+void H1ImageCacheStorageAlphaTestEnable(bool enabled){storageAlphaEnabled=enabled;if(cacheInstance){for(auto& item:cacheInstance->sources)if(item.second.alphaPaletteEligible)item.second.ClearStorage();Recount();}}
 void H1ImageCacheRGBTestFailure(int allocationsBeforeFailure,int readsBeforeFailure){rgbAllocFailure=allocationsBeforeFailure;rgbReadFailure=readsBeforeFailure;}
 void H1ImageCacheAlphaTestFailure(int allocationsBeforeFailure,int readsBeforeFailure){alphaAllocFailure=allocationsBeforeFailure;alphaReadFailure=readsBeforeFailure;}
 void H1ImageCacheFontPaletteTestFailure(int allocationsBeforeFailure,int readsBeforeFailure){fontAllocFailure=allocationsBeforeFailure;fontReadFailure=readsBeforeFailure;}

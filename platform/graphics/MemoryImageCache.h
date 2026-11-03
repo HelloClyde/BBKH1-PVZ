@@ -27,6 +27,7 @@ bool H1ImageCachePrepareTexturePages(MemoryImage *image,const uint32_t* const**p
  * actual physical texels and stride to the software sampler. */
 bool H1ImageCacheIsReduced(MemoryImage *image);
 bool H1ImageCachePrepareStorageTexture(MemoryImage *image,const uint32_t **bits,uint32_t *width,uint32_t *height);
+bool H1ImageCachePrepareStorageAlpha(MemoryImage *image,const unsigned char **alpha,uint32_t *width,uint32_t *height);
 /* Query after a successful PrepareStorageTexture in this synchronous batch.
  * Zero means no eligible live dense pixels. The process-wide content cookie
  * changes after release/reload, sanding or Image-address reuse. It does not
@@ -70,6 +71,7 @@ void H1ImageCacheRGBTestFailure(int allocationsBeforeFailure,int readsBeforeFail
 void H1ImageCacheAlphaTestFailure(int allocationsBeforeFailure,int readsBeforeFailure);
 void H1ImageCacheFontPaletteTestFailure(int allocationsBeforeFailure,int readsBeforeFailure);
 void H1ImageCacheFontPageTestFailure(int allocationsBeforeFailure,int readsBeforeFailure);
+void H1ImageCacheStorageAlphaTestEnable(bool enabled);
 #endif
 struct H1ImageCacheStats {
     std::size_t descriptors,residentBytes,peakBytes,budgetBytes;

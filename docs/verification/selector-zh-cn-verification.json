@@ -1,0 +1,1711 @@
+{
+  "file": "build\\zh-cn\\resources\\h1menu\\selector-wide.h1mb",
+  "bytes": 2039728,
+  "sha256": "7d80e98aecc7bfe364f62c4bc9f7ff94d4ec9d3ba3ee6e4af1e09268e4485ad4",
+  "entry_count": 103,
+  "runs": 15653,
+  "pixels": 461927,
+  "original_vs_replay_checks": 309,
+  "codec_roundtrip_checks": 103,
+  "entries": [
+    {
+      "kind": 1,
+      "id": 0,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-0-normal",
+        "file": "track-0-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 1,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-1-normal",
+        "file": "track-1-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 2,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-2-normal",
+        "file": "track-2-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 3,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-3-normal",
+        "file": "track-3-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 4,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-4-normal",
+        "file": "track-4-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 5,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-5-normal",
+        "file": "track-5-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 6,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-6-normal",
+        "file": "track-6-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 7,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-7-normal",
+        "file": "track-7-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 8,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-8-normal",
+        "file": "track-8-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 9,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-9-normal",
+        "file": "track-9-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 10,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-10-normal",
+        "file": "track-10-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 11,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-11-normal",
+        "file": "track-11-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 12,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-12-normal",
+        "file": "track-12-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 13,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-13-normal",
+        "file": "track-13-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 14,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 645,
+      "pixel_count": 129809,
+      "source": {
+        "key": "track-14-normal",
+        "file": "track-14-normal.ops",
+        "fragments": 129809,
+        "last_hash": 5520830861107426264,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 15,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-15-normal",
+        "file": "track-15-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 16,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-16-normal",
+        "file": "track-16-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 17,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-17-normal",
+        "file": "track-17-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 18,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-18-normal",
+        "file": "track-18-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 19,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-19-normal",
+        "file": "track-19-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 20,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "track-20-normal",
+        "file": "track-20-normal.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 21,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1277,
+      "pixel_count": 36798,
+      "source": {
+        "key": "track-21-normal",
+        "file": "track-21-normal.ops",
+        "fragments": 36798,
+        "last_hash": 8444127984986547737,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 22,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1106,
+      "pixel_count": 26949,
+      "source": {
+        "key": "track-22-normal",
+        "file": "track-22-normal.ops",
+        "fragments": 26949,
+        "last_hash": 5014114786533003935,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 23,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 788,
+      "pixel_count": 50081,
+      "source": {
+        "key": "track-23-normal",
+        "file": "track-23-normal.ops",
+        "fragments": 50081,
+        "last_hash": 2410859390942454274,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 24,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 62,
+      "pixel_count": 597,
+      "source": {
+        "key": "track-24-normal",
+        "file": "track-24-normal.ops",
+        "fragments": 597,
+        "last_hash": 11275034891934536511,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 24,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 29,
+      "pixel_count": 382,
+      "source": {
+        "key": "track-24-almanac",
+        "file": "track-24-almanac.ops",
+        "fragments": 382,
+        "last_hash": 2409855030135281977,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 24,
+      "variant": 3,
+      "color": 4294967295,
+      "run_count": 33,
+      "pixel_count": 215,
+      "source": {
+        "key": "track-24-key",
+        "file": "track-24-key.ops",
+        "fragments": 215,
+        "last_hash": 4648780865939874401,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 25,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 91,
+      "pixel_count": 5168,
+      "source": {
+        "key": "track-25-normal",
+        "file": "track-25-normal.ops",
+        "fragments": 5168,
+        "last_hash": 11575383823144286719,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 26,
+      "variant": 0,
+      "color": 4286611584,
+      "run_count": 212,
+      "pixel_count": 5074,
+      "source": {
+        "key": "track-26-normal",
+        "file": "track-26-normal.ops",
+        "fragments": 5074,
+        "last_hash": 14192679816292209553,
+        "color": 4286611584
+      }
+    },
+    {
+      "kind": 1,
+      "id": 27,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 80,
+      "pixel_count": 4125,
+      "source": {
+        "key": "track-27-normal",
+        "file": "track-27-normal.ops",
+        "fragments": 4125,
+        "last_hash": 16425363861944418108,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 28,
+      "variant": 0,
+      "color": 4286611584,
+      "run_count": 194,
+      "pixel_count": 4123,
+      "source": {
+        "key": "track-28-normal",
+        "file": "track-28-normal.ops",
+        "fragments": 4123,
+        "last_hash": 11695237628915820233,
+        "color": 4286611584
+      }
+    },
+    {
+      "kind": 1,
+      "id": 29,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 75,
+      "pixel_count": 3492,
+      "source": {
+        "key": "track-29-normal",
+        "file": "track-29-normal.ops",
+        "fragments": 3492,
+        "last_hash": 3013754747492932664,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 30,
+      "variant": 0,
+      "color": 4286611584,
+      "run_count": 180,
+      "pixel_count": 3444,
+      "source": {
+        "key": "track-30-normal",
+        "file": "track-30-normal.ops",
+        "fragments": 3444,
+        "last_hash": 6252008370844491802,
+        "color": 4286611584
+      }
+    },
+    {
+      "kind": 1,
+      "id": 31,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 103,
+      "pixel_count": 6935,
+      "source": {
+        "key": "track-31-normal",
+        "file": "track-31-normal.ops",
+        "fragments": 6935,
+        "last_hash": 4399774949418755855,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 32,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 251,
+      "pixel_count": 6962,
+      "source": {
+        "key": "track-32-normal",
+        "file": "track-32-normal.ops",
+        "fragments": 6962,
+        "last_hash": 5189096221931194336,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 33,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 103,
+      "pixel_count": 6935,
+      "source": {
+        "key": "track-33-normal",
+        "file": "track-33-normal.ops",
+        "fragments": 6935,
+        "last_hash": 4399774949418755855,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 34,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 251,
+      "pixel_count": 6962,
+      "source": {
+        "key": "track-34-normal",
+        "file": "track-34-normal.ops",
+        "fragments": 6962,
+        "last_hash": 5189096221931194336,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 35,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 89,
+      "pixel_count": 257,
+      "source": {
+        "key": "track-35-normal",
+        "file": "track-35-normal.ops",
+        "fragments": 257,
+        "last_hash": 13890323245066347281,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 36,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 54,
+      "pixel_count": 150,
+      "source": {
+        "key": "track-36-normal",
+        "file": "track-36-normal.ops",
+        "fragments": 150,
+        "last_hash": 2874371594040835843,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 37,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 57,
+      "pixel_count": 163,
+      "source": {
+        "key": "track-37-normal",
+        "file": "track-37-normal.ops",
+        "fragments": 163,
+        "last_hash": 3985068414111434702,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 38,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 302,
+      "pixel_count": 1986,
+      "source": {
+        "key": "track-38-normal",
+        "file": "track-38-normal.ops",
+        "fragments": 1986,
+        "last_hash": 3021761724203101951,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 39,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 69,
+      "pixel_count": 188,
+      "source": {
+        "key": "track-39-normal",
+        "file": "track-39-normal.ops",
+        "fragments": 188,
+        "last_hash": 581184192720529389,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 40,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 40,
+      "pixel_count": 81,
+      "source": {
+        "key": "track-40-normal",
+        "file": "track-40-normal.ops",
+        "fragments": 81,
+        "last_hash": 6145622068752973890,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 41,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 77,
+      "pixel_count": 218,
+      "source": {
+        "key": "track-41-normal",
+        "file": "track-41-normal.ops",
+        "fragments": 218,
+        "last_hash": 2011102046401077232,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 42,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 74,
+      "pixel_count": 282,
+      "source": {
+        "key": "track-42-normal",
+        "file": "track-42-normal.ops",
+        "fragments": 282,
+        "last_hash": 17112109951967288969,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 43,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 66,
+      "pixel_count": 265,
+      "source": {
+        "key": "track-43-normal",
+        "file": "track-43-normal.ops",
+        "fragments": 265,
+        "last_hash": 7714663777457718201,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 44,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 84,
+      "pixel_count": 370,
+      "source": {
+        "key": "track-44-normal",
+        "file": "track-44-normal.ops",
+        "fragments": 370,
+        "last_hash": 12662591279986725165,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 45,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 442,
+      "pixel_count": 5217,
+      "source": {
+        "key": "track-45-normal",
+        "file": "track-45-normal.ops",
+        "fragments": 5217,
+        "last_hash": 4936005070659668307,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 46,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 154,
+      "pixel_count": 2628,
+      "source": {
+        "key": "track-46-normal",
+        "file": "track-46-normal.ops",
+        "fragments": 2628,
+        "last_hash": 2861694712365617528,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 46,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 154,
+      "pixel_count": 2628,
+      "source": {
+        "key": "track-46-press",
+        "file": "track-46-press.ops",
+        "fragments": 2628,
+        "last_hash": 3640861855493770845,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 47,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 159,
+      "pixel_count": 3069,
+      "source": {
+        "key": "track-47-normal",
+        "file": "track-47-normal.ops",
+        "fragments": 3069,
+        "last_hash": 13473210271297768604,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 1,
+      "id": 47,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 159,
+      "pixel_count": 3069,
+      "source": {
+        "key": "track-47-press",
+        "file": "track-47-press.ops",
+        "fragments": 3069,
+        "last_hash": 8462198616806880530,
+        "color": 4294967295
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 243,
+      "pixel_count": 6840,
+      "source": {
+        "key": "button-100-255-0",
+        "file": "button-100-255-0.ops",
+        "fragments": 6840,
+        "last_hash": 11592513823358378743,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 243,
+      "pixel_count": 6840,
+      "source": {
+        "key": "button-100-255-1",
+        "file": "button-100-255-1.ops",
+        "fragments": 6840,
+        "last_hash": 14732659558725059487,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 238,
+      "pixel_count": 6924,
+      "source": {
+        "key": "button-100-255-2",
+        "file": "button-100-255-2.ops",
+        "fragments": 6924,
+        "last_hash": 13235006385168856649,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 256,
+      "color": 4294967295,
+      "run_count": 251,
+      "pixel_count": 6962,
+      "source": {
+        "key": "button-100-start-0",
+        "file": "button-100-start-0.ops",
+        "fragments": 6962,
+        "last_hash": 5189096221931194336,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 257,
+      "color": 4294967295,
+      "run_count": 251,
+      "pixel_count": 6962,
+      "source": {
+        "key": "button-100-start-1",
+        "file": "button-100-start-1.ops",
+        "fragments": 6962,
+        "last_hash": 4201244829998653936,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 258,
+      "color": 4294967295,
+      "run_count": 247,
+      "pixel_count": 6828,
+      "source": {
+        "key": "button-100-start-2",
+        "file": "button-100-start-2.ops",
+        "fragments": 6828,
+        "last_hash": 10949388869805224333,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 101,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 210,
+      "pixel_count": 5127,
+      "source": {
+        "key": "button-101-255-0",
+        "file": "button-101-255-0.ops",
+        "fragments": 5127,
+        "last_hash": 5921281839326690205,
+        "x": 666,
+        "y": 173,
+        "width": 313,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 101,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 210,
+      "pixel_count": 5127,
+      "source": {
+        "key": "button-101-255-1",
+        "file": "button-101-255-1.ops",
+        "fragments": 5127,
+        "last_hash": 4230647597485947850,
+        "x": 666,
+        "y": 173,
+        "width": 313,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 101,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 208,
+      "pixel_count": 5073,
+      "source": {
+        "key": "button-101-255-2",
+        "file": "button-101-255-2.ops",
+        "fragments": 5073,
+        "last_hash": 2555084469916081331,
+        "x": 666,
+        "y": 173,
+        "width": 313,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 101,
+      "variant": 0,
+      "color": 4286611584,
+      "run_count": 210,
+      "pixel_count": 5127,
+      "source": {
+        "key": "button-101-128-0",
+        "file": "button-101-128-0.ops",
+        "fragments": 5127,
+        "last_hash": 12343016881594701128,
+        "x": 666,
+        "y": 173,
+        "width": 313,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 101,
+      "variant": 1,
+      "color": 4286611584,
+      "run_count": 210,
+      "pixel_count": 5127,
+      "source": {
+        "key": "button-101-128-1",
+        "file": "button-101-128-1.ops",
+        "fragments": 5127,
+        "last_hash": 3447291094066195786,
+        "x": 666,
+        "y": 173,
+        "width": 313,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 101,
+      "variant": 2,
+      "color": 4286611584,
+      "run_count": 208,
+      "pixel_count": 5073,
+      "source": {
+        "key": "button-101-128-2",
+        "file": "button-101-128-2.ops",
+        "fragments": 5073,
+        "last_hash": 6992064028760003369,
+        "x": 666,
+        "y": 173,
+        "width": 313,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 102,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 195,
+      "pixel_count": 4123,
+      "source": {
+        "key": "button-102-255-0",
+        "file": "button-102-255-0.ops",
+        "fragments": 4123,
+        "last_hash": 2680605625516480633,
+        "x": 670,
+        "y": 257,
+        "width": 286,
+        "height": 121
+      }
+    },
+    {
+      "kind": 2,
+      "id": 102,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 195,
+      "pixel_count": 4123,
+      "source": {
+        "key": "button-102-255-1",
+        "file": "button-102-255-1.ops",
+        "fragments": 4123,
+        "last_hash": 6418712950060571335,
+        "x": 670,
+        "y": 257,
+        "width": 286,
+        "height": 121
+      }
+    },
+    {
+      "kind": 2,
+      "id": 102,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 195,
+      "pixel_count": 4093,
+      "source": {
+        "key": "button-102-255-2",
+        "file": "button-102-255-2.ops",
+        "fragments": 4093,
+        "last_hash": 7012745542318556280,
+        "x": 670,
+        "y": 257,
+        "width": 286,
+        "height": 121
+      }
+    },
+    {
+      "kind": 2,
+      "id": 102,
+      "variant": 0,
+      "color": 4286611584,
+      "run_count": 195,
+      "pixel_count": 4123,
+      "source": {
+        "key": "button-102-128-0",
+        "file": "button-102-128-0.ops",
+        "fragments": 4123,
+        "last_hash": 11695237628915820233,
+        "x": 670,
+        "y": 257,
+        "width": 286,
+        "height": 121
+      }
+    },
+    {
+      "kind": 2,
+      "id": 102,
+      "variant": 1,
+      "color": 4286611584,
+      "run_count": 195,
+      "pixel_count": 4123,
+      "source": {
+        "key": "button-102-128-1",
+        "file": "button-102-128-1.ops",
+        "fragments": 4123,
+        "last_hash": 13378854087458562405,
+        "x": 670,
+        "y": 257,
+        "width": 286,
+        "height": 121
+      }
+    },
+    {
+      "kind": 2,
+      "id": 102,
+      "variant": 2,
+      "color": 4286611584,
+      "run_count": 195,
+      "pixel_count": 4093,
+      "source": {
+        "key": "button-102-128-2",
+        "file": "button-102-128-2.ops",
+        "fragments": 4093,
+        "last_hash": 1783604353981764089,
+        "x": 670,
+        "y": 257,
+        "width": 286,
+        "height": 121
+      }
+    },
+    {
+      "kind": 2,
+      "id": 103,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 90,
+      "pixel_count": 196,
+      "source": {
+        "key": "button-103-255-0",
+        "file": "button-103-255-0.ops",
+        "fragments": 196,
+        "last_hash": 8598633146689260949,
+        "x": 825,
+        "y": 475,
+        "width": 81,
+        "height": 54
+      }
+    },
+    {
+      "kind": 2,
+      "id": 103,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 51,
+      "pixel_count": 169,
+      "source": {
+        "key": "button-103-255-1",
+        "file": "button-103-255-1.ops",
+        "fragments": 169,
+        "last_hash": 1177964030038158499,
+        "x": 825,
+        "y": 475,
+        "width": 81,
+        "height": 54
+      }
+    },
+    {
+      "kind": 2,
+      "id": 103,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 51,
+      "pixel_count": 178,
+      "source": {
+        "key": "button-103-255-2",
+        "file": "button-103-255-2.ops",
+        "fragments": 178,
+        "last_hash": 7555219393195568244,
+        "x": 825,
+        "y": 475,
+        "width": 81,
+        "height": 54
+      }
+    },
+    {
+      "kind": 2,
+      "id": 104,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 43,
+      "pixel_count": 152,
+      "source": {
+        "key": "button-104-255-0",
+        "file": "button-104-255-0.ops",
+        "fragments": 152,
+        "last_hash": 7953213119119927949,
+        "x": 907,
+        "y": 499,
+        "width": 48,
+        "height": 55
+      }
+    },
+    {
+      "kind": 2,
+      "id": 104,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 34,
+      "pixel_count": 142,
+      "source": {
+        "key": "button-104-255-1",
+        "file": "button-104-255-1.ops",
+        "fragments": 142,
+        "last_hash": 17491698443249781442,
+        "x": 907,
+        "y": 499,
+        "width": 48,
+        "height": 55
+      }
+    },
+    {
+      "kind": 2,
+      "id": 104,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 35,
+      "pixel_count": 151,
+      "source": {
+        "key": "button-104-255-2",
+        "file": "button-104-255-2.ops",
+        "fragments": 151,
+        "last_hash": 7395040174004605202,
+        "x": 907,
+        "y": 499,
+        "width": 48,
+        "height": 55
+      }
+    },
+    {
+      "kind": 2,
+      "id": 105,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 47,
+      "pixel_count": 135,
+      "source": {
+        "key": "button-105-255-0",
+        "file": "button-105-255-0.ops",
+        "fragments": 135,
+        "last_hash": 3487927613538686769,
+        "x": 975,
+        "y": 510,
+        "width": 57,
+        "height": 37
+      }
+    },
+    {
+      "kind": 2,
+      "id": 105,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 33,
+      "pixel_count": 128,
+      "source": {
+        "key": "button-105-255-1",
+        "file": "button-105-255-1.ops",
+        "fragments": 128,
+        "last_hash": 1141112229288973089,
+        "x": 975,
+        "y": 510,
+        "width": 57,
+        "height": 37
+      }
+    },
+    {
+      "kind": 2,
+      "id": 105,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 32,
+      "pixel_count": 131,
+      "source": {
+        "key": "button-105-255-2",
+        "file": "button-105-255-2.ops",
+        "fragments": 131,
+        "last_hash": 4510284401442982802,
+        "x": 975,
+        "y": 510,
+        "width": 57,
+        "height": 37
+      }
+    },
+    {
+      "kind": 2,
+      "id": 106,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "button-106-255-0",
+        "file": "button-106-255-0.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "x": 49,
+        "y": 136,
+        "width": 250,
+        "height": 30
+      }
+    },
+    {
+      "kind": 2,
+      "id": 106,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "button-106-255-1",
+        "file": "button-106-255-1.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "x": 49,
+        "y": 136,
+        "width": 250,
+        "height": 30
+      }
+    },
+    {
+      "kind": 2,
+      "id": 106,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "button-106-255-2",
+        "file": "button-106-255-2.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "x": 49,
+        "y": 136,
+        "width": 250,
+        "height": 30
+      }
+    },
+    {
+      "kind": 2,
+      "id": 108,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 168,
+      "pixel_count": 1355,
+      "source": {
+        "key": "button-108-255-0",
+        "file": "button-108-255-0.ops",
+        "fragments": 1355,
+        "last_hash": 12509443127020538499,
+        "x": 587,
+        "y": 428,
+        "width": 99,
+        "height": 99
+      }
+    },
+    {
+      "kind": 2,
+      "id": 108,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 168,
+      "pixel_count": 1355,
+      "source": {
+        "key": "button-108-255-1",
+        "file": "button-108-255-1.ops",
+        "fragments": 1355,
+        "last_hash": 5636966256864476444,
+        "x": 587,
+        "y": 428,
+        "width": 99,
+        "height": 99
+      }
+    },
+    {
+      "kind": 2,
+      "id": 108,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 167,
+      "pixel_count": 1355,
+      "source": {
+        "key": "button-108-255-2",
+        "file": "button-108-255-2.ops",
+        "fragments": 1355,
+        "last_hash": 5636966256864476444,
+        "x": 587,
+        "y": 428,
+        "width": 99,
+        "height": 99
+      }
+    },
+    {
+      "kind": 2,
+      "id": 107,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 182,
+      "pixel_count": 1049,
+      "source": {
+        "key": "button-107-255-0",
+        "file": "button-107-255-0.ops",
+        "fragments": 1049,
+        "last_hash": 12126468190655883531,
+        "x": 665,
+        "y": 482,
+        "width": 130,
+        "height": 89
+      }
+    },
+    {
+      "kind": 2,
+      "id": 107,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 182,
+      "pixel_count": 1049,
+      "source": {
+        "key": "button-107-255-1",
+        "file": "button-107-255-1.ops",
+        "fragments": 1049,
+        "last_hash": 17019255270548115040,
+        "x": 665,
+        "y": 482,
+        "width": 130,
+        "height": 89
+      }
+    },
+    {
+      "kind": 2,
+      "id": 107,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 183,
+      "pixel_count": 1025,
+      "source": {
+        "key": "button-107-255-2",
+        "file": "button-107-255-2.ops",
+        "fragments": 1025,
+        "last_hash": 16016156522162632575,
+        "x": 665,
+        "y": 482,
+        "width": 130,
+        "height": 89
+      }
+    },
+    {
+      "kind": 2,
+      "id": 109,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 306,
+      "pixel_count": 2523,
+      "source": {
+        "key": "button-109-255-0",
+        "file": "button-109-255-0.ops",
+        "fragments": 2523,
+        "last_hash": 16183078522205376927,
+        "x": 431,
+        "y": 401,
+        "width": 130,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 109,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 306,
+      "pixel_count": 2523,
+      "source": {
+        "key": "button-109-255-1",
+        "file": "button-109-255-1.ops",
+        "fragments": 2523,
+        "last_hash": 685623792027961103,
+        "x": 431,
+        "y": 401,
+        "width": 130,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 109,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 312,
+      "pixel_count": 2485,
+      "source": {
+        "key": "button-109-255-2",
+        "file": "button-109-255-2.ops",
+        "fragments": 2485,
+        "last_hash": 2207347359259860688,
+        "x": 431,
+        "y": 401,
+        "width": 130,
+        "height": 130
+      }
+    },
+    {
+      "kind": 2,
+      "id": 110,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 178,
+      "pixel_count": 3444,
+      "source": {
+        "key": "button-110-255-0",
+        "file": "button-110-255-0.ops",
+        "fragments": 3444,
+        "last_hash": 10795933888144017812,
+        "x": 673,
+        "y": 328,
+        "width": 266,
+        "height": 124
+      }
+    },
+    {
+      "kind": 2,
+      "id": 110,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 178,
+      "pixel_count": 3444,
+      "source": {
+        "key": "button-110-255-1",
+        "file": "button-110-255-1.ops",
+        "fragments": 3444,
+        "last_hash": 17313280385252388199,
+        "x": 673,
+        "y": 328,
+        "width": 266,
+        "height": 124
+      }
+    },
+    {
+      "kind": 2,
+      "id": 110,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 181,
+      "pixel_count": 3592,
+      "source": {
+        "key": "button-110-255-2",
+        "file": "button-110-255-2.ops",
+        "fragments": 3592,
+        "last_hash": 16955079935785394461,
+        "x": 673,
+        "y": 328,
+        "width": 266,
+        "height": 124
+      }
+    },
+    {
+      "kind": 2,
+      "id": 110,
+      "variant": 0,
+      "color": 4286611584,
+      "run_count": 180,
+      "pixel_count": 3444,
+      "source": {
+        "key": "button-110-128-0",
+        "file": "button-110-128-0.ops",
+        "fragments": 3444,
+        "last_hash": 6252008370844491802,
+        "x": 673,
+        "y": 328,
+        "width": 266,
+        "height": 124
+      }
+    },
+    {
+      "kind": 2,
+      "id": 110,
+      "variant": 1,
+      "color": 4286611584,
+      "run_count": 180,
+      "pixel_count": 3444,
+      "source": {
+        "key": "button-110-128-1",
+        "file": "button-110-128-1.ops",
+        "fragments": 3444,
+        "last_hash": 14342193498260766749,
+        "x": 673,
+        "y": 328,
+        "width": 266,
+        "height": 124
+      }
+    },
+    {
+      "kind": 2,
+      "id": 110,
+      "variant": 2,
+      "color": 4286611584,
+      "run_count": 185,
+      "pixel_count": 3592,
+      "source": {
+        "key": "button-110-128-2",
+        "file": "button-110-128-2.ops",
+        "fragments": 3592,
+        "last_hash": 2616334545635637072,
+        "x": 673,
+        "y": 328,
+        "width": 266,
+        "height": 124
+      }
+    },
+    {
+      "kind": 2,
+      "id": 111,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "button-111-255-0",
+        "file": "button-111-255-0.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "x": 32,
+        "y": 180,
+        "width": 279,
+        "height": 83
+      }
+    },
+    {
+      "kind": 2,
+      "id": 111,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "button-111-255-1",
+        "file": "button-111-255-1.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "x": 32,
+        "y": 180,
+        "width": 279,
+        "height": 83
+      }
+    },
+    {
+      "kind": 2,
+      "id": 111,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "button-111-255-2",
+        "file": "button-111-255-2.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183,
+        "x": 32,
+        "y": 180,
+        "width": 279,
+        "height": 83
+      }
+    },
+    {
+      "kind": 2,
+      "id": 112,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 275,
+      "pixel_count": 3195,
+      "source": {
+        "key": "button-112-255-0",
+        "file": "button-112-255-0.ops",
+        "fragments": 3195,
+        "last_hash": 4476877394125132343,
+        "x": 20,
+        "y": 400,
+        "width": 139,
+        "height": 165
+      }
+    },
+    {
+      "kind": 2,
+      "id": 112,
+      "variant": 1,
+      "color": 4294967295,
+      "run_count": 275,
+      "pixel_count": 3195,
+      "source": {
+        "key": "button-112-255-1",
+        "file": "button-112-255-1.ops",
+        "fragments": 3195,
+        "last_hash": 4293524437828304227,
+        "x": 20,
+        "y": 400,
+        "width": 139,
+        "height": 165
+      }
+    },
+    {
+      "kind": 2,
+      "id": 112,
+      "variant": 2,
+      "color": 4294967295,
+      "run_count": 272,
+      "pixel_count": 3166,
+      "source": {
+        "key": "button-112-255-2",
+        "file": "button-112-255-2.ops",
+        "fragments": 3166,
+        "last_hash": 11795436239265988627,
+        "x": 20,
+        "y": 400,
+        "width": 139,
+        "height": 165
+      }
+    }
+  ],
+  "passed": true
+}

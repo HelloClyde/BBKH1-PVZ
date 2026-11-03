@@ -35,6 +35,8 @@ int h1_image_load_all(H1Image *image, uint32_t *argb, size_t capacity_pixels);
 /* Physical pixels for the renderer. No logical-size expansion occurs. */
 int h1_image_read_storage_span(H1Image *image, uint32_t x, uint32_t y, uint32_t count, uint32_t *argb);
 int h1_image_load_storage(H1Image *image, uint32_t *argb, size_t capacity_pixels);
+/* Exact physical A8 bytes; keeps font masks in their offline representation. */
+int h1_image_load_storage_alpha(H1Image *image,unsigned char *alpha,size_t capacity);
 /* Exact stored RGB24 bytes from an opened H1I1 RGB3/flags0 source. Offsets
  * and lengths are payload-relative and must both be divisible by three.
  * Consecutive calls share one stdio stream; other image reads invalidate its

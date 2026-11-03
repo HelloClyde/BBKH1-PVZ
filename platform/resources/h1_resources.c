@@ -199,6 +199,13 @@ void h1_image_close(H1Image *image) {
     if (image && image->file) { fclose((FILE*)image->file); image->file=0; }
     if (image) image->rgb_source_bytes=image->rgb_next_byte=image->rgb_stream_valid=0;
 }
+int h1_image_load_storage_alpha(H1Image *image,unsigned char *alpha,size_t capacity) {
+    if(!image||!image->file||!alpha||image->info.channels!=1||image->info.flags!=H1_IMAGE_MASK_ONLY)return 0;
+    const uint64_t area=(uint64_t)image->info.storage_width*image->info.storage_height;
+    if(!area||area!=image->info.pixel_bytes||area>capacity)return 0;
+    FILE *fp=(FILE*)image->file;image->rgb_stream_valid=0;
+    return !fseek(fp,(long)image->payload_offset,SEEK_SET)&&fread(alpha,1,(size_t)area,fp)==area;
+}
 static void decode_pixels(const H1Image *image,const unsigned char *buffer,uint32_t count,uint32_t *argb) {
     uint32_t i,channels=image->info.channels;
     for (i=0;i<count;i++) {

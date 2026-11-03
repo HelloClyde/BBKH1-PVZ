@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "scope": "Host ordinary-input gameplay using an existing V4; not native performance",
+  "events": [
+    {
+      "event": "first-plant",
+      "frame": 592,
+      "scene": 3,
+      "level": 1,
+      "board_counter": 65222,
+      "image_load_failures": 0,
+      "heap_sampled_peak": 19954636
+    },
+    {
+      "event": "first-projectile",
+      "frame": 644,
+      "scene": 3,
+      "level": 1,
+      "board_counter": 65694,
+      "image_load_failures": 0,
+      "heap_sampled_peak": 19954636
+    },
+    {
+      "event": "first-hit",
+      "frame": 663,
+      "scene": 3,
+      "level": 1,
+      "board_counter": 65864,
+      "image_load_failures": 0,
+      "heap_sampled_peak": 19954636
+    },
+    {
+      "event": "pause-held",
+      "frame": 677,
+      "scene": 3,
+      "level": 1,
+      "board_counter": 65878,
+      "image_load_failures": 0,
+      "heap_sampled_peak": 19954636
+    },
+    {
+      "event": "resumed",
+      "frame": 681,
+      "scene": 3,
+      "level": 1,
+      "board_counter": 65914,
+      "image_load_failures": 0,
+      "heap_sampled_peak": 19954636
+    },
+    {
+      "event": "level-award-input",
+      "frame": 1148,
+      "scene": 3,
+      "level": 1,
+      "board_counter": 70120,
+      "image_load_failures": 0,
+      "heap_sampled_peak": 19954636
+    },
+    {
+      "event": "level2-after-first-win",
+      "frame": 1430,
+      "scene": 3,
+      "level": 2,
+      "board_counter": 1,
+      "image_load_failures": 0,
+      "heap_sampled_peak": 20837080
+    }
+  ],
+  "closed_state": "closed",
+  "regenerated_runtime_files_equal": 2638,
+  "shared_CJK_metrics": true,
+  "A8_sampling": true,
+  "glyph_metrics_hash": "b8d9bad91ec5369"
+}

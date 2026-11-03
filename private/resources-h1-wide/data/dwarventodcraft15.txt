@@ -4,11 +4,11 @@ Define CharList
    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
    'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '~', '`',
    '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{',
-   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', '¡', '¢', '£', '¥',
-   '§', '©', '®', '¿', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë',
-   'Ì', 'Í', 'Î', 'Ï', '•', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü',
-   '•', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í',
-   'î', 'ï', '•', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', '•', 'ÿ', '€');
+   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', '√Å', '¬¢', '¬£', '¬¥',
+   '¬§', '¬©', '¬®', '√Ä', '√ã', '√ß', '√•', '√å', '‚Ç¨', 'ÔøΩ', '¬Æ', '‚Äö', '√©', '∆í', '√¶', '√®',
+   '√≠', '√™', '√´', '√¨', '¬•', '‚Äû', '√±', '√Æ', '√Ø', '√ç', '‚Ä¶', '¬Ø', '√¥', '√≤', '√≥', '‚Ä†',
+   '¬•', '¬ß', 'ÀÜ', '‚Ä°', '‚Ä∞', '‚Äπ', '≈†', '≈í', '¬æ', 'ÔøΩ', 'ÔøΩ', '≈Ω', 'ÔøΩ', '‚Äò', '‚Äú', '‚Äô',
+   '‚Äù', '‚Ä¢', '¬•', '‚Äì', 'Àú', '‚Äî', '‚Ñ¢', '‚Ä∫', '≈°', '¬ø', 'ÔøΩ', '≈ì', '≈æ', '≈∏', '¬•', '√ò', '√õ');
 
 Define WidthList
  (  14,  11,  12,  11,  11,  10,  12,  14,   7,   7,  13,  10,  18,  14,  14,  11,
@@ -89,7 +89,7 @@ Define OffsetList
 Define KerningPairs
  ("AV","AW","Av","Aw","F,","F.","FA","LT","LV","LW","P,","P.","PA","T,","T.","TA",
   "Ta","V,","V.","VA","Va","W,","W.","WA","Wa","Wo","Y,","Y.","Ya","Yq","w,","w.",
-  "y,","y.","wä","Wä","äh","äk","lä","Lä","ät","mö","öc","öf");
+  "y,","y.","w≈†","W≈†","≈†h","≈†k","l≈†","L≈†","≈†t","m≈°","≈°c","≈°f");
 
 Define KerningValues (  -1,  -1,  -1,  -1,  -2,  -2,  -1,  -1,  -1,  -1,  -2,  -2,  -1,  -1,  -1,  -1,    -1,  -2,  -2,  -1,  -2,  -2,  -2,  -2,  -2,  -1,  -2,  -2,  -1,  -1,  -1,  -1,    -2,  -1, -3, -3, -1, -1, -1, -1, -2, -1, -1, -1);
 
@@ -98,7 +98,7 @@ LayerSetImage             Main 'DwarvenTodcraft15';
 LayerSetAscent            Main 18;
 LayerSetCharWidths        Main CharList WidthList;
 LayerSetCharWidths        Main (' ') (9);
-LayerSetCharWidths        Main (' ') (9);
+LayerSetCharWidths        Main ('√ä') (9);
 LayerSetKerningPairs      Main KerningPairs KerningValues;
 LayerSetImageMap          Main CharList RectList;
 LayerSetCharOffsets       Main CharList OffsetList;
@@ -107,3 +107,13 @@ LayerSetLineSpacingOffset Main 0;
 LayerSetPointSize         Main 15;
 
 SetDefaultPointSize  15;
+
+CreateLayer H1ZhMain;
+LayerSetImage H1ZhMain 'h1zh09';
+LayerSetAscent H1ZhMain 18;
+LayerSetPointSize H1ZhMain 15;
+LayerSetHeight H1ZhMain 24;
+LayerSetColorMult H1ZhMain (1.0, 1.0, 1.0, 1.0);
+LayerSetH1CJK H1ZhMain 'data/h1zh09.h1f' -6;
+LayerSetAscentPadding H1ZhMain 0;
+LayerSetLineSpacingOffset H1ZhMain 0;

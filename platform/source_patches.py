@@ -137,3 +137,8 @@ bool PvzpLoadNextResource()
     spec=importlib.util.spec_from_file_location("pvzh1_widescreen",optional)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     module.apply(source_root)
+
+    optional=ROOT/"platform/localization_patches.py"
+    spec=importlib.util.spec_from_file_location("pvzh1_localization",optional)
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    module.apply(source_root)

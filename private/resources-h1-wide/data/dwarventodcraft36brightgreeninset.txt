@@ -4,11 +4,11 @@ Define CharList
    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
    'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '~', '`',
    '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{',
-   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', 'Á', '¢', '£', '´',
-   '¤', '©', '¨', 'À', 'Ë', 'ç', 'å', 'Ì', '€', '', '®', '‚', 'é', 'ƒ', 'æ', 'è',
-   'í', 'ê', 'ë', 'ì', '¥', '„', 'ñ', 'î', 'ï', 'Í', '…', '¯', 'ô', 'ò', 'ó', '†',
-   '¥', '§', 'ˆ', '‡', '‰', '‹', 'Š', 'Œ', '¾', '', '', '', '', '‘', '“', '’',
-   '”', '•', '¥', '–', '˜', '—', '™', '›', 'š', '¿', '', 'œ', '', 'Ÿ', '¥', 'Ø', 'Û');
+   ']', '}', ';', ':',"'", '"', ',', '<', '.', '>', '/', '?', 'Ã', 'Â¢', 'Â£', 'Â´',
+   'Â¤', 'Â©', 'Â¨', 'Ã€', 'Ã‹', 'Ã§', 'Ã¥', 'ÃŒ', 'â‚¬', 'ï¿½', 'Â®', 'â€š', 'Ã©', 'Æ’', 'Ã¦', 'Ã¨',
+   'Ã­', 'Ãª', 'Ã«', 'Ã¬', 'Â¥', 'â€', 'Ã±', 'Ã®', 'Ã¯', 'Ã', 'â€¦', 'Â¯', 'Ã´', 'Ã²', 'Ã³', 'â€ ',
+   'Â¥', 'Â§', 'Ë†', 'â€¡', 'â€°', 'â€¹', 'Å ', 'Å’', 'Â¾', 'ï¿½', 'ï¿½', 'Å½', 'ï¿½', 'â€˜', 'â€œ', 'â€™',
+   'â€', 'â€¢', 'Â¥', 'â€“', 'Ëœ', 'â€”', 'â„¢', 'â€º', 'Å¡', 'Â¿', 'ï¿½', 'Å“', 'Å¾', 'Å¸', 'Â¥', 'Ã˜', 'Ã›');
 
 Define WidthList
  (  33,  27,  29,  27,  26,  25,  29,  34,  18,  18,  30,  25,  44,  35,  33,  27,
@@ -100,7 +100,7 @@ LayerSetImage             Main 'DwarvenTodcraft36BrightGreenInset';
 LayerSetAscent            Main 48;
 LayerSetCharWidths        Main CharList WidthList;
 LayerSetCharWidths        Main (' ') (21);
-LayerSetCharWidths        Main ('Ê') (21);
+LayerSetCharWidths        Main ('ÃŠ') (21);
 LayerSetKerningPairs      Main KerningPairs KerningValues;
 LayerSetImageMap          Main CharList RectList;
 LayerSetCharOffsets       Main CharList OffsetList;
@@ -109,3 +109,13 @@ LayerSetLineSpacingOffset Main 0;
 LayerSetPointSize         Main 36;
 
 SetDefaultPointSize  36;
+
+CreateLayer H1ZhMain;
+LayerSetImage H1ZhMain 'h1zh17';
+LayerSetAscent H1ZhMain 48;
+LayerSetPointSize H1ZhMain 36;
+LayerSetHeight H1ZhMain 59;
+LayerSetColorMult H1ZhMain (0.45, 1.0, 0.15, 1.0);
+LayerSetH1CJK H1ZhMain 'data/h1zh17.h1f' 8;
+LayerSetAscentPadding H1ZhMain 12;
+LayerSetLineSpacingOffset H1ZhMain 0;
