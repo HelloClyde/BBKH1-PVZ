@@ -1,0 +1,14 @@
+{
+  "tool": "image_gen built-in",
+  "date": "2026-11-04",
+  "output": "assets/icon.png",
+  "desktop_title": "植物僵尸",
+  "prompt": "Use case: stylized-concept. Asset: ONE square launcher icon for a Plants vs Zombies game on a BBK H1 handheld. Image 1 is a style reference ONLY: match its early-2010s native launcher icons: glossy rounded-square colored plate, thick beveled silver-white edge, softly raised toy-like 3D illustration and strong readability at 48x48 pixels. Image 2 is subject context only; replace the old English logo entirely. Create a single polished launcher icon, front-on view: cheerful vivid green peashooter head and its two leaves in foreground, small humorous gray-green zombie head peeking behind, sunny yellow-green rounded square backplate, convincing embossed rim and restrained glassy highlight at top. Very simple large silhouettes, two subjects only, no little decorative elements. The icon fills the square with a small transparent margin outside the rounded corners. No text, letters, words, ribbon, watermark or black rectangular background. Genuine transparent outer background. Deliver one centered square icon, not a screenshot or mockup.",
+  "reference_roles": {
+    "h1_native_desktop": "Style reference: full H1 480x272 desktop screenshot from 2026-11-03 normal exit.",
+    "previous_icon": "Subject reference: original PvZ Portable launcher logo, replaced."
+  },
+  "conversion": "SDK h1_bda.resources.build_icon_resources produces 45x45 and 57x57 RGB565+A and two 49x60 RGB565 resources; no runtime scaling.",
+  "generated_original": "exec-3f5e6eba-56e9-41d6-83f2-7f63a6dde02f.png",
+  "sha256": "1cb12c28f45330b1a43812f035be50aaf336b49ed642d811c77d298e46b7dff5"
+}

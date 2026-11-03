@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "commands": [
+    [
+      "gcc",
+      "-std=c11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DPVZ_NATIVE_PROFILE",
+      "-DPVZ_PROFILE_TEST",
+      "-DPVZ_H1_RAW_TICK_HZ=40",
+      "-I",
+      "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime",
+      "-DPVZ_NATIVE_PROFILE_RAW_TICKS",
+      "-c",
+      "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime\\profiler.c",
+      "-o",
+      "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\native-profiler-test\\profiler.o"
+    ],
+    [
+      "g++",
+      "-std=c++20",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DPVZ_NATIVE_PROFILE",
+      "-DPVZ_PROFILE_TEST",
+      "-DPVZ_H1_RAW_TICK_HZ=40",
+      "-I",
+      "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime",
+      "-DPVZ_NATIVE_PROFILE_RAW_TICKS",
+      "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\native-profiler-test\\probe.cpp",
+      "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\native-profiler-test\\profiler.o",
+      "-o",
+      "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\native-profiler-test\\probe.exe"
+    ]
+  ],
+  "output": "PASS profiler RAII/earlyreturn/exception/same-stage nesting/inclusive child/32bit delta/64bit total carry/clock sequence+wrap",
+  "wrapper_equivalence": {},
+  "inputs": {
+    "runtime/profiler.c": "0a71fe8b958179bff63d4dfb2e56386c4b52c336cb15a79d38672dd1ecb3775c",
+    "runtime/profiler.h": "0508c920a6a84a12cd88ae37ef16dcd4523234d19e9c697a2331e7eeeba7195d",
+    "tools/tests/test_native_profiler.py": "0123be2254658e5659a3af296d333b8c11af84f8c70d681b6f7f5d8a0526e87b"
+  },
+  "device_access_performed": false,
+  "real_counter_frequency_assumed": false,
+  "timer_backend": "native_raw_ticks",
+  "historical_renderer_comparison_skipped": true
+}

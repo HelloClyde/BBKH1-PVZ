@@ -10,11 +10,13 @@
 
 1. 将 `prebuilt/H1PVZPortable.bda` 复制到 **`A:\应用\程序\H1PVZPortable.bda`**。
 2. 将 **`private/resources-h1-wide/` 里面的完整目录树**复制到 **`B:\应用\数据\游戏\PVZ\`**；该目录下应直接有 `properties/resources.xml`、`images/`、`reanim/`、`sounds/` 等。
-3. 在 H1 桌面启动“植物大战僵尸”。游戏创建的 `userdata/` 存档位于同一个 PVZ 资源根目录，更新时保留它。
+3. 在 H1 桌面启动“植物僵尸”（四字短名称）。游戏创建的 `userdata/` 存档位于同一个 PVZ 资源根目录，更新时保留它。
 
 也支持 `A:\应用\数据\游戏\PVZ\`。程序优先选中 A 盘有效资源根目录，否则选 B 盘；资源与存档整次运行使用同一根目录。要使用 B 盘，应避免 A 盘同时留有旧的有效 PVZ 资源根目录。
 
 触摸直接点击；Enter 对应原版回车，Esc/返回键对应原版返回。H1 不绘制鼠标十字光标，选卡、种植预览照常显示。当前版本已汉化文本与界面图片，中文字体和图片均离线处理。
+
+桌面图标已按 H1 的圆角高光底板和立体边框重新设计，见 [图标及生成提示词](assets/icon.provenance.json)。动画、粒子和轨迹也已在电脑上预编译，H1 优先读取 `.h1d` 数据，避免每次启动重新解析 XML。菜单直接使用展开后的画面，云与草叶作为静态装饰；新用户、按钮和存档流程沿用原逻辑。
 
 可生成完整 A/B 安装包：
 
@@ -66,15 +68,15 @@ python tools/package_install.py --bda dist/H1PVZPortable.bda
 
 当前中文成品的 BDA 为：
 
-`d424df6de94c95ea1f3112d6f4e750106a6c14f36016b95c94f7ac569074f96e`
+`2a468b33a76daf0a30e15d7fe96522c2878752b9694ffbbaa80933160460bbe1`
 
-当前无光标中文版本的真机 20 秒窗口：主菜单 **22.71 FPS**、首关旧存档继续场景 **28.76 FPS**；窗口内没有资源读取、图片重载或内存申请失败。触摸 Menu、B 盘资源载入/存档读回、正常退出与内存释放已检查。完整主机运行通过旧 V4 存档载入、种植、投射物命中、触摸暂停/恢复、奖励页和下一关。未逐项测试全部关卡、模式或高密度战斗。
+当前版本真机资源加载时间由 **92.20 秒降至 30.75 秒**。两个 20 秒菜单窗口分别为 **21.93 FPS、21.75 FPS**，首关旧存档继续场景为 **28.08 FPS**；窗口内没有资源读取、图片重载或内存申请失败。触摸 Menu、B 盘存档写回/读回、返回菜单及退出内存释放已检查。完整主机运行通过旧 V4 存档载入、种植、投射物命中、触摸暂停/恢复、奖励页和下一关。首次进入关卡仍有一次原版预加载等待；未逐项测试全部关卡、模式或高密度战斗。
 
-记录位于 [docs/verification](docs/verification)，来源与测试范围见 [宽屏记录](docs/H1-WIDESCREEN-20261103.md)。CI 的 `Validate snapshot` 校验 SDK、上游源码、完整资源字节和 BDA 文件格式；它不代表一次新的真机测试或原生编译。
+记录位于 [docs/verification](docs/verification)，本次改动与计时范围见 [启动及桌面更新](docs/H1-STARTUP-20261104.md)。CI 的 `Validate snapshot` 校验 SDK、上游源码、完整资源字节和 BDA 文件格式；它不代表一次新的真机测试或原生编译。
 
 ## 资源与许可
 
-- `private/resources-h1-wide/`：完整中文运行资源，3,138 个文件、101,932,088 字节。
+- `private/resources-h1-wide/`：完整中文运行资源，3,391 个文件、103,179,028 字节，含 253 份离线动画、粒子和轨迹定义。
 - `private/source/`：原始资源输入；`private/widescreen/`：扩图源图与提示词；`private/zh-cn/`：中文图片和文本来源。
 - `localization/`：语言基线与文案补充；`assets/fonts/`：重新生成中文字形所需的 Noto 原字体，H1 安装不需要 OTF 文件。
 - `provenance/`：运行资源与源素材完整文件校验清单。
@@ -86,7 +88,7 @@ python tools/package_install.py --bda dist/H1PVZPortable.bda
 
 ## 感谢
 
-- Zhou Qiankang（wszqkzqk）：[PvZ-Portable](https://github.com/wszqkzqk/PvZ-Portable) 与本项目沿用的上游实现和图标。
+- Zhou Qiankang（wszqkzqk）：[PvZ-Portable](https://github.com/wszqkzqk/PvZ-Portable)、上游实现和原始图标。
 - PopCap / Electronic Arts：原版游戏、美术、字体与声音；资源提取整理来源为 [FregD156/PvZ_Assets](https://github.com/FregD156/PvZ_Assets)。
 - BBK H1 Native BDA SDK contributors：H1 SDK 与已验证接口。
 - Claudio Matsuoka、Hipolito Carraro Jr. 等 libxmp 作者；Jean-loup Gailly、Mark Adler 等 zlib 作者。

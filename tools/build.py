@@ -251,12 +251,12 @@ def main():
         expected=source_inputs.get(name,header_inputs.get(name,build_inputs.get(name)))
         if expected is not None and (not path.is_file() or sha256_file(path)!=expected):
             raise RuntimeError('Native input changed during build: '+name)
-    data=encode_header(fields,title='植物大战僵尸',build_time='2026-10-31 00:00:00')+resources+payload+bytes(padding)
+    data=encode_header(fields,title='植物僵尸',build_time='2026-10-31 00:00:00')+resources+payload+bytes(padding)
     out.mkdir(parents=True,exist_ok=True);bda=out/'H1PVZPortable.bda';bda.write_bytes(data)
     validation=validate_bda(bda)
     if not validation['ok']:raise RuntimeError(str(validation['errors']))
     digest=hashlib.sha256(data).hexdigest();(out/'H1PVZPortable.bda.sha256').write_text(digest+'  H1PVZPortable.bda\n')
-    meta={'title':'植物大战僵尸','target':'BBK H1/Y100 V1.41','upstream_commit':COMMIT,'bytes':len(data),'sha256':digest,
+    meta={'title':'植物僵尸','target':'BBK H1/Y100 V1.41','upstream_commit':COMMIT,'bytes':len(data),'sha256':digest,
           'native_elf_sha256':hashlib.sha256(elf.read_bytes()).hexdigest(),'payload_bytes':len(payload),
           'compiled_sources':len(sources),'exception_handling':True,'private_stack_bytes':131072,
           'additional_defines':args.define,'optimization':args.optimization,'prepared_source':source.relative_to(ROOT).as_posix(),

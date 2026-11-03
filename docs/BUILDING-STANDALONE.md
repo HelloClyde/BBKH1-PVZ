@@ -31,6 +31,10 @@ python tools/build_widescreen.py --toolchain 'D:/toolchain/bin' --prefix 'D:/pvz
 
 中文图片、文案和共享点阵字体由 `tools/build_zh_cn.py` 生成，随后重新烘焙中文菜单包，见 [汉化记录](H1-ZH-CN-20261103.md)。源字体仅用于电脑端生成，不进入 H1 运行目录。
 
+动画、粒子、轨迹采用 `.h1d` 离线定义。重新生成时，先用 `tools/build_host.py --widescreen` 构建完整主机运行器，再执行 `python tools/bake_definitions.py --host build/host/pvz-portable-host.exe --resources private/resources-h1-wide --output build/definitions-new`。脚本调用原版 XML 解析器，对全部实际使用的粒子、全部动画及轨迹做二进制往返校验；输出位于 `definitions-new/definitions/`，按相同相对路径放入运行资源。它不读取个人存档，包含独立的临时测试用户目录。Linux 主机需用 `--runtime-dir` 指定本机 C++ 运行库路径，Windows 默认 MSYS2 UCRT64。
+
+定义格式 `H1D1` 逐字段保存 32 位数值、字符串表和资源名称，避免序列化宿主机指针与结构体布局；外层 `H1DZ` 使用 zlib 压缩。H1 使用 4 KiB 页流式解压，两遍读取：先验证长度、CRC、类型结构和分配上限，再建立精确大小的数组，避免保留整份解压副本。未安装预编译文件时保留原 XML 兼容路径。当前导出清单为 `provenance/offline-definitions.json`。
+
 历史开发工具中部分模拟器/原生采样脚本保留了工作区配套探针路径，它们不属于上述独立构建和 CI 入口。这里保留相关源代码用于研究，不把不存在的模拟器依赖描述为可直接运行。
 
 ## 包与验证范围

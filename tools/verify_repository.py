@@ -1,6 +1,6 @@
 """Verify the private source snapshot, SDK, prebuilt BDA and complete assets."""
 from pathlib import Path
-import hashlib,json,subprocess,sys
+import hashlib,json,subprocess,sys,struct,zlib
 from build_paths import ROOT,SDK
 def read(path):return json.loads(path.read_text(encoding='utf8'))
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -18,13 +18,26 @@ def main():
  upstream=read(ROOT/'pinned-source-manifest.json');n=check_files(ROOT/'upstream',upstream['files'])
  assets=read(ROOT/'provenance/resources.json');count=check_files(ROOT/assets['directory'],assets['files'])
  for info in read(ROOT/'provenance/source-assets.json')['trees']:check_files(ROOT/info['directory'],info['files'])
+ definitions=read(ROOT/'provenance/offline-definitions.json')
+ assert definitions['count']==len(definitions['files'])
+ assert definitions['exporter_source_sha256']==sha(ROOT/'platform/definition/H1Definition.cpp')
+ for name,meta in definitions['files'].items():
+  path=ROOT/assets['directory']/name
+  data=path.read_bytes();assert len(data)==meta['bytes'] and sha(path)==meta['sha256']
+  assert data[:4]==b'H1DZ';raw=zlib.decompress(data[8:]);assert len(raw)==struct.unpack_from('<I',data,4)[0]
+  assert raw[:4]==b'H1D1' and len(raw)-16==struct.unpack_from('<I',raw,8)[0]
+  assert zlib.crc32(raw[16:])==struct.unpack_from('<I',raw,12)[0]
+ for name,expected in definitions['source_xml_sha256'].items():assert sha(ROOT/assets['directory']/name)==expected
+ icon=read(ROOT/'assets/icon.provenance.json');assert icon['sha256']==sha(ROOT/icon['output'])
  sys.path.insert(0,str(SDK));from h1_bda.validate import validate_bda
  bda=ROOT/'prebuilt/H1PVZPortable.bda';native=read(ROOT/'docs/verification/final-native-verification.json')
  assert sha(bda)==native['program']['bda_sha256']
  validation=validate_bda(bda);assert validation['ok'],validation
+ assert validation['title']==icon['desktop_title']
  assert all(not p.is_symlink() for p in (ROOT/assets['directory']).rglob('*'))
  report={'passed':True,'sdk_commit':pin['commit'],'upstream_files':n,'runtime_files':count,
          'runtime_bytes':assets['bytes'],'prebuilt_sha256':sha(bda),'BDA_validation':True,
+         'desktop_title':validation['title'],'offline_definitions':definitions['count'],
          'scope':'Source, resource bytes and tested BDA envelope; not a new hardware test'}
  print(json.dumps(report,indent=2))
  return report

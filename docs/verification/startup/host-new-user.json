@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "create_user_dialog_shown": true,
+  "dialog": [
+    {
+      "id": 30,
+      "x": 323,
+      "y": 146,
+      "w": 413,
+      "h": 308
+    }
+  ]
+}

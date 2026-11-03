@@ -52,6 +52,11 @@ template<class T> bool Tighten(T *&pointer,int count,unsigned metric)
  * any Reanimation borrower. This is not a live-definition relocation API. */
 bool H1CompactReanimationDefinition(ReanimatorDefinition& definition)
 {
+#ifndef PVZH1_DEFINITION_COMPACTION_TEST
+    // The offline reader already allocates exactly the decoded element count.
+    extern bool H1DefinitionTakeExact(const void*);
+    if(H1DefinitionTakeExact(&definition))return true;
+#endif
     ++pvzh1_definition_compaction_diagnostic[0];
     if(definition.mReanimAtlas||definition.mTracks.count<0||
        (definition.mTracks.count&&!definition.mTracks.tracks))return false;

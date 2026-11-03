@@ -21,7 +21,7 @@ def main():
         if name=='platform/host/host_io.cpp':continue
         obj=host/(hashlib.sha1(name.encode()).hexdigest()[:10]+'-'+Path(name).stem+'.o');objects.append(obj);identities[name]={'source':row['sha256'],'object':sha(obj)}
     io=(ROOT/'platform/host/host_io.cpp').read_text(encoding='utf8')
-    needle='if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_host_probe_selector();pvzh1_host_probe_atlas_entry();}'
+    needle='if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_host_probe_selector();pvzh1_host_probe_atlas_entry();pvzh1_export_definitions();}'
     assert io.count(needle)==1
     symbol='pvzh1_localization_probe' if args.localization else 'pvzh1_text_replay_probe'
     probe=ROOT/'tools/tests'/('localization_engine_probe.cpp' if args.localization else 'text_replay_engine_probe.cpp')

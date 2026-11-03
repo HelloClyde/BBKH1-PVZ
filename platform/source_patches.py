@@ -38,6 +38,78 @@ def apply(source_root:Path):
     replace(base,'#elif (defined(__ANDROID__) && !defined(__TERMUX__)) || defined(__IPHONEOS__)\n\tShutdown();\n#else\n\texit(theCode);',
                  '#elif (defined(__ANDROID__) && !defined(__TERMUX__)) || defined(__IPHONEOS__) || defined(H1_PVZ_PORTABLE)\n\tShutdown();\n#else\n\texit(theCode);')
     replace(source_root/'main.cpp','int main(int argc, char** argv)','int pvzp_upstream_main(int argc, char** argv)')
+    lawn=source_root/'LawnApp.cpp'
+    text=lawn.read_text(encoding='utf8')
+    text='#include "Startup.h"\nstatic bool h1_game_preload_pending=false;\n'+text
+    for phase,anchor in ((1,'aHesitationResources.EndBracket();'),(2,'mMusic->MusicInit();'),
+                         (3,'PvzpFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));'),
+                         (4,'TrailLoadDefinitions(gLawnTrailArray, LENGTH(gLawnTrailArray));'),
+                         (5,'PvzpParticleLoadDefinitions(gLawnParticleArray, LENGTH(gLawnParticleArray));'),
+                         (7,'LoadGroup("LoadingSounds", 54);')):
+        if text.count(anchor)!=1:raise ValueError('Startup phase anchor changed: '+anchor)
+        text=text.replace(anchor,anchor+f'\n    pvzh1_startup_mark({phase});',1)
+    anchor='\tPreloadForUser();\n\tif (mLoadingFailed'
+    if text.count(anchor)!=1:raise ValueError('Startup preload boundary changed')
+    text=text.replace(anchor,'''#ifdef H1_PVZ_PORTABLE
+    // The main menu needs only its selector animation. The original gameplay
+    // warmup still runs once, before creating/loading the first board.
+    ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SELECTOR_SCREEN, true);
+    mCompletedLoadingThreadTasks += GetNumPreloadingTasks();
+    h1_game_preload_pending=true;
+#else
+    PreloadForUser();
+#endif
+    pvzh1_startup_mark(6);
+\tif (mLoadingFailed''',1)
+    anchor='void LawnApp::PreNewGame(GameMode theGameMode, bool theLookForSavedGame)\n{'
+    if text.count(anchor)!=1:raise ValueError('First-board preload boundary changed')
+    text=text.replace(anchor,anchor+'''
+    if(h1_game_preload_pending){h1_game_preload_pending=false;PreloadForUser();}
+''',1)
+    lawn.write_text(text,encoding='utf8')
+    selector=source_root/'Lawn/Widget/GameSelector.cpp'
+    text=selector.read_text(encoding='utf8')
+    text='#include "Startup.h"\n'+text
+    anchor='GameSelector::GameSelector(LawnApp* theApp)\n{'
+    if text.count(anchor)!=1:raise ValueError('Selector constructor boundary changed')
+    text=text.replace(anchor,anchor+'\n    H1StartupSelectorScope startupScope;',1)
+    # The decorative open/sign transitions cannot use the offline final-pose
+    # pixels. Finish them before drawing while retaining upstream Update's
+    # button enablement, new-user dialog and profile/achievement checks.
+    for animation,count in (('anim_open',1),('anim_sign',2)):
+        anchor=f'aSelectorReanim->PlayReanim("{animation}", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 30.0f);'
+        if text.count(anchor)!=count:raise ValueError('Selector transition context changed: '+animation)
+        text=text.replace(anchor,anchor+'\n#ifdef H1_PVZ_PORTABLE\n    aSelectorReanim->mAnimTime=1.0f;\n    aSelectorReanim->mLoopCount=1;\n#endif')
+    # Static sky/grass on H1: moving decorative transforms invalidate reusable
+    # raster plans even when the visible motion is only a fraction of a pixel.
+    anchor='\t\telse\n\t\t\taCloudReanim->mAnimRate = 0.0f;'
+    if text.count(anchor)!=1:raise ValueError('Cloud initialization changed')
+    text=text.replace(anchor,anchor+'\n#ifdef H1_PVZ_PORTABLE\n        aCloudReanim->mAnimRate=0.0f;\n#endif',1)
+    cloud_motion='''	for (int i = 0; i < 6; i++)
+	{
+		Reanimation* aCloudReanim = mApp->ReanimationGet(mCloudReanimID[i]);
+		if (mCloudCounter[i] > 0)
+		{
+			if (--mCloudCounter[i] == 0)
+			{
+				aCloudReanim->mLoopCount = 0;
+				aCloudReanim->mAnimTime = 0.0f;
+				aCloudReanim->mAnimRate = 0.5f;
+			}
+		}
+		else if (aCloudReanim->mLoopCount > 0)
+			mCloudCounter[i] = RandRangeInt(2000, 4000);
+	}'''
+    grass_motion='''	if (--mLeafCounter == 0)
+	{
+		float aRate = RandRangeFloat(3.0f, 12.0f);
+		aLeafReanim->PlayReanim("anim_grass", ReanimLoopType::REANIM_LOOP, 20, aRate);
+		mLeafCounter = RandRangeInt(200, 400);
+	}'''
+    for anchor in (cloud_motion,grass_motion):
+        if text.count(anchor)!=1:raise ValueError('Menu decoration update context changed')
+        text=text.replace(anchor,'#ifndef H1_PVZ_PORTABLE\n'+anchor+'\n#endif',1)
+    selector.write_text(text,encoding='utf8')
     # H1 uses a streaming tracker/PCM backend. Retaining the original filename
     # avoids copying a complete MO3 into RAM before loading the unpacked XM.
     music=source_root/'Lawn/System/Music.cpp'
@@ -62,6 +134,13 @@ def apply(source_root:Path):
     replace(source_root/'PvzpLib/Definition.cpp',
             'std::filesystem::last_write_time(Sexy::PathFromU8(theFilePath), ec)',
             'std::filesystem::last_write_time(Sexy::PathFromU8(Sexy::GetResourcePath(theFilePath)), ec)')
+    replace(source_root/'PvzpLib/Definition.cpp',
+            'bool DefinitionCompileAndLoad(const std::string& theXMLFilePath, const DefMap* theDefMap, void* theDefinition)\n{',
+            '''extern bool H1DefinitionLoad(const std::string&, const DefMap*, void*);
+bool DefinitionCompileAndLoad(const std::string& theXMLFilePath, const DefMap* theDefMap, void* theDefinition)
+{
+    // H1D1 is produced on the PC using the original parser. It has no ABI pointers.
+    if (H1DefinitionLoad(theXMLFilePath, theDefMap, theDefinition)) return true;''')
     replace(source_root/'PvzpLib/Definition.cpp',
             '\treturn DefinitionWriteCompiledFile(theCompiledFilePath, theDefMap, theDefinition);',
             '''#ifdef H1_PVZ_PORTABLE
