@@ -1,0 +1,7 @@
+{
+  "tool": "built-in image_gen",
+  "edit_target": "private/source/images/AwardScreen_Back.jpg",
+  "output": "private\\widescreen\\source\\award-outpaint-v1.png",
+  "prompt": "Extend original 800x600 award background to 1060x600, 130 pixels at each side. Keep central card and title panel original proportions and centered. Extend brown mottled parchment texture and move outside border to new edges. No text or new controls.",
+  "postprocess": "Offline Lanczos resize to 480x272 RGB; H1I2 logical dimensions 1060x600."
+}

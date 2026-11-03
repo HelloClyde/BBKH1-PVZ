@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "checks": {
+    "build/wide-backdrops-engine/run/widescreen-backdrops-verification.json": {
+      "result": {
+        "passed": true,
+        "campaign_backgrounds": 7,
+        "camera_positions_per_background": 3,
+        "actual_raster_cases": 21,
+        "wide_unpainted_bars": false
+      },
+      "sha256": "64e36e9b18d9f0048f2d3daf15517a8a191e804bba3c1c236355a659cb7742c0"
+    },
+    "build/widescreen-probe/present.json": {
+      "result": {
+        "passed": true,
+        "width": 480,
+        "height": 272,
+        "exact_LCD_frames": 323,
+        "damage_tiles": true,
+        "cursor_all_edges": true,
+        "allocation_failure_latched": true,
+        "released_bytes": 0
+      },
+      "sha256": "a1375cb908e4bcba9420fd51ae494fd1cb698f35fc1e7a5579ea996a14e75976"
+    },
+    "build/widescreen-probe/present-legacy.json": {
+      "result": {
+        "all_passed": true,
+        "exact_framebuffer_cases": 244,
+        "partial_frames": 219,
+        "skipped_blocks": 1773247,
+        "changed_blocks": 653,
+        "cursor_edges_and_motion": true,
+        "surface_and_geometry_invalidation": true,
+        "allocation_failure_latched": true,
+        "released_bytes": 0
+      },
+      "sha256": "b8980a2c2add88df3b79a96d6029ef6702cbec3c5589c35b068995fdfd421048"
+    },
+    "build/widescreen-probe/plan-unit.json": {
+      "result": {
+        "passed": true,
+        "checks": 586,
+        "allocations_during_borrow": 0,
+        "live_allocations_after_shutdown": 0
+      },
+      "sha256": "53b1836c3a9a808eeffa4f40155e2bb092970d58f037f335321b9fd4307296b6"
+    },
+    "build/wide-retained-board-engine/run/dirty-canvas-verification.json": {
+      "result": {
+        "passed": true,
+        "whole_frame_cases": 64,
+        "roots": 57,
+        "limited_presentations": 51,
+        "background_pixels_skipped": 5267300,
+        "background_pixels_written": 3058165,
+        "moving_sun": true,
+        "changing_text_alpha": true,
+        "clip_changes": true,
+        "no_draw_frame": true,
+        "raw_access": true,
+        "released_owner": true
+      },
+      "sha256": "584b8125113142089a943cde96db8880f5dcc39a65e2c8449f67d50e149144b8"
+    },
+    "build/wide-retained-menu-attachments-stress/run/dirty-menu-verification.json": {
+      "result": {
+        "passed": true,
+        "whole_canvas_and_LCD_cases": 48,
+        "limited_presentations": 36,
+        "useful_masks": 36,
+        "skipped_blocks": 349414,
+        "cloud_motion": true,
+        "button_states": true,
+        "username_change": true,
+        "slide_fallback": true,
+        "cursor_edges": true
+      },
+      "sha256": "7e31b3ceef616cd4dcbb5eaaf98f6536368445fa42e0a7e97859c2014a6a4351"
+    },
+    "build/wide-retained-text-engine/run/text-replay-verification.json": {
+      "result": {
+        "passed": true,
+        "whole_frame_cases": 240,
+        "warm_hits": 144,
+        "captures": 96,
+        "changing_background": true,
+        "alpha_thresholds": true,
+        "fractional_translation": true,
+        "clip": true,
+        "mutation_counts": true,
+        "allocation_failure_latched": true,
+        "overflow_rejected": true,
+        "released_bytes": 0
+      },
+      "sha256": "ea966b235de0cafcfef937309999906a3c8e2725ecc4b2faa4bfe96cbb084e1d"
+    }
+  }
+}

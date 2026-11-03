@@ -1,0 +1,22 @@
+{
+  "schema": "h1-offline-scale-verification-1",
+  "passed": true,
+  "native_verified": false,
+  "prototype_menu_native_pending": true,
+  "tests": [
+    "RGBA neighboring cels stay isolated, including exact alpha",
+    "Glyph floor-boundary mapping prevents adjacent glyph color bleed",
+    "Nonempty logical glyph mapping to zero texels is rejected",
+    "All converted original-image identities and nonempty rectangle bins verified",
+    "All safety-exception images retained byte-for-byte as H1I1",
+    "Frozen nine-image menu prototype bytes match the corresponding full-stage images",
+    "Original audio, module, XML, font metrics, text and definition files unchanged"
+  ],
+  "scaled_images": 2448,
+  "preserved_images": 32,
+  "rectangle_bins_checked": 4443,
+  "unchanged_nonimage_files": 629,
+  "metadata_header_comparisons": 2480,
+  "full_manifest_sha256": "fdc9f788534b52f1c05ac854b07ce86a7f899e710f0ea261e13ffc7a3fb93b1a",
+  "frozen_menu_manifest_sha256": "c54dd8bb0656ebc95c6a7ba5ca130cd4d3105111f1219daf0be309f5aa05b46c"
+}

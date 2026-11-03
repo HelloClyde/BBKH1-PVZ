@@ -1,0 +1,121 @@
+{
+  "passed": true,
+  "device": "Physical BBK H1 / Y100 V1.41",
+  "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
+  "program": {
+    "source_identity_verified": true,
+    "bda_bytes": 3306052,
+    "bda_sha256": "bb339ae62fa9fdab6596e570c4a1320724d93b3a822adc286c8a1ba4fe03021d",
+    "elf_sha256": "94af60765cee284399aea3cc60d3e2a9e9b795764024286ee7748630e726c872",
+    "build_receipt_sha256": "36d4e0890c9d2c603b02248702ab62bbbcf9a57b9385c9104c1de53ab7617f7e"
+  },
+  "code_fingerprints_verified": 4,
+  "physical": [
+    480,
+    272
+  ],
+  "layout": [
+    1060,
+    600
+  ],
+  "original_game_grid": [
+    800,
+    600
+  ],
+  "assets": {
+    "B:\\搴旂敤\\鏁版嵁\\娓告垙\\PVZ\\images\\titlescreen.h1i": {
+      "sha256": "8f6d03287d51d2a9e9021d80d5d9135cf20d8bce9664a90dbcc194a44d06b4e1",
+      "bytes": 391712,
+      "device_crc_verified": true,
+      "local_path": "private\\resources-h1-wide\\images\\titlescreen.h1i"
+    },
+    "B:\\搴旂敤\\鏁版嵁\\娓告垙\\PVZ\\reanim\\selectorscreen_bg.h1i": {
+      "sha256": "0738859eea1b862e1896dc679696e0ca4cdf11db1014966ac898fb32c1391535",
+      "bytes": 391712,
+      "device_crc_verified": true,
+      "local_path": "private\\resources-h1-wide\\reanim\\selectorscreen_bg.h1i"
+    },
+    "B:\\搴旂敤\\鏁版嵁\\娓告垙\\PVZ\\reanim\\selectorscreen.reanim": {
+      "sha256": "6cbb1d28cd848d50e073a2ac983b91a929fa9d3ad52a9a6ec658dfd3f6d65bf2",
+      "bytes": 300758,
+      "device_crc_verified": true,
+      "local_path": "private\\resources-h1-wide\\reanim\\selectorscreen.reanim"
+    },
+    "B:\\搴旂敤\\鏁版嵁\\娓告垙\\PVZ\\h1menu\\selector-wide.h1mb": {
+      "sha256": "7cc6eb4a4ccd4b03036175dbc87b8b27eabf96c76262755745dfc6b93a728056",
+      "bytes": 2042876,
+      "device_crc_verified": true,
+      "local_path": "private\\resources-h1-wide\\h1menu\\selector-wide.h1mb"
+    },
+    "B:\\搴旂敤\\鏁版嵁\\娓告垙\\PVZ\\image-metadata.h1x": {
+      "sha256": "fc092dd43870df16c4fd4856eeffc64d1256955517cc3da2da70807984e8a04f",
+      "bytes": 156913,
+      "device_crc_verified": true,
+      "local_path": "private\\resources-h1-wide\\image-metadata.h1x"
+    },
+    "B:\\搴旂敤\\鏁版嵁\\娓告垙\\PVZ\\reanim\\zombie_hand.reanim": {
+      "sha256": "4909d785b3a871967833630507f9d9483d0918eee5d6c43659a1d855c37dd4a0",
+      "bytes": 31058,
+      "device_crc_verified": true,
+      "local_path": "private\\resources-h1-wide\\reanim\\zombie_hand.reanim"
+    },
+    "B:\\搴旂敤\\鏁版嵁\\娓告垙\\PVZ\\images\\awardscreen_back.h1i": {
+      "sha256": "8a3565f3fe3a5c5a29f61b39dd9629cd2ed324551d9357018108da19bb05419c",
+      "bytes": 391712,
+      "device_crc_verified": true,
+      "local_path": "private\\resources-h1-wide\\images\\awardscreen_back.h1i"
+    }
+  },
+  "FPS": {
+    "menu": {
+      "scene": 1,
+      "frames": 437,
+      "PC_elapsed_seconds": 20.023999999975786,
+      "FPS": 21.823811426314844,
+      "native_raw_ticks": 801,
+      "native_tick_hz": 40,
+      "native_elapsed_seconds": 20.025,
+      "file_opens_delta": 0,
+      "image_loads_delta": 0,
+      "image_evictions_delta": 0,
+      "text_replay_hits_delta": 0,
+      "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
+      "result_sha256": "7d3a90d47a798213cd72be0447955c515177cf3507745d35857217a8caf7afe8"
+    },
+    "first_level": {
+      "scene": 3,
+      "frames": 568,
+      "PC_elapsed_seconds": 20.03200000000652,
+      "FPS": 28.354632587850197,
+      "native_raw_ticks": 801,
+      "native_tick_hz": 40,
+      "native_elapsed_seconds": 20.025,
+      "file_opens_delta": 0,
+      "image_loads_delta": 0,
+      "image_evictions_delta": 0,
+      "text_replay_hits_delta": 3432,
+      "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
+      "result_sha256": "68ca1910bbaf7c2abbc1f80fa878228c5d40708e9bae2b2d56459cbdf1124ec9"
+    }
+  },
+  "retained_menu_frames_delta": 440,
+  "touch_menu_screenshot": "036-complete-options.png",
+  "native_B_browser_screenshot": "041-native-B-root.png",
+  "B_save": {
+    "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+    "bytes": 33773,
+    "sha256": "dd83fbd9b6d4cace42ef61e7c216e72040b1a9eb9de70dc0c0d3eb10bdff972e",
+    "internal_CRC32_valid": true,
+    "changed_since_before_wide": true
+  },
+  "normal_exit": {
+    "runtime_stage": 9,
+    "native_heap_bytes": 0,
+    "selector_resident_bytes": 0,
+    "LCD_shadow_bytes": 0,
+    "text_cache_bytes": 0,
+    "desktop_idle": 1
+  },
+  "debug_final_state": "Resident running; host serial client closed",
+  "scope": "Native menu and first-level saved tutorial; gameplay combat/award progression verified with real game input on host. Seven campaign backgrounds rasterized at three camera endpoints. All levels and modes not exhaustively tested."
+}

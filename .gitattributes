@@ -1,0 +1,2 @@
+# Preserve byte identities of pinned upstream sources and converted resources.
+* -text

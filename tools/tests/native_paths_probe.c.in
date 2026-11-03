@@ -1,0 +1,46 @@
+
+#include <assert.h>
+#include <errno.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#define NATIVE_PATH_MAX 512
+#define FILE_COUNT 64
+typedef void h1_file;typedef unsigned h1_size_t;
+volatile uint32_t pvz_runtime_diagnostic[16];static h1_file *files[FILE_COUNT],*log_file;
+static int available_a,available_b,fail_a_sentinel,log_sentinel,probes,closes,writes,logopens,marker_mode,marker_opens,marker_closes;static unsigned marker_pos;
+static char observed[3][512],logged[512];
+static h1_file *h1_fopen(const char*,const char*);static void h1_fclose(h1_file*);static unsigned h1_fwrite(const void*,unsigned,unsigned,h1_file*);static unsigned h1_fread(void*,unsigned,unsigned,h1_file*);
+static uint32_t h1_raw_tick_80hz(void){static uint32_t tick;return tick++;}
+static int native_failure(int e){errno=e;return -1;}
+/* @PATH_IMPLEMENTATION@ */
+static h1_file *h1_fopen(const char *p,const char *mode){
+ if(!strcmp(mode,"ab")){++logopens;strcpy(logged,p);return log_sentinel?(void*)(uintptr_t)0xffffffffu:(void*)(uintptr_t)0x1234;}
+ assert(!strcmp(mode,"rb"));if(strstr(p,"\\H1DATA.MAP")){++marker_opens;marker_pos=0;return marker_mode?(void*)(uintptr_t)0x5678:0;}
+ if(!strstr(p,"\\properties\\resources.xml"))return 0;
+ assert(probes<3);strcpy(observed[probes++],p);if(p[0]=='A'&&fail_a_sentinel)return(void*)(uintptr_t)0xffffffffu;
+ return ((p[0]=='A'&&available_a)||(p[0]=='B'&&available_b))?(void*)(uintptr_t)0x1234:0;
+}
+static void h1_fclose(h1_file*p){if(p==(void*)(uintptr_t)0x5678){++marker_closes;return;}assert(p==(void*)(uintptr_t)0x1234);++closes;}
+static unsigned h1_fwrite(const void*p,unsigned z,unsigned n,h1_file*f){(void)p;assert(f==(void*)(uintptr_t)0x1234&&z==1);++writes;return n;}
+static unsigned h1_fread(void*p,unsigned z,unsigned n,h1_file*f){static const unsigned char expected[17]={0x48,0x31,0x42,0x4b,1,0,0,0,0x46,0x4e,0x31,0x41,64,0,0,0,0x5a};assert(f==(void*)(uintptr_t)0x5678&&z==1);unsigned length=marker_mode==2?15:marker_mode==4?17:16;if(n>length-marker_pos)n=length-marker_pos;memcpy(p,expected+marker_pos,n);if(marker_mode==3&&!marker_pos&&n)((unsigned char*)p)[0]^=1;marker_pos+=n;return n;}
+static void reset(int a,int b){available_a=a;available_b=b;fail_a_sentinel=log_sentinel=probes=closes=writes=logopens=marker_mode=marker_opens=marker_closes=0;log_file=0;resource_prefix=native_data_a;resource_drive_detected=asset_bucket_state=0;strcpy(virtual_cwd,"/PVZ");memset((void*)pvz_runtime_diagnostic,0,sizeof(pvz_runtime_diagnostic));memset((void*)pvz_runtime_asset_layout_diagnostic,0,sizeof(pvz_runtime_asset_layout_diagnostic));}
+static void expect(const char *path,const char *suffix,char drive){char actual[512],wanted[512];strcpy(wanted,drive=='A'?native_data_a:native_data_b);strcat(wanted,suffix);assert(!pvz_native_path(path,actual,sizeof(actual))&&!strcmp(actual,wanted));}
+int main(int argc,char **argv){
+ if(argc==2&&!strcmp(argv[1],"--map")){char relative[400],path[512],mapped[512];reset(0,1);marker_mode=1;while(fgets(relative,sizeof(relative),stdin)){relative[strcspn(relative,"\r\n")]=0;strcpy(path,"/PVZ/");strcat(path,relative);assert(!pvz_native_path(path,mapped,sizeof(mapped)));puts(mapped+strlen(native_data_b)+1);}return 0;}
+ const unsigned char gbk[]={0x41,0x3a,0x5c,0xd3,0xa6,0xd3,0xc3,0x5c,0xca,0xfd,0xbe,0xdd,0x5c,0xd3,0xce,0xcf,0xb7,0x5c,0x50,0x56,0x5a,0};assert(!memcmp(native_data_a,gbk,sizeof(gbk)));
+ reset(1,1);expect("/PVZ/properties/resources.xml","\\properties\\resources.xml",'A');assert(probes==1&&observed[0][0]=='A'&&closes==1&&pvz_runtime_diagnostic[7]=='A');expect("/PVZSAVE/userdata/game1_0.v4","\\userdata\\game1_0.v4",'A');expect("reanim/a.h1i","\\reanim\\a.h1i",'A');assert(probes==1&&marker_opens==1&&pvz_runtime_asset_layout_diagnostic[0]==1);
+ reset(0,1);expect("/PVZSAVE/userdata/user1.dat","\\userdata\\user1.dat",'B');expect("/PVZ/images/a.h1i","\\images\\a.h1i",'B');assert(probes==2&&observed[0][0]=='A'&&observed[1][0]=='B'&&closes==1&&pvz_runtime_diagnostic[7]=='B');
+ reset(0,1);fail_a_sentinel=1;expect("/PVZ","",'B');assert(probes==2&&closes==1);
+ reset(0,0);expect("/PVZSAVE/pvz.log","\\pvz.log",'A');assert(probes==2&&!closes&&!pvz_runtime_diagnostic[7]);
+ reset(1,0);expect("./reanim/../images/a.h1i","\\images\\a.h1i",'A');expect("/PVZSAVE/cache32/./x/../a","\\cache32\\a",'A');char tiny[8];assert(pvz_native_path("/PVZ/images/long.h1i",tiny,sizeof(tiny))<0&&errno==ENAMETOOLONG);assert(pvz_native_path(0,tiny,sizeof(tiny))<0&&errno==EINVAL);
+ reset(0,1);marker_mode=1;expect("/PVZ/images/Background1.h1i","\\H1DATA\\1f\\images\\background1.h1i",'B');expect("/pvz/IMAGES/BACKGROUND1.H1I","\\H1DATA\\1f\\images\\background1.h1i",'B');expect("/PVZ/reanim/PotatoMine_rock3.h1i","\\H1DATA\\3b\\reanim\\potatomine_rock3.h1i",'B');expect("/PVZ/data/DwarvenTodcraft18GreenInset.txt","\\H1DATA\\0d\\data\\dwarventodcraft18greeninset.txt",'B');expect("/PVZ/sounds/mainmusic.xm","\\H1DATA\\23\\sounds\\mainmusic.xm",'B');assert(marker_opens==1&&marker_closes==1&&pvz_runtime_asset_layout_diagnostic[0]==2);
+ expect("/PVZSAVE/reanim/user.xml","\\reanim\\user.xml",'B');expect("/PVZ/properties/resources.xml","\\properties\\resources.xml",'B');expect("/PVZ/image-metadata.h1x","\\image-metadata.h1x",'B');expect("/PVZ/reanim","\\reanim",'B');char mapped[512],wanted[512];assert(!pvz_map_native_path("/PVZ/reanim/folder.xml",mapped,sizeof(mapped),0));strcpy(wanted,native_data_b);strcat(wanted,"\\reanim\\folder.xml");assert(!strcmp(mapped,wanted));assert(!pvz_native_path("/PVZ/reanim/not_exist.h1i",mapped,sizeof(mapped))&&strstr(mapped,"\\H1DATA\\")&&!h1_fopen(mapped,"rb"));
+ size_t length=strlen(mapped);char bounded[513];memset(bounded,0x5a,sizeof(bounded));assert(!pvz_native_path("/PVZ/reanim/not_exist.h1i",bounded,length+1)&&bounded[length+1]==0x5a);assert(pvz_native_path("/PVZ/reanim/not_exist.h1i",bounded,length)<0&&errno==ENAMETOOLONG);
+ for(int mode=0;mode<=4;++mode)if(mode!=1){reset(0,1);marker_mode=mode;expect("/PVZ/reanim/a.h1i","\\reanim\\a.h1i",'B');expect("/PVZ/images/a.h1i","\\images\\a.h1i",'B');assert(marker_opens==1&&pvz_runtime_asset_layout_diagnostic[0]==1);}
+ reset(1,1);assert(_write(1,"hello",5)==5&&writes==1&&logopens==1&&probes==1&&!marker_opens);char expected[512];strcpy(expected,native_data_a);strcat(expected,"\\PORT.LOG");assert(!strcmp(logged,expected));assert(_write(2,"!",1)==1&&writes==2&&logopens==1&&probes==1);
+ reset(0,1);assert(_write(1,"hello",5)==5&&writes==1&&probes==2);strcpy(expected,native_data_b);strcat(expected,"\\PORT.LOG");assert(!strcmp(logged,expected));
+ reset(1,0);log_sentinel=1;assert(_write(1,"x",1)==1&&writes==0&&!log_file);log_sentinel=0;assert(_write(1,"x",1)==1&&writes==1&&logopens==2&&probes==1);
+ puts("PASS GBK/A-first/B-fallback/shared saves; strict one-probe marker/64 buckets/golden casefold mappings/legacy/absent files/directory bypass/native bounds");return 0;
+}

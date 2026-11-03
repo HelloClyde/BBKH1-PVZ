@@ -1,0 +1,8 @@
+{
+  "host_loader_cases": 14,
+  "converted_images_hash_checked": 2480,
+  "result": "Passed 14 image metadata/full-load/span/alpha comparisons.",
+  "optional_logo_report": "H1PVZ: optional properties/partner_logo is absent; explicit transparent publisher-slot fallback.",
+  "image_dimensions": "Original sizes preserved; full 8-bit alpha compared",
+  "source_commit": "8ba94e95cfe7d0de5682f8258d3b932dbdac885c"
+}

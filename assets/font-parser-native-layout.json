@@ -1,0 +1,19 @@
+{
+  "target": "MIPS32 little-endian o32 soft-float GCC15.2 + hosted STL15.2",
+  "DataElement": 8,
+  "SingleDataElement": 32,
+  "ListDataElement": 20,
+  "std_string": 24,
+  "ElementVector": 12,
+  "unique_ptr_DataElement": 4,
+  "define_map_node": 44,
+  "FontLayer": 200,
+  "CharData": 56,
+  "max_align_t_alignment": 8,
+  "std_string_sso_capacity": 15,
+  "malloc_tracking_header": 24,
+  "malloc_alignment": 8,
+  "malloc_requested_overhead": 31,
+  "probe_source_sha256": "346d2dedd4df3f2e3489ad9997030f0bacf94b591091e29c20722da996a1775a",
+  "probe_object_sha256": "5cc5b521230b7efe756a97cb333782fcb4fd2fb9831716fbd424200f803efd20"
+}

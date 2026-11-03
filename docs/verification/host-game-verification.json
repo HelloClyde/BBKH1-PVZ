@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "scope": "Actual host game input, existing native V4 save restore, touch pause, wide award next-level click; no host FPS claim",
+  "run": "build\\host-widescreen\\run-wide-complete",
+  "run_metadata": {
+    "upstream_commit": "98b659380014c89c3553fbb2839f5e5a84d6df3d",
+    "target": "host-only complete original game",
+    "executable_sha256": "6ccd042ad67da5390b72c0c57f838f5ad14fe9975a935641e0a17b7a2861a924",
+    "prepared_manifest_sha256": "a4a55dee88fc5940d63dedd1656eaa74525192693ecb45d699b6aef9b42d153e",
+    "compile_report_sha256": "73795c39f552c2eb6e25d0811a4a44fe8ad11d1d33acb2ff6a559c1eb24eef01",
+    "frames_limit": 3000,
+    "clock_speed": 100.0,
+    "native_loading_progress": false,
+    "physical_screen": true,
+    "widescreen": true,
+    "font_probe": false,
+    "atlas_entry_probe": false,
+    "allocator_probe": false,
+    "widget_probe": false,
+    "triangle_probe": false,
+    "selector_probe": false,
+    "trim_unused_atlases": false,
+    "stop_after_first_win": true,
+    "prefer_large_images": true,
+    "read_only_entity_input_controller": true,
+    "compiled_cache_files_before": 0,
+    "script_sha256": "8571cb13ba6a5ff8acbf0eac0115751621aa35b646684dde35a8c0e1ece06591",
+    "resource_directory": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\h1-pvz-portable\\private\\resources-h1-wide",
+    "save_directory": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\h1-pvz-portable\\build\\host-widescreen\\save-wide-complete",
+    "exit_code": 0,
+    "compiled_cache_files_after": 0
+  },
+  "events": {
+    "first-plant": {
+      "frame": 592,
+      "level": 1,
+      "board_counter": 65222,
+      "paused": false
+    },
+    "first-projectile": {
+      "frame": 660,
+      "level": 1,
+      "board_counter": 65797,
+      "paused": false
+    },
+    "first-hit": {
+      "frame": 685,
+      "level": 1,
+      "board_counter": 65985,
+      "paused": false
+    },
+    "pause-held": {
+      "frame": 699,
+      "level": 1,
+      "board_counter": 65998,
+      "paused": true
+    },
+    "resumed": {
+      "frame": 703,
+      "level": 1,
+      "board_counter": 66034,
+      "paused": false
+    },
+    "level-award-input": {
+      "frame": 1203,
+      "level": 1,
+      "board_counter": 70223,
+      "paused": false
+    },
+    "level2-after-first-win": {
+      "frame": 1485,
+      "level": 2,
+      "board_counter": 1,
+      "paused": false
+    }
+  },
+  "physical": [
+    480,
+    272
+  ],
+  "image_load_failures": 0,
+  "raw_pixel_fallbacks": 0,
+  "states_sha256": "ed5ddb6d34cac5438a2b72a1f846614079ee362976a363ebca7c48ac24b4be57",
+  "award_screenshot_sha256": "3a219b7e4f0a5b39f75165413d9a1aef86d0509112db87ab2c5e156a92331a3c",
+  "before_wide_B_save": {
+    "valid": true,
+    "bytes": 35112,
+    "sha256": "f1abdd682464d6ecada91485f9830e8a50216de20d12bf1b148a3bb06dab79bb"
+  }
+}

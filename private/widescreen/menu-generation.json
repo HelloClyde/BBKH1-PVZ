@@ -1,0 +1,9 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "input": "build/hardware-test-20261103-over20/084-text-menu.png",
+  "output": "private/widescreen/source/menu-layout-preview-v1.png",
+  "h1_preview": "private/widescreen/menu-layout-480x272-v1.png",
+  "preview_only": true,
+  "program_updated": false,
+  "prompt": "Use case: precise-object-edit / widescreen layout expansion. Edit target: the attached real handheld screenshot of the Plants vs Zombies main menu, currently a narrow 4:3 game image with dark green vertical bars at left and right. Produce a polished 30:17 landscape (480:272) widescreen adaptation preview, completely fill the frame. Preserve original 2D game art, exact proportions of all existing UI objects, stone buttons and signs, and exact original English lettering: START ADVENTURE, MINI-GAMES, PUZZLE, SURVIVAL, OPTIONS, HELP, QUIT; preserve the top-left welcome sign, user htest! and change-user signs, Zombatar sign, and achievements pedestal. Widen the layout by moving the tree with hanging wooden signs to the far left and the large gravestone with its button cluster toward the far right, keeping their original physical sizes and heights, rather than stretching them. Naturally reveal more of the central house, driveway, garden and blue sky in the extra horizontal space, continue original artwork seamlessly. Maintain the same relative vertical positions and clear separation of interactive controls. Preserve the silhouetted shadowing and late-afternoon colors. No new buttons, no invented words, no fake extra plants or zombies, no watermark, no black or green bars, no external frame. This is a game layout preview to guide actual engine integration, not a redesigned game menu. Output a full-width wide landscape image."
+}

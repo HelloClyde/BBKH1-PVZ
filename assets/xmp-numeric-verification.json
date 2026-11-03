@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "scope": "Exact numeric candidate only: independent host PCM correctness plus actual target code-size/instruction-work proxy. No device or production-build hookup.",
+  "implementation": {
+    "platform/audio/xmp_numeric_patches.py": "8a9be53d8031875e62b8799b9de613dae4e274a6182d137be1ac6f0268982bc3",
+    "platform/audio/xmp_numeric_cache.h": "1e8143c84aadc11c578507b3570474589deac0bc31d67001893d672c696b1d7d",
+    "platform/audio/README.md": "eef78040b246c2fb08e7cffb655314f6d92dfff083252b5ba5f136d75eb06fee",
+    "tools/tests/test_xmp_numeric.py": "aaf5467aee956ad09fd18aa8713064f49aaa91c6e28a884ffc5104d83749fd80",
+    "tools/tests/test_xmp_numeric_mips.py": "163e37e6b8b07fcd241a1db70c3c65f7a5c66c2db7e5d6fcc6e43df5d1504775",
+    "tools/tests/xmp_numeric_unit.c": "a97d4f68422e957cebcefacdaa589c1bb03bfd6966309912605bb9b6bd38e6e2",
+    "tools/tests/xmp_numeric_menu.c": "da6bac14a1483cfbc21a910b6f95d97b2fe164788fcf1145683a2799fd13c05e"
+  },
+  "future_integration": {
+    "currently_hooked": false,
+    "entry": "platform/audio/xmp_numeric_patches.py::apply(prepared_source_root)",
+    "result": "Dict[Path(original vendor source),Path(generated replacement)]",
+    "replace_only": [
+      "vendor/libxmp/src/period.c",
+      "vendor/libxmp/src/mixer.c"
+    ],
+    "c_include": "-I <ROOT>/platform/audio",
+    "required_existing_define": "H1_PVZ_PORTABLE",
+    "release_extra_defines": [],
+    "optional_diagnostic_define": "PVZH1_XMP_NUMERIC_STATS",
+    "build_identity": "Capture patch/header/generated period.c/generated mixer.c hashes and normal compiler flags. Pinned vendor and music_sources.json remain unchanged."
+  },
+  "PCM_reports": [
+    {
+      "kind": "oracle",
+      "module": "mainmusic.xm",
+      "blocks": 7200,
+      "compared_bytes": 7689600,
+      "sha256": "ada3bc6c713463c8d63e79a67d950046ce23dde8e7a3e166aa4e189c0aa07ea2",
+      "exact_PCM_and_control_state": true
+    },
+    {
+      "kind": "oracle",
+      "module": "mainmusic_hihats.xm",
+      "blocks": 7200,
+      "compared_bytes": 7689600,
+      "sha256": "14798f0e8e739593182da2088a1d29a5419e6170b1c28ac42bdb68db1e6d9e5b",
+      "exact_PCM_and_control_state": true
+    },
+    {
+      "kind": "menu",
+      "module": "mainmusic.xm",
+      "blocks": 7200,
+      "compared_bytes": 7632000,
+      "sha256": "e0cd155f1d1424dcef349d003ae3e9973798305ef2f66e983e4c39c4e0bd3d16",
+      "exact_PCM_and_control_state": true
+    }
+  ],
+  "unit_checks": 184031,
+  "target_static_bytes": 3624,
+  "target_hit_instructions": {
+    "method": "Explicitly enumerated, branch-delay-inclusive paths in this actual -Os MIPS object; no callee or cycle estimate.",
+    "instructions": {
+      "way0": 97,
+      "way1_empty_first_way": 112,
+      "way1_first_note_mismatch": 115,
+      "way1_first_bend_mismatch": 118
+    },
+    "external_calls_on_hit": 0,
+    "pristine_direct_instructions": 51,
+    "pristine_external_calls": {
+      "__floatsidf": 2,
+      "__divdf3": 3,
+      "__adddf3": 1,
+      "pow": 1
+    }
+  },
+  "menu_pow_call_proxy": {
+    "pristine": 218310,
+    "candidate": 87,
+    "removed": 218223,
+    "reduction_percent": 99.96014841280747
+  },
+  "cache_contract": "Serial calls only. Complete int/bit keys and original result bits; positive-normal values only. No source pointers/heap allocation/module or voice state, and original miss operation order retained.",
+  "reports": {
+    "build\\xmp-numeric-candidate\\report.json": "3e9d4afba9a0648edbd267c6eb929bd064e4353dd30e9bf0affec20110514f70",
+    "build\\xmp-numeric-candidate\\mips-proxy.json": "08fd7a0155b1172fdffdad7f132de33e51edf48cb1401c92f84c17a33148a149"
+  },
+  "limits": "Call reduction and target instruction counts do not establish native cycles/FPS. Audio is only part of the observed frame; drawing remains the main goal."
+}

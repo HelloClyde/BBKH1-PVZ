@@ -1,0 +1,32 @@
+
+#include <assert.h>
+#include <errno.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#define NATIVE_PATH_MAX 512
+#define FILE_COUNT 64
+#define S_IFCHR 0x2000
+#define S_IFREG 0x8000
+struct stat {int st_mode,st_nlink;off_t st_size;long st_blksize,st_blocks;};
+typedef void h1_file;typedef unsigned h1_size_t;
+volatile uint32_t pvz_runtime_diagnostic[16];
+static h1_file *files[FILE_COUNT];static char *directory_paths[FILE_COUNT];
+static uint32_t tick;static unsigned requested,read_result,read_calls;static void *read_pointer;static h1_file *open_result;static int seek_fail,seek_calls,seek_offset,seek_origin;
+static uint32_t h1_raw_tick_80hz(void){return tick;}
+static h1_file *h1_fopen(const char *p,const char*m){(void)p;(void)m;tick+=3;return open_result;}
+static unsigned h1_fread(void *p,unsigned size,unsigned count,h1_file*f){assert(size==1&&f==files[0]);tick+=5;++read_calls;read_pointer=p;requested=count;return read_result;}
+static int h1_fseek(h1_file *f,int offset,int origin){assert(f==files[0]);tick+=7;++seek_calls;seek_offset=offset;seek_origin=origin;return seek_fail?-1:origin==SEEK_END?100:offset;}
+static int h1_ftell(h1_file*f){assert(f==files[0]);return 13;}
+static int native_failure(int e){errno=e;return -1;}
+static int stat_native(const char*p,struct stat*s){(void)p;(void)s;return 7;}
+/* @IO_IMPLEMENTATION@ */
+int main(void){trace_path("io-test");assert(!strcmp(pvz_runtime_last_path,"io-test"));
+ files[0]=(void*)(uintptr_t)0x1234;open_result=files[0];assert(io_native_open("x","rb")==open_result&&pvz_runtime_io_diagnostic[0]==1&&pvz_runtime_io_diagnostic[1]==3&&!pvz_runtime_io_diagnostic[2]);open_result=0;assert(!io_native_open("x","rb")&&pvz_runtime_io_diagnostic[2]==1);open_result=(void*)(uintptr_t)0xffffffffu;assert(io_native_open("x","rb")==open_result&&pvz_runtime_io_diagnostic[0]==3&&pvz_runtime_io_diagnostic[1]==9&&pvz_runtime_io_diagnostic[2]==2);
+ char buffer[20000];unsigned sizes[]={0,1,1024,1025,4096,4097,16384,16385};uint32_t total=0;for(unsigned i=0;i<8;++i){read_result=sizes[i];assert(_read(3,buffer,sizes[i])==(ssize_t)sizes[i]&&requested==sizes[i]&&read_pointer==buffer);total+=sizes[i];}assert(read_calls==8&&pvz_runtime_io_diagnostic[3]==8&&pvz_runtime_io_diagnostic[4]==total&&pvz_runtime_io_diagnostic[5]==total&&pvz_runtime_io_diagnostic[6]==40&&pvz_runtime_io_diagnostic[7]==16385);assert(pvz_runtime_io_diagnostic[11]==3&&pvz_runtime_io_diagnostic[12]==2&&pvz_runtime_io_diagnostic[13]==2&&pvz_runtime_io_diagnostic[14]==1);
+ read_result=3;assert(_read(3,buffer,20)==3);read_result=0;assert(_read(3,buffer,20)==0&&!pvz_runtime_io_diagnostic[15]);uint32_t returned=pvz_runtime_io_diagnostic[5];read_result=0xffffffffu;assert(_read(3,buffer,20)==-1&&errno==EIO&&pvz_runtime_io_diagnostic[15]==1&&pvz_runtime_io_diagnostic[5]==returned);unsigned calls=read_calls;assert(_read(0,buffer,20)==0&&read_calls==calls);assert(_read(-1,buffer,20)==-1&&errno==EBADF&&read_calls==calls);
+ pvz_runtime_io_diagnostic[4]=0xfffffff0u;read_result=32;tick=0xfffffffeu;uint32_t elapsed=pvz_runtime_io_diagnostic[6];assert(_read(3,buffer,32)==32&&pvz_runtime_io_diagnostic[4]==16&&pvz_runtime_io_diagnostic[6]-elapsed==5);
+ assert(_lseek(3,37,SEEK_SET)==37&&seek_offset==37&&seek_origin==SEEK_SET&&pvz_runtime_io_diagnostic[8]==1&&pvz_runtime_io_diagnostic[9]==7);seek_fail=1;assert(_lseek(3,19,SEEK_SET)==-1&&errno==EIO&&pvz_runtime_io_diagnostic[10]==1);seek_fail=0;struct stat st;int before=seek_calls;uint32_t seeks=pvz_runtime_io_diagnostic[8];assert(!_fstat(3,&st)&&st.st_size==100&&st.st_blksize==4096&&seek_offset==13&&seek_calls==before+2&&pvz_runtime_io_diagnostic[8]==seeks+2);before=seek_calls;assert(!_fstat(1,&st)&&st.st_mode==(S_IFCHR|0666)&&seek_calls==before);directory_paths[0]="dir";assert(_fstat(3,&st)==7&&seek_calls==before);
+ puts("PASS native I/O observations preserve open/read/short-read/EOF/error/seek/fstat semantics, histograms and raw tick wrap");return 0;
+}

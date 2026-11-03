@@ -1,0 +1,19 @@
+{
+  "index_files": 2480,
+  "index_bytes": 137073,
+  "index_sha256": "393738edb0cd50b3b70dc2538af74c2562961f9562bc285b9789b5060adbac60",
+  "results": {
+    "index_only_without_image_files": 2480,
+    "missing_index_falls_back": 2480,
+    "bad_checksum_falls_back": 2480,
+    "truncated_index_falls_back": 2480,
+    "overflowing_header_lengths_fall_back": 2480,
+    "invalid_dimensions_with_valid_checksum_falls_back": 2480,
+    "valid_index_missing_entry_finds_real_file": 2480,
+    "root_switch_reloads_valid_index": 2480
+  },
+  "all_metadata_fields_match_original_headers": true,
+  "original_image_files_modified": false,
+  "optional_logo_and_missing_paths_verified": true,
+  "actual_image_decoder_fixture": "verify_resources.py: 14 full ARGB/span/alpha comparisons"
+}

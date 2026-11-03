@@ -1,0 +1,70 @@
+{
+  "schema": "h1-pvz-wide-assets-v1",
+  "physical": [
+    480,
+    272
+  ],
+  "logical": [
+    1060,
+    600
+  ],
+  "board": [
+    130,
+    0,
+    800,
+    600
+  ],
+  "baseline_modified": false,
+  "savedata_included": false,
+  "changed": {
+    "images/titlescreen.h1i": {
+      "bytes": 391712,
+      "sha256": "8f6d03287d51d2a9e9021d80d5d9135cf20d8bce9664a90dbcc194a44d06b4e1",
+      "source": "private\\widescreen\\source\\title-outpaint-v1.png"
+    },
+    "reanim/selectorscreen_bg.h1i": {
+      "bytes": 391712,
+      "sha256": "0738859eea1b862e1896dc679696e0ca4cdf11db1014966ac898fb32c1391535",
+      "source": "private\\widescreen\\source\\menu-clean-background-v1.png"
+    },
+    "reanim/selectorscreen.reanim": {
+      "bytes": 300758,
+      "sha256": "6cbb1d28cd848d50e073a2ac983b91a929fa9d3ad52a9a6ec658dfd3f6d65bf2",
+      "shifted_tracks": [
+        "SelectorScreen_BG_Right",
+        "almanac_key_shadow",
+        "SelectorScreen_Survival_shadow",
+        "SelectorScreen_Survival_button",
+        "SelectorScreen_Challenges_shadow",
+        "SelectorScreen_Challenges_button",
+        "SelectorScreen_ZenGarden_shadow",
+        "SelectorScreen_ZenGarden_button",
+        "SelectorScreen_StartAdventure_shadow",
+        "SelectorScreen_StartAdventure_button",
+        "SelectorScreen_Adventure_shadow",
+        "SelectorScreen_Adventure_button",
+        "flower1",
+        "flower2",
+        "flower3"
+      ]
+    },
+    "image-metadata.h1x": {
+      "path": "image-metadata.h1x",
+      "format": "H1X2 version2, 32-byte logical/physical records",
+      "files": 2480,
+      "bytes": 156913,
+      "sha256": "fc092dd43870df16c4fd4856eeffc64d1256955517cc3da2da70807984e8a04f",
+      "actual_file_header_comparisons": 2480
+    },
+    "reanim/zombie_hand.reanim": {
+      "bytes": 31058,
+      "sha256": "4909d785b3a871967833630507f9d9483d0918eee5d6c43659a1d855c37dd4a0",
+      "horizontal_offset": 260
+    },
+    "images/awardscreen_back.h1i": {
+      "bytes": 391712,
+      "sha256": "8a3565f3fe3a5c5a29f61b39dd9629cd2ed324551d9357018108da19bb05419c",
+      "source": "private\\widescreen\\source\\award-outpaint-v1.png"
+    }
+  }
+}

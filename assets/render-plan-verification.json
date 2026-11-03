@@ -1,0 +1,922 @@
+{
+  "passed": true,
+  "scope": "Offline host pixel/lifecycle correctness and strict MIPS compiler/shader isolation; actual device FPS remains a separate native experiment",
+  "reports": {
+    "engine": {
+      "path": "build/render-plan-probe/verification.json",
+      "sha256": "a95ec857f5d8318f97e43ca52804ada8cb8c25c818d49036501ca964fa003f6f",
+      "result": {
+        "passed": true,
+        "scope": "Host correctness/lifecycle only; no real H1 FPS claim",
+        "unit": {
+          "passed": true,
+          "checks": 442,
+          "allocations_during_borrow": 0,
+          "live_allocations_after_shutdown": 0
+        },
+        "engine": {
+          "passed": true,
+          "actual_BG_pixel_cases": 42,
+          "actual_guard_cases": 9,
+          "replays": 91,
+          "opaque_memcpy_pixels": 2392982,
+          "partial_pixels": 79077,
+          "transparent_skipped_pixels": 1584731,
+          "peak_capacity_bytes": 138240,
+          "source_images_destroyed_before_shutdown": true,
+          "shutdown_entries": 0,
+          "shutdown_bytes": 0
+        },
+        "objects": {
+          "build/host-physical/source/Lawn/Board.cpp": {
+            "source": "8be4bda7f987a514392165a4a52516d9bbc0c20da77d41b1c2999137e2f51f63",
+            "object": "03bfd1a931f4f4d402b9fbd1b6d234162aee5a863ce4fd435d616aefb80a5ce1"
+          },
+          "build/host-physical/source/Lawn/Challenge.cpp": {
+            "source": "4171495aefd7d00bd992144574850b77e0162e473cd01a468e942a4295c63a1f",
+            "object": "0c2268d6559cce3aec0a043252b97f8c7404701e598188432424430e11da9804"
+          },
+          "build/host-physical/source/Lawn/Coin.cpp": {
+            "source": "907930052a3b4f91c1f91e930b96ee269c8f8941212e744f3b5e3bf97e8653f1",
+            "object": "3a97b0d157953529b492d56c91f0429920b4825e74100c861f5a0d90906f50f7"
+          },
+          "build/host-physical/source/Lawn/CursorObject.cpp": {
+            "source": "71e0611a395fa2ea0328ebc4737bbe94a1dae2df66b2697930b0f852748f7d83",
+            "object": "be88dada7d13c36a5dc2303367296a0ee70e11169500a0588b591231b332dc48"
+          },
+          "build/host-physical/source/Lawn/CutScene.cpp": {
+            "source": "d9bede23e0bc9176f1ee266fc7f9a6db0a181014b80329f1aece95815a159393",
+            "object": "a2adcc01b05e2a48f77a7548e5e184a7795e9e59a90b35096d0ebd02b223828b"
+          },
+          "build/host-physical/source/Lawn/GameObject.cpp": {
+            "source": "76731a6e950c260c77c43fd1944c6452c3b461f68700197cf33c3e0559951582",
+            "object": "636c11a54620525db09e421d378ccb7ee823f3c3c1af499a758facaaecf4a579"
+          },
+          "build/host-physical/source/Lawn/GridItem.cpp": {
+            "source": "c730e7592f8a2ff48813ddc119750670f0767b9b98c0fa059b58bc2d85252ab7",
+            "object": "dcba1e08d4214cf77229f0342828d95e545df3adbfaff3fa3ce0e5eb42081066"
+          },
+          "build/host-physical/source/Lawn/LawnCommon.cpp": {
+            "source": "681573236c03f4306e0211dd25360e195830ee54dc59104df7d100dce05b50af",
+            "object": "3f459951d9ed90dd2ed05eca424bee94e5a78d56377d62b38758a84cf06299c6"
+          },
+          "build/host-physical/source/Lawn/LawnMower.cpp": {
+            "source": "94265ccd3bf6876ac9d48a965100e7c1d2c03fb02518702e427f0fbb9b276caf",
+            "object": "612979656439f9d2b2196c6b2d34faf854e81815af94687364aa4d5014eedea7"
+          },
+          "build/host-physical/source/Lawn/MessageWidget.cpp": {
+            "source": "f5cb12d10bf46eecc3b57e718e5ed35f062c7f3f65b7de24ab66d4bed7444316",
+            "object": "155067c5f246170084a5650ac936e0d4dca38f18ad79150b9f5c4ce4fb5b9acd"
+          },
+          "build/host-physical/source/Lawn/Plant.cpp": {
+            "source": "06653d76dc7e0c25ca08321e02b4b2d056677b98a075257537163afbfa520b50",
+            "object": "5f5b6ffdd46b6330dcf17b229f287be1d6664eec975459302db0ff3e84f60fe6"
+          },
+          "build/host-physical/source/Lawn/Projectile.cpp": {
+            "source": "833b74d3c70bdbe5c722736238410693517c9206f91b0f1e5bdcd8c8d0b585f6",
+            "object": "21ebcac0ab18683acc79714bf6639d09f29077780d2907fcf8bfbc8cec89aaf6"
+          },
+          "build/host-physical/source/Lawn/SeedPacket.cpp": {
+            "source": "719c6b639359343022342bdd5ae7e24f61615b9f5718fe957f827cc1f6562372",
+            "object": "0704e979558cac0738d591c42a037e3b0bb94c2d55a996b7cabd3e8ed2e3a640"
+          },
+          "build/host-physical/source/Lawn/System/DataSync.cpp": {
+            "source": "3fea80414ea0913a823599e7385a6ab6286935614af5cd4ec4df5ee0957d7cc1",
+            "object": "c6591a6e83e6fca3159331fb731c8fdaf86b84e6ec445e7627277335d8b875ff"
+          },
+          "build/host-physical/source/Lawn/System/Music.cpp": {
+            "source": "8fff724ca0a831e3b7cb7ef260b40d193a99ce580eb04c63ddc34bca90592286",
+            "object": "c2b89d8da0203650a2ecab331788a58d40d487de8b1dfcb7c2402e2acce3be87"
+          },
+          "build/host-physical/source/Lawn/System/PlayerInfo.cpp": {
+            "source": "bb09b872ba73e1684b43eabbd75e120011390baa2be4f911cfa0c271a77230bb",
+            "object": "0a410bf148e3c8e52b6bb8e6af9656dcb7d1361d400db4c3875f96d853271519"
+          },
+          "build/host-physical/source/Lawn/System/PoolEffect.cpp": {
+            "source": "810b57c0981d6239da12850de3a90072ce11f43ae20d4bcb0b341eb883e8eafd",
+            "object": "a3872c97217788e90f4fca698e61d2f72130c6cae8b295015f85b38ce529fd1a"
+          },
+          "build/host-physical/source/Lawn/System/ProfileMgr.cpp": {
+            "source": "06a6d5ec91d63892885e16e08fd0ef33e5fade77b47cfd0d22009c026aa7a31f",
+            "object": "ba6fc0e3ff9885e3cffc2addada9e3d2ea7922e5912f9929b4c2020db10528fc"
+          },
+          "build/host-physical/source/Lawn/System/ReanimationLawn.cpp": {
+            "source": "c0e2e2a785d7913f457264df6d1d42d050582bca15c9e7a4574b4bea8035d79a",
+            "object": "a6d2137c04d44dc34d5147946c0636171a247a7cf5a9f8faf04695fe93493f28"
+          },
+          "build/host-physical/source/Lawn/System/SaveGame.cpp": {
+            "source": "1deb4fe9a316ddaa1473839c70bc7c0720cc32e2df7a8346be7d5f87901eb261",
+            "object": "c79177b46ab364afbabd9d7d39512d4b25f23b2abb461312920f1e21940a917c"
+          },
+          "build/host-physical/source/Lawn/System/TypingCheck.cpp": {
+            "source": "b5da3836ed0caaee871740cff535c9e55fc46fb34f83100c08195fbed04d612e",
+            "object": "3f52bf6c0242297e45025bac979869f553ce40e0b0b8cdcd31f05c22b76879fb"
+          },
+          "build/host-physical/source/Lawn/System/Zombatar.cpp": {
+            "source": "dc5b7884c634275a6f2d267577709abadf822552e14c034c6af9bf4fa0a0fbe5",
+            "object": "d8d09998073ca057a41ac31a1f439efd471f112096d2046efceffbf8e12cd6fd"
+          },
+          "build/host-physical/source/Lawn/ToolTipWidget.cpp": {
+            "source": "7d52c4c0e08d499e8e1e24bd91a047f4ad3a2dd678192373673608a28de72919",
+            "object": "69af29ea0dd0428107eaff1f78bee0973eda4745260295393617b618ca73f707"
+          },
+          "build/host-physical/source/Lawn/Widget/AchievementsScreen.cpp": {
+            "source": "988d3fa277dedabbef6270350b5e3edb4eb3c080dcc545fd71ab32cfedaf019f",
+            "object": "2cfb66d63b834dfb55dc8bed3f358f20dddf88f0fb181741d6735a5d3e45bc6a"
+          },
+          "build/host-physical/source/Lawn/Widget/AlmanacDialog.cpp": {
+            "source": "c5ca9d27357e818b16cc4fb79a119f2da9b4533d448b0c3a475cb6f4da93a936",
+            "object": "9d67fbd825369784f346b3346afc334a61b18616702b71df3790e1c0f3f81955"
+          },
+          "build/host-physical/source/Lawn/Widget/AwardScreen.cpp": {
+            "source": "1acedf59dc518a4a18aae7deda6152824547806ddb5c24bdab75cff4d2dfabb8",
+            "object": "0bb4ec3c9161fa2048aa93aac8259caf88f26740ad0673fb1222e4fb928d00ae"
+          },
+          "build/host-physical/source/Lawn/Widget/ChallengeScreen.cpp": {
+            "source": "b7db51d19b67dbd68948914b08da62bfe22dc2feb4353b75251cce57c1de56bc",
+            "object": "f067e48c6b44b42c0fd4e30063cabb9223738a1702b873e229ca03c16141d833"
+          },
+          "build/host-physical/source/Lawn/Widget/CheatDialog.cpp": {
+            "source": "554500384f6741b507c628cdccaded3730cd4f79bf5e7352dc6f64a27b10a484",
+            "object": "7bda033629fe08517411c17e788eed3f12b6129e1b8a411526384cf68fa526f4"
+          },
+          "build/host-physical/source/Lawn/Widget/ContinueDialog.cpp": {
+            "source": "233ac12f2e16f448a4221d1c5f45dc9853f8a8871de8fe91375075259e5a9621",
+            "object": "e242f4191b33685bb8141a586bded916abd1d485ac84a4fb828f680b2d588149"
+          },
+          "build/host-physical/source/Lawn/Widget/CreditScreen.cpp": {
+            "source": "9d9c90f674e9f22fbca2715b1c2cef98fbb14ea555617937d8e31a644a383e2d",
+            "object": "32e1e3ec00c7f3f4f9f823f2b461371959b684b84506fa6aa97a2793d4aefc90"
+          },
+          "build/host-physical/source/Lawn/Widget/GameButton.cpp": {
+            "source": "84475d67c5f1667ad3b285b01fc30efaa542486a93e62ddcaf720cce20867268",
+            "object": "bc694c4bf4b7b2a54263b6ea2b902908c85633a36063b6255a8dcf8eb6f0ff2e"
+          },
+          "build/host-physical/source/Lawn/Widget/GameSelector.cpp": {
+            "source": "8c083d6041fe91b32c72d28099e939ebc007693e8e5b1722a7d3044ebc71be50",
+            "object": "43b6f810248dc684dbf4642a934da2ede5d4d401f9755275be7d300766e947db"
+          },
+          "build/host-physical/source/Lawn/Widget/ImitaterDialog.cpp": {
+            "source": "f484d3b15cd63a434fee23266b95ff48248c75a240bc0a0e4a3a2ec5c30569c9",
+            "object": "095baee0613fa2aed1c7ab4ef74ca666506ab21de84c4f7975b0b22446674d7f"
+          },
+          "build/host-physical/source/Lawn/Widget/LawnDialog.cpp": {
+            "source": "da21c811f839311b7f3257b4a9ec7e76afac335818f9815bc735cb5f1b59b2e0",
+            "object": "d79690daadab1ee0d257b6398497f6ae8b33b78c1dfadd27d621ca2deaade6fe"
+          },
+          "build/host-physical/source/Lawn/Widget/NewOptionsDialog.cpp": {
+            "source": "dcf1251bce6dcc16f4e2c2af42dc7721b322d75d852f95bfdd25d5e9af4269fb",
+            "object": "b8dd9141485f01d962cd1dd44bfbffb864c4d3c0fb45797a1606eac64bb1dd16"
+          },
+          "build/host-physical/source/Lawn/Widget/NewUserDialog.cpp": {
+            "source": "d299ccdd93442eaa4e46c06b6f09eee5c1ad1874c8928fba4b2a8a433d1b6521",
+            "object": "c4fe8b162602f4a95a91fc7b48eaad94e0105ed5cd584de2029ced89495d93f0"
+          },
+          "build/host-physical/source/Lawn/Widget/SeedChooserScreen.cpp": {
+            "source": "0b99f633da8bc5bfdc6144699728d721a429b046f1dee98c5d2a59fc96840738",
+            "object": "321e0baa42d40e1cb12786d3785858dd6065cd89be8dc4c9224883023f1d1fcd"
+          },
+          "build/host-physical/source/Lawn/Widget/StoreScreen.cpp": {
+            "source": "3f2b63e4e2ff5f89a10783c5b689533cc93311e757d492442071059df4c9d50c",
+            "object": "64b9c90aa81a1abb56c2bdc64ebb88c6f8e10b118f994bb38010a5ed4af9e91d"
+          },
+          "build/host-physical/source/Lawn/Widget/TitleScreen.cpp": {
+            "source": "b89fbe9ce2fca94cc6f0492773ee4c67ee9a99d5cc683701804a3f7c04181510",
+            "object": "81707e6f8cba4b266be4d6c53ed6f68a0fe698c26b7d5141f6d08769d97899c3"
+          },
+          "build/host-physical/source/Lawn/Widget/UserDialog.cpp": {
+            "source": "1b27bb75e6c38dbe11cf7f11270c73aa27b67c3e7c33a058f4e867847e9f454d",
+            "object": "f87c403bb80b7e7edaf824b834472e4735181db46674262b3621584c85959efe"
+          },
+          "build/host-physical/source/Lawn/Widget/ZombatarTOS.cpp": {
+            "source": "5668ee6d4f93355df2ca69c7d61647f6143ca5f71d064cca2810a204835005b4",
+            "object": "1f3fffbf020b64792491c4822bd7f339071a24785e7fcb4a793a689ac9cbdc8d"
+          },
+          "build/host-physical/source/Lawn/Widget/ZombatarWidget.cpp": {
+            "source": "68a6f9e831e393173f5a8ef65fd245175d38df5bad3b880ae52cce9e0275f193",
+            "object": "f0ae4cbe85a515fbebb53465d3feb6f4f758370b7b57673b5e4a9c3d62c722ab"
+          },
+          "build/host-physical/source/Lawn/ZenGarden.cpp": {
+            "source": "df59f949ae7aa0d6356958d5636b64f92b61ec911a606fbbc631abfe3ab1a827",
+            "object": "f9f45a98863bb76fc94a33d3a3a80a44119f192040b573bdb6fc5bce7d703210"
+          },
+          "build/host-physical/source/Lawn/Zombie.cpp": {
+            "source": "90c23aaa7dc530cd8395525fff24b7428eef38e9c472808ac0e167d42565bf9b",
+            "object": "2328914310e077a533af1e602c09331ed2cd46510c75f5de95f6e4b31efe115b"
+          },
+          "build/host-physical/source/LawnApp.cpp": {
+            "source": "1a5340a05ccbbc088b8fcc0733fea698054a405eb4f1e3566c7aff6b65da3b62",
+            "object": "80a76898d38c8da9131481ce390f0f60a5576bebecc9439b6a610a941b9edc20"
+          },
+          "build/host-physical/source/PvzpLib/Attachment.cpp": {
+            "source": "c540d3e7a325975738d7619fe6af842c76f62711ba602498b33449d0665dd315",
+            "object": "b68a2936662983a15792f870bf15fd6557305e055b8f2809dab80913798ba0c5"
+          },
+          "build/host-physical/source/PvzpLib/Definition.cpp": {
+            "source": "20d3993f4d687099b3ea0ada33222b2ca1ef84ef73954cea67fe850dd0e061ad",
+            "object": "c72b4fd1e8c7fb4923b2edc300bbae9f394b2caa7db9469c5e508c4fc5ab7b05"
+          },
+          "build/host-physical/source/PvzpLib/EffectSystem.cpp": {
+            "source": "cb1e4b44fb2a682f694af3afeb04f834a3337842568b3ea4f1b0b22788097315",
+            "object": "5b34680ee22f3870ee5d8dafb62d3d20704373062794efec2b9571019f6b0541"
+          },
+          "build/host-physical/source/PvzpLib/FilterEffect.cpp": {
+            "source": "6bfc81782474163b967d27bceb877f060b9629f5135243a4a22d48cc0b74a79b",
+            "object": "4f5411cc6d0bfbb5c3fd25fad6934c40bd95a2e46e2e5629e27cdd06bca851d6"
+          },
+          "build/host-physical/source/PvzpLib/PvzpCommon.cpp": {
+            "source": "24d624cd0bd40c901898544f04d7deef7cafb92fd710d4c40efd8166d066f135",
+            "object": "e2991002649223921c3b02fef845faaef8052af06d52cab285b57cc795a96867"
+          },
+          "build/host-physical/source/PvzpLib/PvzpDebug.cpp": {
+            "source": "e1bd1e88a03fc1949c475920468a8f3d3d13da294e9b42f0d438296534aee8d2",
+            "object": "57830598ebadd354b3eb7f6344ec4e76231eb00dcd8488447409b8a5cee351f0"
+          },
+          "build/host-physical/source/PvzpLib/PvzpFoley.cpp": {
+            "source": "333cb18636b12bc0f50659e1a8f5e056e8c35402466ac341e1a0ba7e7017299d",
+            "object": "75cd7bf0e6ebc18b0902684edb3241fec49261a0c362fe9c8b3a27fe3a38d765"
+          },
+          "build/host-physical/source/PvzpLib/PvzpList.cpp": {
+            "source": "abb0780562dba1acde03dfb517b84298101974503b828a20edc497463cc11515",
+            "object": "9b41bb2da560c144cdd0e043dfbc359ec162b458dbb2ad83fd9e690334296caf"
+          },
+          "build/host-physical/source/PvzpLib/PvzpParticle.cpp": {
+            "source": "0277448f36a4043415aa167896ef64ecae9d9a6a1cca5e066f95b96c165dd39c",
+            "object": "0ef96b53f92ecdf0ba8ac71e29fa92ce4283996e7b23d2ddc581875166cead28"
+          },
+          "build/host-physical/source/PvzpLib/PvzpStringFile.cpp": {
+            "source": "790d32e877ff6673177cecf0674934d2e2763b535a95304aff6d73971e73f1a7",
+            "object": "51d270d0f9c0c49864da03911291378c95e0358e2a1dc1cb19f5c298ae28d1fa"
+          },
+          "build/host-physical/source/PvzpLib/ReanimAtlas.cpp": {
+            "source": "fc068730fa1d38da793023d2346bb3f8ef7a7f5864b666bf46dcad456fbd67b5",
+            "object": "16c9ce7343bae14e2b3f451750222043c3c430def2a019d85cc7721fe1f692cf"
+          },
+          "build/host-physical/source/PvzpLib/Trail.cpp": {
+            "source": "bcd706b92b29366fa6b048caa616d48e1c56e18781c2b64e94b8cd35361c9f05",
+            "object": "b71f03834b345fbeae9eadfe3896ad023068e48ec9ba60b6759d878a1a3117fe"
+          },
+          "build/host-physical/source/Resources.cpp": {
+            "source": "a86a6d8d5cc08c1df0e9d7715c6ee709ce3281434226c4b015beaaa571ca2243",
+            "object": "86d0b9e4b60bf648a95098580935a2f9dacd85eeebe1024ecebc52d5bf441b56"
+          },
+          "build/host-physical/source/SexyAppFramework/Common.cpp": {
+            "source": "dff1e39375ac8d3e54aab7a014d0423b5176ab3c867ee426d404cf7064ce1c6b",
+            "object": "b6a1f907fdd7db517e211c1a483533836346a22c603663f2cf01d639d20a368d"
+          },
+          "build/host-physical/source/SexyAppFramework/SexyApp.cpp": {
+            "source": "3adedbf7b57386ea507bb25bbdec7d2bb3b1280e1fa461fe358b68949461818a",
+            "object": "ac91c80821ad5c5c1b29325419a4bf10af6f4658e10f9e5d648db02c40f01151"
+          },
+          "build/host-physical/source/SexyAppFramework/SexyAppBase.cpp": {
+            "source": "7960bc84759508f1ffa7f8772a2577e5731642c8e647273b07ee05335fcdb515",
+            "object": "c5513f648675a9c0b4c07da5463e299ab228101ce30b7260c1dcc8c5f19f047e"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/Color.cpp": {
+            "source": "e77bc630a28db97be3df92bb41630a4bcac9d543d52a89a0a762aa89fa6d65cc",
+            "object": "a85e86a4c392f261396e7a0ecaae857f9befe9fbaf67e2b0cac6122d6684a4ab"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/Font.cpp": {
+            "source": "926d50d1eb7277f8c4e60a2859b858ace8c0e6e2c941c7b02c1e2a8ec17c1142",
+            "object": "7f8bfb55ffa068240f3166260b035719aae5a481e0f533cd421a593d2fdc2eff"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/Graphics.cpp": {
+            "source": "b759ba3e2188186e6350d1d5bb123f3e3a32f8b9267604fd6aa9d1da1751ffdf",
+            "object": "2dcdc034efb05a0b4132b2fb53a8f83cc3eb3d2120df4854a1830faa3e0f6910"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/Image.cpp": {
+            "source": "6594fb78da16fdd0061c96aa3f6d6861e6754b374c7f28f98542ec116dac9e48",
+            "object": "f5254287cfeeed8392a872d45641668ad87d5df8665c41e5bbc0e1f3e8735e0e"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/ImageFont.cpp": {
+            "source": "6e2030cfcfefe0f7ec73d23e7ddc7039416c33959ab4526db79fb0f637e9e7b8",
+            "object": "3efd3989ce88e03291aced008660863007f43f354121a4df44afc79f95071082"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/MemoryImage.cpp": {
+            "source": "931fce83f0eadca04a6293cb6dbbb55f7c6806df0102268b097d0aac7b1521ea",
+            "object": "c8579dd08680452c6e2888706d0d98ce49db2a420b511e9ce705f2be580ac45c"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/NativeDisplay.cpp": {
+            "source": "99b827ed44ffb21c3cb686b9364322834185a6c43d85e2d52bcd70d167d4945e",
+            "object": "440ab047335a82500a6b3c6c5734c23cce9084ec191a282a914c24ebafacc124"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/Quantize.cpp": {
+            "source": "8916764dc7270a2884f5cbe9947b1b5579e9215d24f2c887becaeae0f57222bc",
+            "object": "5bd1db180e4e1741c76315657ce9d8d4cba7e9c6b53a78f5b0a904d26588144c"
+          },
+          "build/host-physical/source/SexyAppFramework/graphics/SharedImage.cpp": {
+            "source": "f7a79095c7158f3c718daf12955abc17cb09448ac7dc358e9de77c47422721cf",
+            "object": "d1fa0aa287b33849c485a11df6cd04822bbf932b029334d32e79e3a182cba872"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/Buffer.cpp": {
+            "source": "c02e1a5752d72cbe13bb9965a68156870734c4ed01ea5b967cbba99f340e8fe7",
+            "object": "893694e161dd1c975e205bc881a279932ffbb716ecf1041ade3f8ffb4d602fd2"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/Debug.cpp": {
+            "source": "98d761dc481a5ea4e697cf15ed2bc5629e21e05f660cf9d69f1d7642cf59a3b4",
+            "object": "1be16ceb3305c9e6cc62dfaf89e2d8023c9ca2e7a3cc236a7a2efcb6051c3ac2"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/DescParser.cpp": {
+            "source": "3f63ac704778f104be2842b601114d60b549817b35956e6d4e1698f83fced531",
+            "object": "f2dffe5eee7618b9635607b606a0c694eb047c43ab844813f2d50d0baaddc3b7"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/Flags.cpp": {
+            "source": "a42e78f4f8dcea9e760455aecac4612d7438844888b0eb609aaa2f8d1c3e89e3",
+            "object": "e968a7c15d2809ce2aac8f88ec17e53060b0f91e6c73cd74eb0b1051f7b3c649"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/KeyCodes.cpp": {
+            "source": "6a89ffb83db5dc6507294e4c975c3fea2f915953ed2631f733c8bc77ab3b4c9e",
+            "object": "2ad99e6da3e9dba5b4cf7e93e392c31ea4bcc4db28d3691dbca03fba28cf269c"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/MTRand.cpp": {
+            "source": "c3f64d33aa26acc76eb5bfb5bbb2abe2fdd23008634849495da38aa88c3a454d",
+            "object": "1254c32a24aa9bae579f2091fb5d52fd6f9f1e6a1b62f33e387a02cb3da99e70"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/PerfTimer.cpp": {
+            "source": "3b2025fb4fd4ebc5730eac0eb505b7ded3e261b642d4cff92e25fcf9029aa556",
+            "object": "a143bea8543564c9de7d0e5dc540a7fb6b8f7626ecdd58e26f4d74b4e362cb0f"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/PropertiesParser.cpp": {
+            "source": "1ff07d87b2a841e3800f36dea596536acaefb8d81ac5beedeb9136575a52bdf0",
+            "object": "e01a678a8618217396a9ca2d1ebee608e2da961b31d95d0447fd1a2911727b41"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/Ratio.cpp": {
+            "source": "c8fe182bdafc23f446f960b2aab45a757533aa521c0519e7ce153ec006ca209a",
+            "object": "12d8a736bbae69e9707b3f7f9c7e8b456adfd005a95719e0dda7698025244f44"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/RegEmu.cpp": {
+            "source": "bab87b86acf967e0b0e498806d3db227879dbad650a64a67f1d89a6e536c86a2",
+            "object": "84faebc40c14e09f3eadca62c8667b771332c9cc0c9e46d1365ffee1b667112f"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/ResourceManager.cpp": {
+            "source": "02ca9146f8d615afc33dc9b7b38f9dc8689f1255300f6ab7ea9c9f886f8e43dc",
+            "object": "0183ad961be3c5cc5d2e30188a0eef82defb53390a6b4ffc9a2894006443ee09"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/SexyMatrix.cpp": {
+            "source": "a46685d8fcd6580c7d064702940d7f21bc33721e671ff188dbdd07868dfc1cdb",
+            "object": "b8e099df750ff6c6fb1717b86b5a08aceef920a1976b040586c9e55e2eac4c1d"
+          },
+          "build/host-physical/source/SexyAppFramework/misc/XMLParser.cpp": {
+            "source": "fc510710eec2f76d950b4056f3408c38aca7f3a456eafe682fb497bde7cfb43f",
+            "object": "3142f5816230e6c992b768cd33acc73eab451c424d918b81c46ca90b892213e5"
+          },
+          "build/host-physical/source/SexyAppFramework/paklib/PakInterface.cpp": {
+            "source": "60c115e619da2f8594617d4a960c6fed92438afa4ad98591219083223e262fd8",
+            "object": "648a5fb1eda2824ea60cf05bcaa091136594bcdb03f83dd24134709884c0a98c"
+          },
+          "build/host-physical/source/SexyAppFramework/sound/SDLMusicInterface.cpp": {
+            "source": "d1085a268d723616b903f25a2a7177cf0de67ab8254c963cc166df72555bd39e",
+            "object": "88d78ba5b650323aefa978245484659b101b96a6c8b58fb0aac22a72c36d3396"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/ButtonWidget.cpp": {
+            "source": "241e396065ca12356d6ddaf313f085dd6b908631446d2e3c97a502882af936f1",
+            "object": "b39830ea79e7d612df30a87c6732ff0fe0af4a7feb58f74a3d9e7de2dcfcf0f8"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/Checkbox.cpp": {
+            "source": "727781c5cf9aaeecbf239dcf3e836306d57f45b928a78db500a5b84d8e3edb45",
+            "object": "bea6f783df7f84def4d5df9afcdbd895935ff63fa5482070adb6ffc575ab9e18"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/Dialog.cpp": {
+            "source": "5414e8715c38d936b2bccc235c46203fb2f02009d30987f88595dd09ffac82e0",
+            "object": "aa308b3a3a0787a5fc738011339ccf4787ecc2ada47fd1ea1ed4fc3a1edfc206"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/DialogButton.cpp": {
+            "source": "666af2db23f702f7d378806abac03ba8fd342741538ec23348fb5a6b8855b1af",
+            "object": "faeecad8e03433b6ed6db12cbb11ad2b8d0be7127445cacd109deac7f9a0a512"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/EditWidget.cpp": {
+            "source": "63d68da40a93cfe4a8feb686ced8c194cbd96923a85c208f70601656a783057a",
+            "object": "8dc85627afa40edce9bdd687a2bae0fb63a238ab3a27ae67574d3d0139c34ee8"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/HyperlinkWidget.cpp": {
+            "source": "1d8b44029f41a22329a34c5bde7f61f7858a81f2281c5d05712e3f7ee3457e51",
+            "object": "01b340c5440d288905ce7d9e74e9b6f71077782c8dcd33a945236701fd055aae"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/Insets.cpp": {
+            "source": "ce31b37187564173e28c456d87ec3eed1d62f5d67b251cb498cbf747e5c6781c",
+            "object": "ecac253f131f179b33679022f53626950a9cdcb6cc45f3a631996b1ead554e4b"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/ListWidget.cpp": {
+            "source": "b9230588954ab8d6d76380ff9bb4ec51f3a22c163722169ea2120e2184d53371",
+            "object": "3d5ad7ff0a9b610551057d8055532376e0f97389b59c3ecdf2f5970f49d939e3"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/ScrollbarWidget.cpp": {
+            "source": "9ab6fd899151dd2d9e9721cd07682bebc6527ce51d779ad8d5f58b1e7cbf54af",
+            "object": "d15304cec20b2627bbc74361bc790e71a8a0547da3d16b7e450db11aee97b3ad"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/ScrollbuttonWidget.cpp": {
+            "source": "d477be919797584c6970f942e3c712bf2283719afc2fa6f9433f9d04652069eb",
+            "object": "b6fbeb41245c0a5c34f6f807b199e6cf1624bf05ee93077f154b7f0bc531245c"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/Slider.cpp": {
+            "source": "693c2499f32f195cdc77b249323097f5ec70c8746e6cf88ea03249751af534de",
+            "object": "1e954e775a6b256581a9587223d68a51986aa2e54e4a65395a0a7c775b1d3780"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/TextWidget.cpp": {
+            "source": "d17c17acd0cf7a4f6db6005fb4b08e711d8572053e7de6edd1549ba9f5201855",
+            "object": "1e75f616a546b8e4a61af761ba36a5a70501dbf109d30cfb06f773ed4cb76030"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/Widget.cpp": {
+            "source": "193dcb56c64768a2dc986c1c3f172ffa5660ca6c9978b75faf1b62ff66e2a3bd",
+            "object": "fcb3e094372701f325bad3a46149a49f150bf93b8a600b7bf5af3e5ad3106da1"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/WidgetContainer.cpp": {
+            "source": "c774b55d9a0e47993a443e154ac5e8b748d704a887734cd2318e1774588ebb59",
+            "object": "e8ca93a44960dbb801c1e35ef610f178bea0a7d2e149e0b5bec846745482147c"
+          },
+          "build/host-physical/source/SexyAppFramework/widget/WidgetManager.cpp": {
+            "source": "6c975cc33a73bf757357de6678f4cacb346ed41648d37c4e45d8fc1d8c9ac66c",
+            "object": "ea1187ed32d1686bb265c84def21c6c60c3413739215bfd9ea1645d14210967d"
+          },
+          "build/host-physical/source/main.cpp": {
+            "source": "04a711dd50772469485d59cac44df4a21c3aa6e2cbdd4c019eb4bffd407e4867",
+            "object": "0f928b23d1e00954da7f1a324b1122d4354273183269957968a817e55f1a5c1a"
+          },
+          "platform/Input.cpp": {
+            "source": "bff4c369cd570f704a60274422c48ca291cb435c36c08ff27e33383801701ade",
+            "object": "125c60d4cc0529eac9daf17a8b505eb95ff410999915dae9893a18ff63a31af7"
+          },
+          "platform/Loading.cpp": {
+            "source": "881afeb484c4cb23726a09a057574d3a3d81aa4bd7d00679b213216938fa6e0e",
+            "object": "9be69565254595a61bf25a65906cc7fdbc5b1ff07fdd561225f4b90dccd0ca53"
+          },
+          "platform/Main.cpp": {
+            "source": "4ab7990255a941e211530c4dc90d638158faff1cf6d69b44cd3915a52e9d8863",
+            "object": "57a312aeeb6675d60c414b16f293a854ff35a1475644a71ba1afa3e018690b15"
+          },
+          "platform/Window.cpp": {
+            "source": "67d09da7ad5084a5fb32731937677c8c4bce553955195e113fcff59fc0f5720d",
+            "object": "600fb66ef0df19b0d4846df7dec6d4a9e13b2f3161564379f815c635289a5fd9"
+          },
+          "platform/graphics/AllocatorCache.cpp": {
+            "source": "33c6c6b662dd632e101c8ef0fbe6a9d92ad7fa446aa2029cd29b61a90ed4f5ee",
+            "object": "e3a8358dd2738bc3b004c09cc2fbab2ee0a4bf37594fb7c590a1e5b53e6ca4ab"
+          },
+          "platform/graphics/DefinitionCompaction.cpp": {
+            "source": "1e02520b962f26c4ba8d43ce8c5f83435b0b4535a94784015c47a408494bb263",
+            "object": "a98e5278e527ec0245ce09951e659db681d1629ef6c8b8b83c0c572bd36d3a1c"
+          },
+          "platform/graphics/GLImage.cpp": {
+            "source": "d9f3ef1885a16f58e08e4aae3fc701484f2768f31eb57bada6b2937308eb9367",
+            "object": "13df915f3f7e696c6b60b4e1f722a4fe763de93edd7543b9a7a7c79765197645"
+          },
+          "platform/graphics/GLInterface.cpp": {
+            "source": "a9bbb19002559dde5653c5b8e2c0cc90d1dc8fe635a9f273a0fdeb1cc6afc17c",
+            "object": "0c20659ceee52850c6e967c282dcf3337e7e9beee785ca1c851ce06333435cbe"
+          },
+          "platform/graphics/ReanimAtlasCache.cpp": {
+            "source": "2a4529e27eeeae8a758665b65f3fd5f0624bdb598808491a3a231341ff4175d2",
+            "object": "d667b5e5553523fc7ceddb519e85e1973ce812ff26118d2b0ce97fdfd14ef9aa"
+          },
+          "platform/graphics/SelectorDefinitionCache.cpp": {
+            "source": "a02baa2cb9f6192b8598c1bc9ebf0d18db2c41d95df578d830a7abef45f59c9b",
+            "object": "fc0e3b8ac22788f349451f356b26bdbd489d42b437642add5f072d4df30e8c3e"
+          },
+          "platform/h1_fcase.cpp": {
+            "source": "44e043968f2744dde01a076567461f8644148a8210f6c1868365a358b471e8a9",
+            "object": "964d7bda42fe7c800de9a2e8e8bbf155cfb26e2e4e8b3388e2833ca5d89b3035"
+          },
+          "platform/h1_music.cpp": {
+            "source": "93be2db93877ffedcb5f25d1565b2dbc3b53a5e7292b82e3cda2f7be5b8f15be",
+            "object": "d261d5e1ba5bc9850a17b322c56d3e1500e59da022e104b3844953bee501ca05"
+          },
+          "platform/h1_sdl.cpp": {
+            "source": "b67b10b89116d8f42c49dce20a6c92f834e5ca9e7e5d0cdb918b1a23c7113be5",
+            "object": "db66aaaaca2aeb11a6eadc16b12045529f84f7079161db83037cd8aaa560b348"
+          },
+          "platform/h1_sound.cpp": {
+            "source": "82028e2fc6034b1ac29db56ff734b6eae4df98832bd083578ffa1f926abf9b58",
+            "object": "557d668a82f3838cd85aeb76b382f71c3df01019c17efe3b3357f52afa876fa1"
+          },
+          "platform/host/allocator_probe.cpp": {
+            "source": "262a3c73d5fcbaa8ccb1497f68b8283c6e9e94787c7728e6f35cb94905ae8c0f",
+            "object": "773a42d67e9ff66e98f835e9bc900c9881b9ee2404819672a73b3e77c058d3f9"
+          },
+          "platform/host/atlas_entry_probe.cpp": {
+            "source": "511a7eb8eced72dd5ba9b69d40a6b88434d4a0e7cd3ddb5f6fe58ac562778c8f",
+            "object": "3c50eeaa91fc370ea8291c04b56e1ff592c46998ec8626fb003ab782e64a80ba"
+          },
+          "platform/host/font_probe.cpp": {
+            "source": "c6e924ef1cd6b368f2a50044710a68f4311038bf40a217aa1936a91bea1806c7",
+            "object": "0c51826d6dee135cc20a2f72ade4206530a05307b1bef973ae8ceba74fca9a95"
+          },
+          "platform/host/selector_probe.cpp": {
+            "source": "bf414255405aa92d3eda8e2f9ef92f04939bf6b14d6c05e96ae04c4dbc19ecca",
+            "object": "e2781fed63c5a6a53f789bfce5365a6b34726ced70d2e2285e368b13780da86a"
+          },
+          "platform/host/triangle_probe.cpp": {
+            "source": "54e2f03f33880b7225c7bd4d964d49fed598578201ec3147b44321f8b322b278",
+            "object": "369368b5dc9edeeae0a988a29b1e8d139443555dae800878332e3ec45634d2bc"
+          },
+          "platform/host/widget_probe.cpp": {
+            "source": "9f83c5a5b83b805f9b5178f3f6aa1aae7287643bdf48e8fb2e13b9eb4031be4c",
+            "object": "502aa78c4b8e38066891e9a27942b79fd8cecf8925bc0d01ccfe879f55bf4925"
+          },
+          "platform/resources/ImageLib.cpp": {
+            "source": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+            "object": "1117031f0b380e55ac2f3b97e54a6d01b522306bdee93a97e6e5ba20f1f7d8c8"
+          },
+          "platform/resources/h1_resources.c": {
+            "source": "7619bc4438d0318e7694dc13dbbc4d5df1789d6217ae8cb05dbb05776f604ab3",
+            "object": "61e7c38aa7c5c1645128a77dcf5ffd4991416d28a101f49059afafba102a4a09"
+          },
+          "platform/xmp_shared.c": {
+            "source": "2f4355140a3b1ddecca099f078bc946d9cb03854a234fac357e345fc78338faf",
+            "object": "5f5a50ecb41302a8f16539e0700442a931fbdd65788899ad25ca86d84b55412e"
+          },
+          "third_party/zlib-1.3.1/adler32.c": {
+            "source": "9cd1443a24ff2a3053961695bd432035c58347386a420d3388232376ebabe211",
+            "object": "96a81cf336c0315845455390ae6bb2e5139b0db7d616d197b1420d30cca751b8"
+          },
+          "third_party/zlib-1.3.1/compress.c": {
+            "source": "86f802c16a965e7a28737e3730b4e576c5ba40981753967e3e30916f4dc1b4b1",
+            "object": "c51aad14a494d45e274aae3da5c542b7dd4c682c90f28f7c46350662fda11e03"
+          },
+          "third_party/zlib-1.3.1/crc32.c": {
+            "source": "8fd16f0a7714d51c89c2eb37eb98ec15e8a4dc57ba343e7b7398b19144039fda",
+            "object": "d447bed6ef98332a99b36c2464338e330c7bce30ea4525dcf6adc4630d953698"
+          },
+          "third_party/zlib-1.3.1/deflate.c": {
+            "source": "3b956337350f94c34987750f785587ef33d9c89ceaebb7c2afb189c956360cbe",
+            "object": "06ce37434e9a5d6efc35bd52a5361ea25b8cf16b46f76e8beb712f0d40185e91"
+          },
+          "third_party/zlib-1.3.1/infback.c": {
+            "source": "62df9a6dd3eef126f1d81d0ad7a534504610dec44482b0a472b61c93cbab6554",
+            "object": "f028b12a5210a0cea7fe8478cd70dcacbe682f1e3ea152183c5f3d30f203ee3e"
+          },
+          "third_party/zlib-1.3.1/inffast.c": {
+            "source": "e6ef64ce5dc0a4cd5c7ad08ceeb2b2a698b8447f6bd156057caeb2edab68c0cb",
+            "object": "9b3eb4ed347f89262dc45e5bbe28500802d85fcec4c860ef288f362ce36dd2c5"
+          },
+          "third_party/zlib-1.3.1/inflate.c": {
+            "source": "34c998ce0037c0537c04b03b276f680b945f9b2c9d1e01b287605bd6879f7fd2",
+            "object": "e13108f3d7df1db0b5f67068702f18387bf8502bf36480060bf1bab9ea578d0f"
+          },
+          "third_party/zlib-1.3.1/inftrees.c": {
+            "source": "5d4f335221d2dc76f17abd2577d92c2d7baf68fa6d7f23373b360830493d1563",
+            "object": "215e8587d27d06f617336cd9f0dc2530dcc4e34f6c5fbc5366c3aa270beba4d0"
+          },
+          "third_party/zlib-1.3.1/trees.c": {
+            "source": "f63c68c16c05fcd196050529d1a0e7657960e4136b9987d90a6ac3e58a964b0f",
+            "object": "ed7bddea52b49e347f4009b8c87a56d5d6917e1d5064f69b0b1f4950b672cf60"
+          },
+          "third_party/zlib-1.3.1/uncompr.c": {
+            "source": "04dca5e31b3b8a17d1806426f66f0c539f4184d657e149d40be07070c6227b52",
+            "object": "964ff71fade74af7be13574a54d300e3120d1df557328ec35107aa3a1f100456"
+          },
+          "third_party/zlib-1.3.1/zutil.c": {
+            "source": "8ced40d8c88588811edd2bdb35b7439983d5e1f8e9e32b8a3b244731f3c317b7",
+            "object": "8e73ad65a9f3744a09a1857e24238dfa791a5624861b3e861ba4a851f83cb1e9"
+          },
+          "vendor/libxmp/src/control.c": {
+            "source": "20463b6707b070f2c82e434b34051ad2c5afca247d5e0ebb9806d0a0f860458f",
+            "object": "e046dc06bea4bd602aa9fdf2cdd43f7daa2c9e2b76918a27dbf91b618f61f0bd"
+          },
+          "vendor/libxmp/src/dataio.c": {
+            "source": "077667ab53ca53fa7d3b355cdfb8888c6b0c21c4b46033a5ab409d9278457850",
+            "object": "f41791f33624c42bbd4ac1e8e1bd33a8d5d0e4ee82bee346d6384ca405bc8ad0"
+          },
+          "vendor/libxmp/src/effects.c": {
+            "source": "232b96cca9f830ba73cfeb64709c1738ec7ca69e6d21dffd558d419126abdb06",
+            "object": "12c4e2a7838a240b569e4276f9f9f9aeb222652ddc2aeac04d9a820857b62bf5"
+          },
+          "vendor/libxmp/src/filetype.c": {
+            "source": "423d2e1de151314f214ed0e5901d061a4a22d4b9229ad071552f86a78e5b72d4",
+            "object": "5c84f9ea392f2000b82b0a04709273820e60cfa23bf176e59181564c555ee716"
+          },
+          "vendor/libxmp/src/filter.c": {
+            "source": "40c435ff6095be80bb28065271deec8755b57384f3766e0076e58e554ce213f5",
+            "object": "9c78eaf875f8f72522ed3d506418f2997a1d2bd3c5be6fb1f943dcaf6cffb4b0"
+          },
+          "vendor/libxmp/src/flow.c": {
+            "source": "3d55fdd640a3fcbaaed2e32bc6de4688c6133fb9d046725b646c9954a1a0e207",
+            "object": "165f6953b53d968fc4be2ba591504c51c343b921d799428d86c67235ad3cd92b"
+          },
+          "vendor/libxmp/src/format.c": {
+            "source": "6c8bb1003902899233842cec992dac0a0392558503197585901566821606c328",
+            "object": "a0ff0b1a114e0a772f30dafea8cc4993b3fda186f620aac2d6dacc87f0d4dc59"
+          },
+          "vendor/libxmp/src/hio.c": {
+            "source": "13017305cf3030c9a9a4d1a7b50bcc00d5f24238e0a93e0d3085c545f8bda965",
+            "object": "718d0ee5c8cba0521492cf245190b36be6364b8df8d0317ae45573cc90bc0939"
+          },
+          "vendor/libxmp/src/lfo.c": {
+            "source": "b23b6d7a45b1409d5822b4cabecd204760464ca6fea56cf9c18b8902ff22766f",
+            "object": "c1e628d94f5864930b3cd3f0ffa5ba71c627b74cf7555cc4331734d9b41fd333"
+          },
+          "vendor/libxmp/src/load.c": {
+            "source": "c770fbbedd53a5cf1f1c73f821d8b26727d7530a06a3bf85c8177fbfe93fa0b7",
+            "object": "a0347328ef8c4e9bfc037266e1e2b386f487a33a4f6da8d6b87b3b81fb740d35"
+          },
+          "vendor/libxmp/src/load_helpers.c": {
+            "source": "80fb47bcd7820a6c6cccbf6a921783199e05807a661fec70fb257881ddb718ac",
+            "object": "90aadf8228294fc123da35bc2f7f08097176aeaeae9ac1271db10416ef4c4208"
+          },
+          "vendor/libxmp/src/loaders/common.c": {
+            "source": "59777ffa3a362635d775e3dcda63448c4b3395c1f0569ca069f5c9d7081b7c00",
+            "object": "42c4b8dac3b2c7da96ff38dddd325b5b09d6bf7e4fab61486cf4d7ea646f034d"
+          },
+          "vendor/libxmp/src/loaders/mod_load.c": {
+            "source": "b67e9db533b805891c11d2e8d699756bba37a3874eed3cfeb347df33d685cfb6",
+            "object": "48e7a9838eac729062c8f0d464ea11bff2526116120fffa2443d559ad7696dc2"
+          },
+          "vendor/libxmp/src/loaders/s3m_load.c": {
+            "source": "863e290c3b24ba6afc6e4bd4cf879a921ebc5c684333bc84ee8b66408f298895",
+            "object": "2c04d33b5cd2bae9dbd07033720a27198a3636534bddf90323c0ac3f32696860"
+          },
+          "vendor/libxmp/src/loaders/sample.c": {
+            "source": "0ce9f29c30d7c8c06c2a147a6b7c54896139de22acad9628e0ab9feaf7dd68a1",
+            "object": "0524cc91538a8d8c301cb35c41dfe8b6ec7d4f990b1482b7a4baae1a3a533b74"
+          },
+          "vendor/libxmp/src/loaders/xm_load.c": {
+            "source": "ea62ac1db7e727134caa3485dc0ad1b992aa9eaaaca19b77549461b04afa0f7e",
+            "object": "736c56fc14f972eabdc5d3967b7637c4d25be6dd0dfc0062d544605bbc707f0e"
+          },
+          "vendor/libxmp/src/memio.c": {
+            "source": "5491b16b92f39be8417c7e48293ef2b1f4a3f390d5c2f3eb181010283c657376",
+            "object": "691347881a6c47a82d83a75ae994af22bd2722a7e083ae403a2e8c8c6377c15a"
+          },
+          "vendor/libxmp/src/misc.c": {
+            "source": "288f24b31c0474a360c2537f57c07c59f78c935a781525cad996b9cbb120d780",
+            "object": "c7bf08974c75a5b58894dca9c2fcbe739a5eab585f7828479282e11a680ca805"
+          },
+          "vendor/libxmp/src/mix_all.c": {
+            "source": "8f0a03008f35852029d586029ac308aefd8089c5bcb2cb67d193320e33a2ef10",
+            "object": "667bf3222d42e95575ede3bef5176598f5725745e6b1f75628e8e2797106c67e"
+          },
+          "vendor/libxmp/src/mixer.c": {
+            "source": "72ff837d252050bb8cc93471ff955d17d109801c4d30e70d7a896f7bdd6553ad",
+            "object": "fe2c016b6f8ccb81f47036068781c5a526bbb0ab3c5ad67d5328eb50277c41bb"
+          },
+          "vendor/libxmp/src/period.c": {
+            "source": "23cc96ef90974a6fffb213f6b5412257cca80ade143ad568157ee580a66c3f75",
+            "object": "d0dd641431d06f896c4a94b181c595193ccab04f2d8c6ca4acf08e8291a98f45"
+          },
+          "vendor/libxmp/src/player.c": {
+            "source": "5844db1c5b764e6d8fb1185c73300f9a3713784b4c6260829fda0382f1e6e24e",
+            "object": "678fd27589e60c311ef4b08441122935378c17a9ab34b882253a42b0f7476049"
+          },
+          "vendor/libxmp/src/read_event.c": {
+            "source": "f0ea35e492a33fc415a737ee7e6a0bea28735e0efc1f4fc68f94fe6c240c184c",
+            "object": "1d89cebd27fa27c69ed3dabdb53ab583b36194bda340fc2ef34e45b1d800638a"
+          },
+          "vendor/libxmp/src/rng.c": {
+            "source": "43a451652b0b67ed6f7bdb3430878d3a23391f2d81c67cde509493c330abf3d1",
+            "object": "813e3a833a9f7d59c921004647823be9827c710fe5bc3c2f92073bc2aa7ba918"
+          },
+          "vendor/libxmp/src/scan.c": {
+            "source": "7293bf118415c929e78fda0e1220302f40a3ffdea48e3716652338bbe1ac552b",
+            "object": "3d599236a226acbd2b809aa642ebfaeb689c253b3df544c9c2c307c12fb258f8"
+          },
+          "vendor/libxmp/src/smix.c": {
+            "source": "24e376499674cc94adcdc444e22c007f079b0c1de00c62fa810915abbf4b1353",
+            "object": "881d3389c54cf0cd8a5adf8565991fd49ee0bf43f4f3bca4e430bc3db6450a7e"
+          },
+          "vendor/libxmp/src/virtual.c": {
+            "source": "0e27416de322348726920f14b12a26c99727e32d65e91043f2bf56f2793bfa91",
+            "object": "18e56e9c84ccc070f4bf0046aced88cc08054d950fe8f2c74439bd7b13251aad"
+          },
+          "vendor/libxmp/src/win32.c": {
+            "source": "ee207fb2e0b0f1320d244b57abd10c351f7de8de9cc67db14edfcc7c0dcaa2b9",
+            "object": "0fc15dfedf56430230d3e27ca3861f92f6e1be4ab99855081d18aa69f60f015b"
+          },
+          "build\\render-plan-probe\\source\\SexyAppFramework\\graphics\\SWTri.cpp": {
+            "source": "2339e604de6557e4576162fb3bf17c6c949686866e3ff013f353edde1fda1558",
+            "object": "43ee74d5693c3c6cd5b64cad9cef42db66966679503da3847585b8ec72dd006b"
+          },
+          "build\\render-plan-probe\\source\\PvzpLib\\Reanimator.cpp": {
+            "source": "7196e116096e682f2cdb06b8b1c921e2ef6336cefdecd28dd3eab74f09f2a4d4",
+            "object": "a0b48951139f27e701dd01e993d52ae163be6197a156fe17faa16d7bb7423024"
+          },
+          "build\\render-plan-probe\\platform\\graphics\\SoftwareRaster.cpp": {
+            "source": "ee9e3e0c7cc88cdb6f170b2a547c2e1d8757c622863bfbb23be333fbb80210a2",
+            "object": "53e719e499096637ff05bf12061b3279d1395bf1893c261913869040961b3eea"
+          },
+          "build\\render-plan-probe\\platform\\graphics\\MemoryImageCache.cpp": {
+            "source": "b2e0a909065797806b3205bfd8082293d56f3bcfac8cb3bf34663684fd271c77",
+            "object": "77ce0e8d53b009f36b867136e833c175c88a61eb37af40ded37edaaf912c7cd5"
+          },
+          "build\\render-plan-probe\\platform\\graphics\\PhysicalScreen.cpp": {
+            "source": "4763e18e76112cae3b7979e3396a88484279c53dbbbab402b7857d9e4b3338a0",
+            "object": "85f66b55298e0c46af997e19010fd63edec7c8621c41005e6f033716054762c0"
+          },
+          "build\\render-plan-probe\\platform\\graphics\\RenderPlanCache.cpp": {
+            "source": "9f7e1cd59ba2246063b0f62d67006b2408265719a1a9fb094f3acc62bd55bd4c",
+            "object": "1ee314a87a1c42edf7a35d9d028b0cb422c34835fd546fec44cd74541d1c6187"
+          },
+          "build\\render-plan-probe\\observer.cpp": {
+            "source": "cd3ff1c2678c994716f3ddea5ee22c0c04f0065196cae7fc2b278f102df2c999",
+            "object": "b7f3ef141a3d7af61ccfb79d3f6e6c0f9c6cc22735766778d0e8e5302fdf2754"
+          },
+          "tools\\tests\\render_plan_probe.cpp": {
+            "source": "ca16ceead3de3121ee4c6fbac1d9e85c01153197d1e79b0c2d8b0edf4601cdc4",
+            "object": "37fe7242b782d84b8e465cae764ca84b06ffb7c5c91b0111c28e33bdbfc1375a"
+          }
+        },
+        "inputs": {
+          "platform\\graphics\\RenderPlanCache.cpp": "9f7e1cd59ba2246063b0f62d67006b2408265719a1a9fb094f3acc62bd55bd4c",
+          "platform\\graphics\\RenderPlanCache.h": "5d1e56720b0f3faab407ba3e4eb01f683579b19c8ceca4749324168fb69e80b9",
+          "platform\\graphics\\SoftwareRaster.cpp": "ee9e3e0c7cc88cdb6f170b2a547c2e1d8757c622863bfbb23be333fbb80210a2",
+          "platform\\graphics\\reduced_texture_patches.py": "2e5ef58cdd62eb8d19d4f4b91028288713b5f5a091a4675e8eafe01e5c37dbb1"
+        }
+      }
+    },
+    "animation": {
+      "path": "build/render-plan-probe/animation-verification.json",
+      "sha256": "af5c5644fd8f4b4d22635ff3d98f9a912fcef80a7eb8244d6a0ce6d94d0f5f43",
+      "result": {
+        "passed": true,
+        "actual_animation_pixel_checks": 30,
+        "real_BG_matrix_pixel_checks": 16,
+        "matrix_bit_checks": 363,
+        "selector_tracks": 48,
+        "selector_transforms": 33888,
+        "actor_definition_count": 4,
+        "physical_sizes": [
+          [
+            360,
+            270
+          ],
+          [
+            800,
+            600
+          ]
+        ],
+        "real_attached_flower_and_hidden_parent": true,
+        "clip_tint_mirror_angle_fallback": true,
+        "extra_additive_overlay_pixel_scope_verified": false,
+        "extra_case_excluded_because_original_repeated_reference_unstable": true,
+        "ordinary_physical_fallbacks": 0,
+        "combined_pixel_hash": 9615432812269466429,
+        "scope": "Real original full Selector/plant/zombie/sun Reanimation+Attachment+BG matrix old renderer vs warm optional render-plan pixels. Extra overlay/additive full-animation fixture remains excluded as in its original test.",
+        "template_sha256": "66eb2fc5b7c04ccbea30c4690f6fd8e9f4dc876d3690cc67ccebc2780bda4d7d",
+        "production_inputs": {
+          "platform\\graphics\\RenderPlanCache.cpp": "9f7e1cd59ba2246063b0f62d67006b2408265719a1a9fb094f3acc62bd55bd4c",
+          "platform\\graphics\\RenderPlanCache.h": "5d1e56720b0f3faab407ba3e4eb01f683579b19c8ceca4749324168fb69e80b9",
+          "platform\\graphics\\SoftwareRaster.cpp": "ee9e3e0c7cc88cdb6f170b2a547c2e1d8757c622863bfbb23be333fbb80210a2",
+          "platform\\graphics\\reduced_texture_patches.py": "2e5ef58cdd62eb8d19d4f4b91028288713b5f5a091a4675e8eafe01e5c37dbb1"
+        }
+      }
+    },
+    "mips": {
+      "path": "build/render-plan-mips/verification.json",
+      "sha256": "cf7880f4b216c50b3e400746384b383c41928dea2821438f41acf40b4372f760",
+      "result": {
+        "passed": true,
+        "strict_production_flags": true,
+        "EffectSystem_custom_shader_plan_calls": 0,
+        "unlinked_text_delta": 9924,
+        "records": [
+          {
+            "name": "SWTri",
+            "source_sha256": "95900b7bf6aae82b66b3843914f4d451149705b41bf667d1506e21bb7b94b6ee",
+            "object_sha256": "4d4769b98bbe4ffb6fd931216ce149e3ca34795fa5e6f36ec6bcf1c00eb863cf",
+            "text_bytes": 469912,
+            "old_text_bytes": 469024,
+            "record_calls": 8,
+            "span_calls": 8
+          },
+          {
+            "name": "EffectSystem",
+            "source_sha256": "cb1e4b44fb2a682f694af3afeb04f834a3337842568b3ea4f1b0b22788097315",
+            "object_sha256": "14979dac6409e3305f3ba8a4a56f32dcb6bfa478e732312ccd93defa112c9dbe",
+            "text_bytes": 612044,
+            "old_text_bytes": 612044,
+            "record_calls": 0,
+            "span_calls": 0
+          },
+          {
+            "name": "SoftwareRaster",
+            "source_sha256": "ee9e3e0c7cc88cdb6f170b2a547c2e1d8757c622863bfbb23be333fbb80210a2",
+            "object_sha256": "401a36bff75957156716a5b9bc1ba89dfec8321a9e23eae7adc14ba5bd791552",
+            "text_bytes": 9804,
+            "old_text_bytes": 9580,
+            "record_calls": 0,
+            "span_calls": 0
+          },
+          {
+            "name": "RenderPlanCache",
+            "source_sha256": "9f7e1cd59ba2246063b0f62d67006b2408265719a1a9fb094f3acc62bd55bd4c",
+            "object_sha256": "92d46a16df9f70d842c14467b3c3bb16bd76bb2b570d2c3a5b876b71e88a8f86",
+            "text_bytes": 8812,
+            "old_text_bytes": 0,
+            "record_calls": 0,
+            "span_calls": 0
+          }
+        ],
+        "inputs": {
+          "platform\\graphics\\RenderPlanCache.cpp": "9f7e1cd59ba2246063b0f62d67006b2408265719a1a9fb094f3acc62bd55bd4c",
+          "platform\\graphics\\RenderPlanCache.h": "5d1e56720b0f3faab407ba3e4eb01f683579b19c8ceca4749324168fb69e80b9",
+          "platform\\graphics\\SoftwareRaster.cpp": "ee9e3e0c7cc88cdb6f170b2a547c2e1d8757c622863bfbb23be333fbb80210a2",
+          "platform\\graphics\\reduced_texture_patches.py": "2e5ef58cdd62eb8d19d4f4b91028288713b5f5a091a4675e8eafe01e5c37dbb1"
+        }
+      }
+    },
+    "independent_review": {
+      "path": "build/render-plan-review.json",
+      "sha256": "52266d8017869015cf5b5e8707d7f316b22eb6ce265ea79b906a2da42c1f22e7",
+      "result": {
+        "scope": "Independent read-only source and saved-host-evidence review; no device, emulator, production edits, or native FPS attribution",
+        "passed": true,
+        "audited_inputs": {
+          "platform/graphics/RenderPlanCache.cpp": "d4fa63e627c1286b478e16e3492837fab33b20bc05d3c64b731a10d99334b431",
+          "platform/graphics/RenderPlanCache.h": "5d1e56720b0f3faab407ba3e4eb01f683579b19c8ceca4749324168fb69e80b9",
+          "platform/graphics/SoftwareRaster.cpp": "ee9e3e0c7cc88cdb6f170b2a547c2e1d8757c622863bfbb23be333fbb80210a2",
+          "platform/graphics/reduced_texture_patches.py": "2e5ef58cdd62eb8d19d4f4b91028288713b5f5a091a4675e8eafe01e5c37dbb1",
+          "platform/graphics/MemoryImageCache.cpp": "b2e0a909065797806b3205bfd8082293d56f3bcfac8cb3bf34663684fd271c77",
+          "platform/graphics/MemoryImageCache.h": "1ff151be29dcee918ddf84860727b7651b2c0776f1ca7b4f546c40bb34a9248c"
+        },
+        "checks": {
+          "prepare_before_entry_lookup": "Prepare can allocate and pressure-trim; no Entry pointer is selected until the call has returned.",
+          "no_cross_frame_source_pointer": "Entry stores source identity and operations, never source pixels. Every replay obtains a fresh pinned dense view and its globally unique live cookie.",
+          "count_fill_replay_no_allocation": "Only Reserve allocates pages. Active raw pointers are zeroed before Reserve. Count, fill and replay do not allocate or grow storage.",
+          "allocation_pressure": "Reserve marks plan state busy, so pressure cannot remove the Entry under construction. A source cookie is rechecked after allocations; failure clears all partial pages and leaves the original already-completed draw intact.",
+          "capacity": "At most eight entries, each bounded by 21 requested 3072-byte pages. Budget comparisons include static State and diagnostic metadata plus allocated page capacity, and remain at or below 512 KiB. These are requested payload/metadata sizes, not SDK native allocation spans.",
+          "key_and_destination": "Key includes live source cookie, source/destination identities, rectangle, clip, destination dimensions and matrix bit patterns. Production eligibility restricts the real active 360x270 opaque physical screen, full source, positive axis-aligned transforms, normal white rendering. Rejected or changed keys preserve the original draw.",
+          "ABA": "Source cookie is process-global and does not derive from Image or storage addresses; destruction/reconstruction and storage reload cannot match old generations. Generic GetBits and modified/unregistered sources return cookie zero.",
+          "reentry": "Drop protects release callbacks with busy state. Pressure and shutdown refuse active capture/replay/reserve. CaptureGuard aborts unfinished plans on an early return or exception.",
+          "shutdown": "Shutdown only frees owned operation pages and zeroes metadata. It never queries or dereferences stored Image pointers, including after original game destruction.",
+          "pixel_math": "Partial alpha retains original /256 formulas and thresholds. Copy operations require actual source alpha 255 and consecutive original sample indices. Real SWTri generates all operation coordinates and row order.",
+          "scope": "Only the normal 0888 SWTri translation unit records spans; custom Effect shaders are excluded. No game/update/save/timing rules are changed. All cache and plan APIs are intentionally single-threaded."
+        },
+        "review_findings_resolved": [
+          "Added explicit Repeat texture rejection: RepeatTriangle bypasses the recorder and must not produce an empty ready plan.",
+          "Added zero-recorded-row commit rejection. Fully transparent but genuinely recorded rows remain valid.",
+          "Added busy guard around Drop callbacks; recursive release cannot invalidate metadata being traversed."
+        ],
+        "saved_host_evidence_read": {
+          "report": "build/render-plan-probe/verification.json",
+          "unit_checks": 442,
+          "allocations_during_borrow": 0,
+          "live_allocations_after_shutdown": 0,
+          "actual_background_pixel_cases": 42,
+          "actual_guard_cases": 9,
+          "replays": 87,
+          "peak_allocated_page_capacity_bytes": 138240,
+          "source_images_destroyed_before_shutdown": true,
+          "all_passed": true
+        },
+        "parser": {
+          "file": "build/hardware-test-20261102-opt-plan/analyze_profile.py",
+          "sha256": "58bca10ec48761ac83aefa04933a91ff2782b22f3a2320f171feb30bf791f66f",
+          "unchanged_from_raster": true,
+          "explanation": "The extra 24-word plan diagnostics do not alter the eight-stage profiler array. The parser follows profiler metadata rather than unrelated symbol-array lengths. Session and command files were untouched."
+        },
+        "remaining_native_claim": "Only a new real-H1 timing window can establish a frame-rate improvement. Host equality and lifecycle tests alone make no performance claim."
+      }
+    },
+    "source_revision": {
+      "path": "build/storage-revision-probe/run/storage-revision-verification.json",
+      "sha256": "e3128d19d019a964ceb83f8611b603fd1a5c1766062d249f6c8aeaf2b29ab90b",
+      "result": {
+        "test_only": true,
+        "real_cache": true,
+        "checks": 21,
+        "same_address_generations": 6,
+        "original_pixel_hash": 12694267247331895355,
+        "sanded_pixel_hash": 3738893162474980291,
+        "descriptor_query_no_allocation": true,
+        "current_pointer_pin": true,
+        "release_reload_invalidates": true,
+        "sanding_revision_and_reload": true,
+        "generic_materialization_invalidates": true,
+        "plan_pressure_before_source_eviction": true,
+        "pressure_reentry_guard": true,
+        "plan_bytes_are_hints_not_native_span": true,
+        "all_passed": true
+      }
+    }
+  },
+  "diagnostic_schema": [
+    "ready_entries",
+    "allocated_capacity_bytes",
+    "peak_capacity_bytes",
+    "replays",
+    "eligible_misses",
+    "cold_count_starts",
+    "fill_starts",
+    "commits",
+    "new_keys",
+    "revision_rejects",
+    "budget_rejects",
+    "allocation_failures",
+    "busy_fallbacks",
+    "pressure_calls",
+    "pressure_released_plans",
+    "pressure_released_capacity_bytes",
+    "shutdown_calls",
+    "replayed_original_pixels_low32",
+    "transparent_skipped_pixels_low32",
+    "memcpy_pixels_low32",
+    "opaque_OR_pixels_low32",
+    "partial_pixels_low32",
+    "capture_aborts",
+    "static_metadata_bytes"
+  ],
+  "capacity_scope": "3072-byte allocated plan-page capacity plus static metadata stays <=512KiB. Native allocator/pool reserved charge is measured separately, not inferred from logical page payload.",
+  "shutdown_expected": {
+    "ready_entries": 0,
+    "allocated_capacity_bytes": 0,
+    "static_metadata_bytes": "constant nonzero; static storage, not a leak"
+  }
+}

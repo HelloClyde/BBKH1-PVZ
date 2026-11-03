@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/wszqkzqk/PvZ-Portable",
+  "commit": "98b659380014c89c3553fbb2839f5e5a84d6df3d",
+  "license": "LGPL-3.0-or-later with the retained PopCap framework acknowledgment",
+  "target": "BBK H1 / Y100 V1.41",
+  "previous_project": "../h1-pvz (separate five-level fan game; not used as this port's gameplay)",
+  "asset_repository": "https://github.com/FregD156/PvZ_Assets",
+  "asset_commit": "8ba94e95cfe7d0de5682f8258d3b932dbdac885c"
+}

@@ -1,0 +1,4 @@
+# Resume the same original saved board in both isolated comparison runs.
+scene 0 300 click 400 550
+scene 1 120 click 500 150
+scene 3 300 quit

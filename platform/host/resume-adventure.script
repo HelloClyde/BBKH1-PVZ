@@ -1,0 +1,8 @@
+# Existing disposable host profile. Original title, Adventure and award widgets.
+# The optional read-only controller accepts the real saved-game continue dialog.
+scene 0 300 click 400 550
+scene 0 600 click 400 550
+scene 1 120 click 500 150
+scene 1 240 click 500 150
+scene 5 120 click 420 540
+scene 3 30 capture

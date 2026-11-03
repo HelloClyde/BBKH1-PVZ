@@ -1,0 +1,27 @@
+#ifndef PVZ_H1_SINGLE_THREAD_THREAD
+#define PVZ_H1_SINGLE_THREAD_THREAD
+#include <utility>
+#include <functional>
+#include <chrono>
+extern "C" void pvz_runtime_delay_ms(unsigned int);
+namespace std {
+class thread {
+public:
+    class id { public: friend constexpr bool operator==(id,id){return true;} friend constexpr bool operator!=(id,id){return false;} };
+    thread() noexcept=default;
+    template<class F,class... A> explicit thread(F&& f,A&&... a){std::invoke(std::forward<F>(f),std::forward<A>(a)...);}
+    thread(thread&&) noexcept=default;thread& operator=(thread&&) noexcept=default;
+    thread(const thread&)=delete;thread& operator=(const thread&)=delete;
+    bool joinable() const noexcept{return false;}void join() noexcept{}void detach() noexcept{}
+    id get_id() const noexcept{return {};}
+    static unsigned hardware_concurrency() noexcept{return 1;}
+};
+namespace this_thread {
+inline thread::id get_id() noexcept{return {};}
+inline void yield() noexcept{pvz_runtime_delay_ms(0);}
+template<class R,class P>void sleep_for(const chrono::duration<R,P>& d){
+    auto ms=chrono::duration_cast<chrono::milliseconds>(d).count();if(ms>0)pvz_runtime_delay_ms((unsigned)ms);
+}
+}
+}
+#endif

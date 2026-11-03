@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "scope": "Header-only POC, whole framebuffer bytes/cursor/alias equality and actual MIPS software execution instruction/store counts. Counts are not hardware cycles or a game FPS claim.",
+  "host": {
+    "passed": true,
+    "whole_frame_cases": 366,
+    "all_pointer_full_buffer_cases": 487146,
+    "overlap_fallback_cases": 6,
+    "tampered_map_fallback_cases": 6,
+    "invalid_cases": 4
+  },
+  "native": {
+    "whole_frame_bytes_equal": true,
+    "pointer_cases": 121,
+    "KSEG0_KSEG1_alias_rejected": true,
+    "costs": {
+      "present_original": {
+        "instructions": 2054031,
+        "volatile_lcd_stores": 130560,
+        "non32bit_lcd_stores": 0
+      },
+      "present_candidate": {
+        "instructions": 414135,
+        "volatile_lcd_stores": 130560,
+        "non32bit_lcd_stores": 0
+      }
+    },
+    "instruction_reduction_fraction": 0.7983793818106932,
+    "elf_sha256": "f83979a694e479a5113dec55ffe51a0983589196125ce4705c8b9727fd761d44",
+    "elapsed_host_emulation_seconds": 5.75,
+    "measurement_method": "Fresh independent VM per variant; exact valid Configure state supplied as kernel input before first execution; UC_HOOK_CODE installed before any translation, counts entire entry, loops, callees, delay slots. Separate fresh VM LCD-address-only UC_HOOK_MEM_WRITE verifies writes and identical full output; avoids Unicorn global stack-write-hook delay-slot exception.",
+    "scope_limit": "Instruction reductions are not hardware cycles; unchanged volatile LCD writes may dominate bus time. No game FPS improvement claimed until device measurement."
+  },
+  "actual_platform_tu": {
+    "compiled": true,
+    "text_delta_bytes": 1308,
+    "object_sha256": "9dfa7a0ed55bf52379fcd0fdf52fbafe76939794a49e27bfe72f8d35d218eb08"
+  },
+  "original_header_sha256": "117bb7abfa1c2594e72527675f9c4fd9a204c1c7e1e74fc1b4f01ff108605d3d",
+  "candidate_header_sha256": "0015cda4f8a07af9f0b6abfcaaa21b9b9aca84022b6f8140bf7b12debf74bb4d",
+  "probe_sha256": "a73b3bf4c22314779870bb5111d801731771ec1ed58fb53bddd5b3d62690bdc3",
+  "production_changed": true,
+  "production_header_sha256": "0015cda4f8a07af9f0b6abfcaaa21b9b9aca84022b6f8140bf7b12debf74bb4d"
+}

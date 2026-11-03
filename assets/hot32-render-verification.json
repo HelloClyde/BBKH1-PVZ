@@ -1,0 +1,219 @@
+{
+  "passed": true,
+  "scope": "Offline actual old/new prepared compiler-policy framebuffer digest comparison + destination-format/static link review; native FPS and user-input QA are separate",
+  "reports": {
+    "paired_pixels": {
+      "path": "build/hot32-render-probe/verification.json",
+      "sha256": "caac0483f57cd544a9279d5b321dcdf549629c32559cd85d9b7910e523170de0",
+      "result": {
+        "passed": true,
+        "scope": "Paired original -Os/FP vs actual checked hot32 prepared -Os with local O2/omit; full framebuffer FNV64 digests compared per deterministic case. No device speed claim.",
+        "kernel_cases": 960,
+        "forced_mode_linear_draw_cases": 360,
+        "real_font_alpha_cases": 96,
+        "animation_BG_case_hashes": 46,
+        "all_case_digests_identical": true,
+        "normal_and_custom_effect_32bit": true,
+        "formats": [
+          2184,
+          34952
+        ],
+        "modes": [
+          "normal",
+          "additive"
+        ],
+        "prepared_inputs": {
+          "reference": {
+            "SexyAppFramework\\graphics\\SWTri.cpp": "2339e604de6557e4576162fb3bf17c6c949686866e3ff013f353edde1fda1558",
+            "PvzpLib\\PvzpCommon.cpp": "24d624cd0bd40c901898544f04d7deef7cafb92fd710d4c40efd8166d066f135",
+            "SexyAppFramework\\graphics\\SWTri\\SWTri_DrawTriangle.inc": "b2672e02873e34ac620aed4e30d9458e749cb9a9cb41c9be7196482b95bb1530"
+          },
+          "hot32": {
+            "SexyAppFramework\\graphics\\SWTri.cpp": "ef04692da82fdac28c2e95151101ebfef32b9e780f5773f5ba530f2fb7d9c2a8",
+            "PvzpLib\\PvzpCommon.cpp": "6da93d63409dc7008f307cd6e0e5653f860c2c46de813aef83c770a4579b2c08",
+            "SexyAppFramework\\graphics\\SWTri\\SWTri_DrawTriangle.inc": "36464617ffe76f013148d5d96e6ab42e9b62c10c1e7146fa64cb68d96c904147"
+          }
+        },
+        "patch_sha256": "b653a6132a943ed33a25d75afc09ebbadf840d363159c0e2bb03ecd8b0200ee3",
+        "fixture_sha256": "0940e4d9d6500194a34a018dd282fab488d102fa1d0b4a541f1602505f1abf8d"
+      }
+    },
+    "format_audit": {
+      "path": "build/hot32-render-probe/format-audit.json",
+      "sha256": "c0f447cb933c8dcbfbf29648efaa6b9993da8959b3b3560d597aba2ffcecd03c",
+      "result": {
+        "passed": true,
+        "scope": "Independent read-only review of fixed H1 prepared engine/platform destination-format call chain; not a claim about arbitrary future platform backends",
+        "engine_destinations": [
+          "OriginalTriangle textured chooses only 0x888/0x8888 from forced mode/alpha flags, uint32 target bits and byte pitch width*4",
+          "OriginalTriangle untextured passes literal0x8888",
+          "MemoryImage BltMatrix/StretchBlt/BltTrianglesTex route through H1DrawTransformed/H1DrawTriangles; legacy helper signatures only forward format from those wrappers"
+        ],
+        "display": "GLInterface Init unconditionally mRGBBits32; actual H1 GUI present rejects non32bit surfaces and requires byte pitch1920 for480pixels, writes volatileuint32RGB. There is no LCD565 conversion in the current port present path.",
+        "input_format_distinction": "H1I loader accepts channels1/3/4 and decodes or retains logical/storage ARGB uint32; source encoding or hardware panel color precision does not select destination565 kernels. The current GUI surface itself is32bit.",
+        "registry_pruning": "The two128entry table interfaces/public declarations remain. H1-only guards remove64standard+32custom16bit registry roots; non-H1 source preserves them. No reachable fixed-platform caller supplies0x565/0x555.",
+        "future_limit": "A future backend exposing16bit software destinations must restore those H1-only registrations or provide a separate implementation; this proof is specific to current H1 ABI/profile.",
+        "inputs": {
+          "platform/graphics/SoftwareRaster.cpp": "ee9e3e0c7cc88cdb6f170b2a547c2e1d8757c622863bfbb23be333fbb80210a2",
+          "platform/graphics/GLInterface.cpp": "a9bbb19002559dde5653c5b8e2c0cc90d1dc8fe635a9f273a0fdeb1cc6afc17c",
+          "platform/h1_host.cpp": "14f221fa3b7e95a3b39ea3fa9415b2d88ba126d0eaf22fbdf8aefb25a8eb404e",
+          "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+          "platform/resources/h1_resources.c": "ab01a989e4d2890d5353a1df78b683a809248801f9b7e2f98a3d81117d079e81"
+        },
+        "separate_link_evidence": "build/raster-family-probe/report.json"
+      }
+    },
+    "checked_patch": {
+      "path": "build/hot32-patch-test/report.json",
+      "sha256": "c569c63a9d33e1e9ca2eef40ebb52eddeb8adc061af7497e53394c5fef262ca2",
+      "result": {
+        "passed": true,
+        "patch_sha256": "b653a6132a943ed33a25d75afc09ebbadf840d363159c0e2bb03ecd8b0200ee3",
+        "source_patches_sha256": "5f8dd41de6324c0cd2493109b3f9b35423de277e13ac1c047f684c12a0f8bcd4",
+        "cases": [
+          {
+            "source": "pinned",
+            "passed": true,
+            "idempotent": true,
+            "reverse_nonH1_statement_equality": true,
+            "changed_anchor_rejected": true,
+            "prepared_sha256": {
+              "SexyAppFramework/graphics/SWTri.cpp": "6452ed48016a0f70fb392639593b00003841628f7d496513c2e4bca9efa19c48",
+              "PvzpLib/PvzpCommon.cpp": "e1c3a239204fab7683c0b40667d1bb400cebf8ff80da1b58486a411d3d5df5a0",
+              "SexyAppFramework/graphics/SWTri/SWTri_DrawTriangle.inc": "36464617ffe76f013148d5d96e6ab42e9b62c10c1e7146fa64cb68d96c904147"
+            }
+          },
+          {
+            "source": "frozen-plan",
+            "passed": true,
+            "idempotent": true,
+            "reverse_nonH1_statement_equality": true,
+            "changed_anchor_rejected": true,
+            "prepared_sha256": {
+              "SexyAppFramework/graphics/SWTri.cpp": "f41b3fb9747dd0b00845588781b4ca6e18e97c1d40d108d5abbfacacf30355af",
+              "PvzpLib/PvzpCommon.cpp": "6da93d63409dc7008f307cd6e0e5653f860c2c46de813aef83c770a4579b2c08",
+              "SexyAppFramework/graphics/SWTri/SWTri_DrawTriangle.inc": "36464617ffe76f013148d5d96e6ab42e9b62c10c1e7146fa64cb68d96c904147"
+            }
+          }
+        ],
+        "scope": "Patch guards/unchanged statements only. Pixel behavior verified by separate actual renderer oracle."
+      }
+    },
+    "isolated_native_link": {
+      "path": "build/raster-family-probe/report.json",
+      "sha256": "507500b38f69419ccc07f3c12c6bd988186dc3c303bdeffacc79be26aa4ec48e",
+      "result": {
+        "passed": true,
+        "test_only": true,
+        "device_access_performed": false,
+        "performance_measured": false,
+        "baseline_receipt_sha256": "186fc301c402743e1bdcd228b514cf8cf40e1e1df788a6331c81084a6a09d1a8",
+        "removed_registry_lines": {
+          "SWTri": 64,
+          "PvzpCommon": 32
+        },
+        "retained_standard_32bit_kernel_sections_bit_identical_after_registry_cut": 64,
+        "baseline": {
+          "ELF_sha256": "47e1fa1d8310aeae9f342c90058c58952d341cd3ed4e17d07b6cf23a1bcec12c",
+          "ELF_sections_total_bytes": 3314844,
+          "families": {
+            "0888": {
+              "functions": 62,
+              "bytes": 302816
+            },
+            "8888": {
+              "functions": 48,
+              "bytes": 226660
+            },
+            "0565": {
+              "functions": 62,
+              "bytes": 314004
+            },
+            "0555": {
+              "functions": 48,
+              "bytes": 217096
+            }
+          },
+          "size": "text\t   data\t    bss\t    dec\t    hex\tfilename\n3632249\t   9976\t 448924\t4091149\t 3e6d0d\tC:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\h1-pvz-portable\\build\\native-hardware-opt-plan\\H1PVZPortable.elf"
+        },
+        "drop_only": {
+          "ELF_sha256": "214cde65e1a00f7bb249cc0a5d6f6283b83e542ee7276154b6ae8aab44ac3c7d",
+          "ELF_sections_total_bytes": 2781688,
+          "families": {
+            "0888": {
+              "functions": 62,
+              "bytes": 302816
+            },
+            "8888": {
+              "functions": 48,
+              "bytes": 226660
+            },
+            "0565": {
+              "functions": 0,
+              "bytes": 0
+            },
+            "0555": {
+              "functions": 0,
+              "bytes": 0
+            }
+          },
+          "size": "text\t   data\t    bss\t    dec\t    hex\tfilename\n3092381\t   9976\t 448924\t3551281\t 363031\tC:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\h1-pvz-portable\\build\\raster-family-probe\\drop-only.elf"
+        },
+        "drop_plus_16_hot_kernels_O2_omit_frame_pointer": {
+          "ELF_sha256": "3718d28d1aae8f966a2b492acc61621d8c885e43787357495133f6bd80edfc81",
+          "ELF_sections_total_bytes": 2804312,
+          "families": {
+            "0888": {
+              "functions": 62,
+              "bytes": 325440
+            },
+            "8888": {
+              "functions": 48,
+              "bytes": 226660
+            },
+            "0565": {
+              "functions": 0,
+              "bytes": 0
+            },
+            "0555": {
+              "functions": 0,
+              "bytes": 0
+            }
+          },
+          "size": "text\t   data\t    bss\t    dec\t    hex\tfilename\n3114813\t   9976\t 448924\t3573713\t 3687d1\tC:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\h1-pvz-portable\\build\\raster-family-probe\\local-O2.elf"
+        },
+        "optimization_predicate": "defined(H1_PVZ_PORTABLE) && TRI0==1 && TRI1==1",
+        "note": "This is link/code-size proof only. Production needs H1-only checked patch and retained real pixel oracles; no new BDA emitted. Table128 and public declarations unchanged; unreachable functions disappear through linker GC.",
+        "drop_plus_16_hot_kernels_O3_omit_frame_pointer": {
+          "ELF_sha256": "418211ab0a3fcbd277de502d2fdcf17f2f25017b1dc28c78d8b81d9263b05551",
+          "ELF_sections_total_bytes": 2831292,
+          "families": {
+            "0888": {
+              "functions": 62,
+              "bytes": 352420
+            },
+            "8888": {
+              "functions": 48,
+              "bytes": 226660
+            },
+            "0565": {
+              "functions": 0,
+              "bytes": 0
+            },
+            "0555": {
+              "functions": 0,
+              "bytes": 0
+            }
+          },
+          "size": "text\t   data\t    bss\t    dec\t    hex\tfilename\n3141793\t   9976\t 448924\t3600693\t 36f135\tC:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\h1-pvz-portable\\build\\raster-family-probe\\local-O3.elf"
+        }
+      }
+    }
+  },
+  "limits": [
+    "Both host executables use explicit -Os and retained frame pointers; the checked new patch alone selects sixteen local O2/omit-frame-pointer kernels. No fast-math or resource change.",
+    "Framebuffer per-case FNV64 digests are compared, rather than claiming a direct in-process byte memcmp between distinct binaries.",
+    "The sixteen-bit registry deadness proof is specific to current fixed H1/32bit backend. Non-H1 registration statements remain guarded in source.",
+    "Native performance is not inferred from code size or host test duration."
+  ]
+}

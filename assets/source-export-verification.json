@@ -1,0 +1,11 @@
+{
+  "result": "passed",
+  "no_git_export_prepare": true,
+  "upstream_files": 707,
+  "upstream_commit": "98b659380014c89c3553fbb2839f5e5a84d6df3d",
+  "commit_date": "2026-10-31",
+  "manifest_sha256": "249a88aeb518970492bc58646f3151485982b66c5f34e506839f221f95164553",
+  "package_created": false,
+  "probe_directory": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\h1-pvz-portable\\build\\source-export-probe-20261031-174126",
+  "opaque_unused_archives_included": false
+}

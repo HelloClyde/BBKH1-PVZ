@@ -1,0 +1,17 @@
+#ifndef PVZ_H1_SINGLE_THREAD_MUTEX
+#define PVZ_H1_SINGLE_THREAD_MUTEX
+#include_next <mutex>
+/* The firmware executes all ported application work on its one foreground
+   task. Loading is explicitly synchronous; no application worker races exist. */
+#ifndef _GLIBCXX_HAS_GTHREADS
+namespace std {
+class mutex {
+public:
+    constexpr mutex() noexcept=default;
+    mutex(const mutex&)=delete;mutex& operator=(const mutex&)=delete;
+    void lock() noexcept {} void unlock() noexcept {} bool try_lock() noexcept{return true;}
+};
+using recursive_mutex=mutex;
+}
+#endif
+#endif

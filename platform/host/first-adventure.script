@@ -1,0 +1,17 @@
+# Real pointer/key input only. Scene numbers are original GameScenes values.
+# Loading/title: wait for the original loading animation before clicking.
+scene 0 300 click 400 550
+scene 0 600 click 400 550
+# A fresh save presents the original name edit widget. H/O/S/T, then Enter.
+scene 1 20 key 13
+scene 1 22 key 30
+scene 1 24 key 9
+scene 1 26 key 5
+scene 1 30 key 25
+# Click the original Adventure button after its menu animation.
+scene 1 240 click 500 150
+scene 1 360 click 500 150
+scene 2 10 capture
+scene 3 10 capture
+# Continue the real sunflower reward screen after the original first-level win.
+scene 5 120 click 420 540

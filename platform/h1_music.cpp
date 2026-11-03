@@ -1,0 +1,165 @@
+/* LGPL-3.0-or-later. Original tracker orders/channels through libxmp-lite.
+ * MO3 is unpacked offline to XM; original music scheduling stays in Music.cpp.
+ * Ogg credits use the same streamed H1PC format as sound effects.
+ */
+#include "SDL_mixer.h"
+#include "h1_host.h"
+#ifdef PVZ_NATIVE_PROFILE
+#include "profiler.h"
+#endif
+#include "Common.h"
+#include "xmp_shared.h"
+#include <xmp.h>
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <new>
+
+struct SharedTracker {
+    std::string path;
+    pvzh1_xmp_module *module=nullptr;
+    unsigned readers=0;
+};
+static std::vector<SharedTracker*> modules;
+struct Mix_Music{
+    std::string path;
+    xmp_context module=nullptr;
+    SharedTracker *shared=nullptr;
+    FILE *pcm=nullptr;
+    unsigned pcm_samples=0,pcm_position=0;
+    int volume=128,loops=0;
+    bool tracker=false,playing=false,paused=false,pending_order=false;
+    int requested_order=0;
+    int channels[64];
+    Mix_Music(){for(int &v:channels)v=128;}
+};
+static std::vector<Mix_Music*> streams;
+static int global_volume=128;
+extern "C" { volatile uint32_t pvzp_music_diagnostic[8]; }
+static void update_stats(){
+    uint32_t original=0,unique=0,samples=0,players=0;
+    for(SharedTracker *entry:modules){
+        pvzh1_xmp_module_stats s{};
+        if(pvzh1_xmp_module_get_stats(entry->module,&s)==0){
+            original+=(uint32_t)s.original_track_bytes;unique+=(uint32_t)s.unique_track_bytes;
+            samples+=(uint32_t)s.sample_bytes;players+=s.players;
+        }
+    }
+    pvzp_music_diagnostic[0]=(uint32_t)modules.size();pvzp_music_diagnostic[1]=original;
+    pvzp_music_diagnostic[2]=unique;pvzp_music_diagnostic[3]=samples;pvzp_music_diagnostic[4]=players;
+}
+static uint32_t little32(const unsigned char *p){return (uint32_t)p[0]|(uint32_t)p[1]<<8|(uint32_t)p[2]<<16|(uint32_t)p[3]<<24;}
+static bool acquire_module(Mix_Music *music){
+    // Keep the compact module for the descriptor's lifetime. Tune switches
+    // stop/recreate independent players without rereading/reexpanding all XM
+    // tracks, which would otherwise create a large transient memory peak.
+    if(music->shared)return true;
+    for(SharedTracker *entry:modules)if(entry->path==music->path){
+        ++entry->readers;music->shared=entry;return true;
+    }
+    pvzh1_xmp_module *handle=pvzh1_xmp_module_load(music->path.c_str());
+    if(!handle)return false;
+    auto *entry=new(std::nothrow) SharedTracker;
+    if(!entry){pvzh1_xmp_module_free(handle);return false;}
+    entry->path=music->path;entry->module=handle;entry->readers=1;
+    modules.push_back(entry);music->shared=entry;pvzp_music_diagnostic[5]=pvzp_music_diagnostic[5]+1;update_stats();
+    char message[160];snprintf(message,sizeof(message),"H1 XM shared module: track bytes %u -> %u; samples %u.",
+        pvzp_music_diagnostic[1],pvzp_music_diagnostic[2],pvzp_music_diagnostic[3]);pvzp_log_line(message);
+    return true;
+}
+static void release_module(Mix_Music *music){
+    SharedTracker *entry=music->shared;if(!entry)return;music->shared=nullptr;
+    if(--entry->readers)return;
+    pvzh1_xmp_module_free(entry->module);
+    modules.erase(std::remove(modules.begin(),modules.end(),entry),modules.end());delete entry;update_stats();
+}
+static void close_player(Mix_Music *music){
+    if(music->module){pvzh1_xmp_module_free_player(music->module);music->module=nullptr;update_stats();}
+    if(music->pcm){fclose(music->pcm);music->pcm=nullptr;}music->playing=music->paused=false;
+}
+static bool start_player(Mix_Music *music){
+    if(music->tracker){
+        if(!acquire_module(music))return false;
+        music->module=pvzh1_xmp_module_create_player(music->shared->module);
+        if(!music->module)return false;
+        if(xmp_start_player(music->module,16000,XMP_FORMAT_MONO)<0){close_player(music);return false;}
+        xmp_set_player(music->module,XMP_PLAYER_INTERP,XMP_INTERP_LINEAR);
+        xmp_set_player(music->module,XMP_PLAYER_DSP,0);
+        for(int i=0;i<64;i++)xmp_channel_vol(music->module,i,music->channels[i]*100/128);
+        update_stats();
+        return true;
+    }
+    music->pcm=fopen(music->path.c_str(),"rb");if(!music->pcm)return false;
+    if(fseek(music->pcm,16,SEEK_SET)){fclose(music->pcm);music->pcm=nullptr;return false;}
+    music->pcm_position=0;return true;
+}
+extern "C" Mix_Music *Mix_LoadMUS(const char *filename){
+    if(!filename)return nullptr;std::string base(filename);size_t dot=base.rfind('.');
+    std::string ext=dot==std::string::npos?"":base.substr(dot);if(dot!=std::string::npos)base.resize(dot);
+    bool tracker=ext==".mo3"||ext==".xm";
+    std::string path=Sexy::GetResourcePath(base+(tracker?".xm":".h1pcm"));FILE *f=fopen(path.c_str(),"rb");
+    if(!f){pvzp_log_line(("Music input missing: "+path).c_str());return nullptr;}
+    unsigned char header[24]={0};size_t n=fread(header,1,sizeof(header),f);fclose(f);
+    if(tracker){if(n<17||memcmp(header,"Extended Module: ",17))return nullptr;}
+    else if(n<16||memcmp(header,"H1PC",4)||little32(header+4)!=1||little32(header+8)!=16000)return nullptr;
+    Mix_Music *music=new Mix_Music;music->path=path;music->tracker=tracker;
+    if(!tracker)music->pcm_samples=little32(header+12);streams.push_back(music);return music;
+}
+extern "C" Mix_Music *Mix_LoadMUS_RW(SDL_RWops *source,int close_source){
+    /* All H1 music loads retain their source filename through the reviewed
+       Music::PvzpLoadMusic IO patch. Do not guess music identity from bytes. */
+    if(close_source)delete source;pvzp_log_line("Unexpected memory-only music load");return nullptr;
+}
+extern "C" void Mix_FreeMusic(Mix_Music *music){if(!music)return;close_player(music);release_module(music);streams.erase(std::remove(streams.begin(),streams.end(),music),streams.end());delete music;}
+extern "C" int Mix_PlayMusicStream(Mix_Music *music,int loops){
+    if(!music)return -1;close_player(music);music->loops=loops;music->pending_order=false;
+    if(!start_player(music)){pvzp_log_line(("Tracker/PCM load failed: "+music->path).c_str());return -1;}
+    music->playing=true;return 0;
+}
+extern "C" int Mix_HaltMusicStream(Mix_Music *music){if(music)close_player(music);return 0;}
+extern "C" int Mix_HaltMusic(void){return 0;} // Upstream uses only independent multi-music streams.
+extern "C" void Mix_PauseMusicStream(Mix_Music *music){if(music)music->paused=true;}
+extern "C" void Mix_ResumeMusicStream(Mix_Music *music){if(music)music->paused=false;}
+extern "C" int Mix_PlayingMusicStream(Mix_Music *music){return music&&music->playing;}
+extern "C" int Mix_PausedMusicStream(Mix_Music *music){return music&&music->paused;}
+extern "C" int Mix_VolumeMusicStream(Mix_Music *music,int volume){if(!music)return -1;int old=music->volume;if(volume>=0)music->volume=std::clamp(volume,0,128);return old;}
+extern "C" int Mix_VolumeMusic(int volume){int old=global_volume;if(volume>=0)global_volume=std::clamp(volume,0,128);return old;}
+extern "C" int Mix_VolumeMusicGeneral(int volume){return Mix_VolumeMusic(volume);}
+extern "C" int Mix_ModMusicStreamJumpToOrder(Mix_Music *music,int order){
+    if(!music||!music->module)return -1;int position=order&65535,row=(unsigned)order>>16;
+    if(xmp_set_position(music->module,position)<=-2)return -1;
+    if(xmp_set_row(music->module,row)<0)return -1;
+    xmp_play_buffer(music->module,nullptr,0,0);music->requested_order=order;music->pending_order=true;return 0;
+}
+extern "C" int Mix_ModMusicStreamGetOrder(Mix_Music *music,int *order){
+    if(!order)return -1;*order=-1;if(!music||!music->module)return -1;
+    if(music->pending_order){*order=music->requested_order;return 0;}
+    xmp_frame_info frame{};xmp_get_frame_info(music->module,&frame);*order=(frame.pos&65535)|((frame.row&65535)<<16);return 0;
+}
+extern "C" int Mix_ModMusicStreamSetChannelVolume(Mix_Music *music,int channel,int volume){
+    if(!music||channel<0||channel>=64)return -1;int old=music->channels[channel];music->channels[channel]=std::clamp(volume,0,128);
+    if(music->module)xmp_channel_vol(music->module,channel,music->channels[channel]*100/128);return old;
+}
+extern "C" void pvzp_music_mix(int32_t *output,unsigned count){
+#ifdef PVZ_NATIVE_PROFILE
+    PVZProfileScope profile(PVZ_PROFILE_MUSIC);
+#endif
+    if(count>256)return;int16_t samples[256];
+    for(Mix_Music *music:streams){
+        if(!music->playing||music->paused)continue;unsigned produced=count;
+        if(music->tracker){
+            if(xmp_play_buffer(music->module,samples,(int)count*2,music->loops<0?0:1)<0){music->playing=false;continue;}
+            music->pending_order=false;
+        }else{
+            produced=0;int empty_reads=0;
+            while(produced<count){unsigned got=(unsigned)fread(samples+produced,2,count-produced,music->pcm);produced+=got;music->pcm_position+=got;
+                if(!got&&++empty_reads>1){music->playing=false;break;}
+                if(produced<count){if(music->loops<0&&music->pcm_samples){fseek(music->pcm,16,SEEK_SET);music->pcm_position=0;}else{music->playing=false;break;}}
+            }
+        }
+        int gain=music->volume*global_volume;
+        for(unsigned i=0;i<produced;i++)output[i]+=(int32_t)samples[i]*gain/(128*128);
+    }
+}
+extern "C" void pvzp_music_shutdown(void){while(!streams.empty())Mix_FreeMusic(streams.back());}

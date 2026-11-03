@@ -1,0 +1,18 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "purpose": "H1 480x272 title background horizontal outpainting",
+  "input": "private/source/images/titlescreen.jpg",
+  "output": "private/widescreen/source/title-outpaint-v1.png",
+  "prompt": "Use case: precise-object-edit / outpainting. Asset type: production widescreen game title background for a 480x272 handheld. Edit target: the attached original 800x600 Plants vs Zombies title background (no logo). Expand ONLY the left and right edges to make a full 30:17 landscape composition (480:272, approximately 1060x600 at original scale). Keep the entire original 4:3 illustration exactly centered, with its original composition, existing characters, plant shapes, zombie identities, proportions, crisp outlines, colors, and positions unchanged. Invent seamless new scenery ONLY beyond the left and right borders: continue the sunny garden with foliage and grass at the far left, and continue the spooky purple cemetery pavement, fence, and distant foliage at the far right. Continue the sky and cloud colors naturally. The expansion must feel like the same original 2D painted game art and contain NO extra major characters or plants, no interface, NO words, NO logo, NO watermark, no black bars. Do not crop the existing foreground plants or characters. The new side scenery must leave the original central 800x600 image intact. Deliver a wide, opaque illustration, ready for offline downscaling to 480x272.",
+  "source_pixels": [
+    1665,
+    945
+  ],
+  "h1_preview": "h1-pvz-portable/private/widescreen/title-480x272-v1.png",
+  "h1_pixels": [
+    480,
+    272
+  ],
+  "preview_sha256": "6173febed6e0309c19f58586a78fa6e88fdf0b73a7a9decdbe8b0b6f4d32a554",
+  "integration_state": "Preview asset; original program and installed resources have not been replaced"
+}

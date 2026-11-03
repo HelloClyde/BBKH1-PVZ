@@ -1,0 +1,8 @@
+# Reopen the original level-2 save, then use the original options and menu.
+scene 0 300 click 400 550
+scene 0 600 click 400 550
+scene 1 120 click 500 150
+scene 3 90 capture
+scene 3 120 key 24
+scene 3 140 click 400 400
+scene 3 160 key 25

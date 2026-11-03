@@ -1,0 +1,6 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "input": "private/widescreen/source/menu-layout-preview-v1.png",
+  "output": "private/widescreen/source/menu-clean-background-v1.png",
+  "prompt": "Use case: precise-object-edit. Edit target: approved widescreen Plants vs Zombies menu layout image. Produce a clean production BACKGROUND PLATE ONLY at the same wide 30:17 landscape ratio. Keep the central house, sloping green garden, fence, driveway, distant houses, blue sky and soft clouds in their same positions, proportions and original 2D painterly style. Remove all menu foreground and UI objects: remove the giant left foreground tree and canopy, all hanging wooden signs and all writing, the achievements pedestal, the entire giant right foreground gravestone and lettered stone buttons, flower vases, and all interface labels. Seamlessly paint the revealed areas as continuing sky, garden foliage, sloping ground and soil, matching the central scene and perspective. No words, no letters, no signs, no gravestones, no interface, no characters, no logos, no watermark. Keep the house near the lower-left middle with a wide open blue sky above and extend the garden and soil to both side edges. This plate will have the original interactive game sprites drawn on top in real time."
+}

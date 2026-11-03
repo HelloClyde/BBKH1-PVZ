@@ -1,0 +1,43 @@
+{
+  "repository": "https://github.com/libxmp/libxmp",
+  "commit": "06efa94d463d6202e9d553ab45aa797ad6b7a0a3",
+  "sources": [
+    "vendor/libxmp/src/virtual.c",
+    "vendor/libxmp/src/format.c",
+    "vendor/libxmp/src/period.c",
+    "vendor/libxmp/src/player.c",
+    "vendor/libxmp/src/read_event.c",
+    "vendor/libxmp/src/misc.c",
+    "vendor/libxmp/src/dataio.c",
+    "vendor/libxmp/src/lfo.c",
+    "vendor/libxmp/src/scan.c",
+    "vendor/libxmp/src/control.c",
+    "vendor/libxmp/src/filter.c",
+    "vendor/libxmp/src/effects.c",
+    "vendor/libxmp/src/flow.c",
+    "vendor/libxmp/src/mixer.c",
+    "vendor/libxmp/src/mix_all.c",
+    "vendor/libxmp/src/load_helpers.c",
+    "vendor/libxmp/src/load.c",
+    "vendor/libxmp/src/filetype.c",
+    "vendor/libxmp/src/hio.c",
+    "vendor/libxmp/src/smix.c",
+    "vendor/libxmp/src/memio.c",
+    "vendor/libxmp/src/rng.c",
+    "vendor/libxmp/src/win32.c",
+    "vendor/libxmp/src/loaders/common.c",
+    "vendor/libxmp/src/loaders/sample.c",
+    "vendor/libxmp/src/loaders/xm_load.c",
+    "vendor/libxmp/src/loaders/mod_load.c",
+    "vendor/libxmp/src/loaders/s3m_load.c"
+  ],
+  "defines": [
+    "LIBXMP_CORE_PLAYER",
+    "LIBXMP_STATIC",
+    "LIBXMP_CORE_DISABLE_IT"
+  ],
+  "includes": [
+    "vendor/libxmp/include",
+    "vendor/libxmp/src"
+  ]
+}
