@@ -1,0 +1,29 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "read",
+        "address": "0x8057aff0",
+        "bytes": 20
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T13:30:22.517078+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x8057aff0",
+        "bytes": 20
+      },
+      "result": {
+        "address": "0x8057aff0",
+        "bytes": 20,
+        "hex": "0000c0830000c081f0debf83220400008cfdbb83"
+      },
+      "started_monotonic": 547605.218,
+      "finished_monotonic": 547605.234
+    }
+  ],
+  "ok": true
+}

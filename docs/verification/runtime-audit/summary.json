@@ -1,0 +1,266 @@
+{
+  "kind": "Runtime performance audit, findings remain open",
+  "base_commit": "bc39b11c6899c1ebb7032d871d36b953bba3a263",
+  "device": "Physical BBK H1 / Y100 V1.41, installed Chinese widescreen BDA",
+  "bda_sha256": "134db1967e2d15b51d037150959cfc6c7e12f399fc21692419d3794fdb61d9d2",
+  "bda_bytes": 3400532,
+  "elf_sha256": "7d17ee75aec52dd8b861db8010bc2822d934a925e9537c8740eb0d2e6cb64e2a",
+  "production_code_assets_and_program_unchanged": true,
+  "code_fingerprints_matched": 4,
+  "native_windows": {
+    "options-requested": {
+      "scene": 3,
+      "frames": 39,
+      "PC_elapsed_seconds": 20.030999999959022,
+      "FPS": 1.9469821776286647,
+      "native_raw_ticks": 798,
+      "native_tick_hz": 40,
+      "successful_file_opens_delta": 118,
+      "native_open_calls_delta": 119,
+      "native_open_failures_delta": 0,
+      "native_read_bytes_delta": 52049216,
+      "image_loads_delta": 119,
+      "image_evictions_delta": 117,
+      "allocation_pressure_callbacks_delta": 658,
+      "final_allocation_failures_delta": 0,
+      "raw_canvas_fallbacks_delta": 0,
+      "scope": "Physical H1; 20-second quiet wait, bounded endpoint reads. PC time is the FPS denominator; native clock stores last-frame timestamps and can lag at low FPS.",
+      "result_sha256": "90008e9cb1291d2b92d0b2ae83427ecf41d4376e3982d37d68620b8b487e270a"
+    },
+    "return-confirm": {
+      "scene": 3,
+      "frames": 18,
+      "PC_elapsed_seconds": 20.03200000000652,
+      "FPS": 0.8985623003191964,
+      "native_raw_ticks": 833,
+      "native_tick_hz": 40,
+      "successful_file_opens_delta": 244,
+      "native_open_calls_delta": 243,
+      "native_open_failures_delta": 0,
+      "native_read_bytes_delta": 31991848,
+      "image_loads_delta": 244,
+      "image_evictions_delta": 239,
+      "allocation_pressure_callbacks_delta": 560,
+      "final_allocation_failures_delta": 0,
+      "raw_canvas_fallbacks_delta": 0,
+      "scope": "Physical H1; 20-second quiet wait, bounded endpoint reads. PC time is the FPS denominator; native clock stores last-frame timestamps and can lag at low FPS.",
+      "result_sha256": "c125bc9f1b6104e6deba123846cc618870b55fa46d19aaed62430d1999938474"
+    }
+  },
+  "window_caveats": [
+    "Options first screenshot was stale; subsequent return-button behavior led to a fresh confirmed dialog screenshot.",
+    "Counters are read sequentially, not atomically; I/O snapshot and presented-frame endpoints differ slightly.",
+    "Native clock stores last-frame time and can lag at low FPS; use PC monotonic time for FPS."
+  ],
+  "post_window_native_path_samples": [
+    "B:\\应用\\数据\\游戏\\PVZ\\images\\dialog_bottommiddle.h1i",
+    "B:\\应用\\数据\\游戏\\PVZ\\images\\background1unsodded.h1i",
+    "B:\\应用\\数据\\游戏\\PVZ\\images\\sod1row.h1a",
+    "B:\\应用\\数据\\游戏\\PVZ\\images\\dialog_topleft.h1i",
+    "B:\\应用\\数据\\游戏\\PVZ\\images\\dialog_bottomleft.h1i",
+    "B:\\应用\\数据\\游戏\\PVZ\\data\\h1zh12.h1a",
+    "B:\\应用\\数据\\游戏\\PVZ\\images\\sod1row.h1a",
+    "B:\\应用\\数据\\游戏\\PVZ\\data\\h1zh17.h1a"
+  ],
+  "resource_metadata": {
+    "data/h1zh17.h1a": {
+      "logical": [
+        2256,
+        1590
+      ],
+      "storage": [
+        1008,
+        720
+      ],
+      "channels": 1,
+      "pixel_bytes": 725760,
+      "dense_allocation_bytes": 725760
+    },
+    "images/background1unsodded.h1i": {
+      "logical": [
+        1400,
+        600
+      ],
+      "storage": [
+        630,
+        270
+      ],
+      "channels": 3,
+      "pixel_bytes": 510300,
+      "dense_allocation_bytes": 680404
+    }
+  },
+  "native_heap_header_sample": {
+    "words_hex": [
+      "0x83c00000",
+      "0x81c00000",
+      "0x83bfdef0",
+      "0x422",
+      "0x83bbfd8c"
+    ],
+    "range_bytes": 33554432,
+    "tail_bytes": 254308,
+    "scope": "One metadata header only; no free-hole walk, total free bytes or largest-hole measurement."
+  },
+  "earlier_options_to_menu_interval": {
+    "image_loads": 1376,
+    "image_evictions": 1354,
+    "read_bytes": 240808402,
+    "scope": "About149 seconds including dwell and transition; not isolated return-to-menu latency."
+  },
+  "host_probe": {
+    "sounds": {
+      "throw": {
+        "plays": 20,
+        "opens": 20,
+        "seeks": 120,
+        "reads": 100,
+        "closes": 20
+      },
+      "splat": {
+        "plays": 20,
+        "opens": 20,
+        "seeks": 360,
+        "reads": 340,
+        "closes": 20
+      },
+      "cached_dirt_rise": {
+        "plays": 20,
+        "opens": 0,
+        "seeks": 0,
+        "reads": 0,
+        "closes": 0
+      }
+    },
+    "cache_accounting": {
+      "frame_end_calls": 100,
+      "recounts": 100,
+      "source_visits": 47700
+    },
+    "startup": {
+      "particle_definitions": 106,
+      "selector_tracks": 48,
+      "selector_transforms": 33888,
+      "sparse_float_fields_before_inheritance": 266848
+    },
+    "identity": {
+      "platform/graphics/MemoryImageCache.cpp": "00dd8bf4bc1f30211207b2973f3d6ff79269a186d35253fa0022b83e0bef6971",
+      "platform/h1_sound.cpp": "d65a26e194ed84fc0e223fee4712707f0bdc1680f9ab5072e8e71a268fa69b42",
+      "platform/host/host_io.cpp": "b601c0926150494a0d2c70836552939f38bf6843acd0af344520d673c35d33e8"
+    },
+    "scope": "Real host backend operations with controlled PCM draining; no H1 latency/FPS or subjective audio claim. Production sources unchanged."
+  },
+  "host_probe_identity": {
+    "source_count": 174,
+    "compile_report_sha256": "b4516695b4717228d1f7b7b2ff012e01f0908b418a875c81cb9e84d02779cd9c",
+    "executable_sha256": "c986175095f0ae3809f3ab01c663959d26bb2514d84858b97ff2c3422e89dfb2",
+    "tool_sha256": "cfbaff433cd25fa159abb61c5a797c86c946945b81a487b6ebac5f8b356a765e",
+    "probe_sha256": "e2227a2a0156d384062264db2caa689720ec1d4166ecb6cd26d362b5afa4555f",
+    "analyzer_sha256": "7cf72303b41a885ce6773e30eb4d2bd792ef0acc04799c2006fcb88c720cf1b7"
+  },
+  "exit": {
+    "stage": 9,
+    "user_heap_bytes": 0,
+    "native_charge_bytes": 0,
+    "desktop_return_code": 0,
+    "menu_idle": 1,
+    "host_serial_closed": true,
+    "debugger_left_running": true
+  },
+  "coverage_limitations": [
+    "No later/completed-profile preload benchmark",
+    "No dense-battle native FPS or subjective sound test",
+    "No pool/night/almanac/garden scene matrix",
+    "No native timing isolated for numeric inheritance or recount scan"
+  ],
+  "evidence_files": {
+    "000-state-result.json": {
+      "bytes": 4866,
+      "sha256": "d83e29c46b928b4999e985748b3bfc0848d73cf160986e4aa8cecbb9d64259ac"
+    },
+    "001-title-result.json": {
+      "bytes": 10797,
+      "sha256": "23b68cf7e1118ed80507c54ab05fd1016c1aa910aad81a340a2faa61577a8799"
+    },
+    "002-menu-result.json": {
+      "bytes": 10324,
+      "sha256": "2c887963ee32fdf7629c6d6f336ca10802aac19982abf5acfeb1c1dc4c5c0442"
+    },
+    "003-adventure-result.json": {
+      "bytes": 10414,
+      "sha256": "4d25f0ef6522af6ca4bbe03e51030e5f2470f77d6da2f601561cb08a3ff1c703"
+    },
+    "004-playing-result.json": {
+      "bytes": 10475,
+      "sha256": "7bb06bc673ed9e44c35dbbc2b3b30e71394bf06bca50bbeb68d45791cf0e4698"
+    },
+    "005-options-result.json": {
+      "bytes": 10462,
+      "sha256": "eb288c969396f7302b190b9b67f693c374bb9c302caf2f4a276cf1d54fcd7128"
+    },
+    "006-options-fps-result.json": {
+      "bytes": 18968,
+      "sha256": "90008e9cb1291d2b92d0b2ae83427ecf41d4376e3982d37d68620b8b487e270a"
+    },
+    "007-confirm-result.json": {
+      "bytes": 10550,
+      "sha256": "ebefea4ef1f1c33c592f58f36f797f8f97aeacee3a8a3f914b6f954d634061bd"
+    },
+    "007-confirm.png": {
+      "bytes": 201530,
+      "sha256": "e00d375d6aca8d087b69518798b1ff190455636d52b0eb2374e080c8212d9907"
+    },
+    "008-confirm-fps-result.json": {
+      "bytes": 19029,
+      "sha256": "c125bc9f1b6104e6deba123846cc618870b55fa46d19aaed62430d1999938474"
+    },
+    "008a-heap-header-result.json": {
+      "bytes": 588,
+      "sha256": "26306bbc29bb0a966984985665a88af7f29387469a759212b4b7ca2c3fa00400"
+    },
+    "008b-code-result.json": {
+      "bytes": 2249,
+      "sha256": "be739bcbe26f6d6a192886b6b20d31d611dea1e89f27938e19c8cdef12e17390"
+    },
+    "008c-path-samples-result.json": {
+      "bytes": 14039,
+      "sha256": "5ab042283441999f1379f32c849063c7f07b8f95a993fbc45fdbe65ef1803ede"
+    },
+    "009-return-result.json": {
+      "bytes": 10588,
+      "sha256": "8de0a50ed1a1146fc477197c6a473468f44f2794b29367aedbf70b9d3b84fa8a"
+    },
+    "009-return.png": {
+      "bytes": 209126,
+      "sha256": "aa61c432e7d52e167cad2e045a456f27412329348e2870763495e45442533c74"
+    },
+    "010-quit-result.json": {
+      "bytes": 2378,
+      "sha256": "43dfe8392803dab5a5ec0686ac4121e334e7b8d9fa89e68828f57b2587ae8fe0"
+    },
+    "011-exit-result.json": {
+      "bytes": 12493,
+      "sha256": "1d0ce9d10a63c1ace377678a0935fb235263819aac119329c18231eef9d605fd"
+    },
+    "closed.json": {
+      "bytes": 443,
+      "sha256": "7783a95c501ba091e723b647d014ddc026d3da7ad82f9447bc459f4faed45ff2"
+    },
+    "expected-code-fingerprints.json": {
+      "bytes": 1527,
+      "sha256": "a9777ffe4cf0383ac32d4e5e80fc5e0729643f6f922a4e1b881c7982e4fc9e2d"
+    },
+    "host-verification.json": {
+      "bytes": 1177,
+      "sha256": "6ff9d518120e97550c2a670eeb28226973dd0c1c5b8b3e7e3511d5e64cf5e8f1"
+    },
+    "ready.json": {
+      "bytes": 2524,
+      "sha256": "fe436ffd3b90157ebc499c60e2304a2adb08641cf2191b93d466f5ef54992d03"
+    },
+    "symbols.json": {
+      "bytes": 19597,
+      "sha256": "2a37a496796753ab8f81fe1d1ae4d90366cfcc2ea379790fd9101fac29f1baac"
+    }
+  }
+}

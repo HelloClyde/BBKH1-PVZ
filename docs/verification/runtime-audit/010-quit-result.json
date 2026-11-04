@@ -1,0 +1,89 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "tap",
+        "x": 455,
+        "y": 236,
+        "seconds": 1
+      },
+      {
+        "kind": "wait",
+        "seconds": 2
+      },
+      {
+        "kind": "screenshot",
+        "output": "010-quit.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T13:45:01.717740+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "tap",
+        "x": 455,
+        "y": 236,
+        "seconds": 1
+      },
+      "result": {
+        "gesture": "tap",
+        "x": 455,
+        "y": 236,
+        "hold_seconds": 1,
+        "lease_ticks": 80,
+        "release_acknowledged": true,
+        "host_elapsed_seconds": 1.0320000000065193
+      },
+      "started_monotonic": 548484.421,
+      "finished_monotonic": 548485.453
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 2
+      },
+      "result": {
+        "waited_seconds": 2
+      },
+      "started_monotonic": 548485.453,
+      "finished_monotonic": 548487.453
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "010-quit.png"
+      },
+      "result": {
+        "token": 140,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 3106443,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 415780,
+          "requests": 842,
+          "protocol_bytes_sent": 23576,
+          "protocol_bytes_received": 442724,
+          "elapsed_seconds": 15.203000000095926,
+          "decoded_bytes_per_second": 34351.114911313874,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 15.297000000020489,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-audit\\010-quit.png",
+        "snapshot_sha256": "be230cd645e1e5147adc98cb8e030607a856553393376026f6f03adfed389bd1",
+        "png_sha256": "2a2a0bb1c0be8629909c4600ab7737433ccbbed4470e391cc36b34b1839a8d05"
+      },
+      "started_monotonic": 548487.453,
+      "finished_monotonic": 548502.828
+    }
+  ],
+  "ok": true
+}
