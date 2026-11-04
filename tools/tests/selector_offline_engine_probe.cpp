@@ -9,6 +9,7 @@
 #include "graphics/GLInterface.h"
 #include "graphics/Graphics.h"
 #include "graphics/PhysicalScreen.h"
+#include "graphics/ScreenLayout.h"
 #include "selector/SelectorOffline.h"
 #include <vector>
 #include <fstream>
@@ -24,7 +25,7 @@ std::vector<uint32_t> Frame(GameSelector* selector,bool enabled,unsigned seed,bo
     H1SelectorOfflineTestEnable(enabled);
     auto* proxy=H1GetPhysicalScreen(gLawnApp->mGLInterface->GetScreenImage());Check(proxy&&proxy->Active(),"physical target active");
     auto* target=proxy->Target();auto* bits=target->GetBits();
-    for(unsigned i=0;i<360*270;++i)bits[i]=0xff000000u|((i*1664525u+seed*1013904223u)&0xffffffu);
+    for(unsigned i=0;i<H1ScreenWidth*H1ScreenHeight;++i)bits[i]=0xff000000u|((i*1664525u+seed*1013904223u)&0xffffffu);
     Graphics g(proxy);selector->Draw(&g);
     if(children){NewLawnButton* list[]={selector->mAchievementsButton,selector->mZombatarButton,selector->mChangeUserButton,
         selector->mSurvivalButton,selector->mZenGardenButton,selector->mPuzzleButton,selector->mMinigameButton,
@@ -32,7 +33,7 @@ std::vector<uint32_t> Frame(GameSelector* selector,bool enabled,unsigned seed,bo
         for(auto* button:list)if(button->mVisible){Graphics child(proxy);child.Translate(button->mX,button->mY);button->Draw(&child);}
         Graphics overlay(proxy);selector->DrawOverlay(&overlay);
     }
-    return std::vector<uint32_t>(bits,bits+360*270);
+    return std::vector<uint32_t>(bits,bits+H1ScreenWidth*H1ScreenHeight);
 }
 void Pair(GameSelector* selector,unsigned seed=0){auto before=Frame(selector,false,seed);auto after=Frame(selector,true,seed);Check(before==after,"original/offline full-frame pixels differ");++cases;}
 }
@@ -71,8 +72,8 @@ extern "C" void pvzh1_offline_selector_engine_probe(){
     }
     profile.mName="SECOND_PLAYER";Pair(selector);Pair(selector);
     // Uncovered animation/geometry/tint/fade states stay in original code.
-    auto hit=pvzh1_selector_offline_diagnostic[4];selector->mStartingGame=true;Pair(selector);Check(pvzh1_selector_offline_diagnostic[4]==hit,"starting must fall back");selector->mStartingGame=false;
-    selector->mSlideCounter=1;Pair(selector);Check(pvzh1_selector_offline_diagnostic[4]==hit,"slide must fall back");selector->mSlideCounter=0;
+    auto hit=pvzh1_selector_offline_diagnostic[4];selector->mStartingGame=true;Pair(selector);Check(pvzh1_selector_offline_diagnostic[4]>hit,"Adventure must retain cached menu drawing");selector->mStartingGame=false;
+    hit=pvzh1_selector_offline_diagnostic[4];selector->mSlideCounter=1;Pair(selector);Check(pvzh1_selector_offline_diagnostic[4]==hit,"slide must fall back");selector->mSlideCounter=0;
     selector->mSelectorState=SELECTOR_OPEN;Pair(selector);Check(pvzh1_selector_offline_diagnostic[4]==hit,"open must fall back");selector->mSelectorState=SELECTOR_IDLE;
     Graphics tinted(gLawnApp->mGLInterface->GetScreenImage());tinted.SetColorizeImages(true);tinted.SetColor(Color(128,64,32));
     Check(!H1SelectorOfflineDrawGroup(selector,&tinted,animation,RENDER_GROUP_NORMAL),"parent tint must fall back");
@@ -90,10 +91,10 @@ extern "C" void pvzh1_offline_selector_engine_probe(){
         const uint32_t prior=pvzh1_selector_cull_diagnostic[0];
         for(unsigned enabled=0;enabled<2;++enabled){
             auto* pixels=proxy->Target()->GetBits();
-            for(unsigned i=0;i<360*270;++i)pixels[i]=0xff000000u|((i*1664525u+17u)&0xffffffu);
+            for(unsigned i=0;i<H1ScreenWidth*H1ScreenHeight;++i)pixels[i]=0xff000000u|((i*1664525u+17u)&0xffffffu);
             Graphics g(proxy);g.Translate(0,y);g.ClipRect(0,0,page->mWidth,page->mHeight);
             H1SelectorOfflineTestEnable(enabled);page->Draw(&g);
-            frames[enabled].assign(pixels,pixels+360*270);
+            frames[enabled].assign(pixels,pixels+H1ScreenWidth*H1ScreenHeight);
         }
         Check(frames[0]==frames[1],"achievement-page cull changed physical pixels");
         const bool empty=y>=600||y+page->mHeight<=0;
@@ -113,6 +114,6 @@ extern "C" void pvzh1_offline_selector_engine_probe(){
     out<<"{\"test_only\":true,\"all_passed\":true,\"checks\":"<<checks<<",\"full_frame_pixel_cases\":"<<cases
        <<",\"clipped_page_cases\":"<<pageCases<<",\"hidden_page_skips\":"<<pvzh1_selector_cull_diagnostic[0]
        <<",\"group_hits\":"<<groups<<",\"button_state_hits\":"<<buttonHits<<",\"welcome_hits\":"<<welcome
-       <<",\"resident_requested_bytes\":"<<resident<<",\"released_bytes\":0,\"warm_bundle_opens\":0,\"original_attachments_preserved\":true,\"fallback_states\":[\"open\",\"slide\",\"starting\",\"parent_tint\",\"hover_fade\"],\"gameplay_input_proof\":false}\n";
+       <<",\"resident_requested_bytes\":"<<resident<<",\"released_bytes\":0,\"warm_bundle_opens\":0,\"original_attachments_preserved\":true,\"starting_retains_cache\":true,\"fallback_states\":[\"open\",\"slide\",\"parent_tint\",\"hover_fade\"],\"gameplay_input_proof\":false}\n";
     gLawnApp->mPlayerInfo=old;
 }

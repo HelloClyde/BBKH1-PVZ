@@ -59,6 +59,7 @@ extern "C" void pvzh1_host_probe_selector();
 extern "C" void pvzh1_host_probe_atlas_entry();
 extern "C" void pvzh1_host_probe_allocators();
 extern "C" void pvzh1_export_definitions();
+extern "C" void pvzh1_export_fonts();
 namespace {
 using Clock=std::chrono::steady_clock;
 Clock::time_point start=Clock::now();
@@ -461,6 +462,7 @@ extern "C" void pvzp_log_line(const char *line){
             MeasureMemory();State(checkpoint);
             if(std::strcmp(checkpoint,"loaded-images-fonts")==0){pvzh1_host_probe_fonts();pvzh1_host_probe_widgets();pvzh1_host_probe_triangles();}
             if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_host_probe_selector();pvzh1_host_probe_atlas_entry();pvzh1_export_definitions();}
+            if(std::strcmp(checkpoint,"loading-complete")==0)pvzh1_export_fonts();
         }
     }
 }

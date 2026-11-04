@@ -32,6 +32,7 @@ static struct borrowed_player *players;
  * Update only at module boundaries; never emit per-read/sample log traffic. */
 volatile uint32_t pvzh1_xmp_load_diagnostic[12];
 extern uint32_t pvzp_ticks_ms(void) __attribute__((weak));
+extern void pvzp_audio_service(void) __attribute__((weak));
 static uint32_t load_ticks(void) { return pvzp_ticks_ms ? pvzp_ticks_ms() : 0; }
 
 static int load_buffered_module(struct context_data *ctx, const char *path)
@@ -111,6 +112,7 @@ static int deduplicate_tracks(pvzh1_xmp_module *module)
     module->aliases = (unsigned char *)calloc(((size_t)mod->trk + 7) / 8, 1);
     if (!table || !module->aliases) { free(table); return -1; }
     for (i = 0; i < (size_t)mod->trk; ++i) {
+        if(pvzp_audio_service)pvzp_audio_service();
         struct xmp_track *track = mod->xxt[i];
         size_t bytes = track_size(track), slot;
         if (!bytes) { free(table); return -1; }

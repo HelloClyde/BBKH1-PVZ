@@ -60,6 +60,25 @@ extern "C" void pvzh1_export_selector_bake(){
  GameSelector selector(gLawnApp);auto *animation=gLawnApp->ReanimationGet(selector.mSelectorReanimID);
  animation->PlayReanim("anim_sign",ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD,0,0);animation->mAnimTime=1;
  selector.mSelectorState=SelectorAnimState::SELECTOR_IDLE;
+ if(std::getenv("PVZ_BAKE_ADVENTURE")){
+    auto* hand=gLawnApp->AddReanimation(-70.0f,10.0f,0,ReanimationType::REANIM_ZOMBIE_HAND);
+    hand->mLoopType=ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD;
+    for(int i=0;i<hand->mDefinition->mTracks.count;i++)if(!strncasecmp(hand->mDefinition->mTracks.tracks[i].mName,"rock",4))hand->mTrackInstances[i].mIgnoreClipRect=true;
+    for(unsigned update=0;update<=450;update++){
+        if(update)hand->Update();if(update%4&&update!=450)continue;
+        Export("hand-"+std::to_string(update),[&]{Graphics g(screen);g.SetLinearBlend(true);g.SetClipRect(0,0,H1LogicalWidth,BOARD_HEIGHT-40);hand->Draw(&g);});
+    }
+    auto* button=selector.mAdventureButton;button->mBtnNoDraw=false;button->mDisabled=false;button->mOverAlpha=0;
+    for(int start:{0,1}){
+        button->mButtonImage=start?IMAGE_REANIM_SELECTORSCREEN_STARTADVENTURE_BUTTON:IMAGE_REANIM_SELECTORSCREEN_ADVENTURE_BUTTON;
+        button->mOverImage=button->mDownImage=start?IMAGE_REANIM_SELECTORSCREEN_STARTADVENTURE_HIGHLIGHT:IMAGE_REANIM_SELECTORSCREEN_ADVENTURE_HIGHLIGHT;
+        selector.TrackButton(button,start?"SelectorScreen_StartAdventure_button":"SelectorScreen_Adventure_button",0,0);button->SetBkgColor(Color(80,80,80));
+        const std::string geometry=",\"x\":"+std::to_string(button->mX)+",\"y\":"+std::to_string(button->mY)+",\"width\":"+std::to_string(button->mWidth)+",\"height\":"+std::to_string(button->mHeight);
+        for(int state=0;state<3;state++){button->mIsOver=state!=0;button->mIsDown=state==2;Export(std::string("button-100-")+(start?"start80":"80")+"-"+std::to_string(state),[&]{Graphics g(screen);g.SetLinearBlend(true);g.Translate(button->mX,button->mY);button->Draw(&g);},geometry);}
+    }
+    hand->ReanimationDie();
+    manifest<<"\n],\"original_vs_replay_checks\":"<<checks<<",\"passed\":true}\n";manifest.close();return;
+ }
  const char *buttons[]={"SelectorScreen_Adventure_button","SelectorScreen_StartAdventure_button","SelectorScreen_Survival_button","SelectorScreen_Challenges_button","SelectorScreen_ZenGarden_button"};
  for(const char *name:buttons)animation->AssignRenderGroupToTrack(name,RENDER_GROUP_HIDDEN);
  auto track=[&](int i){Graphics g(screen);g.SetLinearBlend(true);ReanimatorFrameTime time;animation->GetFrameTime(&time);PvzpTriangleGroup group;animation->DrawTrack(&g,i,0,&group,&time);group.DrawGroup(&g);};

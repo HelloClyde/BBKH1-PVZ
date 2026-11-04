@@ -1,0 +1,89 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "tap",
+        "x": 239,
+        "y": 182,
+        "seconds": 1
+      },
+      {
+        "kind": "wait",
+        "seconds": 2
+      },
+      {
+        "kind": "screenshot",
+        "output": "159-leave-confirm-v14.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T03:05:09.996209+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "tap",
+        "x": 239,
+        "y": 182,
+        "seconds": 1
+      },
+      "result": {
+        "gesture": "tap",
+        "x": 239,
+        "y": 182,
+        "hold_seconds": 1,
+        "lease_ticks": 80,
+        "release_acknowledged": true,
+        "host_elapsed_seconds": 1.0
+      },
+      "started_monotonic": 510092.703,
+      "finished_monotonic": 510093.703
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 2
+      },
+      "result": {
+        "waited_seconds": 2
+      },
+      "started_monotonic": 510093.703,
+      "finished_monotonic": 510095.703
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "159-leave-confirm-v14.png"
+      },
+      "result": {
+        "token": 112,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 1570898,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 427944,
+          "requests": 866,
+          "protocol_bytes_sent": 24248,
+          "protocol_bytes_received": 455656,
+          "elapsed_seconds": 14.952999999979511,
+          "decoded_bytes_per_second": 34925.43302352141,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 15.03100000001723,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-offline2\\159-leave-confirm-v14.png",
+        "snapshot_sha256": "77edf98ff9b77fb061a9e00bc2133b3ce93a9976cedd9a7cb21456cf4b3da9d9",
+        "png_sha256": "9e24e218be5cbef7f66201f70b237d857fd74df1fab9d743e023fa720cf5337e"
+      },
+      "started_monotonic": 510095.703,
+      "finished_monotonic": 510110.828
+    }
+  ],
+  "ok": true
+}

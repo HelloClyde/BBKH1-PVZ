@@ -35,11 +35,13 @@ void H1CompactFontParserData(Sexy::FontData& data)
 
 '''
     text=text.replace(signature,helper+signature,1)
+    text=text.replace('mSourceFile = theFontDescFileName;\n\n\tmInitialized = LoadDescriptor', 'mSourceFile = theFontDescFileName;\n    if(H1FontCacheLoad(*this))return true;\n    ++pvzh1_font_cache_diagnostic[3];\n\n\tmInitialized = LoadDescriptor',1)
     old='mInitialized = LoadDescriptor(theFontDescFileName); ;'
     if text.count(old)!=1:raise RuntimeError('Pinned FontData successful-load context changed')
     text=text.replace(old,'''mInitialized = LoadDescriptor(theFontDescFileName);
 #ifdef H1_PVZ_PORTABLE
     if (mInitialized)
         H1CompactFontParserData(*this);
+    if(mInitialized)H1FontCacheExport(*this);
 #endif''',1)
     path.write_text(text,encoding='utf8',newline='\n')

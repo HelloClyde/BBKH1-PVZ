@@ -28,8 +28,9 @@ struct Mix_Music{
     SharedTracker *shared=nullptr;
     FILE *pcm=nullptr;
     unsigned pcm_samples=0,pcm_position=0;
+    std::vector<int16_t> title_samples;
     int volume=128,loops=0;
-    bool tracker=false,playing=false,paused=false,pending_order=false;
+    bool tracker=false,title_pcm=false,playing=false,paused=false,pending_order=false;
     int requested_order=0;
     int channels[64];
     Mix_Music(){for(int &v:channels)v=128;}
@@ -75,8 +76,9 @@ static void release_module(Mix_Music *music){
     modules.erase(std::remove(modules.begin(),modules.end(),entry),modules.end());delete entry;update_stats();
 }
 static void close_player(Mix_Music *music){
+    music->playing=music->paused=false; // Releasing a tracker may service other audio streams.
     if(music->module){pvzh1_xmp_module_free_player(music->module);music->module=nullptr;update_stats();}
-    if(music->pcm){fclose(music->pcm);music->pcm=nullptr;}music->playing=music->paused=false;
+    if(music->pcm){fclose(music->pcm);music->pcm=nullptr;}std::vector<int16_t>().swap(music->title_samples);music->playing=music->paused=music->title_pcm=false;
 }
 static bool start_player(Mix_Music *music){
     if(music->tracker){
@@ -114,6 +116,9 @@ extern "C" Mix_Music *Mix_LoadMUS_RW(SDL_RWops *source,int close_source){
 extern "C" void Mix_FreeMusic(Mix_Music *music){if(!music)return;close_player(music);release_module(music);streams.erase(std::remove(streams.begin(),streams.end(),music),streams.end());delete music;}
 extern "C" int Mix_PlayMusicStream(Mix_Music *music,int loops){
     if(!music)return -1;close_player(music);music->loops=loops;music->pending_order=false;
+    // The original tracker API supplies the tune/order immediately afterwards.
+    // Wait for that order so the menu can use the sample-exact offline loop.
+    if(music->tracker)return 0;
     if(!start_player(music)){pvzp_log_line(("Tracker/PCM load failed: "+music->path).c_str());return -1;}
     music->playing=true;return 0;
 }
@@ -127,13 +132,32 @@ extern "C" int Mix_VolumeMusicStream(Mix_Music *music,int volume){if(!music)retu
 extern "C" int Mix_VolumeMusic(int volume){int old=global_volume;if(volume>=0)global_volume=std::clamp(volume,0,128);return old;}
 extern "C" int Mix_VolumeMusicGeneral(int volume){return Mix_VolumeMusic(volume);}
 extern "C" int Mix_ModMusicStreamJumpToOrder(Mix_Music *music,int order){
-    if(!music||!music->module)return -1;int position=order&65535,row=(unsigned)order>>16;
+    if(!music)return -1;int position=order&65535,row=(unsigned)order>>16;
+    if(music->tracker&&position==0x98&&row==0){
+        close_player(music);auto path=music->path;auto dot=path.rfind('.');if(dot!=std::string::npos)path.resize(dot);path+="-title.h1pcm";
+        FILE* file=fopen(path.c_str(),"rb");unsigned char header[16];
+        if(file&&fread(header,1,16,file)==16&&!memcmp(header,"H1PC",4)&&little32(header+4)==1&&little32(header+8)==16000){
+            unsigned count=little32(header+12);
+            if(count&&count<=16000*600){
+                // No title sample needs the parsed tracker payload. Release
+                // halted shared players before allocating its cached PCM.
+                for(auto* stream:streams)if(!stream->module&&stream->shared)release_module(stream);
+                music->title_samples.resize(count);
+                bool valid=fread(music->title_samples.data(),2,count,file)==count&&fgetc(file)==EOF;fclose(file);file=nullptr;
+                if(valid){music->pcm_samples=count;music->pcm_position=0;music->title_pcm=true;music->playing=true;music->requested_order=order;
+                    pvzp_music_diagnostic[6]++;return 0;}
+                std::vector<int16_t>().swap(music->title_samples);
+            }
+        }if(file)fclose(file);
+    }
+    if(!music->module){if(!start_player(music))return -1;music->playing=true;}
     if(xmp_set_position(music->module,position)<=-2)return -1;
     if(xmp_set_row(music->module,row)<0)return -1;
     xmp_play_buffer(music->module,nullptr,0,0);music->requested_order=order;music->pending_order=true;return 0;
 }
 extern "C" int Mix_ModMusicStreamGetOrder(Mix_Music *music,int *order){
-    if(!order)return -1;*order=-1;if(!music||!music->module)return -1;
+    if(!order)return -1;*order=-1;if(!music)return -1;
+    if(music->title_pcm){*order=0x98;return 0;}if(!music->module)return -1;
     if(music->pending_order){*order=music->requested_order;return 0;}
     xmp_frame_info frame{};xmp_get_frame_info(music->module,&frame);*order=(frame.pos&65535)|((frame.row&65535)<<16);return 0;
 }
@@ -148,9 +172,16 @@ extern "C" void pvzp_music_mix(int32_t *output,unsigned count){
     if(count>256)return;int16_t samples[256];
     for(Mix_Music *music:streams){
         if(!music->playing||music->paused)continue;unsigned produced=count;
-        if(music->tracker){
+        if(music->tracker&&!music->title_pcm){
+            if(!music->module)continue;
             if(xmp_play_buffer(music->module,samples,(int)count*2,music->loops<0?0:1)<0){music->playing=false;continue;}
             music->pending_order=false;
+        }else if(music->title_pcm){
+            produced=0;
+            while(produced<count){unsigned n=std::min(count-produced,music->pcm_samples-music->pcm_position);
+                memcpy(samples+produced,music->title_samples.data()+music->pcm_position,n*2);produced+=n;music->pcm_position+=n;
+                if(music->pcm_position==music->pcm_samples)music->pcm_position=0;
+            }
         }else{
             produced=0;int empty_reads=0;
             while(produced<count){unsigned got=(unsigned)fread(samples+produced,2,count-produced,music->pcm);produced+=got;music->pcm_position+=got;
@@ -161,5 +192,8 @@ extern "C" void pvzp_music_mix(int32_t *output,unsigned count){
         int gain=music->volume*global_volume;
         for(unsigned i=0;i<produced;i++)output[i]+=(int32_t)samples[i]*gain/(128*128);
     }
+}
+extern "C" int pvzp_music_has_audio(){
+    for(auto* music:streams)if(music->playing&&!music->paused)return 1;return 0;
 }
 extern "C" void pvzp_music_shutdown(void){while(!streams.empty())Mix_FreeMusic(streams.back());}

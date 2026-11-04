@@ -109,8 +109,10 @@ def compare(kind,module):
     finally:
         for p in processes:
             if p.poll() is None:p.kill()
-reports=[compare('oracle',ROOT/'private/resources/sounds'/name) for name in ('mainmusic.xm','mainmusic_hihats.xm')]
-reports.append(compare('menu',ROOT/'private/resources/sounds/mainmusic.xm'))
+modules=sorted((ROOT/'private/resources-h1-wide/sounds').glob('*.xm'))
+assert modules,'Runtime tracker modules missing'
+reports=[compare('oracle',module) for module in modules]
+reports.append(compare('menu',ROOT/'private/resources-h1-wide/sounds/mainmusic.xm'))
 unit=compile(OUT/'unit.c','unit',['-DH1_PVZ_PORTABLE','-DPVZH1_XMP_NUMERIC_STATS','-Werror'])
 unit_exe=OUT/'unit.exe';execute([cc,*common,*candidate,unit,'-lm','-o',unit_exe],'unit.link.log')
 unit_result=json.loads(execute([unit_exe],'unit.log'))

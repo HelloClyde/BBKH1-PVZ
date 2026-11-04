@@ -11,6 +11,7 @@
 #include <string>
 #include <stdexcept>
 #include <algorithm>
+#include <map>
 #ifdef PVZ_HOST_RUNNER
 #include <filesystem>
 #include <map>
@@ -18,8 +19,30 @@
 #include "resources/h1_resources.h"
 #endif
 extern "C" { volatile uint32_t pvzh1_definition_diagnostic[8]; }
+extern "C" void pvzp_audio_service();
 namespace {
 constexpr uint32_t Limit=16*1024*1024;
+static std::map<std::string,std::vector<unsigned char>> startupPack;
+static bool startupPackAttempted;
+static uint32_t ReadWord(const unsigned char* p){return p[0]|uint32_t(p[1])<<8|uint32_t(p[2])<<16|uint32_t(p[3])<<24;}
+static void LoadStartupPack(){
+    if(startupPackAttempted)return;startupPackAttempted=true;
+    auto path=Sexy::GetResourcePath("particles/startup.h1dp");FILE* file=fopen(path.c_str(),"rb");if(!file)return;
+    unsigned char header[16];bool ok=fread(header,1,16,file)==16&&!memcmp(header,"H1DP",4)&&ReadWord(header+4)==1;
+    uint32_t count=ok?ReadWord(header+8):0,bytes=ok?ReadWord(header+12):0;ok=ok&&count&&count<=512&&bytes<=1048576;
+    std::map<std::string,std::vector<unsigned char>> entries;uint32_t consumed=0;
+    for(unsigned i=0;ok&&i<count;i++){
+        unsigned char h[12];ok=fread(h,1,12,file)==12;if(!ok)break;consumed+=12;
+        uint32_t length=ReadWord(h),size=ReadWord(h+4),crc=ReadWord(h+8);
+        ok=length&&length<=256&&size>=24&&size<=1048576&&uint64_t(consumed)+length+size<=bytes;if(!ok)break;
+        std::string name(length,'\0');std::vector<unsigned char> data(size);
+        ok=fread(name.data(),1,length,file)==length&&fread(data.data(),1,size,file)==size&&crc32(0,data.data(),size)==crc;
+        consumed+=length+size;if(ok)ok=entries.emplace(std::move(name),std::move(data)).second;
+    }
+    ok=ok&&consumed==bytes&&fgetc(file)==EOF;fclose(file);
+    if(ok){startupPack.swap(entries);pvzh1_definition_diagnostic[4]=count;pvzh1_definition_diagnostic[5]=bytes+16;}
+    else ++pvzh1_definition_diagnostic[7];
+}
 const void* exactLoadedDefinition=nullptr;
 uint32_t Hash(const DefMap* map,uint32_t h=2166136261u) {
     auto byte=[&](unsigned char b){h=(h^b)*16777619u;};
@@ -58,6 +81,7 @@ struct Input {
         }return ok;
     }
     bool fill(){
+        pvzp_audio_service(); // Foreground, outside filesystem locks; never recursive audio IO.
         size_t cap=std::min(sizeof(page),limit-produced),n=cap;
         if(!cap)return ok=false;
         if(compressed){
@@ -203,6 +227,12 @@ void FreeStrings(const DefMap* map,void* object){
 }
 bool H1DefinitionLoad(const std::string& xml,const DefMap* map,void* object){
     exactLoadedDefinition=nullptr;
+    LoadStartupPack();std::string key=xml;for(auto& c:key){if(c=='\\')c='/';if(c>='A'&&c<='Z')c+=32;}
+    auto packed=startupPack.find(key);
+    if(packed!=startupPack.end()){
+        if(!DecodeFile(packed->second,map,object)){++pvzh1_definition_diagnostic[3];throw std::runtime_error("Invalid packed H1 definition: "+xml);}
+        exactLoadedDefinition=object;++pvzh1_definition_diagnostic[0];++pvzh1_definition_diagnostic[6];pvzh1_definition_diagnostic[1]+=packed->second.size();return true;
+    }
     std::string name=Sexy::GetResourcePath(xml+".h1d");FILE* f=fopen(name.c_str(),"rb");
     if(!f){++pvzh1_definition_diagnostic[2];return false;}
     bool ok=false;std::vector<unsigned char> data;

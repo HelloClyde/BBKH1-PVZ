@@ -1,0 +1,528 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "tap",
+        "x": 188,
+        "y": 168,
+        "seconds": 1
+      },
+      {
+        "kind": "wait",
+        "seconds": 20
+      },
+      {
+        "kind": "snapshot"
+      },
+      {
+        "kind": "screenshot",
+        "output": "156-playing-v14.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T03:03:13.176414+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "tap",
+        "x": 188,
+        "y": 168,
+        "seconds": 1
+      },
+      "result": {
+        "gesture": "tap",
+        "x": 188,
+        "y": 168,
+        "hold_seconds": 1,
+        "lease_ticks": 80,
+        "release_acknowledged": true,
+        "host_elapsed_seconds": 1.0150000000139698
+      },
+      "started_monotonic": 509975.875,
+      "finished_monotonic": 509976.89
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 20
+      },
+      "result": {
+        "waited_seconds": 20
+      },
+      "started_monotonic": 509976.89,
+      "finished_monotonic": 509996.89
+    },
+    {
+      "action": {
+        "kind": "snapshot"
+      },
+      "result": {
+        "started_monotonic": 509996.89,
+        "utc": "2026-11-04T03:03:34.193757+00:00",
+        "pvzp_diagnostic": [
+          1347833905,
+          1,
+          2885,
+          0,
+          46,
+          0,
+          6,
+          3,
+          12514,
+          1,
+          75,
+          0,
+          232306,
+          1,
+          0,
+          0,
+          1,
+          1652564,
+          0,
+          0,
+          3753688,
+          3753688,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_diagnostic": [
+          1347836496,
+          2,
+          0,
+          17276312,
+          19616468,
+          159,
+          1,
+          66,
+          21,
+          520,
+          25,
+          2210579060,
+          0,
+          0,
+          0,
+          65536
+        ],
+        "pvzh1_cache_diagnostic": [
+          3753688,
+          3753688,
+          83,
+          0,
+          2885,
+          3482086
+        ],
+        "pvzh1_cache_pressure_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_storage_texture_diagnostic": [
+          2805624,
+          76,
+          79,
+          3029975,
+          0,
+          212243,
+          1,
+          680404
+        ],
+        "pvzh1_physical_screen_diagnostic": [
+          1,
+          480,
+          272,
+          1060,
+          600,
+          0,
+          2886,
+          187978
+        ],
+        "pvz_runtime_pressure_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_native_charge": [
+          22288500,
+          22288500
+        ],
+        "pvzh1_render_plan_diagnostic": [
+          5,
+          135168,
+          135168,
+          3572,
+          19,
+          6,
+          5,
+          5,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          265426706,
+          9187662,
+          250604954,
+          2894001,
+          2740089,
+          0,
+          11352
+        ],
+        "pvz_runtime_profile_diagnostic": [
+          25038,
+          958,
+          0,
+          484,
+          2886,
+          4237,
+          0,
+          130,
+          2886,
+          522,
+          0,
+          1,
+          218495,
+          71,
+          0,
+          1,
+          6640,
+          35,
+          0,
+          1,
+          2886,
+          4996,
+          0,
+          131,
+          0,
+          0,
+          0,
+          0,
+          214788,
+          1399,
+          0,
+          6
+        ],
+        "pvz_runtime_profile_clock": [
+          5772,
+          1566945,
+          1566945,
+          0,
+          40,
+          5772
+        ],
+        "pvz_runtime_hole_diagnostic": [
+          1211189318,
+          1783,
+          0,
+          10,
+          26719,
+          26719,
+          26720,
+          26720,
+          0,
+          4294967295,
+          0,
+          337940
+        ],
+        "pvz_runtime_small_pool_diagnostic": [
+          1211191372,
+          545,
+          555,
+          32925,
+          5933504,
+          9550836,
+          9550976,
+          9550976,
+          599,
+          54,
+          0,
+          84385,
+          83786,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_io_diagnostic": [
+          865,
+          893,
+          705,
+          14105,
+          35102720,
+          34944604,
+          235,
+          16384,
+          1373,
+          3,
+          0,
+          12760,
+          0,
+          1345,
+          0,
+          0
+        ],
+        "pvz_runtime_asset_layout_diagnostic": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "pvzh1_xmp_load_diagnostic": [
+          5,
+          1,
+          139125,
+          4150,
+          275,
+          65536,
+          5734353,
+          4450,
+          0,
+          1,
+          0,
+          0
+        ],
+        "pvzh1_axis_span_diagnostic": [
+          3621967,
+          1335418,
+          38882857,
+          30810806,
+          3633276,
+          4438775,
+          0,
+          0
+        ],
+        "pvzh1_selector_offline_diagnostic": [
+          1,
+          0,
+          0,
+          7972639,
+          2154,
+          9693,
+          1076,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          1,
+          2,
+          91826097
+        ],
+        "pvzh1_selector_cull_diagnostic": [
+          1077,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_dirty_present_diagnostic": [
+          1,
+          522240,
+          1,
+          2886,
+          238807,
+          23310953,
+          0,
+          0
+        ],
+        "pvzh1_dirty_canvas_diagnostic": [
+          1,
+          2867,
+          2864,
+          20,
+          78151835,
+          170400893,
+          0,
+          1
+        ],
+        "pvzh1_text_replay_diagnostic": [
+          9372,
+          96,
+          96,
+          0,
+          714852,
+          714852,
+          72,
+          0
+        ],
+        "pvzh1_font_metric_diagnostic": [
+          168842,
+          8910,
+          8910,
+          0
+        ],
+        "pvzh1_selector_retained_diagnostic": [
+          1077,
+          577820,
+          0,
+          0
+        ],
+        "pvzh1_definition_diagnostic": [
+          122,
+          179485,
+          0,
+          0,
+          107,
+          29418,
+          107,
+          0
+        ],
+        "pvzh1_startup_diagnostic": [
+          1,
+          101,
+          101,
+          4076,
+          4076,
+          4126,
+          4126,
+          4201,
+          4201,
+          4226,
+          4226,
+          5951,
+          5951,
+          9026,
+          9026,
+          9251,
+          9251,
+          9251,
+          9251,
+          2201,
+          36776,
+          36801,
+          36801,
+          38451,
+          38451,
+          41726,
+          89276,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_font_cache_diagnostic": [
+          18,
+          239715,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_sound_index_diagnostic": [
+          169,
+          167,
+          1,
+          0
+        ],
+        "pvzh1_audio_diagnostic": [
+          350,
+          0,
+          0,
+          8192,
+          32768,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_adventure_diagnostic": [
+          1,
+          84751,
+          84751,
+          451,
+          96,
+          84776,
+          89251,
+          89276,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_adventure_raster_diagnostic": [
+          96,
+          0,
+          84776,
+          89251,
+          50,
+          450,
+          655651,
+          7451923
+        ],
+        "pvzp_music_diagnostic": [
+          1,
+          4605636,
+          1568344,
+          5014597,
+          1,
+          1,
+          1,
+          0
+        ],
+        "finished_monotonic": 509997.046
+      },
+      "started_monotonic": 509996.89,
+      "finished_monotonic": 509997.046
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "156-playing-v14.png"
+      },
+      "result": {
+        "token": 109,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 1566952,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 426542,
+          "requests": 864,
+          "protocol_bytes_sent": 24192,
+          "protocol_bytes_received": 454190,
+          "elapsed_seconds": 15.202999999979511,
+          "decoded_bytes_per_second": 34351.114911576915,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 15.28200000000652,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-offline2\\156-playing-v14.png",
+        "snapshot_sha256": "a28b48a2529babac5607cae0aed165cc91fdef8004763d3023b9e5d68bb00746",
+        "png_sha256": "52f532938f0d77ecb031b33464452e99a69f620028cf92b56f4807242ebf097c"
+      },
+      "started_monotonic": 509997.046,
+      "finished_monotonic": 510012.421
+    }
+  ],
+  "ok": true
+}

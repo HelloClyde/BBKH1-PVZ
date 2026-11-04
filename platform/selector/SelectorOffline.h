@@ -10,6 +10,7 @@ namespace Sexy { class Graphics; }
  * hit testing, dialogs and transitions remain the original game. */
 bool H1SelectorOfflineDrawGroup(GameSelector*, Sexy::Graphics*, Reanimation*, int);
 bool H1SelectorOfflineDrawButton(NewLawnButton*, Sexy::Graphics*);
+bool H1SelectorOfflineDrawHand(GameSelector*, Sexy::Graphics*, Reanimation*);
 bool H1SelectorSkipClippedAchievements(Sexy::Graphics*);
 bool H1SelectorOfflineWelcomeBegin(GameSelector*, Sexy::Graphics*);
 void H1SelectorOfflineWelcomeEnd(GameSelector*, Sexy::Graphics*);

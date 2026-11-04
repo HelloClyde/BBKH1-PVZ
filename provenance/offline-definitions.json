@@ -1274,6 +1274,6 @@
   "bytes": 1246940,
   "all_fields_roundtrip": true,
   "crc_rejection": true,
-  "exporter_source_sha256": "f5a5714d0e04839be6f8b62ae115e683b19b49c934cade4fae9d03308a230904",
+  "exporter_source_sha256": "bfdf3550ee446fa3b247e53522c9431b1746474d5d032358434fad84b0ee9908",
   "upstream_parser_sha256": "285b7e29e58bbbc4a958ce95fc18213758b9b0b99355be8908ed01103e7a53a0"
 }

@@ -37,6 +37,8 @@ python tools/build_widescreen.py --toolchain 'D:/toolchain/bin' --prefix 'D:/pvz
 
 历史开发工具中部分模拟器/原生采样脚本保留了工作区配套探针路径，它们不属于上述独立构建和 CI 入口。这里保留相关源代码用于研究，不把不存在的模拟器依赖描述为可直接运行。
 
+字体和音效索引可通过 `tools/bake_startup.py --host build/host/pvz-portable-host.exe --output build/startup-new` 重新生成；标题音乐通过 `tools/bake_title_music.py --host-build build/host --output build/title-new` 生成并逐样本校验。粒子小文件包入口为 `tools/pack_definitions.py`。冒险帧使用 `tools/bake_selector.py --adventure-only --host-build build/host --prepared-source build/host/source --build-dir build/adventure-new --resources private/resources-h1-wide --output build/adventure-new/adventure.h1mb`；导出和回放按原片段顺序保留整数混合结果。对应清单在 `provenance/offline-startup*.json`、`offline-title-music.json` 和 `offline-adventure.json`。重新生成后需要更新资源清单并重做验证。
+
 ## 包与验证范围
 
 `python tools/package_install.py` 生成包含预验证 BDA 与全部 B 盘运行资源的安装 ZIP；指定 `--bda dist/H1PVZPortable.bda` 可使用本次编译结果。生成物不会覆盖已有同名 ZIP，且每个成员都读回核验 SHA-256。

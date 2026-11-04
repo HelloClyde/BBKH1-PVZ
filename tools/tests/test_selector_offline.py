@@ -12,7 +12,7 @@ def main():
     includes=[ROOT/'platform/host/include',ROOT/'platform/include',ROOT/'platform',ROOT/'platform/graphics',
               ROOT/'platform/resources',args.source,args.source/'SexyAppFramework']
     command=[args.cxx,'-std=c++20','-O1','-ffunction-sections','-fdata-sections','-DH1_PVZ_PORTABLE','-DLOW_MEMORY','-DPVZH1_SELECTOR_OFFLINE_STANDALONE',
-             '-Wl,--gc-sections','-static-libstdc++','-static-libgcc',str(source),'-o',str(exe)]
+             '-Wl,--gc-sections','-static-libstdc++','-static-libgcc',str(source),'-lz','-o',str(exe)]
     for path in includes:command+=['-I',str(path)]
     built=subprocess.run(command,capture_output=True,text=True,env=env)
     if built.returncode:raise RuntimeError(built.stdout+built.stderr)

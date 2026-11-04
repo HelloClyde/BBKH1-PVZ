@@ -100,6 +100,13 @@ std::map<std::string,std::string> Defines(ImageFont& font){
 }
 }
 
+extern "C" void pvzh1_export_fonts(){
+    if(!getenv("PVZ_H1_EXPORT_FONTS"))return;
+    for(const auto& entry:std::filesystem::directory_iterator(GetResourcePath("data"))){
+        if(entry.path().extension()!=".txt")continue;
+        FontData font;if(!font.Load(gLawnApp,"data/"+entry.path().filename().string()))throw std::runtime_error("Font export failed");
+    }
+}
 extern "C" void pvzh1_host_probe_fonts(){
     static bool ran=false;if(ran||!gLawnApp||!gLawnApp->mResourceManager)return;ran=true;
     const char *setting=getenv("PVZ_HOST_FONT_PROBE");if(!setting||setting[0]!='1')return;

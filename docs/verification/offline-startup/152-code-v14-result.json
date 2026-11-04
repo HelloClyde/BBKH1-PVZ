@@ -1,0 +1,86 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "read",
+        "address": "0x83c00020",
+        "bytes": 48
+      },
+      {
+        "kind": "read",
+        "address": "0x83e04c78",
+        "bytes": 64
+      },
+      {
+        "kind": "read",
+        "address": "0x83df7338",
+        "bytes": 64
+      },
+      {
+        "kind": "read",
+        "address": "0x83e036ec",
+        "bytes": 64
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T03:01:30.821412+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83c00020",
+        "bytes": 48
+      },
+      "result": {
+        "address": "0x83c00020",
+        "bytes": 48,
+        "hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3cc082bd27e0ffbd271800a8af3d0cf80c000000001800bd8f1800bc8f"
+      },
+      "started_monotonic": 509873.515,
+      "finished_monotonic": 509873.531
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83e04c78",
+        "bytes": 64
+      },
+      "result": {
+        "address": "0x83e04c78",
+        "bytes": 64,
+        "hex": "78fdbd278002beaf25f0a0037802b3af8402bfaf7c02b4af7402b2af7002b1af6c02b0af9402c7af2000073c0300e7242438a7002598a0009002c6af0100e72c"
+      },
+      "started_monotonic": 509873.531,
+      "finished_monotonic": 509873.531
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83df7338",
+        "bytes": 64
+      },
+      "result": {
+        "address": "0x83df7338",
+        "bytes": 64,
+        "hex": "80ffbd277800beaf6800b4af25f0a0036400b3af6000b2af5800b0af7c00bfaf7400b7af7000b6af6c00b5af5c00b1af25a08000020004242580a0007909f80c"
+      },
+      "started_monotonic": 509873.531,
+      "finished_monotonic": 509873.531
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83e036ec",
+        "bytes": 64
+      },
+      "result": {
+        "address": "0x83e036ec",
+        "bytes": 64,
+        "hex": "fa83023c804d438c4200601400000000d8ffbd27010003241800b1af1400b0afec83113cfa83103c2400bfaf2000beaf1c00b2af25f0a00370b0242664481026"
+      },
+      "started_monotonic": 509873.531,
+      "finished_monotonic": 509873.531
+    }
+  ],
+  "ok": true
+}

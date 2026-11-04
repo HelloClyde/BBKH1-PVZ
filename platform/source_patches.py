@@ -5,6 +5,7 @@ bounded to the platform lifecycle and fails if its reviewed context changes.
 """
 from pathlib import Path
 import importlib.util
+import re
 
 ROOT=Path(__file__).resolve().parents[1]
 REPLACEMENTS={
@@ -37,6 +38,9 @@ def apply(source_root:Path):
                  '#if defined(__EMSCRIPTEN__) || defined(H1_PVZ_PORTABLE)\n\t\tLoadingThreadProcStub(this);')
     replace(base,'#elif (defined(__ANDROID__) && !defined(__TERMUX__)) || defined(__IPHONEOS__)\n\tShutdown();\n#else\n\texit(theCode);',
                  '#elif (defined(__ANDROID__) && !defined(__TERMUX__)) || defined(__IPHONEOS__) || defined(H1_PVZ_PORTABLE)\n\tShutdown();\n#else\n\texit(theCode);')
+    base.write_text('#include "Startup.h"\n'+base.read_text(encoding='utf8'),encoding='utf8')
+    replace(base,'\t\t\tmMusicInterface->StopAllMusic();\n\n\t\tRestoreScreenResolution();',
+                 '\t\t\tmMusicInterface->StopAllMusic();\n        if(mSoundManager)mSoundManager->StopAllSounds();\n        pvzp_audio_loading_begin(); // Drain output before the app destroys resources.\n\n\t\tRestoreScreenResolution();')
     replace(source_root/'main.cpp','int main(int argc, char** argv)','int pvzp_upstream_main(int argc, char** argv)')
     lawn=source_root/'LawnApp.cpp'
     text=lawn.read_text(encoding='utf8')
@@ -64,15 +68,83 @@ def apply(source_root:Path):
     anchor='void LawnApp::PreNewGame(GameMode theGameMode, bool theLookForSavedGame)\n{'
     if text.count(anchor)!=1:raise ValueError('First-board preload boundary changed')
     text=text.replace(anchor,anchor+'''
+    H1AudioLoadingScope audioLoadingScope;
     if(h1_game_preload_pending){h1_game_preload_pending=false;PreloadForUser();}
 ''',1)
     lawn.write_text(text,encoding='utf8')
+    # Save completes before DoBackToMain tears down the board. Its PCM tail
+    # must drain before config writes / object destruction, too, rather than
+    # waiting until the next selector constructor starts its loading scope.
+    replace(lawn,'\tmSoundSystem->CancelPausedFoley();\n\tWriteCurrentUserConfig();',
+                 '\tmSoundSystem->CancelPausedFoley();\n    pvzp_audio_loading_begin();\n\tWriteCurrentUserConfig();')
+    save=source_root/'Lawn/System/SaveGame.cpp'
+    text=save.read_text(encoding='utf8');text='#include "Startup.h"\nextern "C" void pvzp_audio_service();\n'+text
+    begin=text.index('class PortableSaveContext');end=text.index('static void SyncColorPortable',begin)
+    segment,count=re.subn(r'(\tvoid Sync\w+\([^)]*\)\n\t\{)',r'\1\n        pvzp_audio_service();',text[begin:end])
+    if count!=9:raise ValueError('Portable save service boundaries changed: '+str(count))
+    text=text[:begin]+segment+text[end:]
+    anchor='bool LawnSaveGame(Board* theBoard, const std::string& theFilePath)\n{'
+    if text.count(anchor)!=1:raise ValueError('Portable save entry changed')
+    save.write_text(text.replace(anchor,anchor+'\n    H1AudioSaveScope audioSaveScope;',1),encoding='utf8')
+    resources=source_root/'Resources.cpp'
+    text=resources.read_text(encoding='utf8');text='#include <algorithm>\n#include <cstdint>\nextern "C" void pvzp_audio_service();\n'+text
+    old='''	static std::map<void*, int> aMap;
+
+	if (gNeedRecalcVariableToIdMap)
+	{
+		gNeedRecalcVariableToIdMap = false;
+		aMap.clear();
+		for (int i = 0; i < static_cast<int>(ResourceId::RESOURCE_ID_MAX); i++)
+		{
+			void* value;
+			std::memcpy(&value, gResources[i], sizeof(void*));
+			aMap[value] = i;
+		}
+	}
+
+	auto anIter = aMap.find(theVariable);
+	return anIter == aMap.end() ? ResourceId::RESOURCE_ID_MAX : (ResourceId)anIter->second;'''
+    new='''    // One compact allocation instead of thousands of individually allocated
+    // tree nodes. Sorting by (address, ID) keeps the original last-ID alias rule.
+    static std::vector<std::pair<uintptr_t,int>> ids;
+    if(gNeedRecalcVariableToIdMap){
+        gNeedRecalcVariableToIdMap=false;ids.clear();
+        ids.reserve(static_cast<int>(ResourceId::RESOURCE_ID_MAX));
+        for(int i=0;i<static_cast<int>(ResourceId::RESOURCE_ID_MAX);i++){
+            void* value;std::memcpy(&value,gResources[i],sizeof(void*));
+            ids.emplace_back(reinterpret_cast<uintptr_t>(value),i);pvzp_audio_service();
+        }
+        std::sort(ids.begin(),ids.end());
+    }
+    const auto key=reinterpret_cast<uintptr_t>(theVariable);
+    auto it=std::upper_bound(ids.begin(),ids.end(),std::make_pair(key,static_cast<int>(ResourceId::RESOURCE_ID_MAX)));
+    if(it==ids.begin())return ResourceId::RESOURCE_ID_MAX;
+    --it;return it->first==key?static_cast<ResourceId>(it->second):ResourceId::RESOURCE_ID_MAX;'''
+    if text.count(old)!=1:raise ValueError('Resource reverse-ID lookup context changed')
+    resources.write_text(text.replace(old,new,1),encoding='utf8')
     selector=source_root/'Lawn/Widget/GameSelector.cpp'
     text=selector.read_text(encoding='utf8')
     text='#include "Startup.h"\n'+text
     anchor='GameSelector::GameSelector(LawnApp* theApp)\n{'
     if text.count(anchor)!=1:raise ValueError('Selector constructor boundary changed')
     text=text.replace(anchor,anchor+'\n    H1StartupSelectorScope startupScope;',1)
+    # The hand must already own its definition/atlas before the touch starts
+    # the animation. Keep all 450 original updates and original effects.
+    anchor='\tmApp->mMusic->StopAllMusic();\n\tmApp->PlaySample(Sexy::SOUND_LOSEMUSIC);\n\tmStartingGame = true;'
+    if text.count(anchor)!=1:raise ValueError('Adventure start context changed')
+    text=text.replace(anchor,'    pvzh1_adventure_mark(0,0);\n'+anchor,1)
+    anchor='\t\tmStartingGameCounter++;'
+    if text.count(anchor)!=1:raise ValueError('Adventure update context changed')
+    text=text.replace(anchor,anchor+'\n        pvzh1_adventure_mark(2,mStartingGameCounter);',1)
+    anchor='\t\t\tmApp->KillGameSelector();\n\n\t\t\tif (mApp->IsIceDemo())'
+    if text.count(anchor)!=1:raise ValueError('Adventure end context changed')
+    text=text.replace(anchor,'            pvzh1_adventure_mark(4,mStartingGameCounter);\n            H1SelectorOfflineRelease(this); // Release menu/hand pixels before board warmup.\n'+anchor,1)
+    anchor='\tmHandReanimID = mApp->ReanimationGetID(aHandReanim);'
+    if text.count(anchor)!=1:raise ValueError('Adventure hand context changed')
+    text=text.replace(anchor,anchor+'\n    pvzh1_adventure_mark(1,0);',1)
+    anchor='\t\taHandReanim->Draw(g);'
+    if text.count(anchor)!=1:raise ValueError('Adventure hand draw context changed')
+    text=text.replace(anchor,anchor+'\n        pvzh1_adventure_mark(3,mStartingGameCounter);',1)
     # The decorative open/sign transitions cannot use the offline final-pose
     # pixels. Finish them before drawing while retaining upstream Update's
     # button enablement, new-user dialog and profile/achievement checks.
@@ -110,6 +182,22 @@ def apply(source_root:Path):
         if text.count(anchor)!=1:raise ValueError('Menu decoration update context changed')
         text=text.replace(anchor,'#ifndef H1_PVZ_PORTABLE\n'+anchor+'\n#endif',1)
     selector.write_text(text,encoding='utf8')
+    reanim=source_root/'PvzpLib/Reanimator.cpp'
+    text=reanim.read_text(encoding='utf8')
+    text='#include "h1_host.h"\nextern "C" void pvzp_audio_service();\n'+text
+    text=text.replace('for (int aTrackIndex = 0; aTrackIndex < theDefinition->mTracks.count; aTrackIndex++)\n\t{',
+        'for (int aTrackIndex = 0; aTrackIndex < theDefinition->mTracks.count; aTrackIndex++)\n\t{\n        pvzp_audio_service();')
+    anchor='\t\tif (DefinitionIsCompiled(aReanimationParams->mReanimFileName))'
+    if text.count(anchor)!=1:raise ValueError('Legacy animation cache scan changed')
+    text=text.replace(anchor,'#ifndef H1_PVZ_PORTABLE\n'+anchor+'\n#endif\n#ifdef H1_PVZ_PORTABLE\n        if(false) // H1D is loaded on demand; do not stat 292 absent legacy cache paths.\n#endif',1)
+    reanim.write_text(text,encoding='utf8')
+    raster=source_root/'SexyAppFramework/graphics/SWTri.cpp'
+    text=raster.read_text(encoding='utf8')
+    entry='bool blend, bool vertexColor)\n{'
+    if text.count(entry)!=1:raise ValueError('Software draw entry changed')
+    text='extern "C" void pvzp_audio_service();\n'+text
+    text=text.replace(entry,entry+'\n    pvzp_audio_service();',1)
+    raster.write_text(text,encoding='utf8')
     # H1 uses a streaming tracker/PCM backend. Retaining the original filename
     # avoids copying a complete MO3 into RAM before loading the unpacked XM.
     music=source_root/'Lawn/System/Music.cpp'
@@ -165,10 +253,12 @@ bool DefinitionCompileAndLoad(const std::string& theXMLFilePath, const DefMap* t
     # H1 loads synchronously: establish the same title state before entering
     # that work, then draw/update its original widget at safe resource boundaries.
     title=source_root/'Lawn/Widget/TitleScreen.cpp'
+    replace(title,'\t\tmApp->mMusic->MusicTitleScreenInit();',
+        '#ifndef PVZ_NATIVE_LOADING_PROGRESS\n\t\tmApp->mMusic->MusicTitleScreenInit();\n#endif')
     replace(title, '\t\tmApp->StartLoadingThread();',
         '#ifndef PVZ_NATIVE_LOADING_PROGRESS\n\t\tmApp->StartLoadingThread();\n#endif')
     replace(title, '\t\tmTitleStateCounter = mTitleStateDuration;\n\t}',
-        '\t\tmTitleStateCounter = mTitleStateDuration;\n#ifdef PVZ_NATIVE_LOADING_PROGRESS\n\t\tmApp->StartLoadingThread();\n#endif\n\t}')
+        '\t\tmTitleStateCounter = mTitleStateDuration;\n#ifdef PVZ_NATIVE_LOADING_PROGRESS\n        mTitleStateCounter-=50; // First visible frame is the opaque original PopCap logo.\n        MarkDirty();mApp->mWidgetManager->MarkAllDirty();mApp->DrawDirtyStuff();\n        mApp->mMusic->MusicTitleScreenInit();\n\t\tmApp->StartLoadingThread();\n#endif\n\t}')
     common=source_root/'PvzpLib/PvzpCommon.cpp'
     replace(common,
         'bool PvzpLoadNextResource()\n{\n\treturn static_cast<PvzpResourceManager*>(gSexyAppBase->mResourceManager.get())->PvzpLoadNextResource();\n}',

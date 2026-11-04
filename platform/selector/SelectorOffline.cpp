@@ -21,9 +21,14 @@
 #include <cstdlib>
 #include <new>
 #include <limits>
+#include <vector>
+#include <zlib.h>
+#include "h1_host.h"
+extern "C" void pvzp_audio_service();
 
 extern "C" { volatile uint32_t pvzh1_selector_offline_diagnostic[16]; }
 extern "C" { volatile uint32_t pvzh1_selector_cull_diagnostic[4]; }
+extern "C" { volatile uint32_t pvzh1_adventure_raster_diagnostic[8]; }
 #ifdef PVZH1_WIDESCREEN
 extern "C" {volatile uint32_t pvzh1_selector_retained_diagnostic[4];}
 #endif
@@ -120,7 +125,7 @@ void Clear(){
 bool Read(FILE* file,void* buffer,size_t bytes){return !bytes||std::fread(buffer,1,bytes,file)==bytes;}
 bool Range(uint32_t offset,uint32_t bytes,uint32_t end){return offset<=end&&bytes<=end-offset;}
 bool Validate(Entry& e){
-    if(e.kind<1||e.kind>2||e.runs>Pixels*4u||e.pixels>Pixels*4u)return false;
+    if(e.kind<1||e.kind>3||e.runs>Pixels*4u||e.pixels>Pixels*4u)return false;
     if((uint64_t)e.runs*12u+(uint64_t)e.pixels*4u!=e.bytes)return false;
     const unsigned char* run=e.data;
     for(uint32_t i=0;i<e.runs;++i,run+=12){
@@ -134,14 +139,14 @@ bool Validate(Entry& e){
     }
     return true;
 }
-bool Load(const char* filename){
+bool Load(const char* filename,bool merge=false){
     FILE* file=std::fopen(filename,"rb");
     if(!file){Add(8);return false;}
     unsigned char header[HeaderBytes]{};bool okay=Read(file,header,sizeof(header));
     uint32_t h[16]{};for(unsigned i=0;i<16;++i)h[i]=Word(header+i*4);
     okay=okay&&h[0]==Magic&&h[1]==1&&h[2]==HeaderBytes&&h[3]>=HeaderBytes&&h[3]<=MaximumFileBytes&&
         h[4]==Width&&h[5]==Height&&h[6]==Sexy::H1LogicalWidth&&h[7]==Sexy::H1LogicalHeight&&h[8]&&h[8]<=MaximumEntries&&
-        h[9]==HeaderBytes&&h[10]==EntryBytes&&h[12]&&h[12]<=128&&
+        h[9]==HeaderBytes&&h[10]==EntryBytes&&h[12]&&h[12]<=128&&h[13]<=1&&
         Range(h[9],h[8]*EntryBytes,h[3]);
     if(okay){okay=std::fseek(file,0,SEEK_END)==0;long actual=okay?std::ftell(file):-1;
         okay=actual>=0&&(uint64_t)actual==h[3]&&std::fseek(file,HeaderBytes,SEEK_SET)==0;}
@@ -153,6 +158,7 @@ bool Load(const char* filename){
     uint32_t resident=entries?h[8]*(uint32_t)sizeof(Entry):0;
     uint32_t position=HeaderBytes+h[8]*EntryBytes;
     for(uint32_t i=0;okay&&i<h[8];++i){
+        pvzp_audio_service();
         const unsigned char* row=directory+(size_t)i*EntryBytes;
         auto& e=entries[i];e.kind=Word(row);e.id=Word(row+4);e.variant=Word(row+8);e.color=Word(row+12);
         e.runs=Word(row+16);e.pixels=Word(row+20);const uint32_t offset=Word(row+24);
@@ -162,16 +168,28 @@ bool Load(const char* filename){
         if(!okay)break;
         for(uint32_t j=0;j<i;++j)if(entries[j].kind==e.kind&&entries[j].id==e.id&&entries[j].variant==e.variant&&entries[j].color==e.color){okay=false;break;}
         if(!okay)break;
+        const uint32_t packedBytes=e.bytes;
+        if(h[13]){uint64_t raw=uint64_t(e.runs)*12+uint64_t(e.pixels)*4;
+            if(raw>uint64_t(Pixels)*64){okay=false;break;}e.bytes=uint32_t(raw);}
         if(e.bytes){e.data=new(std::nothrow) unsigned char[e.bytes];if(!e.data){Add(10);okay=false;break;}resident+=e.bytes;}
         // The packer emits entries in offset order. Read that common case
         // sequentially: no directory/payload seeks or per-frame file I/O.
-        okay=(offset==position||std::fseek(file,offset,SEEK_SET)==0)&&Read(file,e.data,e.bytes)&&Validate(e);
-        position=offset+e.bytes;
+        okay=offset==position||std::fseek(file,offset,SEEK_SET)==0;
+        if(okay&&h[13]){std::vector<unsigned char> packed(packedBytes);uLongf raw=e.bytes;
+            okay=Read(file,packed.data(),packedBytes)&&uncompress(e.data,&raw,packed.data(),packedBytes)==Z_OK&&raw==e.bytes&&Validate(e);
+        }else if(okay)okay=Read(file,e.data,e.bytes)&&Validate(e);
+        position=offset+packedBytes;
     }
     delete[] directory;
     std::fclose(file);
     if(!okay){if(entries){for(uint32_t i=0;i<h[8];++i)delete[] entries[i].data;delete[] entries;}Add(9);return false;}
-    state.entries=entries;state.count=h[8];state.pose=h[11];state.tracks=h[12];state.resident+=resident;state.loaded=true;
+    if(merge){
+        auto* combined=new(std::nothrow) Entry[state.count+h[8]];
+        if(!combined){for(uint32_t i=0;i<h[8];i++)delete[] entries[i].data;delete[] entries;Add(10);return false;}
+        std::copy(state.entries,state.entries+state.count,combined);std::copy(entries,entries+h[8],combined+state.count);
+        delete[] state.entries;delete[] entries;state.entries=combined;state.count+=h[8];
+    }else{state.entries=entries;state.count=h[8];state.pose=h[11];state.tracks=h[12];state.loaded=true;}
+    state.resident+=resident;
     Add(11);Count();return true;
 }
 #ifndef PVZH1_SELECTOR_OFFLINE_STANDALONE
@@ -188,7 +206,7 @@ Sexy::H1PhysicalScreen* Screen(Sexy::Graphics* g){
 }
 bool Idle(GameSelector* selector){
     return selector&&selector->mApp&&selector->mApp->mGameSelector.get()==selector&&
-        selector->mSelectorState==SELECTOR_IDLE&&!selector->mStartingGame&&!selector->mLoading&&
+        selector->mSelectorState==SELECTOR_IDLE&&!selector->mLoading&&
         !selector->mSlideCounter&&!selector->mX&&!selector->mY;
 }
 bool Ready(GameSelector* selector){
@@ -206,7 +224,7 @@ bool Ready(GameSelector* selector){
 #ifdef PVZ_HOST_RUNNER
         if(const char* test=std::getenv("PVZ_HOST_SELECTOR_BUNDLE"))path=test;
 #endif
-        Load(path.c_str());}
+        if(Load(path.c_str()))Load(Sexy::GetResourcePath("h1menu/adventure.h1mb").c_str(),true);}
     return state.loaded;
 }
 #endif
@@ -266,6 +284,7 @@ bool BuildVisible(VisibleGroup& plan,Entry* const* selected,unsigned count,bool 
     plan.count=count;plan.seeded=seeded;plan.seedRevision=state.foregroundRevision;
     bool okay=true;
     for(unsigned remaining=count;remaining&&okay;){
+        pvzp_audio_service();
         const unsigned index=--remaining;const Entry& e=*selected[index];
         auto& output=plan.entries[index];output.entry=&e;
         uint32_t used=0,visiblePixels=0;
@@ -525,6 +544,21 @@ bool H1SelectorOfflineDrawButton(NewLawnButton* button,Sexy::Graphics* g){
     if(down||button->mIsOver){g->SetFont(button->mHiliteFont?button->mHiliteFont:button->mFont.get());g->SetColor(button->mColors.mLabelHilite);}
     else {g->SetFont(button->mFont.get());g->SetColor(button->mColors.mLabel);}
     Add(5);return true;
+}
+bool H1SelectorOfflineDrawHand(GameSelector* selector,Sexy::Graphics* g,Reanimation* hand){
+    auto reject=[](){++pvzh1_adventure_raster_diagnostic[1];return false;};
+    if(!selector||!g||!hand||!selector->mStartingGame||!Ready(selector)||hand->mReanimationType!=REANIM_ZOMBIE_HAND||
+       hand->mColorOverride!=Sexy::Color::White||hand->mFilterEffect!=FILTER_EFFECT_NONE||g->mTransX!=0||g->mTransY!=0||
+       g->mClipRect!=Sexy::Rect(0,0,Sexy::H1LogicalWidth,BOARD_HEIGHT-40))return reject();
+    Sexy::Graphics full(*g);full.ClearClipRect();auto* screen=Screen(&full);if(!screen)return reject();
+    const unsigned counter=std::min(450,std::max(0,selector->mStartingGameCounter));
+    auto* entry=Find(3,counter==450?450:counter/4*4,0,0xffffffff);if(!entry)return reject();
+    H1CanvasProtectedPixels protect(screen->Target());Replay(*entry,screen->Target()->GetBits());
+    screen->Target()->BitsChanged();screen->NoteDraw();
+    auto& d=pvzh1_adventure_raster_diagnostic;uint32_t now=pvzp_ticks_ms()+1;
+    if(!counter||counter<d[5]){for(unsigned i=0;i<8;i++)d[i]=0;}
+    ++d[0];if(!d[2])d[2]=now;if(d[3]&&now-d[3]>d[4])d[4]=now-d[3];d[3]=now;d[5]=counter;d[6]+=entry->pixels;d[7]=state.resident;
+    return true;
 }
 
 bool H1SelectorOfflineWelcomeBegin(GameSelector* selector,Sexy::Graphics* g){

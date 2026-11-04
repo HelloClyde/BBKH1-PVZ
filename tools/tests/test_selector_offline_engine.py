@@ -17,7 +17,7 @@ def main():
         if name=='platform/host/host_io.cpp':continue
         obj=host/(hashlib.sha1(name.encode()).hexdigest()[:10]+'-'+Path(name).stem+'.o');objects.append(obj);identities[name]={'source':row['sha256'],'object':sha(obj)}
     io=(ROOT/'platform/host/host_io.cpp').read_text(encoding='utf8')
-    needle='if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_host_probe_selector();pvzh1_host_probe_atlas_entry();}'
+    needle='if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_host_probe_selector();pvzh1_host_probe_atlas_entry();pvzh1_export_definitions();}'
     assert io.count(needle)==1
     io='extern "C" void pvzh1_offline_selector_engine_probe();\n'+io.replace(needle,'if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_offline_selector_engine_probe();std::exit(0);}')
     (out/'observer.cpp').write_text(io,encoding='utf8')
@@ -30,14 +30,14 @@ def main():
     exe=out/'probe.exe';cmd=[args.cxx,'-Wl,--gc-sections','-static-libstdc++','-static-libgcc','-o',str(exe),*map(str,objects),'-lws2_32','-luser32','-lgdi32','-lwinmm','-limm32','-lshlwapi','-lshell32','-lpsapi']
     result=subprocess.run(cmd,capture_output=True,text=True,env=env);(out/'link.log').write_text(result.stdout+result.stderr)
     if result.returncode:raise RuntimeError(result.stdout+result.stderr)
-    env.update(PVZ_RESOURCE_DIR=(ROOT/'private/resources-h1-full').as_posix()+'/',PVZ_SAVE_DIR=(out/'save').as_posix()+'/',
-               PVZ_HOST_OUTPUT=(out/'run').as_posix(),PVZ_HOST_MAX_FRAMES='600',PVZ_HOST_SPEED='100',PVZ_HOST_SELECTOR_BUNDLE=(ROOT/'private/menu-bake/selector.h1mb').as_posix())
+    env.update(PVZ_RESOURCE_DIR=(ROOT/'private/resources-h1-wide').as_posix()+'/',PVZ_SAVE_DIR=(out/'save').as_posix()+'/',
+               PVZ_HOST_OUTPUT=(out/'run').as_posix(),PVZ_HOST_MAX_FRAMES='600',PVZ_HOST_SPEED='100',PVZ_HOST_SELECTOR_BUNDLE=(ROOT/'private/resources-h1-wide/h1menu/selector-wide.h1mb').as_posix())
     for name in list(env):
         if name.startswith('PVZ_HOST_') and name not in ('PVZ_HOST_OUTPUT','PVZ_HOST_MAX_FRAMES','PVZ_HOST_SPEED','PVZ_HOST_SELECTOR_BUNDLE'):del env[name]
     with (out/'console.log').open('w') as log:result=subprocess.run([str(exe)],cwd=ROOT,env=env,stdout=log,stderr=log)
     if result.returncode:raise RuntimeError(f'fixture exit {result.returncode}; {out}/console.log')
     identity={'objects':identities,'compile_report':sha(host/'compile-report.json'),'executable':sha(exe),
-              'bundle':sha(ROOT/'private/menu-bake/selector.h1mb'),'probe':sha(ROOT/'tools/tests/selector_offline_engine_probe.cpp')}
+              'bundle':sha(ROOT/'private/resources-h1-wide/h1menu/selector-wide.h1mb'),'probe':sha(ROOT/'tools/tests/selector_offline_engine_probe.cpp')}
     (out/'identity.json').write_text(json.dumps(identity,indent=2)+'\n')
     verification=json.loads((out/'run/selector-offline-engine-verification.json').read_text());assert verification['all_passed'];print(json.dumps(verification))
 if __name__=='__main__':main()

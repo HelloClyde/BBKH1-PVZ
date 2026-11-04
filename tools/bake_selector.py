@@ -5,7 +5,7 @@ Original frames, per-track ordering, image sampling and blend math execute norma
 Production source, original resources and save data are not modified.
 """
 from pathlib import Path
-import argparse, hashlib, json, os, re, shutil, struct, subprocess
+import argparse, hashlib, json, os, re, shutil, struct, subprocess, zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -30,7 +30,7 @@ def patch_capture(source):
     text = text.replace(opaque, 'pvzh1_menu_bake_fragment(pix,0xFF000000u|tex,0,1);\n\t\t\t\t\t'+opaque)
     path.write_text(text, encoding='utf8')
 
-def encode_segments(manifest_path, output):
+def encode_segments(manifest_path, output, compressed=False):
     manifest = json.loads(manifest_path.read_text())
     width,height=manifest['physical_width'],manifest['physical_height']
     logical_width,logical_height=manifest.get('logical_width',800),manifest.get('logical_height',600)
@@ -38,21 +38,42 @@ def encode_segments(manifest_path, output):
     codec_checks = 0
     for segment in manifest['segments']:
         key = segment['key']
-        if key.startswith('track-'):
+        if key.startswith('hand-'):
+            kind,identifier,variant,color=3,int(key.split('-')[1]),0,0xffffffff
+        elif key.startswith('track-'):
             _, identifier, variant = key.split('-')
             kind, identifier, color = 1, int(identifier), segment['color']
             variant = dict(normal=0, press=1, almanac=2, key=3)[variant]
         else:
             _, identifier, tint, state = key.split('-')
             kind, identifier, variant = 2, int(identifier), int(state)
-            if tint == 'start':
+            if tint in ('start','start80'):
                 variant |= 256
-                tint = 255
+                tint = 80 if tint=='start80' else 255
             tint = int(tint)
             color = 0xff000000 | tint << 16 | tint << 8 | tint
         raw = (manifest_path.parent/'segments'/segment['file']).read_bytes()
         assert len(raw) == segment['fragments'] * 16
         operations = list(struct.iter_unpack('<4I', raw))
+        # Earlier fragments covered by a later opaque fragment cannot affect
+        # any background. Keep the remaining fragments in their original order.
+        if kind==3:
+            covered=set();keep=[]
+            for op in reversed(operations):
+                if op[0] in covered:continue
+                keep.append(op)
+                if op[3]:covered.add(op[0])
+            reduced=list(reversed(keep))
+            def replay(ops,seed):
+                values={}
+                for dst,premul,inv,opaque in ops:
+                    old=values.get(dst,0xff000000|((dst*0x164b35+seed*0x213141)&0xffffff))
+                    rb=(((old&0xff00ff)*inv)>>8)&0xff00ff
+                    green=(((old&0xff00)*inv)>>8)&0xff00
+                    values[dst]=premul if opaque else 0xff000000|(premul+(rb|green))
+                return values
+            for seed in (1,17,231):assert replay(operations,seed)==replay(reduced,seed)
+            operations=reduced
         runs, payload = [], []
         previous = -2
         for destination, premul, inverse, opaque in operations:
@@ -85,16 +106,18 @@ def encode_segments(manifest_path, output):
         data = entry['data']
         meta = entry['source']
         geometry = ((meta['x']&65535)|((meta['y']&65535)<<16), (meta['width']&65535)|((meta['height']&65535)<<16)) if entry['kind']==2 else (0,0)
+        if compressed:data=zlib.compress(data,9)
+        entry['packed_data']=data
         directory += struct.pack('<10I', entry['kind'], entry['id'], entry['variant'], entry['color'], entry['run_count'], entry['pixel_count'], offset, len(data), *geometry)
         offset += len(data)
     output.parent.mkdir(parents=True, exist_ok=True)
-    header = struct.pack('<16I', 0x424d3148, 1, 64, offset, width, height, logical_width, logical_height, len(encoded), 64, 40, 40, 48, 0, 0, 0)
-    output.write_bytes(header + directory + b''.join(e['data'] for e in encoded))
+    header = struct.pack('<16I', 0x424d3148, 1, 64, offset, width, height, logical_width, logical_height, len(encoded), 64, 40, 40, 48, int(compressed), 0, 0)
+    output.write_bytes(header + directory + b''.join(e['packed_data'] for e in encoded))
     return dict(file=str(output), bytes=offset, sha256=sha(output), entry_count=len(encoded),
                 runs=sum(e['run_count'] for e in encoded), pixels=sum(e['pixel_count'] for e in encoded),
                 original_vs_replay_checks=manifest['original_vs_replay_checks'],
                 codec_roundtrip_checks=codec_checks,
-                entries=[{k:v for k,v in e.items() if k!='data'} for e in encoded])
+                entries=[{k:v for k,v in e.items() if k not in ('data','packed_data')} for e in encoded])
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
@@ -104,6 +127,7 @@ def main():
     ap.add_argument('--output', type=Path, default=ROOT/'private/menu-bake/selector.h1mb')
     ap.add_argument('--cxx', type=Path, default=Path('C:/msys64/ucrt64/bin/g++.exe'))
     ap.add_argument('--encode-only', action='store_true')
+    ap.add_argument('--adventure-only', action='store_true')
     ap.add_argument('--resources',type=Path,default=ROOT/'private/resources-h1-full')
     args = ap.parse_args()
     out, host = args.build_dir.resolve(), args.host_build.resolve()
@@ -127,7 +151,7 @@ def main():
         changed = ['source/SexyAppFramework/graphics/SWTri.cpp', 'source/PvzpLib/Reanimator.cpp', 'source/Lawn/Widget/GameSelector.cpp',
                    'platform/graphics/SoftwareRaster.cpp', 'platform/graphics/RenderPlanCache.cpp', 'platform/graphics/MemoryImageCache.cpp', 'platform/graphics/PhysicalScreen.cpp']
         observer = (ROOT/'platform/host/host_io.cpp').read_text()
-        anchor = 'if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_host_probe_selector();pvzh1_host_probe_atlas_entry();}'
+        anchor = 'if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_host_probe_selector();pvzh1_host_probe_atlas_entry();pvzh1_export_definitions();}'
         assert observer.count(anchor) == 1
         observer = observer.replace(anchor, 'if(std::strcmp(checkpoint,"loading-complete")==0){pvzh1_export_selector_bake();std::exit(0);}')
         observer = 'extern "C" void pvzh1_export_selector_bake();\n' + observer
@@ -162,10 +186,11 @@ def main():
         for k in list(env):
             if k.startswith('PVZ_HOST_') and k not in ('PVZ_HOST_OUTPUT','PVZ_HOST_SPEED','PVZ_HOST_MAX_FRAMES'):
                 del env[k]
+        if args.adventure_only:env['PVZ_BAKE_ADVENTURE']='1'
         with (out/'console.log').open('w') as log:
             subprocess.run([str(exe)], cwd=ROOT, env=env, stdout=log, stderr=log, check=True)
         (out/'build-identity.json').write_text(json.dumps(dict(host_report=sha(host/'compile-report.json'), prepared_source=str(args.prepared_source), changed_sources=identities, executable=sha(exe)),indent=2)+'\n')
-    result = encode_segments(out/'run/segments.json', args.output)
+    result = encode_segments(out/'run/segments.json', args.output, args.adventure_only)
     result['passed'] = True
     (out/'verification.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps({k:v for k,v in result.items() if k!='entries'}))

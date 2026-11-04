@@ -16,6 +16,8 @@ def apply(source_root):
                        'GameSelector::~GameSelector()\n{\n\tH1SelectorOfflineRelease(this);\n', 'selector lifetime')
         text = replace(text, '\taSelectorReanim->DrawRenderGroup(g, 1);  // "SelectorScreen_BG"',
                        '\tif (!H1SelectorOfflineDrawGroup(this, g, aSelectorReanim, 1))\n\t\taSelectorReanim->DrawRenderGroup(g, 1);  // "SelectorScreen_BG"', 'background order')
+        text = replace(text, '\t\taHandReanim->Draw(g);',
+                       '\t\tif(!H1SelectorOfflineDrawHand(this,g,aHandReanim))aHandReanim->Draw(g);', 'offline adventure hand')
         text = replace(text, '\taSelectorReanim->DrawRenderGroup(g, RENDER_GROUP_NORMAL);',
                        '\tif (!H1SelectorOfflineDrawGroup(this, g, aSelectorReanim, RENDER_GROUP_NORMAL))\n\t\taSelectorReanim->DrawRenderGroup(g, RENDER_GROUP_NORMAL);', 'foreground order')
         text = replace(text,

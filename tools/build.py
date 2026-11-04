@@ -141,7 +141,7 @@ def main():
         spec=importlib.util.spec_from_file_location('pvz_h1_xmp_numeric',module_path)
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         numeric_replacements=module.apply(source)
-        expected={ROOT/'vendor/libxmp/src'/name for name in ('period.c','mixer.c')}
+        expected={ROOT/'vendor/libxmp/src'/name for name in ('period.c','mixer.c','scan.c','load.c')}
         if set(numeric_replacements)!=expected or not all(p.is_file() for p in numeric_replacements.values()):
             raise RuntimeError('Unexpected pinned libxmp numerical adaptation mapping')
     sources=source_files(source,replacements,zlib,numeric_replacements)

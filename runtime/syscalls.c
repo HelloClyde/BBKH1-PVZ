@@ -80,6 +80,8 @@ static void first_allocation_failure(size_t requested,uintptr_t caller,uintptr_t
     }
 }
 static int stat_native(const char *,struct stat *);
+extern void pvzp_audio_service(void) __attribute__((weak));
+static void audio_io_yield(void){if(pvzp_audio_service)pvzp_audio_service();}
 char pvz_runtime_last_path[NATIVE_PATH_MAX];
 /* Read-only observations of the native SDK calls. Raw tick units deliberately
    have no assumed frequency; calibrate against PC wall time on the device.
@@ -349,15 +351,16 @@ int _open(const char *path,int flags,...){
     file=io_native_open(native,mode);pvz_runtime_diagnostic[8]=11;
     if(!file&&(flags&O_CREAT)&&!(flags&O_APPEND))file=io_native_open(native,(flags&O_RDWR)?"wb+":"wb");
     if(!file||(uintptr_t)file==0xffffffffu)return native_failure(EIO);
-    files[i]=file;descriptor_flags[i]=flags;pvz_runtime_diagnostic[5]++;return i+3;
+    files[i]=file;descriptor_flags[i]=flags;pvz_runtime_diagnostic[5]++;audio_io_yield();return i+3;
 }
 int _close(int fd){int result;if(fd<3)return 0;if(fd>=FILE_COUNT+3){errno=EBADF;return -1;}if(directory_paths[fd-3]){free(directory_paths[fd-3]);directory_paths[fd-3]=0;return 0;}if(!files[fd-3]){errno=EBADF;return -1;}result=h1_fclose(files[fd-3]);files[fd-3]=0;return result?native_failure(EIO):0;}
 ssize_t _read(int fd,void *buffer,size_t size){
-    unsigned n;if(fd==0)return 0;if(fd<3||fd>=FILE_COUNT+3||!files[fd-3]){errno=EBADF;return -1;}
+    unsigned n;size_t done=0;if(fd==0)return 0;if(fd<3||fd>=FILE_COUNT+3||!files[fd-3]){errno=EBADF;return -1;}
     pvz_runtime_diagnostic[8]=20;pvz_runtime_diagnostic[9]=(uint32_t)fd;
-    n=io_native_read(buffer,(h1_size_t)size,files[fd-3]);
-    pvz_runtime_diagnostic[8]=21;pvz_runtime_diagnostic[9]=n;
-    if(n>size)return native_failure(EIO);return (ssize_t)n;
+    while(done<size){unsigned count=(unsigned)((size-done)>16384?16384:size-done);
+        n=io_native_read((unsigned char*)buffer+done,count,files[fd-3]);
+        if(n>count)return native_failure(EIO);done+=n;audio_io_yield();if(n<count)break;}
+    pvz_runtime_diagnostic[8]=21;pvz_runtime_diagnostic[9]=(uint32_t)done;return (ssize_t)done;
 }
 static int io_native_seek(h1_file *file,int offset,int whence){
     uint32_t begin=h1_raw_tick_80hz();int result;
@@ -368,13 +371,16 @@ static int io_native_seek(h1_file *file,int offset,int whence){
     return result;
 }
 ssize_t _write(int fd,const void *buffer,size_t size){
-    unsigned n;h1_file *file;
+    unsigned n;size_t done=0;h1_file *file;
     if(fd==1||fd==2){
         if(!log_file){char native[NATIVE_PATH_MAX];if(!pvz_native_path("/PVZSAVE/PORT.LOG",native,sizeof(native)))log_file=io_native_open(native,"ab");}
         if(!log_file||(uintptr_t)log_file==0xffffffffu){log_file=0;return (ssize_t)size;}file=log_file;
     }else{if(fd<3||fd>=FILE_COUNT+3||!files[fd-3]){errno=EBADF;return -1;}file=files[fd-3];}
     pvz_runtime_diagnostic[8]=22;pvz_runtime_diagnostic[9]=(uint32_t)fd;
-    n=h1_fwrite(buffer,1,(h1_size_t)size,file);pvz_runtime_diagnostic[8]=23;pvz_runtime_diagnostic[9]=n;if(n>size)return native_failure(EIO);return (ssize_t)n;
+    while(done<size){unsigned count=(unsigned)((size-done)>4096?4096:size-done);
+        n=h1_fwrite((const unsigned char*)buffer+done,1,count,file);
+        if(n>count)return native_failure(EIO);done+=n;audio_io_yield();if(n<count)break;}
+    pvz_runtime_diagnostic[8]=23;pvz_runtime_diagnostic[9]=(uint32_t)done;return (ssize_t)done;
 }
 off_t _lseek(int fd,off_t offset,int origin){
     int result;if(fd<3||fd>=FILE_COUNT+3||!files[fd-3]){errno=EBADF;return -1;}

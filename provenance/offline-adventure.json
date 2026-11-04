@@ -1,0 +1,1720 @@
+{
+  "bytes": 2893827,
+  "sha256": "f210a7383d2f489ea628e8efe08af3d850ee58dfbe131f7a5f1b0e3ecd9723b4",
+  "entry_count": 120,
+  "runs": 162753,
+  "pixels": 819966,
+  "original_vs_replay_checks": 360,
+  "codec_roundtrip_checks": 120,
+  "entries": [
+    {
+      "kind": 3,
+      "id": 0,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 0,
+      "pixel_count": 0,
+      "source": {
+        "key": "hand-0",
+        "file": "hand-0.ops",
+        "fragments": 0,
+        "last_hash": 1518966071238358183
+      }
+    },
+    {
+      "kind": 3,
+      "id": 4,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 20,
+      "pixel_count": 41,
+      "source": {
+        "key": "hand-4",
+        "file": "hand-4.ops",
+        "fragments": 61,
+        "last_hash": 10792273883977254754
+      }
+    },
+    {
+      "kind": 3,
+      "id": 8,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 49,
+      "pixel_count": 107,
+      "source": {
+        "key": "hand-8",
+        "file": "hand-8.ops",
+        "fragments": 127,
+        "last_hash": 5157174981507463464
+      }
+    },
+    {
+      "kind": 3,
+      "id": 12,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 87,
+      "pixel_count": 204,
+      "source": {
+        "key": "hand-12",
+        "file": "hand-12.ops",
+        "fragments": 306,
+        "last_hash": 9101690252239455655
+      }
+    },
+    {
+      "kind": 3,
+      "id": 16,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 260,
+      "pixel_count": 571,
+      "source": {
+        "key": "hand-16",
+        "file": "hand-16.ops",
+        "fragments": 1062,
+        "last_hash": 14293161443188718148
+      }
+    },
+    {
+      "kind": 3,
+      "id": 20,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 670,
+      "pixel_count": 1725,
+      "source": {
+        "key": "hand-20",
+        "file": "hand-20.ops",
+        "fragments": 3057,
+        "last_hash": 2979527369082122978
+      }
+    },
+    {
+      "kind": 3,
+      "id": 24,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 867,
+      "pixel_count": 3051,
+      "source": {
+        "key": "hand-24",
+        "file": "hand-24.ops",
+        "fragments": 4529,
+        "last_hash": 17088742322511234533
+      }
+    },
+    {
+      "kind": 3,
+      "id": 28,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1067,
+      "pixel_count": 4350,
+      "source": {
+        "key": "hand-28",
+        "file": "hand-28.ops",
+        "fragments": 6327,
+        "last_hash": 706561040175121879
+      }
+    },
+    {
+      "kind": 3,
+      "id": 32,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1314,
+      "pixel_count": 5500,
+      "source": {
+        "key": "hand-32",
+        "file": "hand-32.ops",
+        "fragments": 7735,
+        "last_hash": 4763915597671251295
+      }
+    },
+    {
+      "kind": 3,
+      "id": 36,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1432,
+      "pixel_count": 6246,
+      "source": {
+        "key": "hand-36",
+        "file": "hand-36.ops",
+        "fragments": 8479,
+        "last_hash": 1653997367720827705
+      }
+    },
+    {
+      "kind": 3,
+      "id": 40,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1466,
+      "pixel_count": 6700,
+      "source": {
+        "key": "hand-40",
+        "file": "hand-40.ops",
+        "fragments": 8869,
+        "last_hash": 1783522247734259133
+      }
+    },
+    {
+      "kind": 3,
+      "id": 44,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7003,
+      "source": {
+        "key": "hand-44",
+        "file": "hand-44.ops",
+        "fragments": 9082,
+        "last_hash": 7052281320406858905
+      }
+    },
+    {
+      "kind": 3,
+      "id": 48,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1452,
+      "pixel_count": 7045,
+      "source": {
+        "key": "hand-48",
+        "file": "hand-48.ops",
+        "fragments": 9204,
+        "last_hash": 6905375328735156754
+      }
+    },
+    {
+      "kind": 3,
+      "id": 52,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1491,
+      "pixel_count": 7149,
+      "source": {
+        "key": "hand-52",
+        "file": "hand-52.ops",
+        "fragments": 9152,
+        "last_hash": 1843319214476107528
+      }
+    },
+    {
+      "kind": 3,
+      "id": 56,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1485,
+      "pixel_count": 7188,
+      "source": {
+        "key": "hand-56",
+        "file": "hand-56.ops",
+        "fragments": 9189,
+        "last_hash": 12726735382939632536
+      }
+    },
+    {
+      "kind": 3,
+      "id": 60,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1502,
+      "pixel_count": 7238,
+      "source": {
+        "key": "hand-60",
+        "file": "hand-60.ops",
+        "fragments": 9229,
+        "last_hash": 15427269320440993930
+      }
+    },
+    {
+      "kind": 3,
+      "id": 64,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1504,
+      "pixel_count": 7265,
+      "source": {
+        "key": "hand-64",
+        "file": "hand-64.ops",
+        "fragments": 9238,
+        "last_hash": 4788194472283684364
+      }
+    },
+    {
+      "kind": 3,
+      "id": 68,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-68",
+        "file": "hand-68.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 72,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-72",
+        "file": "hand-72.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 76,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-76",
+        "file": "hand-76.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 80,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-80",
+        "file": "hand-80.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 84,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-84",
+        "file": "hand-84.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 88,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-88",
+        "file": "hand-88.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 92,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-92",
+        "file": "hand-92.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 96,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-96",
+        "file": "hand-96.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 100,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-100",
+        "file": "hand-100.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 104,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-104",
+        "file": "hand-104.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 108,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-108",
+        "file": "hand-108.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 112,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-112",
+        "file": "hand-112.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 116,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-116",
+        "file": "hand-116.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 120,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-120",
+        "file": "hand-120.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 124,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-124",
+        "file": "hand-124.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 128,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-128",
+        "file": "hand-128.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 132,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-132",
+        "file": "hand-132.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 136,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-136",
+        "file": "hand-136.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 140,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-140",
+        "file": "hand-140.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 144,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-144",
+        "file": "hand-144.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 148,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-148",
+        "file": "hand-148.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 152,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-152",
+        "file": "hand-152.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 156,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-156",
+        "file": "hand-156.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 160,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-160",
+        "file": "hand-160.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 164,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-164",
+        "file": "hand-164.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 168,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-168",
+        "file": "hand-168.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 172,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-172",
+        "file": "hand-172.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 176,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-176",
+        "file": "hand-176.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 180,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-180",
+        "file": "hand-180.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 184,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-184",
+        "file": "hand-184.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 188,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-188",
+        "file": "hand-188.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 192,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-192",
+        "file": "hand-192.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 196,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-196",
+        "file": "hand-196.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 200,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-200",
+        "file": "hand-200.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 204,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-204",
+        "file": "hand-204.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 208,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-208",
+        "file": "hand-208.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 212,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-212",
+        "file": "hand-212.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 216,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-216",
+        "file": "hand-216.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 220,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-220",
+        "file": "hand-220.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 224,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-224",
+        "file": "hand-224.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 228,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-228",
+        "file": "hand-228.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 232,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-232",
+        "file": "hand-232.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 236,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-236",
+        "file": "hand-236.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 240,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-240",
+        "file": "hand-240.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 244,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-244",
+        "file": "hand-244.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 248,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-248",
+        "file": "hand-248.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 252,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-252",
+        "file": "hand-252.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 256,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-256",
+        "file": "hand-256.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 260,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-260",
+        "file": "hand-260.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 264,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-264",
+        "file": "hand-264.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 268,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-268",
+        "file": "hand-268.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 272,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-272",
+        "file": "hand-272.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 276,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-276",
+        "file": "hand-276.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 280,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-280",
+        "file": "hand-280.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 284,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-284",
+        "file": "hand-284.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 288,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-288",
+        "file": "hand-288.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 292,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-292",
+        "file": "hand-292.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 296,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-296",
+        "file": "hand-296.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 300,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-300",
+        "file": "hand-300.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 304,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-304",
+        "file": "hand-304.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 308,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-308",
+        "file": "hand-308.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 312,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-312",
+        "file": "hand-312.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 316,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-316",
+        "file": "hand-316.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 320,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-320",
+        "file": "hand-320.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 324,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-324",
+        "file": "hand-324.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 328,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-328",
+        "file": "hand-328.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 332,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-332",
+        "file": "hand-332.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 336,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-336",
+        "file": "hand-336.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 340,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-340",
+        "file": "hand-340.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 344,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-344",
+        "file": "hand-344.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 348,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-348",
+        "file": "hand-348.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 352,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-352",
+        "file": "hand-352.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 356,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-356",
+        "file": "hand-356.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 360,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-360",
+        "file": "hand-360.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 364,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-364",
+        "file": "hand-364.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 368,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-368",
+        "file": "hand-368.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 372,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-372",
+        "file": "hand-372.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 376,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-376",
+        "file": "hand-376.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 380,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-380",
+        "file": "hand-380.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 384,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-384",
+        "file": "hand-384.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 388,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-388",
+        "file": "hand-388.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 392,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-392",
+        "file": "hand-392.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 396,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-396",
+        "file": "hand-396.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 400,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-400",
+        "file": "hand-400.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 404,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-404",
+        "file": "hand-404.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 408,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-408",
+        "file": "hand-408.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 412,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-412",
+        "file": "hand-412.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 416,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-416",
+        "file": "hand-416.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 420,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-420",
+        "file": "hand-420.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 424,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-424",
+        "file": "hand-424.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 428,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-428",
+        "file": "hand-428.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 432,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-432",
+        "file": "hand-432.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 436,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-436",
+        "file": "hand-436.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 440,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-440",
+        "file": "hand-440.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 444,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-444",
+        "file": "hand-444.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 448,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-448",
+        "file": "hand-448.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 3,
+      "id": 450,
+      "variant": 0,
+      "color": 4294967295,
+      "run_count": 1496,
+      "pixel_count": 7291,
+      "source": {
+        "key": "hand-450",
+        "file": "hand-450.ops",
+        "fragments": 9294,
+        "last_hash": 18418006630520443462
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 0,
+      "color": 4283453520,
+      "run_count": 243,
+      "pixel_count": 6840,
+      "source": {
+        "key": "button-100-80-0",
+        "file": "button-100-80-0.ops",
+        "fragments": 6840,
+        "last_hash": 14394308563736225967,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 1,
+      "color": 4283453520,
+      "run_count": 243,
+      "pixel_count": 6840,
+      "source": {
+        "key": "button-100-80-1",
+        "file": "button-100-80-1.ops",
+        "fragments": 6840,
+        "last_hash": 7656877311305837620,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 2,
+      "color": 4283453520,
+      "run_count": 238,
+      "pixel_count": 6924,
+      "source": {
+        "key": "button-100-80-2",
+        "file": "button-100-80-2.ops",
+        "fragments": 6924,
+        "last_hash": 12130262549563538376,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 256,
+      "color": 4283453520,
+      "run_count": 253,
+      "pixel_count": 6962,
+      "source": {
+        "key": "button-100-start80-0",
+        "file": "button-100-start80-0.ops",
+        "fragments": 6962,
+        "last_hash": 13307381196491549964,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 257,
+      "color": 4283453520,
+      "run_count": 253,
+      "pixel_count": 6962,
+      "source": {
+        "key": "button-100-start80-1",
+        "file": "button-100-start80-1.ops",
+        "fragments": 6962,
+        "last_hash": 3322494051838831290,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    },
+    {
+      "kind": 2,
+      "id": 100,
+      "variant": 258,
+      "color": 4283453520,
+      "run_count": 249,
+      "pixel_count": 6828,
+      "source": {
+        "key": "button-100-start80-2",
+        "file": "button-100-start80-2.ops",
+        "fragments": 6828,
+        "last_hash": 9896100769298419145,
+        "x": 665,
+        "y": 65,
+        "width": 329,
+        "height": 125
+      }
+    }
+  ],
+  "passed": true,
+  "runtime_path": "h1menu/adventure.h1mb",
+  "renderer_exporter_sha256": "e7cbfdf8fbbaab9f95c77f3568a9d250c1db48dbf40760ca0ec85181efe21057",
+  "encoder_sha256": "a85af13071eb34aae128f2af3bc71ef67ed9b30974947bf9a074f577c21125d5",
+  "sampling": "Original 100-Hz hand updates; stored at 25 poses/second plus the final pose; all 450 updates and original sound timings retained."
+}

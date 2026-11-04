@@ -1,0 +1,89 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "tap",
+        "x": 455,
+        "y": 236,
+        "seconds": 1
+      },
+      {
+        "kind": "wait",
+        "seconds": 2
+      },
+      {
+        "kind": "screenshot",
+        "output": "162-quit-v14.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T03:07:22.638743+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "tap",
+        "x": 455,
+        "y": 236,
+        "seconds": 1
+      },
+      "result": {
+        "gesture": "tap",
+        "x": 455,
+        "y": 236,
+        "hold_seconds": 1,
+        "lease_ticks": 80,
+        "release_acknowledged": true,
+        "host_elapsed_seconds": 1.0160000000032596
+      },
+      "started_monotonic": 510225.343,
+      "finished_monotonic": 510226.359
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 2
+      },
+      "result": {
+        "waited_seconds": 2
+      },
+      "started_monotonic": 510226.359,
+      "finished_monotonic": 510228.359
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "162-quit-v14.png"
+      },
+      "result": {
+        "token": 114,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 1576204,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 413520,
+          "requests": 837,
+          "protocol_bytes_sent": 23436,
+          "protocol_bytes_received": 440304,
+          "elapsed_seconds": 16.0,
+          "decoded_bytes_per_second": 32640.0,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 16.07799999997951,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-offline2\\162-quit-v14.png",
+        "snapshot_sha256": "830e3d0ea7f1f0aff29be0ab881c87fb3f59e230ae6f86ec4e5e83274d1d9d25",
+        "png_sha256": "04c26699c97ca86b68354359b4b6ecc4f97d75b0acf8695c5d63408050b3ae57"
+      },
+      "started_monotonic": 510228.359,
+      "finished_monotonic": 510244.546
+    }
+  ],
+  "ok": true
+}

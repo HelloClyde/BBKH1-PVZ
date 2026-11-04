@@ -1,0 +1,11 @@
+{
+  "source_sha256": "d0b20106d60abf6bf873db6fa5aca2749dacf27345115becca383f3197d02ef8",
+  "output_sha256": "2e9b71c4c3f954eabe2283779991cd3d6b5283817e3882619c7d91c24111b68d",
+  "bytes": 2790416,
+  "rate": 16000,
+  "channels": 1,
+  "bits": 16,
+  "start_order": 152,
+  "whole_loop_sample_exact": true,
+  "exporter_sha256": "5a62de0d20f8011b4a4ba0b1e8a13a0ed686509b2dc322a1273d124b5f25a1e1"
+}

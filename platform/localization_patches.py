@@ -44,11 +44,13 @@ void MessageWidget::SetLabel(std::string_view theNewLabel, MessageStyle theMessa
  patch('SexyAppFramework/graphics/ImageFont.h','class FontData;\n',
        'class FontData;\nstruct H1CJKFontTable;\n')
  patch('SexyAppFramework/graphics/ImageFont.h','\tbool\t\t\t\t\tmUseAlphaCorrection;\n\npublic:\n\tFontLayer',
-       '\tbool\t\t\t\t\tmUseAlphaCorrection;\n\tstd::shared_ptr<H1CJKFontTable> mH1CJKFont;\n\tint mH1CJKOffsetY=0;\n\npublic:\n\tFontLayer')
+       '\tbool\t\t\t\t\tmUseAlphaCorrection=false;\n\tstd::shared_ptr<H1CJKFontTable> mH1CJKFont;\n\tint mH1CJKOffsetY=0;\n\tstd::string mH1ImagePath,mH1CJKPath;\n\npublic:\n\tFontLayer')
  patch('SexyAppFramework/graphics/ImageFont.cpp','using namespace Sexy;',
-       '#include "localization/CompactFont.h"\n\nusing namespace Sexy;')
+       '#include "localization/CompactFont.h"\n#include "localization/FontCache.h"\n\nusing namespace Sexy;')
  patch('SexyAppFramework/graphics/ImageFont.cpp','mUseAlphaCorrection(theFontLayer.mUseAlphaCorrection)',
-       'mUseAlphaCorrection(theFontLayer.mUseAlphaCorrection),\n\tmH1CJKFont(theFontLayer.mH1CJKFont),mH1CJKOffsetY(theFontLayer.mH1CJKOffsetY)')
+       'mUseAlphaCorrection(theFontLayer.mUseAlphaCorrection),\n\tmH1CJKFont(theFontLayer.mH1CJKFont),mH1CJKOffsetY(theFontLayer.mH1CJKOffsetY),mH1ImagePath(theFontLayer.mH1ImagePath),mH1CJKPath(theFontLayer.mH1CJKPath)')
+ patch('SexyAppFramework/graphics/ImageFont.cpp','aLayer->mImage = anImage;',
+       'aLayer->mImage = anImage;\n                    aLayer->mH1ImagePath=aFileName;')
  patch('SexyAppFramework/graphics/ImageFont.cpp','anItr = mCharDataMap.insert(CharDataMap::value_type(theChar, CharData())).first;',
        'CharData glyph;H1CJKLookup(*this,theChar,glyph);\n\t\tanItr = mCharDataMap.insert(CharDataMap::value_type(theChar, glyph)).first;')
  patch('SexyAppFramework/graphics/ImageFont.cpp','\tif (strcasecmp(aCmd.c_str(), "Define") == 0)',r'''    if (strcasecmp(aCmd.c_str(), "LayerSetH1CJK") == 0) {
@@ -58,7 +60,7 @@ void MessageWidget::SetLabel(std::string_view theNewLabel, MessageStyle theMessa
         if(!StringToInt(static_cast<SingleDataElement*>(theParams.mElementVector[3].get())->mString,&offset))return Error("Invalid compact CJK baseline");
         auto table=H1LoadCJKTable(mApp,file);if(!table)return Error("Invalid compact CJK font table");
         for(const auto& glyph:table->glyphs)if(glyph.x+glyph.w>uint32_t(layer->mImage->GetWidth())||glyph.y+glyph.h>uint32_t(layer->mImage->GetHeight()))return Error("Compact CJK rectangle out of bounds");
-        layer->mH1CJKFont=std::move(table);layer->mH1CJKOffsetY=offset;return true;
+        layer->mH1CJKFont=std::move(table);layer->mH1CJKOffsetY=offset;layer->mH1CJKPath=file;return true;
     }
     if (strcasecmp(aCmd.c_str(), "Define") == 0)''')
  patch('SexyAppFramework/graphics/ImageFont.cpp','\t\t\t\t\t// Resize font elements',

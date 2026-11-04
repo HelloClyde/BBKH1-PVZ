@@ -94,4 +94,21 @@ H1XmpNumericStats pvzh1_xmp_step_cache_stats(void) {
             assert text.count(anchor)==1;text=text.replace(anchor,prelude+anchor)
         target=output/name;target.write_text(text,encoding='utf8',newline='\n')
         replacements[original]=target
+    # Long scans and module release run in the foreground too. The callback
+    # only feeds audio; it never advances game or tracker simulation here.
+    for name,expected in {'scan.c':'7293bf118415c929e78fda0e1220302f40a3ffdea48e3716652338bbe1ac552b',
+                          'load.c':'c770fbbedd53a5cf1f1c73f821d8b26727d7530a06a3bf85c8177fbfe93fa0b7'}.items():
+        original=ROOT/'vendor/libxmp/src'/name
+        if hashlib.sha256(original.read_bytes()).hexdigest()!=expected:raise RuntimeError('Pinned xmp service source changed: '+name)
+        text=original.read_text(encoding='utf8');common=os.path.relpath(original.parent/'common.h',output).replace('\\','/')
+        # Bind quoted vendor headers to their original directory; load.c also
+        # includes loaders/loader.h and does not directly include common.h.
+        import re
+        text=re.sub(r'#include "([^"]+)"',lambda m:'#include "'+os.path.relpath(original.parent/m[1],output).replace('\\','/')+'"',text)
+        text='extern void pvzp_audio_service(void) __attribute__((weak));\nstatic void h1_xmp_service(void){if(pvzp_audio_service)pvzp_audio_service();}\n'+text
+        anchors=['\torders_since_last_valid++;'] if name=='scan.c' else ['\t\tfor (i = 0; i < mod->trk; i++) {','\t\tfor (i = 0; i < mod->smp; i++) {']
+        for anchor in anchors:
+            if text.count(anchor)!=1:raise RuntimeError('XMP service boundary changed: '+name)
+            text=text.replace(anchor,anchor+'\n        h1_xmp_service();',1)
+        target=output/name;target.write_text(text,encoding='utf8',newline='\n');replacements[original]=target
     return replacements

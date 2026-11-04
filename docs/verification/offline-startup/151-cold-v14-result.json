@@ -1,0 +1,719 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "status"
+      },
+      {
+        "kind": "desktop_run",
+        "path": "A:\\应用\\程序\\H1PVZPortable.bda"
+      },
+      {
+        "kind": "wait",
+        "seconds": 2.5
+      },
+      {
+        "kind": "screenshot",
+        "output": "151-popcap.png"
+      },
+      {
+        "kind": "wait",
+        "seconds": 12
+      },
+      {
+        "kind": "snapshot"
+      },
+      {
+        "kind": "screenshot",
+        "output": "151-title.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T03:00:54.228291+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "status"
+      },
+      "result": {
+        "status": {
+          "version": 1,
+          "state": 1,
+          "usb_configured": 1,
+          "usb_fault": 0,
+          "usb_resets": 2,
+          "commands": 229114,
+          "bad_frames": 0,
+          "tick": 1560546,
+          "poll_count": 73073990,
+          "last_poll_tick": 1560546,
+          "resident_base": 2185888384,
+          "resident_size": 727104,
+          "keys_low": 0,
+          "keys_high": 0,
+          "exec_state": 0,
+          "last_error": 0
+        },
+        "caps": {
+          "version": 1,
+          "features": 16383,
+          "max_payload": 512,
+          "ram_start": 2147483648,
+          "ram_size": 67108864,
+          "module_abi": 1,
+          "forced_preemption": 0,
+          "tick_hz": 0
+        },
+        "desktop": {
+          "job_id": 25,
+          "kind": 1,
+          "state": 4,
+          "error": 0,
+          "menu_idle": 1,
+          "app_index": 4294967295,
+          "entry_count": 13,
+          "return_code": 0,
+          "state_name": "done"
+        },
+        "exec_info": {
+          "abi": 1,
+          "base": 2186549952,
+          "image_capacity": 65536,
+          "scratch_capacity": 16384,
+          "stack_capacity": 32768,
+          "output_capacity": 4096,
+          "state": 0,
+          "image_size": 0,
+          "memory_size": 0,
+          "entry_offset": 0,
+          "upload_crc": 0,
+          "written": 0,
+          "runs": 0,
+          "flags": 0,
+          "forced_preemption": 0,
+          "api_size": 28
+        },
+        "usb": {
+          "version": 2,
+          "open_count": 1,
+          "fault_count": 0,
+          "clock_link_reconnects": 0,
+          "last_fault_valid": false,
+          "last_fault_open": 0,
+          "current": {
+            "tick": 1560546,
+            "fault_reason": 0,
+            "events": 0,
+            "cpccr": 1080435232,
+            "cppcr": 452986144,
+            "clkgr": 0,
+            "opcr": 5440,
+            "cp0_status": 268436481,
+            "intc_imr": 3046076415,
+            "pd_mask": 2684338147,
+            "pd_pin": 1148026876,
+            "pd_flag": 64,
+            "power": 64,
+            "intr_txe": 0,
+            "intr_rxe": 0,
+            "intr_usbe": 0,
+            "frame": 873,
+            "address": 35,
+            "index": 1,
+            "configured": 1,
+            "resets": 2,
+            "session_epoch": 5,
+            "rx_packets": 988815,
+            "tx_packets": 984619,
+            "fault_names": [],
+            "usb_clock_gated": false,
+            "phy_enabled": true
+          },
+          "last_fault": null,
+          "resident": {
+            "state": 1,
+            "stop_request": 0,
+            "last_error": 0,
+            "completed_stops": 0,
+            "last_stop_error": 0,
+            "last_stop_tick": 0,
+            "poll_count": 73074432,
+            "last_poll_tick": 1560546
+          },
+          "retention": "same resident allocation across stop/start; cleared by H1 reboot",
+          "read_only": true
+        }
+      },
+      "started_monotonic": 509836.921,
+      "finished_monotonic": 509836.953
+    },
+    {
+      "action": {
+        "kind": "desktop_run",
+        "path": "A:\\应用\\程序\\H1PVZPortable.bda"
+      },
+      "result": {
+        "path": "A:\\应用\\程序\\H1PVZPortable.bda",
+        "operation": "desktop_run",
+        "before": {
+          "job_id": 25,
+          "kind": 1,
+          "state": 4,
+          "error": 0,
+          "menu_idle": 1,
+          "app_index": 4294967295,
+          "entry_count": 13,
+          "return_code": 0,
+          "state_name": "done"
+        },
+        "completed": true,
+        "request_sent": true,
+        "job_id": 26,
+        "status": {
+          "job_id": 26,
+          "kind": 2,
+          "state": 3,
+          "error": 0,
+          "menu_idle": 0,
+          "app_index": 105,
+          "entry_count": 14,
+          "return_code": 0,
+          "state_name": "running"
+        },
+        "payload_started": true,
+        "elapsed_seconds": 0.7339999999967404
+      },
+      "started_monotonic": 509836.953,
+      "finished_monotonic": 509837.687
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 2.5
+      },
+      "result": {
+        "waited_seconds": 2.5
+      },
+      "started_monotonic": 509837.687,
+      "finished_monotonic": 509840.187
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "151-popcap.png"
+      },
+      "result": {
+        "token": 105,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 1560678,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 41373,
+          "requests": 97,
+          "protocol_bytes_sent": 2716,
+          "protocol_bytes_received": 44477,
+          "elapsed_seconds": 2.1869999999762513,
+          "decoded_bytes_per_second": 238792.86694360815,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 2.2660000000032596,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-offline2\\151-popcap.png",
+        "snapshot_sha256": "1aa25fab2a72b40fd5b07deab15bd5688c9802bf908d3ead592b559b4d5cb626",
+        "png_sha256": "91e5cf1b31599257d1704b37bc258afe3b7ca5b672de0cd75e91a938282b49fa"
+      },
+      "started_monotonic": 509840.187,
+      "finished_monotonic": 509842.562
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 12
+      },
+      "result": {
+        "waited_seconds": 12
+      },
+      "started_monotonic": 509842.562,
+      "finished_monotonic": 509854.562
+    },
+    {
+      "action": {
+        "kind": "snapshot"
+      },
+      "result": {
+        "started_monotonic": 509854.562,
+        "utc": "2026-11-04T03:01:11.858178+00:00",
+        "pvzp_diagnostic": [
+          1347833905,
+          1,
+          218,
+          0,
+          19,
+          0,
+          0,
+          0,
+          729,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          226983,
+          0,
+          0,
+          1245448,
+          1245448,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_diagnostic": [
+          1347836496,
+          2,
+          0,
+          9642395,
+          9644443,
+          70,
+          1,
+          66,
+          21,
+          0,
+          25,
+          2210579060,
+          0,
+          0,
+          0,
+          65536
+        ],
+        "pvzh1_cache_diagnostic": [
+          1245448,
+          1245448,
+          17,
+          0,
+          218,
+          874134
+        ],
+        "pvzh1_cache_pressure_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_storage_texture_diagnostic": [
+          983300,
+          16,
+          16,
+          834459,
+          0,
+          16620,
+          1,
+          522244
+        ],
+        "pvzh1_physical_screen_diagnostic": [
+          1,
+          480,
+          272,
+          1060,
+          600,
+          0,
+          219,
+          9420
+        ],
+        "pvz_runtime_pressure_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_native_charge": [
+          11233216,
+          11233216
+        ],
+        "pvzh1_render_plan_diagnostic": [
+          3,
+          79872,
+          79872,
+          399,
+          13,
+          4,
+          3,
+          3,
+          6,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          29685276,
+          1337700,
+          27647703,
+          296223,
+          403650,
+          0,
+          11352
+        ],
+        "pvz_runtime_profile_diagnostic": [
+          1472,
+          288,
+          0,
+          282,
+          220,
+          216,
+          0,
+          11,
+          220,
+          22,
+          0,
+          1,
+          677,
+          7,
+          0,
+          1,
+          911,
+          2,
+          0,
+          1,
+          220,
+          248,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0,
+          16302,
+          66,
+          0,
+          4
+        ],
+        "pvz_runtime_profile_clock": [
+          440,
+          1561253,
+          1561253,
+          0,
+          40,
+          440
+        ],
+        "pvz_runtime_hole_diagnostic": [
+          1211189318,
+          614,
+          0,
+          10,
+          16384,
+          16384,
+          16384,
+          16384,
+          0,
+          4294967295,
+          0,
+          11726004
+        ],
+        "pvz_runtime_small_pool_diagnostic": [
+          1211191372,
+          204,
+          204,
+          28314,
+          2899456,
+          3462450,
+          3462464,
+          3462464,
+          204,
+          0,
+          0,
+          49847,
+          49643,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_io_diagnostic": [
+          312,
+          271,
+          241,
+          5021,
+          5141504,
+          5074750,
+          41,
+          1024,
+          346,
+          0,
+          0,
+          5021,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvz_runtime_asset_layout_diagnostic": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "pvzh1_xmp_load_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_axis_span_diagnostic": [
+          92921,
+          19079,
+          1387416,
+          873875,
+          195179,
+          318362,
+          0,
+          0
+        ],
+        "pvzh1_selector_offline_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_selector_cull_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_dirty_present_diagnostic": [
+          1,
+          522240,
+          1,
+          221,
+          24321,
+          1779039,
+          0,
+          0
+        ],
+        "pvzh1_dirty_canvas_diagnostic": [
+          1,
+          205,
+          204,
+          16,
+          4121097,
+          22489748,
+          0,
+          1
+        ],
+        "pvzh1_text_replay_diagnostic": [
+          184,
+          21,
+          21,
+          0,
+          37140,
+          37140,
+          21,
+          0
+        ],
+        "pvzh1_font_metric_diagnostic": [
+          946,
+          9,
+          9,
+          0
+        ],
+        "pvzh1_selector_retained_diagnostic": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_definition_diagnostic": [
+          110,
+          46778,
+          0,
+          0,
+          107,
+          29418,
+          107,
+          0
+        ],
+        "pvzh1_startup_diagnostic": [
+          1,
+          101,
+          101,
+          4076,
+          4076,
+          4126,
+          4126,
+          4201,
+          4201,
+          4226,
+          4226,
+          5951,
+          5951,
+          9026,
+          9026,
+          9251,
+          9251,
+          9251,
+          9251,
+          2201,
+          16951,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_font_cache_diagnostic": [
+          18,
+          239715,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_sound_index_diagnostic": [
+          169,
+          167,
+          1,
+          0
+        ],
+        "pvzh1_audio_diagnostic": [
+          250,
+          0,
+          0,
+          8192,
+          32768,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_adventure_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_adventure_raster_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzp_music_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "finished_monotonic": 509854.781
+      },
+      "started_monotonic": 509854.562,
+      "finished_monotonic": 509854.781
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "151-title.png"
+      },
+      "result": {
+        "token": 106,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 1561262,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 506748,
+          "requests": 1026,
+          "protocol_bytes_sent": 28728,
+          "protocol_bytes_received": 539580,
+          "elapsed_seconds": 18.53100000001723,
+          "decoded_bytes_per_second": 28181.96535532429,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 18.625,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-offline2\\151-title.png",
+        "snapshot_sha256": "7c77d686b30fe29f0ccc975f42a9e81598ec05e1286282a62d41712d810adb8c",
+        "png_sha256": "882e5387267bb23718e056e051bb06b9ccb2be3978094ad631369947687a1b32"
+      },
+      "started_monotonic": 509854.781,
+      "finished_monotonic": 509873.515
+    }
+  ],
+  "ok": true
+}

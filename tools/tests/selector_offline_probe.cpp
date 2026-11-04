@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdlib>
 #include <iostream>
+extern "C" void pvzp_audio_service(){} // No audio device exists in this isolated loader test.
 namespace {
 unsigned checks=0;
 void Check(bool value,const char* what){++checks;if(!value){std::cerr<<what<<"\n";std::exit(1);}}
@@ -45,7 +46,7 @@ int main(int argc,char** argv){
     const Bad bads[]={
         {0,0,"wrong magic"},{4,2,"wrong version"},{12,1,"wrong file size"},{16,800,"wrong target"},
         {32,0,"empty directory"},{32,1025,"directory bound"},{36,0,"directory offset"},{40,41,"directory stride"},
-        {48,129,"track bound"},{64,3,"unknown kind"},{80,97200*4+1,"run bound"},
+        {48,129,"track bound"},{64,4,"unknown kind"},{80,97200*4+1,"run bound"},
         {88,0,"entry overlaps directory"},{92,59,"payload byte mismatch"},{104,359,"run crosses target row"},
         {108,0,"zero run"},{108,0x20003,"unknown run kind"},{112,6,"payload overrun"},
         {140,0x00123456,"opaque must retain alpha255"}};

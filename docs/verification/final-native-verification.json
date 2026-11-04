@@ -5,10 +5,10 @@
   "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
   "program": {
     "source_identity_verified": true,
-    "bda_bytes": 3364164,
-    "bda_sha256": "2a468b33a76daf0a30e15d7fe96522c2878752b9694ffbbaa80933160460bbe1",
-    "elf_sha256": "abc4bc17c6cc9c194194e284f286887973bec9f99611086de0aeffd86f3f4799",
-    "build_receipt_sha256": "8bf7ba21709747d96428c553f7ab116ebcd62be7e09855331af4911eb1c513b1",
+    "bda_bytes": 3397252,
+    "bda_sha256": "1823aba5fde3518614d9212df32b754cf074a2a6e7861171017344c5f23d5518",
+    "elf_sha256": "9f17819485fa99ae70bbff51c031e776aa298e3e4d0924ca7ed4916bd9ad576b",
+    "build_receipt_sha256": "a45e1dcce741a21b72e43a788e28ad0a598b7abbd6fe45023d25c124dc6c4429",
     "compiled_sources": 178
   },
   "code_fingerprints_verified": 4,
@@ -29,20 +29,21 @@
     "icon_sha256": "1cb12c28f45330b1a43812f035be50aaf336b49ed642d811c77d298e46b7dff5"
   },
   "startup": {
-    "baseline_native_loading_ms": 92200,
-    "native_loading_ms": 30750,
+    "previous_loading_boundary_ms": 30750,
+    "native_loading_ms": 9250,
+    "first_present_ms": 2200,
+    "popcap_screenshot_upper_bound_after_launch_seconds": 3.3,
+    "selector_preparation_ms": 4925,
     "clock_tick_hz": 40,
     "clock_resolution_ms": 25,
-    "gameplay_preload_deferred_until_first_board": true,
-    "menu_clouds_and_grass_static": true,
-    "scope": "Original Resource Loading Time boundary; not including desktop BDA loader time or user wait on title."
+    "scope": "Native start-to-loading-complete marker; desktop BDA loading/user title wait excluded. Selector preparation timed separately; PopCap bound uses device screenshot tick and prelaunch resident tick."
   },
   "FPS": {
     "menu": {
       "scene": 1,
-      "frames": 436,
-      "PC_elapsed_seconds": 20.04699999996228,
-      "FPS": 21.748890108286542,
+      "frames": 471,
+      "PC_elapsed_seconds": 20.030999999959022,
+      "FPS": 23.513553991361565,
       "native_raw_ticks": 800,
       "native_tick_hz": 40,
       "native_elapsed_seconds": 20.0,
@@ -51,94 +52,122 @@
       "image_evictions_delta": 0,
       "text_replay_hits_delta": 0,
       "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
-      "result_sha256": "15374419858d6b15da840bf5d43247322ecbbafa61f5491383547aa311c5cee2"
-    },
-    "menu_initial": {
-      "scene": 1,
-      "frames": 439,
-      "PC_elapsed_seconds": 20.01600000000326,
-      "FPS": 21.932454036767012,
-      "native_raw_ticks": 800,
-      "native_tick_hz": 40,
-      "native_elapsed_seconds": 20.0,
-      "file_opens_delta": 0,
-      "image_loads_delta": 0,
-      "image_evictions_delta": 0,
-      "text_replay_hits_delta": 0,
-      "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
-      "result_sha256": "f71ed193e6fa84be8e2169e38f7bcc6d950ebb66a33521b60587fcdd2d29becb"
+      "result_sha256": "c01bf1599191715eb7c09567aaa2f72e61180856e798fc29d9a1e9c265156fab"
     },
     "first_level": {
       "scene": 3,
-      "frames": 562,
-      "PC_elapsed_seconds": 20.01549999997951,
-      "FPS": 28.07823936452126,
-      "native_raw_ticks": 800,
+      "frames": 555,
+      "PC_elapsed_seconds": 20.01500000001397,
+      "FPS": 27.72920309765739,
+      "native_raw_ticks": 801,
       "native_tick_hz": 40,
-      "native_elapsed_seconds": 20.0,
+      "native_elapsed_seconds": 20.025,
       "file_opens_delta": 0,
       "image_loads_delta": 0,
       "image_evictions_delta": 0,
-      "text_replay_hits_delta": 3402,
+      "text_replay_hits_delta": 3369,
       "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
-      "result_sha256": "1df564f665adf094afcd5b441a429f5ecc7a127100950452387c754ba352714e"
+      "result_sha256": "7fa8ab72aade41990d63e804d8b07ad231e818609fdb64d280241b90e2bef3e5"
+    },
+    "menu_return": {
+      "scene": 1,
+      "frames": 398,
+      "PC_elapsed_seconds": 20.01600000000326,
+      "FPS": 19.884092725816107,
+      "native_raw_ticks": 801,
+      "native_tick_hz": 40,
+      "native_elapsed_seconds": 20.025,
+      "file_opens_delta": 0,
+      "image_loads_delta": 0,
+      "image_evictions_delta": 0,
+      "text_replay_hits_delta": 0,
+      "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
+      "result_sha256": "353214844bb8779df519364fc955c4f54ba1e8508b960764b9f7d7fe089dcd4a"
     }
   },
-  "offline_definitions": {
-    "installed_files": 253,
-    "installed_bytes": 1246940,
-    "device_crc_verified": true,
-    "startup_loaded": 110,
-    "after_return_loaded": 123,
-    "XML_fallbacks": 0,
-    "rejected": 0,
-    "decode_page_bytes": 4096,
-    "whole_uncompressed_temporary_removed_bytes": 1493684,
-    "save_return_menu_regression_passed": true
+  "adventure": {
+    "original_updates": 450,
+    "accepted_touch_to_hand_ready_ms": 0,
+    "animation_ms": 4525,
+    "frames": 96,
+    "FPS": 21.22905027932961,
+    "max_frame_gap_ms": 50,
+    "offline_hits": 96,
+    "fallbacks": 0,
+    "last_drawn_original_update": 450,
+    "final_hold_pixel_equivalent": true
   },
-  "B_save": {
-    "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
-    "bytes": 33773,
-    "sha256": "8975d6d98528ef952b06c79271042add85b0e273d4cb7bae8a8beb7afeb8c47d",
-    "internal_CRC32_valid": true,
-    "version": 1,
-    "changed_since_before_v7": true
+  "audio": {
+    "ring_heap_bytes": 65536,
+    "normal_queued_ms": 256,
+    "loading_queued_ms": 1024,
+    "queue_underruns": 0,
+    "missed_full_rings": 0,
+    "max_observed_service_gap_ms": 350,
+    "scope": "Native ring supply counters across cold loading, menu, complete animation, first board, save-return and exit; no external sound recording."
   },
-  "normal_exit": {
-    "runtime_stage": 9,
-    "exit_status": 0,
-    "tracked_user_heap_bytes": 0,
-    "actual_tracked_native_bytes": 0,
-    "peak_tracked_user_heap_bytes": 18055686,
-    "peak_actual_native_bytes": 22919952,
-    "first_allocation_failure_bytes": 0,
-    "desktop_idle": 1
+  "offline": {
+    "font_cache": [
+      18,
+      239715,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sound_index": [
+      169,
+      167,
+      1,
+      0
+    ],
+    "definitions": [
+      110,
+      46778,
+      0,
+      0,
+      107,
+      29418,
+      107,
+      0
+    ],
+    "title_music": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    "adventure_bundle": "f210a7383d2f489ea628e8efe08af3d850ee58dfbe131f7a5f1b0e3ecd9723b4"
   },
-  "host_validation": {
-    "render": {
+  "save": {
+    "root": "B:\\应用\\数据\\游戏\\PVZ",
+    "existing_v4_continued": true,
+    "written_and_read_back": true,
+    "bytes": 35112,
+    "internal_crc_valid": true,
+    "changed_from_before": true,
+    "sha256": "263749f08d13bce2d83f010dad62a5b5f6de4a43263ffa149b6367afd984f318"
+  },
+  "memory": {
+    "user_peak_bytes": 20710352,
+    "native_peak_bytes": 22777812,
+    "allocation_failures": 0,
+    "exit_user_bytes": 0,
+    "exit_native_bytes": 0
+  },
+  "host": {
+    "adventure": {
       "passed": true,
-      "whole_frame_cases": 240,
-      "warm_hits": 144,
-      "captures": 96,
-      "reduced_A8_vs_ARGB_reference": true,
-      "changing_background": true,
-      "alpha_thresholds": true,
-      "fractional_translation": true,
-      "clip": true,
-      "mutation_counts": true,
-      "allocation_failure_latched": true,
-      "overflow_rejected": true,
-      "released_bytes": 0
-    },
-    "fonts": {
-      "passed": true,
-      "font_faces": 20,
-      "actual_engine_glyph_checks": 28320,
-      "glyph_metrics_hash": "b8d9bad91ec5369",
-      "saved_label_styles": 2,
-      "animated_UTF8_indices_rebuilt": true,
-      "message_timing_preserved": true,
-      "almanac_scope": "host visual fixture using original dialog and localized resources"
+      "poses": 114,
+      "whole_frame_pixel_cases": 342,
+      "original_450_updates_preserved": true,
+      "compressed_reader_exercised": true
     },
     "save_return": {
       "passed": true,
@@ -155,9 +184,32 @@
       "selector_generations": 2,
       "selector_collections": 1
     },
+    "audio_io": {
+      "passed": true,
+      "scope": "Actual native syscall bodies with deterministic SDK streams; no device file IO",
+      "production_sha256": "ad7b7ac950d9867d33f9dc03c76b7629ecfad167313ffdb4eedafd95b06043ba",
+      "result": "PASS exact bytes / EOF / partial write / bounds / invalid descriptors / service outside SDK calls"
+    },
+    "resource_id_cache": {
+      "passed": true,
+      "comparisons": 220020,
+      "rebuilds": 20,
+      "last_alias_ID_preserved": true,
+      "null_and_unknown_pointers": true,
+      "production_patch_sha256": "956c73834566659cfbe5f9d90b5f7c63fe2bcd7a11d98d4116276672eb277f87"
+    },
+    "pcm_tail": {
+      "passed": true,
+      "production_function_bodies": true,
+      "source_sha256": "3c85bc61c884f00667287da6b4f7ff46433be7dd85845b92dc85a418457aa47a",
+      "cases": 14,
+      "active_underrun_detected": true,
+      "finite_end_stops": true,
+      "full_wrap_still_detected": true
+    },
     "combat_pause_reward_next_level": true
   },
-  "runtime_inventory_sha256": "f350d0ee8df87d1ff63e40034e3edaac7503e3fd28b4869468f1707866093958",
+  "runtime_inventory_sha256": "1d2b55a04812d9bf649bf8869dca20f52d39aba637a2a2f07adb3135750a5825",
   "debug_final_state": "Resident running; host serial client closed",
-  "scope": "Native startup, existing V4 continuation, low-density first-level animation, touch options, save-return menu and normal exit. Host original-input combat, pause, reward and next level. All levels, modes and dense battles not exhaustively tested."
+  "scope": "Native startup, menu, complete Adventure entrance, existing V4 continuation, low-density first-level animation, save-return and clean exit. All modes and dense battles not exhaustively tested."
 }
