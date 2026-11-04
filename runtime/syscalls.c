@@ -3,6 +3,7 @@
    semaphore, as independently exercised by h1-debug/files.c. */
 #include "runtime.h"
 #include "small_pool.h"
+#include "asset_index.h"
 #include "h1_sdk.h"
 #include <errno.h>
 #include <fcntl.h>
@@ -199,6 +200,58 @@ static int pvz_map_native_path(const char *path,char *output,size_t capacity,int
     memcpy(output,prefix,used);for(i=0;i<=n;i++)output[used+i]=rest[i]=='/'?'\\':rest[i];return 0;
 }
 int pvz_native_path(const char *path,char *output,size_t capacity){return pvz_map_native_path(path,output,capacity,1);}
+static PvzAssetIndex asset_index;
+static unsigned char *asset_index_data;
+static int asset_index_state,asset_index_disabled;
+/* state (1 fallback, 2 indexed, 3 invalidated by resource mutation), entries,
+   avoided opens, indexed stats, out-of-scope queries, bytes, error, trace count. */
+volatile uint32_t pvz_runtime_asset_index_diagnostic[8];
+char pvz_runtime_asset_index_paths[32][160];
+static uint32_t index_word(const unsigned char *p){return p[0]|(uint32_t)p[1]<<8|(uint32_t)p[2]<<16|(uint32_t)p[3]<<24;}
+static int index_relative(const char *native,char relative[NATIVE_PATH_MAX]){
+    size_t base=strlen(resource_prefix),i=0;const char *p;
+    if(strlen(native)<=base||!ascii_prefix(native,resource_prefix)||native[base]!='\\')return 0;
+    p=native+base+1;
+    if(asset_bucket_state>0&&ascii_prefix(p,"H1DATA\\")&&strlen(p)>10&&p[9]=='\\')p+=10;
+    for(;p[i];i++){unsigned c=(unsigned char)p[i];if(i+1>=NATIVE_PATH_MAX)return 0;
+        relative[i]=c=='\\'?'/':(c>='A'&&c<='Z'?(char)(c+32):(char)c);}
+    relative[i]=0;
+    /* Direct native paths may contain components not normalized by the VFS. */
+    if(strstr(relative,"../")||strstr(relative,"/..")||strstr(relative,"//"))return 0;
+    return pvz_asset_index_managed(relative);
+}
+static void load_asset_index(void){
+    char path[NATIVE_PATH_MAX];unsigned char header[32],extra,*data=0;h1_file *file;uint32_t bytes,done=32;int ok=0;
+    if(asset_index_state)return;asset_index_state=1;pvz_runtime_asset_index_diagnostic[0]=1;
+    strcpy(path,resource_prefix);strcat(path,"\\resource-files.h1fi");file=io_native_open(path,"rb");
+    if(!file||(uintptr_t)file==0xffffffffu){pvz_runtime_asset_index_diagnostic[6]=1;return;}
+    if(io_native_read(header,32,file)!=32)goto finished;
+    bytes=index_word(header+20);if(memcmp(header,"H1FI",4)||bytes>2097120||bytes<12)goto finished;
+    bytes+=32;data=malloc(bytes);if(!data)goto finished;memcpy(data,header,32);
+    while(done<bytes){unsigned n=bytes-done;if(n>32768)n=32768;
+        if(io_native_read(data+done,n,file)!=n)goto finished;done+=n;audio_io_yield();}
+    if(io_native_read(&extra,1,file)!=0||!pvz_asset_index_parse(&asset_index,data,bytes))goto finished;
+    asset_index_data=data;data=0;asset_index_state=2;pvz_runtime_asset_index_diagnostic[0]=2;
+    pvz_runtime_asset_index_diagnostic[1]=asset_index.count;pvz_runtime_asset_index_diagnostic[5]=bytes;ok=1;
+finished:
+    h1_fclose(file);free(data);if(!ok)pvz_runtime_asset_index_diagnostic[6]=2;
+}
+static int query_asset_index(const char *native,uint32_t *size,int *directory){
+    char relative[NATIVE_PATH_MAX];
+    if(asset_index_disabled||!index_relative(native,relative)){pvz_runtime_asset_index_diagnostic[4]++;return -1;}
+    load_asset_index();if(asset_index_state!=2)return -1;
+    return pvz_asset_index_find(&asset_index,relative,size,directory);
+}
+static void trace_index_miss(const char *native){
+    char relative[NATIVE_PATH_MAX];unsigned count=pvz_runtime_asset_index_diagnostic[7];
+    if(!index_relative(native,relative)||strlen(relative)>=160)return;
+    for(unsigned i=0;i<count;i++)if(!strcmp(pvz_runtime_asset_index_paths[i],relative))return;
+    if(count<32){strcpy(pvz_runtime_asset_index_paths[count],relative);pvz_runtime_asset_index_diagnostic[7]=count+1;}
+}
+static void invalidate_asset_index(const char *native){
+    char relative[NATIVE_PATH_MAX];if(index_relative(native,relative)){
+        asset_index_disabled=1;pvz_runtime_asset_index_diagnostic[0]=3;}
+}
 uint32_t pvz_runtime_ticks(void){return h1_raw_tick_80hz();}
 void pvz_runtime_delay_ms(unsigned int milliseconds){
     /* Stock V1.41's OS timer is not initialized. Keep IRQs enabled and wait
@@ -340,6 +393,9 @@ int _open(const char *path,int flags,...){
     if(pvz_map_native_path(path,native,sizeof(native),(flags&O_DIRECTORY)==0&&(flags&O_ACCMODE)==O_RDONLY))return -1;
     for(i=0;i<FILE_COUNT&&(files[i]||directory_paths[i]);i++);if(i==FILE_COUNT){errno=EMFILE;return -1;}
     if(flags&O_DIRECTORY){struct stat st;if(stat_native(native,&st))return -1;if(!S_ISDIR(st.st_mode)){errno=ENOTDIR;return -1;}directory_paths[i]=strdup(native);if(!directory_paths[i])return -1;descriptor_flags[i]=flags;return i+3;}
+    if((flags&O_ACCMODE)==O_RDONLY&&!(flags&(O_CREAT|O_TRUNC|O_APPEND))){
+        if(query_asset_index(native,0,0)==0){pvz_runtime_asset_index_diagnostic[2]++;trace_index_miss(native);errno=ENOENT;return -1;}
+    }else invalidate_asset_index(native);
     if(flags&O_APPEND)mode=(flags&O_RDWR)?"ab+":"ab";
     else if(flags&O_TRUNC)mode=(flags&O_RDWR)?"wb+":"wb";
     else if((flags&O_ACCMODE)==O_RDONLY)mode="rb";
@@ -400,7 +456,15 @@ static int stat_native(const char *native,struct stat *out){
     memset(out,0,sizeof(*out));out->st_mode=(st[0]&0x40000000u)?(S_IFDIR|0777):(S_IFREG|0666);
     out->st_size=(off_t)st[2];out->st_nlink=1;out->st_blksize=4096;out->st_blocks=(st[2]+511u)/512u;return 0;
 }
-int _stat(const char *path,struct stat *out){char native[NATIVE_PATH_MAX];if(pvz_native_path(path,native,sizeof(native)))return -1;return stat_native(native,out);}
+int _stat(const char *path,struct stat *out){
+    char native[NATIVE_PATH_MAX];uint32_t size;int directory,found;
+    if(pvz_native_path(path,native,sizeof(native)))return -1;
+    found=query_asset_index(native,&size,&directory);
+    if(found>=0){pvz_runtime_asset_index_diagnostic[3]++;if(!found){trace_index_miss(native);errno=ENOENT;return -1;}
+        memset(out,0,sizeof(*out));out->st_mode=directory?(S_IFDIR|0777):(S_IFREG|0666);out->st_size=size;
+        out->st_nlink=1;out->st_blksize=4096;out->st_blocks=(size+511u)/512u;return 0;}
+    return stat_native(native,out);
+}
 int lstat(const char *path,struct stat *out){return _stat(path,out);}
 int _fstat(int fd,struct stat *out){
     int here,end;memset(out,0,sizeof(*out));out->st_nlink=1;
@@ -412,16 +476,17 @@ int _fstat(int fd,struct stat *out){
     out->st_mode=S_IFREG|0666;out->st_size=end;out->st_blksize=4096;out->st_blocks=(end+511)/512;return 0;
 }
 int _isatty(int fd){return fd>=0&&fd<3;}
-int _unlink(const char *path){char native[NATIVE_PATH_MAX];if(pvz_native_path(path,native,sizeof(native)))return -1;return h1_remove(native)?native_failure(EIO):0;}
+int _unlink(const char *path){char native[NATIVE_PATH_MAX];if(pvz_native_path(path,native,sizeof(native)))return -1;invalidate_asset_index(native);return h1_remove(native)?native_failure(EIO):0;}
 int rename(const char *from,const char *to){
     typedef int (*Rename)(const char *,const char *);char a[NATIVE_PATH_MAX],b[NATIVE_PATH_MAX];
     if(pvz_native_path(from,a,sizeof(a))||pvz_native_path(to,b,sizeof(b)))return -1;
+    invalidate_asset_index(a);invalidate_asset_index(b);
     /* Native rename refuses overwrite. Preserve the old file on failure. */
     Rename fn=(Rename)h1_runtime_entry(h1_runtime_table(H1_RUNTIME_FS_TABLE_SLOT),0x28u);
     return fn(a,b)?native_failure(EIO):0;
 }
-int mkdir(const char *path,mode_t mode){typedef int (*Fn)(const char *);char native[NATIVE_PATH_MAX];(void)mode;if(pvz_map_native_path(path,native,sizeof(native),0))return -1;Fn fn=(Fn)h1_runtime_entry(h1_runtime_table(H1_RUNTIME_FS_TABLE_SLOT),0x30u);return fn(native)?native_failure(EIO):0;}
-int rmdir(const char *path){typedef int (*Fn)(const char *);char native[NATIVE_PATH_MAX];if(pvz_map_native_path(path,native,sizeof(native),0))return -1;Fn fn=(Fn)h1_runtime_entry(h1_runtime_table(H1_RUNTIME_FS_TABLE_SLOT),0x34u);return fn(native)?native_failure(EIO):0;}
+int mkdir(const char *path,mode_t mode){typedef int (*Fn)(const char *);char native[NATIVE_PATH_MAX];(void)mode;if(pvz_map_native_path(path,native,sizeof(native),0))return -1;invalidate_asset_index(native);Fn fn=(Fn)h1_runtime_entry(h1_runtime_table(H1_RUNTIME_FS_TABLE_SLOT),0x30u);return fn(native)?native_failure(EIO):0;}
+int rmdir(const char *path){typedef int (*Fn)(const char *);char native[NATIVE_PATH_MAX];if(pvz_map_native_path(path,native,sizeof(native),0))return -1;invalidate_asset_index(native);Fn fn=(Fn)h1_runtime_entry(h1_runtime_table(H1_RUNTIME_FS_TABLE_SLOT),0x34u);return fn(native)?native_failure(EIO):0;}
 char *getcwd(char *buffer,size_t capacity){size_t n=strlen(virtual_cwd)+1;if(!buffer){buffer=malloc(capacity?capacity:n);if(!capacity)capacity=n;}if(!buffer)return 0;if(capacity<n){errno=ERANGE;return 0;}memcpy(buffer,virtual_cwd,n);return buffer;}
 int chdir(const char *path){struct stat st;char joined[NATIVE_PATH_MAX];if(pvz_map_native_path(path,joined,sizeof(joined),0)||stat_native(joined,&st))return -1;if(!S_ISDIR(st.st_mode)){errno=ENOTDIR;return -1;}if(path[0]=='/')strncpy(joined,path,sizeof(joined)-1);else{size_t n=strlen(virtual_cwd);if(n+strlen(path)+2>sizeof(joined)){errno=ENAMETOOLONG;return -1;}memcpy(joined,virtual_cwd,n);joined[n++]='/';strcpy(joined+n,path);}joined[sizeof(joined)-1]=0;strcpy(virtual_cwd,joined);return 0;}
 int access(const char *path,int mode){struct stat st;(void)mode;return _stat(path,&st);}
@@ -517,6 +582,7 @@ void pvz_runtime_shutdown(void){
     if(pvzp_window_close)pvzp_window_close();
     for(i=0;i<FILE_COUNT;i++)if(files[i]||directory_paths[i])_close(i+3);
     if(log_file){h1_fclose(log_file);log_file=0;}
+    free(asset_index_data);asset_index_data=0;memset(&asset_index,0,sizeof(asset_index));
     while(allocations)free(allocations+1);
     if(small_pool_ready){
         if(!pvz_small_pool_dispose(&small_pool))pvz_runtime_abort(106);

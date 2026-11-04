@@ -41,6 +41,8 @@ python tools/build_widescreen.py --toolchain 'D:/toolchain/bin' --prefix 'D:/pvz
 
 ## 包与验证范围
 
+资源树内容改变后运行 `python tools/bake_file_index.py`，重建 `resource-files.h1fi` 与资源清单。索引保存只读资源文件名、长度和目录，启动只读取一次；不存在的候选路径在内存中直接返回未找到。索引缺失或损坏时回退实际文件系统，运行中修改受索引管理的资源也会停用索引。`userdata/` 存档不参与索引，仍执行真实读写。原生打开/查询适配代码可用 `python tools/tests/test_asset_index.py` 检查，覆盖 A/B 盘、桶目录、索引回退、存档绕过和资源修改失效。
+
 `python tools/package_install.py` 生成包含预验证 BDA 与全部 B 盘运行资源的安装 ZIP；指定 `--bda dist/H1PVZPortable.bda` 可使用本次编译结果。生成物不会覆盖已有同名 ZIP，且每个成员都读回核验 SHA-256。
 
 CI 仅做快照完整性与成品格式校验，使用固定 SDK、固定官方 Actions 提交及只读权限。本次只建立私有仓库、推送 main，不创建 tag 或 Release。

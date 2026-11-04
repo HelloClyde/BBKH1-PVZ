@@ -17,6 +17,10 @@ def main():
  assert not subprocess.check_output([*sdk_git,'status','--porcelain','--untracked-files=no'],text=True).strip(),'SDK has tracked edits'
  upstream=read(ROOT/'pinned-source-manifest.json');n=check_files(ROOT/'upstream',upstream['files'])
  assets=read(ROOT/'provenance/resources.json');count=check_files(ROOT/assets['directory'],assets['files'])
+ from bake_file_index import encode
+ file_index=read(ROOT/'provenance/offline-file-index.json');index=ROOT/assets['directory']/file_index['runtime_path']
+ assert index.read_bytes()==encode(ROOT/assets['directory'])[0] and sha(index)==file_index['sha256']
+ assert sha(ROOT/'tools/bake_file_index.py')==file_index['encoder_sha256']
  for info in read(ROOT/'provenance/source-assets.json')['trees']:check_files(ROOT/info['directory'],info['files'])
  definitions=read(ROOT/'provenance/offline-definitions.json')
  assert definitions['count']==len(definitions['files'])

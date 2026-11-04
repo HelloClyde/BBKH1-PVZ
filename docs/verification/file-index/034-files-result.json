@@ -1,0 +1,64 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+        "output": "after.v4"
+      },
+      {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\pvz.log",
+        "output": "after.log"
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T11:41:01.718333+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+        "output": "after.v4"
+      },
+      "result": {
+        "operation": "file_get",
+        "source": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-fileindex\\after.v4",
+        "partial": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-fileindex\\after.v4.part-1793792461719362800",
+        "completed": true,
+        "token": 313,
+        "size": 33773,
+        "crc32": 1698074834,
+        "sha256": "7f002f5f1ca4fa9ecaa04bf9bb27f413d6eb2c5afe1df83d8d088990025198be",
+        "device_crc_verified": false,
+        "elapsed_seconds": 1.0790000000270084
+      },
+      "started_monotonic": 541044.421,
+      "finished_monotonic": 541045.5
+    },
+    {
+      "action": {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\pvz.log",
+        "output": "after.log"
+      },
+      "result": {
+        "operation": "file_get",
+        "source": "B:\\应用\\数据\\游戏\\PVZ\\pvz.log",
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-fileindex\\after.log",
+        "partial": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-fileindex\\after.log.part-1793792462802172800",
+        "completed": true,
+        "token": 314,
+        "size": 295873,
+        "crc32": 750863896,
+        "sha256": "950c3cbaffad50eab5cf637719bfe9a34616a1c87d21c69f24a88115d1ce05ee",
+        "device_crc_verified": false,
+        "elapsed_seconds": 10.827999999979511
+      },
+      "started_monotonic": 541045.5,
+      "finished_monotonic": 541056.328
+    }
+  ],
+  "ok": true
+}

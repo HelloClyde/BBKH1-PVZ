@@ -5,11 +5,11 @@
   "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
   "program": {
     "source_identity_verified": true,
-    "bda_bytes": 3397252,
-    "bda_sha256": "1823aba5fde3518614d9212df32b754cf074a2a6e7861171017344c5f23d5518",
-    "elf_sha256": "9f17819485fa99ae70bbff51c031e776aa298e3e4d0924ca7ed4916bd9ad576b",
-    "build_receipt_sha256": "a45e1dcce741a21b72e43a788e28ad0a598b7abbd6fe45023d25c124dc6c4429",
-    "compiled_sources": 178
+    "bda_bytes": 3400532,
+    "bda_sha256": "134db1967e2d15b51d037150959cfc6c7e12f399fc21692419d3794fdb61d9d2",
+    "elf_sha256": "7d17ee75aec52dd8b861db8010bc2822d934a925e9537c8740eb0d2e6cb64e2a",
+    "build_receipt_sha256": "db52181e2817b02941e16379dcf90cf0f8fc2f815bb1ac0931c01da41ca593bd",
+    "compiled_sources": 179
   },
   "code_fingerprints_verified": 4,
   "physical": [
@@ -29,11 +29,11 @@
     "icon_sha256": "1cb12c28f45330b1a43812f035be50aaf336b49ed642d811c77d298e46b7dff5"
   },
   "startup": {
-    "previous_loading_boundary_ms": 30750,
-    "native_loading_ms": 9250,
-    "first_present_ms": 2200,
+    "previous_loading_boundary_ms": 9250,
+    "native_loading_ms": 5025,
+    "first_present_ms": 1625,
     "popcap_screenshot_upper_bound_after_launch_seconds": 3.3,
-    "selector_preparation_ms": 4925,
+    "selector_preparation_ms": 3575,
     "clock_tick_hz": 40,
     "clock_resolution_ms": 25,
     "scope": "Native start-to-loading-complete marker; desktop BDA loading/user title wait excluded. Selector preparation timed separately; PopCap bound uses device screenshot tick and prelaunch resident tick."
@@ -41,9 +41,9 @@
   "FPS": {
     "menu": {
       "scene": 1,
-      "frames": 471,
+      "frames": 505,
       "PC_elapsed_seconds": 20.030999999959022,
-      "FPS": 23.513553991361565,
+      "FPS": 25.21092306929425,
       "native_raw_ticks": 800,
       "native_tick_hz": 40,
       "native_elapsed_seconds": 20.0,
@@ -52,28 +52,28 @@
       "image_evictions_delta": 0,
       "text_replay_hits_delta": 0,
       "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
-      "result_sha256": "c01bf1599191715eb7c09567aaa2f72e61180856e798fc29d9a1e9c265156fab"
+      "result_sha256": "d5a935e1c04e1b1fc51218cf71c32cbc40cab6c66ecaccb193406ac292a854ca"
     },
     "first_level": {
       "scene": 3,
-      "frames": 555,
-      "PC_elapsed_seconds": 20.01500000001397,
-      "FPS": 27.72920309765739,
+      "frames": 542,
+      "PC_elapsed_seconds": 20.031000000075437,
+      "FPS": 27.058060006887267,
       "native_raw_ticks": 801,
       "native_tick_hz": 40,
       "native_elapsed_seconds": 20.025,
       "file_opens_delta": 0,
       "image_loads_delta": 0,
       "image_evictions_delta": 0,
-      "text_replay_hits_delta": 3369,
+      "text_replay_hits_delta": 3281,
       "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
-      "result_sha256": "7fa8ab72aade41990d63e804d8b07ad231e818609fdb64d280241b90e2bef3e5"
+      "result_sha256": "7321a3f47f95a832e5222a42f3fb33719049dd53aeca47261f4219b1e285e45b"
     },
     "menu_return": {
       "scene": 1,
-      "frames": 398,
-      "PC_elapsed_seconds": 20.01600000000326,
-      "FPS": 19.884092725816107,
+      "frames": 416,
+      "PC_elapsed_seconds": 20.04599999997299,
+      "FPS": 20.752269779535094,
       "native_raw_ticks": 801,
       "native_tick_hz": 40,
       "native_elapsed_seconds": 20.025,
@@ -82,17 +82,17 @@
       "image_evictions_delta": 0,
       "text_replay_hits_delta": 0,
       "scope": "Physical H1; 20-second wait without RPC, inputs, screenshots; independent bounded frame/tick reads at its endpoints",
-      "result_sha256": "353214844bb8779df519364fc955c4f54ba1e8508b960764b9f7d7fe089dcd4a"
+      "result_sha256": "865b67f9036895378f0f832360dffc5658b96244567f3b8213a70eb9e4e51db6"
     }
   },
   "adventure": {
     "original_updates": 450,
     "accepted_touch_to_hand_ready_ms": 0,
     "animation_ms": 4525,
-    "frames": 96,
-    "FPS": 21.22905027932961,
+    "frames": 102,
+    "FPS": 22.696629213483146,
     "max_frame_gap_ms": 50,
-    "offline_hits": 96,
+    "offline_hits": 102,
     "fallbacks": 0,
     "last_drawn_original_update": 450,
     "final_hold_pixel_equivalent": true
@@ -103,7 +103,7 @@
     "loading_queued_ms": 1024,
     "queue_underruns": 0,
     "missed_full_rings": 0,
-    "max_observed_service_gap_ms": 350,
+    "max_observed_service_gap_ms": 250,
     "scope": "Native ring supply counters across cold loading, menu, complete animation, first board, save-return and exit; no external sound recording."
   },
   "offline": {
@@ -149,14 +149,14 @@
     "root": "B:\\应用\\数据\\游戏\\PVZ",
     "existing_v4_continued": true,
     "written_and_read_back": true,
-    "bytes": 35112,
+    "bytes": 33773,
     "internal_crc_valid": true,
     "changed_from_before": true,
-    "sha256": "263749f08d13bce2d83f010dad62a5b5f6de4a43263ffa149b6367afd984f318"
+    "sha256": "7f002f5f1ca4fa9ecaa04bf9bb27f413d6eb2c5afe1df83d8d088990025198be"
   },
   "memory": {
-    "user_peak_bytes": 20710352,
-    "native_peak_bytes": 22777812,
+    "user_peak_bytes": 20853889,
+    "native_peak_bytes": 22831180,
     "allocation_failures": 0,
     "exit_user_bytes": 0,
     "exit_native_bytes": 0
@@ -187,7 +187,7 @@
     "audio_io": {
       "passed": true,
       "scope": "Actual native syscall bodies with deterministic SDK streams; no device file IO",
-      "production_sha256": "ad7b7ac950d9867d33f9dc03c76b7629ecfad167313ffdb4eedafd95b06043ba",
+      "production_sha256": "b6a2c1bca88f5cdd51e8a4a6073bce802ec5fde5a852bc64d888130125857980",
       "result": "PASS exact bytes / EOF / partial write / bounds / invalid descriptors / service outside SDK calls"
     },
     "resource_id_cache": {
@@ -207,9 +207,99 @@
       "finite_end_stops": true,
       "full_wrap_still_detected": true
     },
-    "combat_pause_reward_next_level": true
+    "combat_pause_reward_next_level": true,
+    "asset_index": {
+      "passed": true,
+      "lookup_checks": 6864,
+      "production_open_stat_bodies": true,
+      "save_paths_bypass": true,
+      "drive_a_and_b": true,
+      "bucket_layout": true,
+      "mutation_invalidates": true,
+      "missing_corrupt_fallback": true,
+      "syscalls_sha256": "b6a2c1bca88f5cdd51e8a4a6073bce802ec5fde5a852bc64d888130125857980",
+      "parser_sha256": "c91f3024737249abcf1be09bc488bea0b716d9fd03d5cf1346a595a673bcae93"
+    },
+    "engine_regression_reused_from_commit": "034eb3bcc4f61d18dd9fdb69407c30d03bb4381b"
   },
-  "runtime_inventory_sha256": "1d2b55a04812d9bf649bf8869dca20f52d39aba637a2a2f07adb3135750a5825",
+  "runtime_inventory_sha256": "7f4224630ff841276ab3d9ca40878bdc3ee5cce62eec2cd737f9ac3bee9b2d7b",
   "debug_final_state": "Resident running; host serial client closed",
-  "scope": "Native startup, menu, complete Adventure entrance, existing V4 continuation, low-density first-level animation, save-return and clean exit. All modes and dense battles not exhaustively tested."
+  "scope": "Native startup, menu, complete Adventure entrance, existing V4 continuation, low-density first-level animation, save-return and clean exit. All modes and dense battles not exhaustively tested.",
+  "file_index": {
+    "manifest": {
+      "version": 1,
+      "runtime_path": "resource-files.h1fi",
+      "bytes": 143537,
+      "sha256": "01d541dc296749e3abd5832ad89762b75a7466f55d4fe700d7506aaee861ab24",
+      "entries": 3422,
+      "files": 3415,
+      "directories": 7,
+      "encoder_sha256": "8b36538050ac1267b18e7c2f2360277a30d2b368b560cf80712afe72ece3542c",
+      "scope": "Immutable resource tree; savedata and the index itself excluded. Regenerate after resource changes."
+    },
+    "diagnostic": [
+      2,
+      3422,
+      238,
+      0,
+      4,
+      143537,
+      0,
+      32
+    ],
+    "native_open_calls": 75,
+    "native_open_failures": 3,
+    "native_open_ms": 2525,
+    "native_read_calls": 5028,
+    "native_read_bytes": 5218287,
+    "native_read_ms": 1100,
+    "previous_open_calls": 312,
+    "previous_open_failures": 241,
+    "previous_open_ms": 6775,
+    "avoided_opens": 238,
+    "sample_avoided_paths": [
+      "properties/partner.xml",
+      "properties/partner_logo.h1a",
+      "properties/partner_logo.h1i",
+      "reanim_potatomine_rock3.h1a",
+      "reanim_potatomine_rock3.h1i",
+      "particles/reanim_potatomine_rock3.h1a",
+      "particles/reanim_potatomine_rock3.h1i",
+      "reanim_sprout_body.h1a",
+      "reanim_sprout_body.h1i",
+      "particles/reanim_sprout_body.h1a",
+      "particles/reanim_sprout_body.h1i",
+      "reanim_potatomine_rock1.h1a",
+      "reanim_potatomine_rock1.h1i",
+      "particles/reanim_potatomine_rock1.h1a",
+      "particles/reanim_potatomine_rock1.h1i",
+      "reanim_sprout_petal.h1a",
+      "reanim_sprout_petal.h1i",
+      "particles/reanim_sprout_petal.h1a",
+      "particles/reanim_sprout_petal.h1i",
+      "reanim_zombie_head.h1a",
+      "reanim_zombie_head.h1i",
+      "particles/reanim_zombie_head.h1a",
+      "particles/reanim_zombie_head.h1i",
+      "reanim_zombie_hair.h1a",
+      "reanim_zombie_hair.h1i",
+      "particles/reanim_zombie_hair.h1a",
+      "particles/reanim_zombie_hair.h1i",
+      "reanim_zombie_jaw.h1a",
+      "reanim_zombie_jaw.h1i",
+      "particles/reanim_zombie_jaw.h1a",
+      "particles/reanim_zombie_jaw.h1i",
+      "properties/zombatartos.txt"
+    ],
+    "scope": "Cold-loading endpoint. Native call durations use the calibrated 40-Hz clock; writable files bypass the index."
+  },
+  "source_changes": {
+    "changed": [
+      "runtime/syscalls.c"
+    ],
+    "added": [
+      "runtime/asset_index.c"
+    ],
+    "other_compiled_sources_unchanged": 177
+  }
 }

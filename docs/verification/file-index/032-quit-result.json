@@ -1,0 +1,89 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "tap",
+        "x": 455,
+        "y": 236,
+        "seconds": 1
+      },
+      {
+        "kind": "wait",
+        "seconds": 2
+      },
+      {
+        "kind": "screenshot",
+        "output": "032-quit.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T11:37:52.630623+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "tap",
+        "x": 455,
+        "y": 236,
+        "seconds": 1
+      },
+      "result": {
+        "gesture": "tap",
+        "x": 455,
+        "y": 236,
+        "hold_seconds": 1,
+        "lease_ticks": 80,
+        "release_acknowledged": true,
+        "host_elapsed_seconds": 1.0
+      },
+      "started_monotonic": 540855.328,
+      "finished_monotonic": 540856.328
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 2
+      },
+      "result": {
+        "waited_seconds": 2
+      },
+      "started_monotonic": 540856.328,
+      "finished_monotonic": 540858.328
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "032-quit.png"
+      },
+      "result": {
+        "token": 131,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 2801303,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 412571,
+          "requests": 835,
+          "protocol_bytes_sent": 23380,
+          "protocol_bytes_received": 439291,
+          "elapsed_seconds": 15.0,
+          "decoded_bytes_per_second": 34816.0,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 15.077999999979511,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261104-fileindex\\032-quit.png",
+        "snapshot_sha256": "3447eb47b9784ab947afd8eba3cde58f56e17af21a5a75190ec2b6452f0ffef9",
+        "png_sha256": "89175a7faa5cb38d6148742ef8e33ba4d57dcc5ec7c231b2f01b3561831ad626"
+      },
+      "started_monotonic": 540858.328,
+      "finished_monotonic": 540873.515
+    }
+  ],
+  "ok": true
+}
