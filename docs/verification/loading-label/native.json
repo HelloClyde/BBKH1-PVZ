@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "scope": "Loading label placement only; existing BDA and game logic unchanged",
+  "physical": [
+    480,
+    272
+  ],
+  "program": {
+    "passed": true,
+    "bda_sha256": "92a0178133c6568ee7b6186e660740d10c2cc7b9125dc4afd41b76c9ec4c73cf",
+    "elf_sha256": "1dc625a7b1b62ffdd0e978ea19a5a83bcc3dfe632303ad1a41fa6da84d5496cb",
+    "live_code_fingerprints": 4
+  },
+  "layout": {
+    "passed": true,
+    "dimensions": [
+      480,
+      272
+    ],
+    "old_logical_baseline": 576,
+    "new_logical_baseline": 496,
+    "physical_baseline_delta": -36.266666666666666,
+    "changed_rectangle": [
+      224,
+      215,
+      259,
+      263
+    ],
+    "changed_pixels": 427,
+    "grass_patch_byte_identical": true,
+    "progress_rectangle": [
+      167,
+      232,
+      142,
+      15
+    ],
+    "outside_text_region_byte_identical": true,
+    "new_resource_sha256": "59bebb2a81748a4f165cccb1a8553dd48a79153141a39214d299181a428e6d0b",
+    "native_label_pixels_byte_identical": true,
+    "native_outside_progress_bar_byte_identical": true,
+    "native_screenshot": "fresh-loading.png",
+    "native_progress_difference_pixels": 0
+  },
+  "resources": {
+    "level-loading.h1ll": {
+      "sha256": "59bebb2a81748a4f165cccb1a8553dd48a79153141a39214d299181a428e6d0b",
+      "bytes": 361531,
+      "device_crc_verified": true
+    },
+    "resource-files.h1fi": {
+      "sha256": "7363b5dd6fcc3277d079fed33ffde3d00c34a85e61f8aff6c1cfbb3bfef99af4",
+      "bytes": 143917,
+      "device_crc_verified": true
+    }
+  },
+  "normal_UI_exit": true,
+  "exit_code": 0,
+  "user_heap_bytes": 0,
+  "native_charge": 0,
+  "original_saves_restored": {
+    "user1.dat": {
+      "bytes": 886,
+      "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+      "device_crc_verified": true,
+      "readback_identical": true
+    },
+    "users.dat": {
+      "bytes": 22,
+      "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+      "device_crc_verified": true,
+      "readback_identical": true
+    }
+  },
+  "original_no_V4_restored": true,
+  "debugger_left_running": true
+}

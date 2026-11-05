@@ -104,5 +104,13 @@
     "Long unattended play and failure-screen stability are not certified by this focused acceptance. Earlier candidates failed font-pack access; final shared-stream candidate passed the same options and return-menu sequence."
   ],
   "debugger_left_running": true,
-  "evidence_directory": "docs/verification/font-options"
+  "evidence_directory": "docs/verification/font-options",
+  "presentation_update": {
+    "date": "2026-11-06",
+    "description": "Loading Chinese label moved above the progress bar by about 36 physical pixels",
+    "BDA_unchanged": true,
+    "resource_sha256": "59bebb2a81748a4f165cccb1a8553dd48a79153141a39214d299181a428e6d0b",
+    "native_pixels_verified": true,
+    "evidence": "docs/verification/loading-label/native.json"
+  }
 }

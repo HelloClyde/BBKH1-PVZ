@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "dimensions": [
+    480,
+    272
+  ],
+  "old_logical_baseline": 576,
+  "new_logical_baseline": 496,
+  "physical_baseline_delta": -36.266666666666666,
+  "changed_rectangle": [
+    224,
+    215,
+    259,
+    263
+  ],
+  "changed_pixels": 427,
+  "grass_patch_byte_identical": true,
+  "progress_rectangle": [
+    167,
+    232,
+    142,
+    15
+  ],
+  "outside_text_region_byte_identical": true,
+  "new_resource_sha256": "59bebb2a81748a4f165cccb1a8553dd48a79153141a39214d299181a428e6d0b",
+  "native_label_pixels_byte_identical": true,
+  "native_outside_progress_bar_byte_identical": true,
+  "native_screenshot": "fresh-loading.png",
+  "native_progress_difference_pixels": 0
+}
