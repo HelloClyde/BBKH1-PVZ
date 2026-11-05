@@ -3073,8 +3073,9 @@
     "reanim/zombieswon.reanim.h1d": "0b664c03e70aae08d94e859f6ac207900b0feaa0a46cb773e175ad54ebdf01eb",
     "reanim/zombieswon_.h1i": "e4bc9aca42ee264098882fb1f712e6d8ba5d7e1358ecaff01f59bdce7c455dad",
     "reanim/zombieswonscreen.h1i": "2607ff727c27919aaec17da673fe6ce6ed6ee964f06e6f734066f8b2beddb953",
-    "resource-files.h1fi": "71b6b6fc5d3c1723be7e5cb7224b9db5a1e2f1620d581f79881a8e77f5add6d3",
+    "resource-files.h1fi": "b7f4f22110b65e141092ce445e516728366acab883f50aa2625204729ea9f5d4",
     "resource-index.json": "a745318b768a0902b8bcab717e26e8e319475e1ea97315dc34b5124c29783cf9",
+    "reward-effects.h1re": "92358c3e58b32fdd7774e6c94a5c606ad3887ba7d8ba6665ac195e1aa0458e22",
     "sounds/achievement.h1pcm": "2db6d55b925cb0145877c67960cc49f28f0e7eaa81b67487c1bc16ea3122025d",
     "sounds/achievement.ogg": "0c0a4b7368d540f92073b81b7cdc277553a25c08081f4436487cc5956f63ef4c",
     "sounds/awooga.h1pcm": "b8901254db89049971e4ec45a7f95e385d3a8df07cdf0cb99d6d7a85b6862bdc",
@@ -3273,6 +3274,7 @@
     "sounds/lowgroan2.ogg": "1bda96c503a33a21ed78bb8543a462c8b589c10b9adf206eb578931b884bb0b6",
     "sounds/magnetshroom.h1pcm": "ff9d512d0841605905a357660d171da2ebc1ae84e5e93b60c2a6f8adfed05095",
     "sounds/magnetshroom.ogg": "178844a55c56b7c250b153913a79606663bbbc5cfdaabb66d12ce432cae555e9",
+    "sounds/mainmusic-award.xm": "fb66dc3dfa6de29bd4fd557d6ec8d8ca73c48ad7a4f9c63b78e14134ad16ee37",
     "sounds/mainmusic-day.xm": "22493d32ab94338fce9566268ddb9af169f36c540dca190ed602f364e16e385c",
     "sounds/mainmusic-title.h1pcm": "2e9b71c4c3f954eabe2283779991cd3d6b5283817e3882619c7d91c24111b68d",
     "sounds/mainmusic.mo3": "afbd1a0cd7fd9e641a425355b6560eb9bf25bf901e99f163ab3bb1c37db49f59",
@@ -3427,7 +3429,7 @@
     "zh-cn-manifest.json": "1e44630f0e7dcd3bff1802e7b044f4aadd3e863d5f5f00799fa33cabdd735961",
     "zh-cn-owner.json": "9d4678ca04c978b7f5ae058b08b70bbdfa3029cf6e3b0c4e0e815cf6d1f3fce1"
   },
-  "bytes": 131250869,
-  "count": 3425,
+  "bytes": 133885217,
+  "count": 3427,
   "locale": "zh_CN"
 }

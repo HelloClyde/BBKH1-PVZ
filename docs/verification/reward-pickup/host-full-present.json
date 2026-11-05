@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "exact_LCD_frames": 364,
+  "resolution": [
+    480,
+    272
+  ],
+  "full_damage_and_alpha_only_changes": true,
+  "partial_after_full_rebuilds_shadow": true,
+  "guards_and_surface_switches": true,
+  "allocation_failure_latched": true,
+  "header_sha256": "dfa3d7213018a0a50f3691171d2e1312e9d2ab4ec912fa47205acdc178c11bd0",
+  "probe_sha256": "6b4e12b1f383779584e1b27564ce09efb55a8c8cf50f38ce2785bbf4c8028fd7",
+  "executable_sha256": "2f4ebc111b0240312413a01fc66c328d69104dc7ed2bf35ae7889519d347be87",
+  "evidence": "Executed once successfully in tool output on 2026-11-05 18:12 local; this record copies that result without repeating the test."
+}

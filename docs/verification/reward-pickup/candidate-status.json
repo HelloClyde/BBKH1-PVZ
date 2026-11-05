@@ -1,0 +1,23 @@
+{
+  "bda_sha256": "a50285db5e2eb80a6f3ce10590a7ff46c69511b240ee1b356d6a3eb4d19b2339",
+  "functional_validation_complete": true,
+  "performance_target_met": false,
+  "FPS": [
+    18.78139331672992,
+    15.575565832218023,
+    12.074378168666152,
+    0.0
+  ],
+  "rejected_earlier_candidates": [
+    "c806490a",
+    "8379d02b",
+    "db7a7239",
+    "6ea08038",
+    "63f00427"
+  ],
+  "resource_container_bytes": 1220539,
+  "frame_scratch_bytes": [
+    30328,
+    4891
+  ]
+}

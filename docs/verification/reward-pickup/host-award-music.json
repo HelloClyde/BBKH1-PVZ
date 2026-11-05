@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "sample_exact": true,
+  "samples_compared": 6960310,
+  "frames_compared": 15920,
+  "orders_visited": 15,
+  "seek_cases": 3,
+  "dynamic_channels": 30,
+  "input_sha256": {
+    "mainmusic.xm": "d0b20106d60abf6bf873db6fa5aca2749dacf27345115becca383f3197d02ef8",
+    "mainmusic-award.xm": "fb66dc3dfa6de29bd4fd557d6ec8d8ca73c48ad7a4f9c63b78e14134ad16ee37"
+  },
+  "verifier_sha256": "a2b550bcdaf8b7f686ea56d488ad328f6171b7ae1ca379c99577437c3ad5afb0"
+}

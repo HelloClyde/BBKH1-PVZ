@@ -19,6 +19,18 @@ def main():
  assets=read(ROOT/'provenance/resources.json');count=check_files(ROOT/assets['directory'],assets['files'])
  from bake_file_index import encode
  file_index=read(ROOT/'provenance/offline-file-index.json');index=ROOT/assets['directory']/file_index['runtime_path']
+ reward=read(ROOT/'provenance/offline-reward-effects.json');reward_file=ROOT/assets['directory']/reward['runtime_path']
+ assert sha(reward_file)==reward['sha256'] and reward_file.stat().st_size==reward['bytes']
+ assert sha(ROOT/'tools/pack_reward_effects.py')==reward['encoder_sha256']
+ assert sha(ROOT/'tools/tests/reward_effect_export.cpp')==reward['renderer_exporter_sha256']
+ packed=reward_file.read_bytes();magic,version,decoded_size,checksum=struct.unpack_from('<4I',packed)
+ assert magic==0x5a523148 and version==1
+ decoded=zlib.decompress(packed[16:]);assert len(decoded)==decoded_size==reward['decoded_bytes'] and zlib.crc32(decoded)==checksum
+ assert hashlib.sha256(decoded).hexdigest()==reward['decoded_sha256']
+ rh=struct.unpack_from('<16I',decoded);assert rh[:4]==(0x45523148,4,960,544) and rh[5]==reward['frames']==212 and rh[9]==decoded_size
+ assert rh[11:15]==(30,480,272,1) and zlib.crc32(decoded[64:])==rh[10]
+ assert sha(ROOT/'provenance/reward-viewport-bounds.json')==reward['viewport_bounds_sha256']
+ assert sha(ROOT/'tools/tests/reward_bounds_export.cpp')==reward['bounds_exporter_sha256']
  assert index.read_bytes()==encode(ROOT/assets['directory'])[0] and sha(index)==file_index['sha256']
  assert sha(ROOT/'tools/bake_file_index.py')==file_index['encoder_sha256']
  for info in read(ROOT/'provenance/source-assets.json')['trees']:check_files(ROOT/info['directory'],info['files'])
@@ -54,6 +66,16 @@ def main():
  assert hashlib.sha256(pruned).hexdigest()==day['output_sha256'] and len(pruned)==day['bytes']
  assert sha(ROOT/'tools/bake_day_music.py')==day['exporter_sha256']
  assert details['retained_sample_bytes']==day['retained_sample_bytes']==1841555
+ award_music=read(ROOT/'provenance/offline-award-music.json')
+ from bake_award_music import prune as prune_award_music
+ compact,award_details=prune_award_music(ROOT/assets['directory']/'sounds/mainmusic.xm')
+ assert compact==(ROOT/assets['directory']/award_music['runtime_path']).read_bytes()
+ assert hashlib.sha256(compact).hexdigest()==award_music['output_sha256'] and len(compact)==award_music['bytes']
+ assert award_details['retained_sample_bytes']==award_music['retained_sample_bytes']==1668486
+ assert sha(ROOT/'tools/bake_award_music.py')==award_music['exporter_sha256']
+ award_proof=read(ROOT/award_music['verification_path']);assert award_proof['passed'] and award_proof['sample_exact']
+ assert award_proof['input_sha256']['mainmusic-award.xm']==award_music['output_sha256']
+ assert award_proof['verifier_sha256']==sha(ROOT/'tools/audio/verify_award.cpp')
  proof=read(ROOT/day['verification_path']);assert proof['passed'] and proof['sample_exact'] and proof['dynamic_channels']==30
  assert proof['input_sha256']['mainmusic-day.xm']==day['output_sha256']
  assert proof['verifier_sha256']==sha(ROOT/'tools/audio/verify_day.cpp')

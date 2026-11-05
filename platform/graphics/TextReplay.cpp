@@ -38,7 +38,7 @@ struct Entry {
     uint32_t targetBumps=0,logicalBumps=0,drawCalls=0;
 };
 struct State {
-    Entry entries[Slots]{};Raw scratch[MaximumOps]{};
+    Entry entries[Slots]{};Raw* scratch=nullptr;
     uintptr_t surface=0;unsigned used=0;bool failed=false,busy=false,disabled=false;
     ImageFont* rejected[16]{};unsigned rejectedNext=0;
     const void* capture=nullptr;std::size_t bytes=0;uint64_t clock=0;
@@ -185,6 +185,7 @@ bool H1ImageReplayTryDraw(const H1ImageReplayContext& c){
 H1TextReplayCapture::H1TextReplayCapture(const H1ImageReplayContext& c):imageContext(&c){
  if(state.disabled||state.busy||state.capture||pvzh1_text_capture_active)return;Key key;MemoryImage* source=nullptr;if(!ImageKey(c,key,source))return;
  uint32_t hash=Hash(key);for(auto rejected:state.imageRejected)if(hash==rejected)return;if(!RepeatedLiteral(hash))return;
+ if(!state.scratch)state.scratch=Allocate<Raw>(MaximumOps);if(!state.scratch)return;
  target=c.destination;state.surface=(uintptr_t)target->mBits.get();state.used=0;state.failed=false;state.capture=this;
  targetBefore=target->mBitsChangedCount;active=true;pvzh1_text_capture_active=1;
 }
@@ -198,6 +199,7 @@ H1TextReplayCapture::H1TextReplayCapture(ImageFont* f,Graphics* g,int px,int py,
     Key key{};if(!MakeKey(f,g,px,py,s,c,key,target,matrix))return;
     if(matrix){uint32_t hash=Hash(key);bool seen=false;for(unsigned i=0;i<state.matrixSeenCount;++i)seen|=state.matrixSeen[i]==hash;
         if(!seen){state.matrixSeen[state.matrixSeenNext++%32]=hash;state.matrixSeenCount=std::min(32u,state.matrixSeenCount+1);return;}}
+    if(!state.scratch)state.scratch=Allocate<Raw>(MaximumOps);if(!state.scratch)return;
     state.surface=(uintptr_t)target->mBits.get();state.used=0;state.failed=false;state.capture=this;
     targetBefore=target->mBitsChangedCount;
     logicalBefore=static_cast<H1PhysicalScreen*>(graphics->mDestImage)->mBitsChangedCount;
@@ -272,3 +274,4 @@ extern "C" std::size_t pvzh1_text_replay_release_pressure(std::size_t){
     using namespace Sexy;if(state.busy)return 0;auto* old=Oldest();if(!old)return 0;
     const std::size_t bytes=old->bytes;Drop(*old);Stats();return bytes;
 }
+extern "C" void pvzh1_text_scratch_shutdown(){using namespace Sexy;delete[] state.scratch;state.scratch=nullptr;}

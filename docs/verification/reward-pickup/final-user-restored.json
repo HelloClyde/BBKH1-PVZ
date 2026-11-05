@@ -1,0 +1,21 @@
+{
+  "latest_original_progress_level": 4,
+  "files": {
+    "user1.dat": {
+      "bytes": 886,
+      "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+      "device_crc_verified": true,
+      "readback_identical": true
+    },
+    "users.dat": {
+      "bytes": 22,
+      "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+      "device_crc_verified": true,
+      "readback_identical": true
+    }
+  },
+  "test_game1_0_v4_already_absent": true,
+  "absence_verified_by_successful_directory_listing": true,
+  "earlier_stat_missing_file_status": 10,
+  "note": "Both original files had already completed upload and readback before stat of the absent test checkpoint returned native IO status 10. Successful subsequent directory listing independently proves absence; no retry of writes or deletion was needed."
+}

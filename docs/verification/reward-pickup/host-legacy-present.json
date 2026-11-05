@@ -1,0 +1,12 @@
+{
+  "all_passed": true,
+  "exact_framebuffer_cases": 244,
+  "partial_frames": 219,
+  "skipped_blocks": 1773247,
+  "changed_blocks": 653,
+  "cursor_edges_and_motion": true,
+  "surface_and_geometry_invalidation": true,
+  "allocation_failure_latched": true,
+  "released_bytes": 0,
+  "header_sha256": "dfa3d7213018a0a50f3691171d2e1312e9d2ab4ec912fa47205acdc178c11bd0"
+}

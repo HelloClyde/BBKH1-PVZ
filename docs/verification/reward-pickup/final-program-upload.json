@@ -1,0 +1,150 @@
+{
+  "operation": "deploy",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-v9\\H1PVZPortable.bda",
+  "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+  "bda": {
+    "path": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-v9\\H1PVZPortable.bda",
+    "size": 3571996,
+    "title": "植物僵尸",
+    "description": "H1 Native BDA SDK",
+    "category": 72,
+    "version": 16777474,
+    "file_size_minus_4": 3571992,
+    "payload_offset": 30812,
+    "resource_offset": 136,
+    "resource_sizes": [
+      6088,
+      9760,
+      5892,
+      8936
+    ],
+    "resources": [
+      {
+        "index": 0,
+        "start": 136,
+        "end": 6224,
+        "size": 6088,
+        "width": 45,
+        "height": 45,
+        "bits": 24,
+        "planes": 1,
+        "draw_width": 45,
+        "draw_height": 45
+      },
+      {
+        "index": 1,
+        "start": 6224,
+        "end": 15984,
+        "size": 9760,
+        "width": 57,
+        "height": 57,
+        "bits": 24,
+        "planes": 1,
+        "draw_width": 57,
+        "draw_height": 57
+      },
+      {
+        "index": 2,
+        "start": 15984,
+        "end": 21876,
+        "size": 5892,
+        "width": 49,
+        "height": 60,
+        "bits": 16,
+        "planes": 1,
+        "draw_width": 49,
+        "draw_height": 60
+      },
+      {
+        "index": 3,
+        "start": 21876,
+        "end": 30812,
+        "size": 8936,
+        "width": 49,
+        "height": 60,
+        "bits": 16,
+        "planes": 1,
+        "draw_width": 49,
+        "draw_height": 60
+      }
+    ],
+    "checksum": 5487,
+    "expected_checksum": 5487,
+    "checksum_ok": true,
+    "errors": [],
+    "warnings": [],
+    "ok": true
+  },
+  "completed": true,
+  "upload": {
+    "operation": "file_put",
+    "source": "C:\\Users\\ASUS\\AppData\\Local\\Temp\\h1-deploy-a561sdeo\\H1PVZPortable.bda",
+    "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+    "target_gbk_hex": "413a5cd3a6d3c35cb3ccd0f25c483150565a506f727461626c652e626461",
+    "phase": "done",
+    "completed": true,
+    "size": 3571996,
+    "crc32": 451230369,
+    "sha256": "a50285db5e2eb80a6f3ce10590a7ff46c69511b240ee1b356d6a3eb4d19b2339",
+    "token": 118,
+    "received": 3571996,
+    "status": {
+      "version": 1,
+      "state": 5,
+      "token": 118,
+      "size": 3571996,
+      "received": 3571996,
+      "expected_crc": 451230369,
+      "actual_crc": 451230369,
+      "verify_offset": 3571996,
+      "error": 0,
+      "fs_errno": 0,
+      "flags": 9,
+      "old_size": 3571428,
+      "old_crc": 391396400,
+      "last_activity_tick": 2392612,
+      "step_count": 2627,
+      "reserved": 0,
+      "state_name": "done",
+      "error_name": "ok"
+    },
+    "paths": {
+      "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+      "temporary": "A:\\应用\\程序\\H1D00000076.TMP",
+      "backup": "A:\\应用\\程序\\H1D00000076.BAK"
+    },
+    "device_crc_verified": true,
+    "elapsed_seconds": 259.1720000000205,
+    "original_source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-v9\\H1PVZPortable.bda"
+  },
+  "refresh": {
+    "operation": "desktop_refresh",
+    "before": {
+      "job_id": 54,
+      "kind": 2,
+      "state": 4,
+      "error": 0,
+      "menu_idle": 1,
+      "app_index": 105,
+      "entry_count": 28,
+      "return_code": 0,
+      "state_name": "done"
+    },
+    "completed": true,
+    "request_sent": true,
+    "job_id": 55,
+    "status": {
+      "job_id": 55,
+      "kind": 1,
+      "state": 4,
+      "error": 0,
+      "menu_idle": 1,
+      "app_index": 4294967295,
+      "entry_count": 28,
+      "return_code": 0,
+      "state_name": "done"
+    },
+    "payload_started": false,
+    "elapsed_seconds": 0.125
+  }
+}

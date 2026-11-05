@@ -44,10 +44,16 @@ def apply(source_root:Path):
     replace(source_root/'main.cpp','int main(int argc, char** argv)','int pvzp_upstream_main(int argc, char** argv)')
     lawn=source_root/'LawnApp.cpp'
     text=lawn.read_text(encoding='utf8')
-    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\n'+text
+    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n#include "graphics/RewardEffects.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\n'+text
     anchor='void LawnApp::ShowGameSelector()\n{\n\tKillBoard();'
     assert text.count(anchor)==1
-    text=text.replace(anchor,anchor+'\n    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();',1)
+    text=text.replace(anchor,anchor+'\n    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();pvzh1_reward_effect_shutdown();',1)
+    anchor='void LawnApp::ShowAwardScreen(AwardType theAwardType, bool theShowAchievements)\n{'
+    assert text.count(anchor)==1
+    text=text.replace(anchor,anchor+'\n    pvzh1_reward_effect_shutdown();',1)
+    anchor='void LawnApp::CheckForGameEnd()\n{\n\tif (mBoard == nullptr || !mBoard->mLevelComplete)\n\t\treturn;'
+    assert text.count(anchor)==1
+    text=text.replace(anchor,anchor+'\n    H1AudioSaveScope audioLoadingScope;',1)
     for phase,anchor in ((1,'aHesitationResources.EndBracket();'),(2,'mMusic->MusicInit();'),
                          (3,'PvzpFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));'),
                          (4,'TrailLoadDefinitions(gLawnTrailArray, LENGTH(gLawnTrailArray));'),
@@ -75,9 +81,15 @@ def apply(source_root:Path):
     // No profile-wide resource preload at this boundary.
 ''',1)
     text=text.replace('\tmBoard->InitLevel();','\tmBoard->InitLevel();\n    H1PreloadCurrentBoard(this);',1)
-    text=text.replace('\tmBoard->StartLevel();','    H1PreloadCurrentBoard(this);\n\tmBoard->StartLevel();',1)
+    text=text.replace('\tmBoard->StartLevel();','    H1PreloadCurrentBoard(this);\n    H1RewardEffectsPrepare();\n\tmBoard->StartLevel();',1)
     assert text.count('\t\t\tDoContinueDialog();')==2
-    text=text.replace('\t\t\tDoContinueDialog();','            H1PreloadCurrentBoard(this);\n\t\t\tDoContinueDialog();')
+    text=text.replace('\t\t\tDoContinueDialog();','            H1PreloadCurrentBoard(this);\n            H1RewardEffectsPrepare();\n\t\t\tDoContinueDialog();')
+    # A restarted board briefly overlaps its replacement and camera panorama.
+    # Reward frames are needed only once the intro has completed (or a saved
+    # board is ready); release them before building either replacement.
+    anchor='void LawnApp::MakeNewBoard()\n{\n\tKillBoard();'
+    assert text.count(anchor)==1
+    text=text.replace(anchor,anchor+'\n    pvzh1_reward_effect_shutdown();',1)
     lawn.write_text(text,encoding='utf8')
     # Save completes before DoBackToMain tears down the board. Its PCM tail
     # must drain before config writes / object destruction, too, rather than
@@ -323,7 +335,10 @@ bool PvzpLoadNextResource()
     # simulation. Reuse that layer; original dialog/child widgets still draw.
     board=source_root/'Lawn/Board.cpp'
     text=board.read_text(encoding='utf8')
-    text='#include "graphics/PausedBoardCache.h"\n#include "misc/ResourceManager.h"\n'+text
+    text='#include "graphics/PausedBoardCache.h"\n#include "graphics/RewardEffects.h"\n#include "misc/ResourceManager.h"\n'+text
+    needle='void Board::ZombiesWon(Zombie* theZombie)\n{\n\tif (mApp->mGameScene == GameScenes::SCENE_ZOMBIES_WON)\n\t\treturn;'
+    assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    pvzh1_reward_effect_shutdown();')
     # KillBoard defers Widget destruction, while NewGame loads the next board
     # immediately. Release this board's tracked groups before their next load,
     # so its later Widget destructor cannot unload the replacement's images.
@@ -361,3 +376,22 @@ bool PvzpLoadNextResource()
     needle='\t\t\tif (mBoard->mLevel == 1)';at=text.index(needle,start)
     text='#include "actors/ActorPose.h"\n'+text[:at]+text[at:].replace(needle,'            if(H1SodOfflineBegin(mBoard)){}\n            else if (mBoard->mLevel == 1)',1)
     cut.write_text(text,encoding='utf8',newline='\n')
+
+    particles=source_root/'PvzpLib/PvzpParticle.cpp'
+    text=particles.read_text(encoding='utf8')
+    text='#include "graphics/RewardEffects.h"\n'+text
+    start=text.index('void PvzpParticleSystem::PvzpParticleInitializeFromDef(')
+    end=text.index('void PvzpParticleEmitter::PvzpEmitterInitialize(',start)
+    close=text.rfind('\n}',start,end)
+    text=text[:close]+'\n    H1RewardEffectsBegin(this);'+text[close:]
+    for signature,statement in (('void PvzpParticleSystem::Update()','if(H1RewardEffectsUpdate(this))return;'),('void PvzpParticleSystem::Draw(Graphics* g)','if(H1RewardEffectsDraw(this,g))return;'),('void PvzpParticleSystem::ParticleSystemDie()','H1RewardEffectsForget(this);')):
+        anchor=signature+'\n{'
+        assert text.count(anchor)==1
+        text=text.replace(anchor,anchor+'\n    '+statement)
+    particles.write_text(text,encoding='utf8',newline='\n')
+    coin=source_root/'Lawn/Coin.cpp'
+    text=coin.read_text(encoding='utf8')
+    anchor='mApp->AddPvzpParticle(mPosX + 30.0f, mPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_STARBURST);'
+    assert text.count(anchor)==1
+    text='#include "graphics/RewardEffects.h"\n'+text.replace(anchor,'H1RewardStarburst(mApp,mPosX + 30.0f,mPosY + 30.0f,mRenderOrder + 1);')
+    coin.write_text(text,encoding='utf8',newline='\n')

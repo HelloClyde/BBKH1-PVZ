@@ -10,6 +10,7 @@
 #include "Startup.h"
 #include "actors/ActorPose.h"
 #include "graphics/EarlyLawn.h"
+#include "graphics/RewardEffects.h"
 #include "graphics/MemoryImageCache.h"
 #include "graphics/MemoryImage.h"
 #include <set>
@@ -83,4 +84,7 @@ void H1PreloadCurrentBoard(LawnApp* app){
     for(int i=0;i<static_cast<int>(SeedType::NUM_SEED_TYPES);++i)if(plants[i]){Plant::PreloadPlantResources(static_cast<SeedType>(i));++pvzh1_level_preload_diagnostic[1];}
     for(int i=0;i<static_cast<int>(ZombieType::NUM_ZOMBIE_TYPES);++i)if(zombies[i]){Zombie::PreloadZombieResources(static_cast<ZombieType>(i));++pvzh1_level_preload_diagnostic[2];}
     pvzh1_level_preload_diagnostic[3]=images.size();
+    // All getters have returned. Advance their pin epoch before the optional
+    // baked reward data competes with textures that the actor replay replaces.
+    Sexy::H1ImageCacheEndFrame();
 }

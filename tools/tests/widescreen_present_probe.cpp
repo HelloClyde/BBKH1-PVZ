@@ -29,6 +29,17 @@ int main(){
         assert(output==expected);++checks;
     }
     assert(dirty.partialFrames>200&&dirty.skippedBlocks>dirty.changedBlocks);
+    // Repeated full damage bypasses the comparison cache, then a partial
+    // update must rebuild it before using it. Alpha-only differences remain
+    // invisible on the LCD; guard pixels around both surfaces must survive.
+    uint32_t fullDamage[H1DirtyCanvas::Rows];for(auto& row:fullDamage)row=H1DirtyCanvas::All;
+    for(unsigned frame=0;frame<40;++frame){
+        for(unsigned i=0;i<pixels.size();++i)pixels[i]^=frame%2?0xff000000u:0x00439b17u;
+        assert(H1PresentMapped(expected.data()+4,pixels.data(),W,H,-1,-1,reference));
+        assert(dirty.Present(first.data()+4,pixels.data(),W,H,-1,-1,map,fullDamage));
+        assert(first==expected);++checks;
+    }
+    assert(dirty.Present(first.data()+4,pixels.data(),W,H,-1,-1,map));assert(first==expected);++checks;
     for(int fail:{0,17,33}){
         dirty.Reset();dirty.failAfter=fail;
         assert(!dirty.Present(first.data()+4,pixels.data(),W,H,0,0,map));

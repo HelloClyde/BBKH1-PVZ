@@ -14,6 +14,8 @@ int pvzp_upstream_main(int,char**);
 extern "C" void pvzp_music_shutdown(void);
 extern "C" bool pvzh1_additive_prepare();
 extern "C" void pvzh1_additive_shutdown();
+extern "C" void pvzh1_reward_effect_shutdown();
+extern "C" void pvzh1_text_scratch_shutdown();
 extern "C" void pvzh1_reanim_atlas_end_frame(void*);
 extern "C" void pvzh1_render_plan_shutdown(void) __attribute__((weak));
 extern "C" void pvzh1_selector_shutdown(void);
@@ -57,6 +59,8 @@ extern "C" int pvz_portable_main(void){
     pvzh1_selector_shutdown();
     pvzh1_actor_pose_shutdown();
     pvzh1_early_lawn_shutdown();
+    pvzh1_reward_effect_shutdown();
+    pvzh1_text_scratch_shutdown();
     pvzp_music_shutdown();
     h1_resources_shutdown();
     pvzp_window_close();return result;

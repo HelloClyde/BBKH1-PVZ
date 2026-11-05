@@ -1,0 +1,40 @@
+{
+  "channels": 30,
+  "total_patterns": 200,
+  "retained_patterns": [
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197
+  ],
+  "total_instruments": 82,
+  "retained_instruments": [
+    1,
+    3,
+    7,
+    27,
+    54
+  ],
+  "source_sample_bytes": 5014597,
+  "retained_sample_bytes": 1668486,
+  "order_ranges": [
+    [
+      221,
+      235
+    ]
+  ],
+  "pattern_and_instrument_ids_preserved": true,
+  "source_sha256": "d0b20106d60abf6bf873db6fa5aca2749dacf27345115becca383f3197d02ef8",
+  "output_sha256": "fb66dc3dfa6de29bd4fd557d6ec8d8ca73c48ad7a4f9c63b78e14134ad16ee37",
+  "bytes": 1699530,
+  "exporter_sha256": "ecfa32438e7ed8ea4fcedc03ed18faf1973cecff02b993f3b30a2fb8574c5193",
+  "runtime_path": "sounds/mainmusic-award.xm",
+  "verification_path": "docs/verification/reward-pickup/host-award-music.json"
+}

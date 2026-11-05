@@ -201,6 +201,7 @@ static uint32_t Composite(uint32_t dest,uint32_t src,int mode)
 
 void H1FillRect(MemoryImage *dest,const Rect& rect,const Color& color,int mode)
 {
+    if(mode==Graphics::DRAWMODE_NORMAL&&color.mAlpha==0)return;
     h1AdditiveNormalDraw=pvzh1_additive_normal_draw;h1AdditiveBeginFrame=pvzh1_additive_begin_frame;
     Rect r=Bounds(dest,rect);
     if (r.mWidth<=0||r.mHeight<=0) return;

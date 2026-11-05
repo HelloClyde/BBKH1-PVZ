@@ -1,0 +1,281 @@
+{
+  "test_precondition": "Only a live zombie pos_x was moved to -210, beyond house edge; no scene, cutscene, result or animation counters written. Original engine detects failure and runs complete loss animation.",
+  "zombie": {
+    "slot": 8,
+    "id": 66191368,
+    "address": "0x82d6d824",
+    "dead": false,
+    "type": 0,
+    "row": 3,
+    "health": 270,
+    "max_health": 270,
+    "pos_x": 803.0,
+    "pos_y": 350.0
+  },
+  "previous_pos_x": 796.8379516601562,
+  "position_write": -210,
+  "phases": [
+    {
+      "scene": 3,
+      "time": 8380,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 180,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 380,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 580,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 780,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 980,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 1180,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 1380,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 1580,
+      "board_x": 130
+    },
+    {
+      "scene": 4,
+      "time": 1700,
+      "board_x": 131
+    },
+    {
+      "scene": 4,
+      "time": 1790,
+      "board_x": 132
+    },
+    {
+      "scene": 4,
+      "time": 1970,
+      "board_x": 142
+    },
+    {
+      "scene": 4,
+      "time": 2150,
+      "board_x": 164
+    },
+    {
+      "scene": 4,
+      "time": 2330,
+      "board_x": 199
+    },
+    {
+      "scene": 4,
+      "time": 2600,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 2690,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 2990,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 3190,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 3390,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 3590,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 3790,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 3990,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 4190,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 4390,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 4590,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 4790,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 4990,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 5190,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 5390,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 5590,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 5790,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 5990,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 6000,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 6080,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 6080,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 6350,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 6600,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 6800,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 7000,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 7200,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 7380,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 7580,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 7790,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 8000,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 8200,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 8380,
+      "board_x": 220
+    },
+    {
+      "scene": 4,
+      "time": 8630,
+      "board_x": 220
+    }
+  ],
+  "captured": {
+    "scene": 4,
+    "time": 8630,
+    "board_x": 220
+  },
+  "screen": {
+    "token": 203,
+    "width": 480,
+    "height": 272,
+    "stride": 1920,
+    "format": 2,
+    "total": 522240,
+    "source": 2710577152,
+    "tick": 2403599
+  },
+  "transfer": {
+    "codec": "rle",
+    "decoded_bytes": 522240,
+    "encoded_bytes": 492487,
+    "requests": 997,
+    "protocol_bytes_sent": 27916,
+    "protocol_bytes_received": 524391,
+    "elapsed_seconds": 16.70299999997951,
+    "decoded_bytes_per_second": 31266.23959771542,
+    "progress_callback": false,
+    "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+  }
+}

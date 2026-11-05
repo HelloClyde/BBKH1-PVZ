@@ -52,7 +52,14 @@ struct H1DirtyPresentation {
         if(!out||!pixels||!map.Configure(width,height)||!H1CanPresent480(out,pixels,width,height,map)||!Prepare()){
             valid=false;return false;
         }
-        if(!valid||surface!=out){
+        bool fullDamage=changedTiles!=nullptr;
+        if(fullDamage)for(unsigned row=0;row<PageCount;++row)
+            if((changedTiles[row]&0x3fffffffu)!=0x3fffffffu){fullDamage=false;break;}
+        if(fullDamage){
+            // A full-screen effect dirties every tile. Copy directly rather
+            // than compare and maintain an equally large previous picture.
+            H1PresentFixed480(out,pixels);++fullFrames;surface=out;valid=false;
+        }else if(!valid||surface!=out){
             H1PresentFixed480(out,pixels);
             for(unsigned y=0;y<Height;++y)std::memcpy(Row(y),pixels+y*Width,Width*4u);
             ++fullFrames;valid=true;surface=out;

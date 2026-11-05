@@ -55,6 +55,9 @@ static uint32_t little32(const unsigned char *p){return (uint32_t)p[0]|(uint32_t
 static std::string module_path(const Mix_Music *music){
     const std::string suffix="mainmusic.xm";
     const unsigned order=music->requested_order&65535;
+    if(order>=0xdd&&order<0xec&&music->path.size()>=suffix.size()&&
+       music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
+        return music->path.substr(0,music->path.size()-3)+"-award.xm";
     if((order<0x30||(order>=0x7a&&order<0x7d))&&music->path.size()>=suffix.size()&&
        music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
         return music->path.substr(0,music->path.size()-3)+"-day.xm";

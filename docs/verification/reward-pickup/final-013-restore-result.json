@@ -1,0 +1,185 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "put_long",
+        "source": "build\\hardware-test-20261105-reward-baseline\\latest-user\\user1.dat",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "receipt": "original-user1.dat-upload.json"
+      },
+      {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "output": "restored-original/user1.dat"
+      },
+      {
+        "kind": "put_long",
+        "source": "build\\hardware-test-20261105-reward-baseline\\latest-user\\users.dat",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "receipt": "original-users.dat-upload.json"
+      },
+      {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "output": "restored-original/users.dat"
+      },
+      {
+        "kind": "delete_file",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4"
+      },
+      {
+        "kind": "status"
+      }
+    ]
+  },
+  "started_utc": "2026-11-05T10:25:23.972082+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "put_long",
+        "source": "build\\hardware-test-20261105-reward-baseline\\latest-user\\user1.dat",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "receipt": "original-user1.dat-upload.json"
+      },
+      "result": {
+        "operation": "file_put",
+        "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-baseline\\latest-user\\user1.dat",
+        "target": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c75736572646174615c75736572312e646174",
+        "phase": "done",
+        "completed": true,
+        "size": 886,
+        "crc32": 3956318493,
+        "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+        "token": 121,
+        "received": 886,
+        "status": {
+          "version": 1,
+          "state": 5,
+          "token": 121,
+          "size": 886,
+          "received": 886,
+          "expected_crc": 3956318493,
+          "actual_crc": 3956318493,
+          "verify_offset": 886,
+          "error": 0,
+          "fs_errno": 0,
+          "flags": 9,
+          "old_size": 886,
+          "old_crc": 759863229,
+          "last_activity_tick": 2407260,
+          "step_count": 12,
+          "reserved": 0,
+          "state_name": "done",
+          "error_name": "ok"
+        },
+        "paths": {
+          "target": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+          "temporary": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\H1D00000079.TMP",
+          "backup": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\H1D00000079.BAK"
+        },
+        "device_crc_verified": true,
+        "elapsed_seconds": 3.172000000020489
+      },
+      "started_monotonic": 622908.187,
+      "finished_monotonic": 622911.359
+    },
+    {
+      "action": {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "output": "restored-original/user1.dat"
+      },
+      "result": {
+        "operation": "file_get",
+        "source": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-v9\\restored-original\\user1.dat",
+        "partial": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-v9\\restored-original\\user1.dat.part-1793874327151891000",
+        "completed": true,
+        "token": 122,
+        "size": 886,
+        "crc32": 3956318493,
+        "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+        "device_crc_verified": false,
+        "elapsed_seconds": 0.125
+      },
+      "started_monotonic": 622911.359,
+      "finished_monotonic": 622911.484
+    },
+    {
+      "action": {
+        "kind": "put_long",
+        "source": "build\\hardware-test-20261105-reward-baseline\\latest-user\\users.dat",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "receipt": "original-users.dat-upload.json"
+      },
+      "result": {
+        "operation": "file_put",
+        "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-baseline\\latest-user\\users.dat",
+        "target": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c75736572646174615c75736572732e646174",
+        "phase": "done",
+        "completed": true,
+        "size": 22,
+        "crc32": 3862323292,
+        "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+        "token": 123,
+        "received": 22,
+        "status": {
+          "version": 1,
+          "state": 5,
+          "token": 123,
+          "size": 22,
+          "received": 22,
+          "expected_crc": 3862323292,
+          "actual_crc": 3862323292,
+          "verify_offset": 22,
+          "error": 0,
+          "fs_errno": 0,
+          "flags": 9,
+          "old_size": 22,
+          "old_crc": 3862323292,
+          "last_activity_tick": 2407395,
+          "step_count": 12,
+          "reserved": 0,
+          "state_name": "done",
+          "error_name": "ok"
+        },
+        "paths": {
+          "target": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+          "temporary": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\H1D0000007B.TMP",
+          "backup": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\H1D0000007B.BAK"
+        },
+        "device_crc_verified": true,
+        "elapsed_seconds": 1.8439999999245629
+      },
+      "started_monotonic": 622911.484,
+      "finished_monotonic": 622913.328
+    },
+    {
+      "action": {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "output": "restored-original/users.dat"
+      },
+      "result": {
+        "operation": "file_get",
+        "source": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-v9\\restored-original\\users.dat",
+        "partial": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-reward-v9\\restored-original\\users.dat.part-1793874329124914000",
+        "completed": true,
+        "token": 124,
+        "size": 22,
+        "crc32": 3862323292,
+        "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+        "device_crc_verified": false,
+        "elapsed_seconds": 0.0940000000409782
+      },
+      "started_monotonic": 622913.328,
+      "finished_monotonic": 622913.437
+    }
+  ],
+  "ok": false,
+  "error": "DeviceError('H1 command 63 failed with status 10')",
+  "transport_broken": false
+}

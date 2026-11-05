@@ -1,0 +1,162 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "list",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata"
+      },
+      {
+        "kind": "status"
+      }
+    ]
+  },
+  "started_utc": "2026-11-05T10:26:00.789927+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "list",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata"
+      },
+      "result": {
+        "operation": "file_list",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata",
+        "entries": [
+          {
+            "name": "users.dat",
+            "size": 22,
+            "attributes": 32,
+            "is_directory": false
+          },
+          {
+            "name": "user1.dat",
+            "size": 886,
+            "attributes": 32,
+            "is_directory": false
+          }
+        ],
+        "completed": true,
+        "token": 125,
+        "count": 2
+      },
+      "started_monotonic": 622945.0,
+      "finished_monotonic": 622945.109
+    },
+    {
+      "action": {
+        "kind": "status"
+      },
+      "result": {
+        "status": {
+          "version": 1,
+          "state": 1,
+          "usb_configured": 1,
+          "usb_fault": 0,
+          "usb_resets": 2,
+          "commands": 741956,
+          "bad_frames": 0,
+          "tick": 2408730,
+          "poll_count": 210270945,
+          "last_poll_tick": 2408730,
+          "resident_base": 2185888384,
+          "resident_size": 727104,
+          "keys_low": 0,
+          "keys_high": 0,
+          "exec_state": 0,
+          "last_error": 0
+        },
+        "caps": {
+          "version": 1,
+          "features": 16383,
+          "max_payload": 512,
+          "ram_start": 2147483648,
+          "ram_size": 67108864,
+          "module_abi": 1,
+          "forced_preemption": 0,
+          "tick_hz": 0
+        },
+        "desktop": {
+          "job_id": 56,
+          "kind": 2,
+          "state": 4,
+          "error": 0,
+          "menu_idle": 1,
+          "app_index": 105,
+          "entry_count": 29,
+          "return_code": 0,
+          "state_name": "done"
+        },
+        "exec_info": {
+          "abi": 1,
+          "base": 2186549952,
+          "image_capacity": 65536,
+          "scratch_capacity": 16384,
+          "stack_capacity": 32768,
+          "output_capacity": 4096,
+          "state": 0,
+          "image_size": 0,
+          "memory_size": 0,
+          "entry_offset": 0,
+          "upload_crc": 0,
+          "written": 0,
+          "runs": 0,
+          "flags": 0,
+          "forced_preemption": 0,
+          "api_size": 28
+        },
+        "usb": {
+          "version": 2,
+          "open_count": 1,
+          "fault_count": 0,
+          "clock_link_reconnects": 0,
+          "last_fault_valid": false,
+          "last_fault_open": 0,
+          "current": {
+            "tick": 2408731,
+            "fault_reason": 0,
+            "events": 0,
+            "cpccr": 1080435232,
+            "cppcr": 452986144,
+            "clkgr": 0,
+            "opcr": 5440,
+            "cp0_status": 268436481,
+            "intc_imr": 3046076415,
+            "pd_mask": 2684338147,
+            "pd_pin": 1299021820,
+            "pd_flag": 64,
+            "power": 64,
+            "intr_txe": 0,
+            "intr_rxe": 0,
+            "intr_usbe": 0,
+            "frame": 1949,
+            "address": 12,
+            "index": 1,
+            "configured": 1,
+            "resets": 2,
+            "session_epoch": 71,
+            "rx_packets": 3115136,
+            "tx_packets": 2429307,
+            "fault_names": [],
+            "usb_clock_gated": false,
+            "phy_enabled": true
+          },
+          "last_fault": null,
+          "resident": {
+            "state": 1,
+            "stop_request": 0,
+            "last_error": 0,
+            "completed_stops": 0,
+            "last_stop_error": 0,
+            "last_stop_tick": 0,
+            "poll_count": 210271243,
+            "last_poll_tick": 2408731
+          },
+          "retention": "same resident allocation across stop/start; cleared by H1 reboot",
+          "read_only": true
+        }
+      },
+      "started_monotonic": 622945.109,
+      "finished_monotonic": 622945.14
+    }
+  ],
+  "ok": true
+}

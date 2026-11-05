@@ -57,12 +57,18 @@ def apply(root):
     s=s.replace(pair,'mApp->mWidgetManager->mLastMouseX - mX, mApp->mWidgetManager->mLastMouseY - mY, aCursorSeedType')
     s=s.replace('mSeedBank->ContainsPoint(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY)',
                 'mSeedBank->ContainsPoint(mWidgetManager->mLastMouseX - mX, mWidgetManager->mLastMouseY - mY)')
+    old='mApp->AddReanimation(-BOARD_OFFSET, 0, MakeRenderOrder(RenderLayer::RENDER_LAYER_SCREEN_FADE, 0, 0), ReanimationType::REANIM_ZOMBIES_WON);'
+    assert s.count(old)==1
+    s=s.replace(old,'mApp->AddReanimation(int(Sexy::H1BoardOffset)-mX,-mY,MakeRenderOrder(RenderLayer::RENDER_LAYER_SCREEN_FADE,0,0),ReanimationType::REANIM_ZOMBIES_WON);')
     p.write_text(s,encoding='utf8')
     p=Path(root)/'Lawn/CutScene.cpp';s='#include "graphics/ScreenLayout.h"\n'+p.read_text(encoding='utf8')
     s=s.replace('mApp->mWidth','BOARD_WIDTH')
     s,count=re.subn(r'mBoard->Move\((.+), 0\);',r'mBoard->Move(Sexy::H1BoardCameraX(\1), 0);',s)
     assert count==7,count
     s=s.replace('aSeedChoser->Move(0,','aSeedChoser->Move(Sexy::H1BoardOffset,')
+    old='mApp->AddReanimation(-BOARD_OFFSET, 0, aRenderPosition, ReanimationType::REANIM_ZOMBIES_WON);'
+    assert s.count(old)==1
+    s=s.replace(old,'mApp->AddReanimation(int(Sexy::H1BoardOffset)-mBoard->mX,-mBoard->mY,aRenderPosition,ReanimationType::REANIM_ZOMBIES_WON);')
     p.write_text(s,encoding='utf8')
     # Ghost seed and grid highlight consume board-local coordinates.
     p=Path(root)/'Lawn/CursorObject.cpp';s=p.read_text(encoding='utf8')
