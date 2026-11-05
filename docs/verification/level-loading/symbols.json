@@ -1,0 +1,272 @@
+{
+  "schema": "h1-pvz-hardware-opt-offline-menu-read-only-symbols-1",
+  "bda_sha256": "1d321f97bb18a43726c20227d404c7dab8602ef43436380041acfabae88b9b4d",
+  "elf_sha256": "8db5015d79e4ed90758f5dc842ec225e04d66d727e2f37859bdd49aa47349ebb",
+  "build_receipt_sha256": "d3408609ca4dab062cbdb25a5d47b1a94dd50da110469951f6e4a0ddef09d522",
+  "symbols": {
+    "pvzp_diagnostic": {
+      "address": "0x83fbe074",
+      "size": 128
+    },
+    "pvz_runtime_diagnostic": {
+      "address": "0x83fbf444",
+      "size": 64
+    },
+    "pvzh1_cache_diagnostic": {
+      "address": "0x83fa6d48",
+      "size": 24
+    },
+    "pvzh1_cache_pressure_diagnostic": {
+      "address": "0x83fa6d60",
+      "size": 16
+    },
+    "pvzh1_storage_texture_diagnostic": {
+      "address": "0x83fa6c88",
+      "size": 32
+    },
+    "pvzh1_physical_screen_diagnostic": {
+      "address": "0x83fa6fd0",
+      "size": 32
+    },
+    "pvz_runtime_pressure_diagnostic": {
+      "address": "0x83fc0b14",
+      "size": 24
+    },
+    "pvz_runtime_native_charge": {
+      "address": "0x83fc0b40",
+      "size": 8
+    },
+    "pvzh1_render_plan_diagnostic": {
+      "address": "0x83fac28c",
+      "size": 96
+    },
+    "pvz_runtime_profile_diagnostic": {
+      "address": "0x83fbf390",
+      "size": 128
+    },
+    "pvz_runtime_profile_clock": {
+      "address": "0x83fbf378",
+      "size": 24
+    },
+    "pvz_runtime_hole_diagnostic": {
+      "address": "0x83fc10bc",
+      "size": 48
+    },
+    "pvz_runtime_small_pool_diagnostic": {
+      "address": "0x83fc0b48",
+      "size": 64
+    },
+    "pvz_runtime_io_diagnostic": {
+      "address": "0x83fc08d0",
+      "size": 64
+    },
+    "pvz_runtime_asset_layout_diagnostic": {
+      "address": "0x83fc08c0",
+      "size": 16
+    },
+    "pvzh1_xmp_load_diagnostic": {
+      "address": "0x83fbf2c8",
+      "size": 48
+    },
+    "pvzh1_axis_span_diagnostic": {
+      "address": "0x83facfd8",
+      "size": 32
+    },
+    "pvzh1_selector_offline_diagnostic": {
+      "address": "0x83fbf1d8",
+      "size": 64
+    },
+    "pvzh1_selector_cull_diagnostic": {
+      "address": "0x83fbf1c8",
+      "size": 16
+    },
+    "pvzh1_dirty_present_diagnostic": {
+      "address": "0x83fbe054",
+      "size": 32
+    },
+    "pvzh1_dirty_canvas_diagnostic": {
+      "address": "0x83f631b8",
+      "size": 32
+    },
+    "pvzh1_text_replay_diagnostic": {
+      "address": "0x83fbd380",
+      "size": 32
+    },
+    "pvzh1_font_metric_diagnostic": {
+      "address": "0x83fbd370",
+      "size": 16
+    },
+    "pvzh1_selector_retained_diagnostic": {
+      "address": "0x83fbf198",
+      "size": 16
+    },
+    "pvzh1_definition_diagnostic": {
+      "address": "0x83fa6bd4",
+      "size": 32
+    },
+    "pvzh1_startup_diagnostic": {
+      "address": "0x83fbf248",
+      "size": 128
+    },
+    "pvzh1_font_cache_diagnostic": {
+      "address": "0x83f63a14",
+      "size": 32
+    },
+    "pvzh1_sound_index_diagnostic": {
+      "address": "0x83f641c8",
+      "size": 16
+    },
+    "pvzh1_audio_diagnostic": {
+      "address": "0x83fbe168",
+      "size": 64
+    },
+    "pvzh1_adventure_diagnostic": {
+      "address": "0x83fbf218",
+      "size": 48
+    },
+    "pvzh1_adventure_raster_diagnostic": {
+      "address": "0x83fbf1a8",
+      "size": 32
+    },
+    "pvzp_music_diagnostic": {
+      "address": "0x83fbe0f4",
+      "size": 32
+    },
+    "pvz_runtime_asset_index_diagnostic": {
+      "address": "0x83fc0884",
+      "size": 32
+    },
+    "pvzh1_sound_bank_diagnostic": {
+      "address": "0x83f641f8",
+      "size": 16
+    },
+    "pvzh1_level_preload_diagnostic": {
+      "address": "0x83fbe21c",
+      "size": 16
+    },
+    "gLawnApp": {
+      "address": "0x83f61884",
+      "size": 4
+    },
+    "pvzh1_paused_board_diagnostic": {
+      "address": "0x83fa6fc0",
+      "size": 16
+    },
+    "pvzh1_additive_diagnostic": {
+      "address": "0x83facfc4",
+      "size": 16
+    },
+    "pvzh1_additive_lut": {
+      "address": "0x83facfc0",
+      "size": 4
+    },
+    "pvzh1_image_pack_diagnostic": {
+      "address": "0x83fbe234",
+      "size": 16
+    },
+    "pvz_runtime_native_charge_fault": {
+      "address": "0x83fc0b2c",
+      "size": 16
+    },
+    "pvzh1_actor_pose_diagnostic": {
+      "address": "0x83fa6aa4",
+      "size": 64
+    },
+    "pvzh1_sod_offline_diagnostic": {
+      "address": "0x83fa6a84",
+      "size": 32
+    },
+    "pvzh1_early_lawn_diagnostic": {
+      "address": "0x83fa6c58",
+      "size": 32
+    },
+    "pvz_runtime_last_path": {
+      "address": "0x83fc0910",
+      "size": 512
+    },
+    "pvz_runtime_heap_failure": {
+      "address": "0x83fbf2fc",
+      "size": 80
+    },
+    "pvz_runtime_native_charge_failure": {
+      "address": "0x83fc0b3c",
+      "size": 4
+    },
+    "pvzh1_camera_lawn_diagnostic": {
+      "address": "0x83fa6c38",
+      "size": 32
+    },
+    "pvzh1_reward_effect_diagnostic": {
+      "address": "0x83fac350",
+      "size": 48
+    },
+    "pvzh1_level_loading_diagnostic": {
+      "address": "0x83fa6b80",
+      "size": 48
+    }
+  },
+  "encoding": "aligned little-endian uint32",
+  "allowed_RAM": [
+    "0x80000000",
+    "0x84000000"
+  ],
+  "application_bound": [
+    "0x83c00020",
+    "0x83ff0000"
+  ],
+  "optional_native_path": {
+    "address": "0x83fca810",
+    "size": 512,
+    "decode": "NUL terminated; UTF-8 strict, otherwise GBK strict"
+  },
+  "scene_values": {
+    "loading": 0,
+    "menu": 1,
+    "intro": 2,
+    "playing": 3,
+    "zombies_won": 4,
+    "award": 5,
+    "credit": 6,
+    "challenge": 7
+  },
+  "state_values": {
+    "runtime": {
+      "constructors": 1,
+      "main": 2,
+      "normal_exit": 9,
+      "abort": 255
+    },
+    "window": {
+      "open": 1,
+      "closed": 9
+    }
+  },
+  "device_access_performed_by_this_preparation": false,
+  "calibrated_raw_tick_hz": 40,
+  "profiling_timer": {
+    "unit": "raw_tick",
+    "backend": "pvz_runtime_ticks",
+    "hz": 40
+  },
+  "profiling_contract": "Native raw ticks at calibrated 40Hz (25ms granularity), no CP0 Count reads. Totals low/high uint64; elapsed modulo32. Same-category nesting counts outermost. MUSIC subset AUDIO; REPEAT and SW_DRAW_SHAPE subset DRAW; DRAW/PRESENT/AUDIO subset FRAME. Clock sequence must match and be even; use steady deltas, not startup maxima.",
+  "native_charge_contract": "Actual direct native spans plus complete pool page reserves, charged once per page; slot free does not deduct a still-resident page.",
+  "render_plan_contract": "Optional original scanline replay; allocated_capacity_bytes plus static_metadata_bytes <=512KiB. Capacity is requested plan pages, not native heap charge. Normal explicit shutdown clears ready_entries and allocated_capacity_bytes; static metadata and cumulative counters remain.",
+  "offline_selector_asset": {
+    "runtime_path": "/PVZ/h1menu/selector-wide.h1mb",
+    "source_path": "private/resources-h1-wide/h1menu/selector-wide.h1mb",
+    "sha256": "b7b75f330144218de855f235346a07b8a1cc0bb4333dd9042fd3fb44ddf86e99",
+    "bytes": 1626524,
+    "entries": 103
+  },
+  "offline_selector_contract": "H1 offline fragments: detach releases hand/transient captures, retains base for reuse; pressure can evict idle base; explicit shutdown releases all requested bytes.",
+  "native_private_stack": {
+    "address": "0x83fc42f0",
+    "size": 131072,
+    "end_exclusive": "0x83fe42f0"
+  },
+  "native_text_range": {
+    "address": "0x83c00020",
+    "size": 2863752,
+    "end_exclusive": "0x83ebb2a8"
+  }
+}

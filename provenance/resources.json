@@ -645,6 +645,7 @@
     "images/zombienotehelpblack.h1i": "858f64440f0e1e172f0eecd00735d2f99f25c821e8fad48ff2f0ec51c8fe9a31",
     "images/zombienotesmall.h1i": "32974d3badb300c80cc5704c25e7d12edddec9d1a47767e77a851f63ce3dc86b",
     "images-common.h1pk": "9987083a2f6ef1b3cd21d259e2bba66a71d3611ebf82b06fafe5a80d8025feca",
+    "level-loading.h1ll": "0ccfa43e9e46d72f388043aef862ef47bd5452ea6d3c79901e6db0b512f39151",
     "module-index.json": "c5a97e1cd703ea54283fb44a6891003ff6e7ba65926be9a4e0ebc0296ab9cbd0",
     "particles/artchallengeplant.xml": "4d46bf72de9b4d067d0be018d64f69041aac7d36e27d5fa98f630af4a2ae983d",
     "particles/award.xml": "ff7015958afecd62427087a083d202825b306a383cf519a838eb7b0685a38207",
@@ -3073,7 +3074,7 @@
     "reanim/zombieswon.reanim.h1d": "0b664c03e70aae08d94e859f6ac207900b0feaa0a46cb773e175ad54ebdf01eb",
     "reanim/zombieswon_.h1i": "e4bc9aca42ee264098882fb1f712e6d8ba5d7e1358ecaff01f59bdce7c455dad",
     "reanim/zombieswonscreen.h1i": "2607ff727c27919aaec17da673fe6ce6ed6ee964f06e6f734066f8b2beddb953",
-    "resource-files.h1fi": "b7f4f22110b65e141092ce445e516728366acab883f50aa2625204729ea9f5d4",
+    "resource-files.h1fi": "311cbca656abae74511ed2d0b2aaee7ca6e6a8ffdfd9dd2137c8b16008440b51",
     "resource-index.json": "a745318b768a0902b8bcab717e26e8e319475e1ea97315dc34b5124c29783cf9",
     "reward-effects.h1re": "92358c3e58b32fdd7774e6c94a5c606ad3887ba7d8ba6665ac195e1aa0458e22",
     "sounds/achievement.h1pcm": "2db6d55b925cb0145877c67960cc49f28f0e7eaa81b67487c1bc16ea3122025d",
@@ -3429,7 +3430,7 @@
     "zh-cn-manifest.json": "1e44630f0e7dcd3bff1802e7b044f4aadd3e863d5f5f00799fa33cabdd735961",
     "zh-cn-owner.json": "9d4678ca04c978b7f5ae058b08b70bbdfa3029cf6e3b0c4e0e815cf6d1f3fce1"
   },
-  "bytes": 133885217,
-  "count": 3427,
+  "bytes": 134246881,
+  "count": 3428,
   "locale": "zh_CN"
 }

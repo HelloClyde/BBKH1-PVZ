@@ -1,0 +1,18 @@
+{
+  "original_level": 4,
+  "files": {
+    "user1.dat": {
+      "bytes": 886,
+      "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+      "device_crc_verified": true,
+      "readback_identical": true
+    },
+    "users.dat": {
+      "bytes": 22,
+      "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+      "device_crc_verified": true,
+      "readback_identical": true
+    }
+  },
+  "original_no_v4_restored": true
+}

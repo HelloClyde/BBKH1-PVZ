@@ -78,6 +78,7 @@ def apply(source_root:Path):
     if text.count(anchor)!=1:raise ValueError('First-board preload boundary changed')
     text=text.replace(anchor,anchor+'''
     H1AudioLoadingScope audioLoadingScope;
+    H1LevelLoadingScope levelLoadingScope;
     // No profile-wide resource preload at this boundary.
 ''',1)
     text=text.replace('\tmBoard->InitLevel();','\tmBoard->InitLevel();\n    H1PreloadCurrentBoard(this);',1)
@@ -157,7 +158,7 @@ def apply(source_root:Path):
     text=text.replace(anchor,anchor+'\n        pvzh1_adventure_mark(2,mStartingGameCounter);',1)
     anchor='\t\t\tmApp->KillGameSelector();\n\n\t\t\tif (mApp->IsIceDemo())'
     if text.count(anchor)!=1:raise ValueError('Adventure end context changed')
-    text=text.replace(anchor,'            pvzh1_adventure_mark(4,mStartingGameCounter);\n            H1SelectorOfflineRelease(this); // Release menu/hand pixels before board warmup.\n'+anchor,1)
+    text=text.replace(anchor,'            H1LevelLoadingScope levelLoadingScope;\n            pvzh1_adventure_mark(4,mStartingGameCounter);\n            H1SelectorOfflineRelease(this); // Release menu/hand pixels before board warmup.\n'+anchor,1)
     anchor='\tmHandReanimID = mApp->ReanimationGetID(aHandReanim);'
     if text.count(anchor)!=1:raise ValueError('Adventure hand context changed')
     text=text.replace(anchor,anchor+'\n    pvzh1_adventure_mark(1,0);',1)

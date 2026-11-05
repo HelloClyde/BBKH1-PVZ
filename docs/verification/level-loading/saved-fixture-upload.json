@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-runtime-v18b\\battle-checkpoint\\game1_0.v4",
+  "target": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+  "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c75736572646174615c67616d65315f302e7634",
+  "phase": "done",
+  "completed": true,
+  "size": 68904,
+  "crc32": 591558643,
+  "sha256": "2a01f0abb9010315272a86ed045080978cee247692093cf94dc2ad8b4aa91081",
+  "token": 136,
+  "received": 68904,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 136,
+    "size": 68904,
+    "received": 68904,
+    "expected_crc": 591558643,
+    "actual_crc": 591558643,
+    "verify_offset": 68904,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 9,
+    "old_size": 0,
+    "old_crc": 0,
+    "last_activity_tick": 2590104,
+    "step_count": 44,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+    "temporary": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\H1D00000088.TMP",
+    "backup": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\H1D00000088.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 7.844000000040978
+}

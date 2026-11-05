@@ -44,10 +44,15 @@ void H1PreloadCurrentBoard(LawnApp* app){
     struct Scope {std::set<Sexy::MemoryImage*>* previous;Scope(std::set<Sexy::MemoryImage*>* value):previous(warmImages){warmImages=value;}~Scope(){warmImages=previous;}} scope(&images);
     auto* board=app->mBoard;
     ++pvzh1_level_preload_diagnostic[0];
+    pvzh1_level_loading_step(10);
     pvzh1_music_warm_game();
+    pvzh1_level_loading_step(25);
     H1ActorPosePrepare();
+    pvzh1_level_loading_step(45);
     H1EarlyLawnPrepare(app->mBoard);
+    pvzh1_level_loading_step(55);
     pvzh1_sound_warmup();
+    pvzh1_level_loading_step(65);
     for(auto type:{REANIM_PUFF,REANIM_LAWN_MOWERED_ZOMBIE,REANIM_READYSETPLANT,
                    REANIM_FINAL_WAVE,REANIM_SUN,REANIM_TEXT_FADE_ON,REANIM_SODROLL,REANIM_LAWNMOWER})
         ReanimatorEnsureDefinitionLoaded(type,true);
@@ -84,6 +89,7 @@ void H1PreloadCurrentBoard(LawnApp* app){
     for(int i=0;i<static_cast<int>(SeedType::NUM_SEED_TYPES);++i)if(plants[i]){Plant::PreloadPlantResources(static_cast<SeedType>(i));++pvzh1_level_preload_diagnostic[1];}
     for(int i=0;i<static_cast<int>(ZombieType::NUM_ZOMBIE_TYPES);++i)if(zombies[i]){Zombie::PreloadZombieResources(static_cast<ZombieType>(i));++pvzh1_level_preload_diagnostic[2];}
     pvzh1_level_preload_diagnostic[3]=images.size();
+    pvzh1_level_loading_step(95);
     // All getters have returned. Advance their pin epoch before the optional
     // baked reward data competes with textures that the actor replay replaces.
     Sexy::H1ImageCacheEndFrame();

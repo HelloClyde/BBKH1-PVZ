@@ -4,7 +4,7 @@ from pathlib import Path
 from build_paths import ROOT,TOOLCHAIN,RUNTIME_PREFIX
 # Normal RGB32 kernels retain their targeted O2 pragma; other generated
 # triangle formats use Os to keep the BDA below the firmware caller stack.
-HOT=('SoftwareRaster.cpp','RenderPlanCache.cpp','TextReplay.cpp','ActorPose.cpp','EarlyLawn.cpp','RewardEffects.cpp',
+HOT=('SoftwareRaster.cpp','RenderPlanCache.cpp','TextReplay.cpp','ActorPose.cpp','EarlyLawn.cpp','RewardEffects.cpp','BoardLoading.cpp',
      'PhysicalScreen.cpp','GLImage.cpp','GLInterface.cpp','MemoryImage.cpp',
      'MemoryImageCache.cpp','ImageFont.cpp','Reanimator.cpp','h1_host.cpp',
      'mixer.c','period.c','SelectorOffline.cpp')

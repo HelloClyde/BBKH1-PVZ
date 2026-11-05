@@ -4,11 +4,13 @@
 #include "Lawn/Widget/TitleScreen.h"
 #include "widget/WidgetManager.h"
 #include "SDL.h"
+#include "Startup.h"
 #include <algorithm>
 extern "C" int pvzh1_widget_draw_active();
 
 extern "C" void pvzh1_native_loading_progress()
 {
+    if(pvzh1_level_loading_progress())return;
 #ifdef PVZ_NATIVE_LOADING_PROGRESS
     static bool drawing=false;
     static uint32_t lastTick=0;

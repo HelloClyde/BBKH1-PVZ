@@ -31,6 +31,12 @@ def main():
  assert rh[11:15]==(30,480,272,1) and zlib.crc32(decoded[64:])==rh[10]
  assert sha(ROOT/'provenance/reward-viewport-bounds.json')==reward['viewport_bounds_sha256']
  assert sha(ROOT/'tools/tests/reward_bounds_export.cpp')==reward['bounds_exporter_sha256']
+ loading=read(ROOT/'provenance/offline-level-loading.json');loading_file=ROOT/assets['directory']/loading['runtime_path'];blob=loading_file.read_bytes();h=struct.unpack_from('<16I',blob)
+ assert sha(loading_file)==loading['sha256'] and len(blob)==loading['bytes'] and h[:5]==(0x4c4c3148,1,480,272,522240)
+ assert h[13]==len(blob)==64+h[5]+h[10] and list(h[6:10])==loading['patch_rectangle']
+ background=zlib.decompress(blob[64:64+h[5]]);patch=zlib.decompress(blob[64+h[5]:])
+ assert len(background)==h[4] and zlib.crc32(background)==h[11] and len(patch)==h[8]*h[9]*4 and zlib.crc32(patch)==h[12]
+ assert sha(ROOT/'tools/bake_level_loading.py')==loading['encoder_sha256'] and sha(ROOT/'tools/tests/level_loading_export.cpp')==loading['exporter_sha256']
  assert index.read_bytes()==encode(ROOT/assets['directory'])[0] and sha(index)==file_index['sha256']
  assert sha(ROOT/'tools/bake_file_index.py')==file_index['encoder_sha256']
  for info in read(ROOT/'provenance/source-assets.json')['trees']:check_files(ROOT/info['directory'],info['files'])

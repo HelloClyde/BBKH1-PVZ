@@ -1,0 +1,89 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "tap",
+        "x": 239,
+        "y": 180,
+        "seconds": 0.15
+      },
+      {
+        "kind": "wait",
+        "seconds": 2
+      },
+      {
+        "kind": "screenshot",
+        "output": "008-main-confirm.png"
+      }
+    ]
+  },
+  "started_utc": "2026-11-05T11:32:44.317167+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "tap",
+        "x": 239,
+        "y": 180,
+        "seconds": 0.15
+      },
+      "result": {
+        "gesture": "tap",
+        "x": 239,
+        "y": 180,
+        "hold_seconds": 0.15,
+        "lease_ticks": 80,
+        "release_acknowledged": true,
+        "host_elapsed_seconds": 0.18700000003445894
+      },
+      "started_monotonic": 626948.531,
+      "finished_monotonic": 626948.718
+    },
+    {
+      "action": {
+        "kind": "wait",
+        "seconds": 2
+      },
+      "result": {
+        "waited_seconds": 2
+      },
+      "started_monotonic": 626948.718,
+      "finished_monotonic": 626950.718
+    },
+    {
+      "action": {
+        "kind": "screenshot",
+        "output": "008-main-confirm.png"
+      },
+      "result": {
+        "token": 221,
+        "width": 480,
+        "height": 272,
+        "stride": 1920,
+        "format": 2,
+        "total": 522240,
+        "source": 2710577152,
+        "tick": 2568943,
+        "codec": "rle",
+        "transfer": {
+          "codec": "rle",
+          "decoded_bytes": 522240,
+          "encoded_bytes": 172812,
+          "requests": 351,
+          "protocol_bytes_sent": 9828,
+          "protocol_bytes_received": 184044,
+          "elapsed_seconds": 7.203000000095926,
+          "decoded_bytes_per_second": 72503.12369749341,
+          "progress_callback": false,
+          "scope": "SCREEN_READ RPCs; protocol framing included, USB packet overhead excluded"
+        },
+        "capture_elapsed_seconds": 7.266000000061467,
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-level-loading-v3\\008-main-confirm.png",
+        "snapshot_sha256": "4d44256b6af5ae8b255639711716b53a287f481ddc3320a9fbc61670fcfb1802",
+        "png_sha256": "9de18db195d6750da1ad518d3337d8bf0d7438ddfecee7905c92ec834e295b07"
+      },
+      "started_monotonic": 626950.718,
+      "finished_monotonic": 626958.093
+    }
+  ],
+  "ok": true
+}

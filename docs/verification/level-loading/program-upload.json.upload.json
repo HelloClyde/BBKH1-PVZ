@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\AppData\\Local\\Temp\\h1-deploy-5gn45uue\\H1PVZPortable.bda",
+  "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+  "target_gbk_hex": "413a5cd3a6d3c35cb3ccd0f25c483150565a506f727461626c652e626461",
+  "phase": "done",
+  "completed": true,
+  "size": 3575988,
+  "crc32": 3886661013,
+  "sha256": "1d321f97bb18a43726c20227d404c7dab8602ef43436380041acfabae88b9b4d",
+  "token": 133,
+  "received": 3575988,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 133,
+    "size": 3575988,
+    "received": 3575988,
+    "expected_crc": 3886661013,
+    "actual_crc": 3886661013,
+    "verify_offset": 3575988,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 9,
+    "old_size": 3575932,
+    "old_crc": 3153587495,
+    "last_activity_tick": 2560624,
+    "step_count": 2631,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+    "temporary": "A:\\应用\\程序\\H1D00000085.TMP",
+    "backup": "A:\\应用\\程序\\H1D00000085.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 260.34399999992456
+}

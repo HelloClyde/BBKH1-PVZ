@@ -1,10 +1,10 @@
 {
   "version": 1,
   "runtime_path": "resource-files.h1fi",
-  "bytes": 143886,
-  "sha256": "b7f4f22110b65e141092ce445e516728366acab883f50aa2625204729ea9f5d4",
-  "entries": 3433,
-  "files": 3426,
+  "bytes": 143917,
+  "sha256": "311cbca656abae74511ed2d0b2aaee7ca6e6a8ffdfd9dd2137c8b16008440b51",
+  "entries": 3434,
+  "files": 3427,
   "directories": 7,
   "encoder_sha256": "8b36538050ac1267b18e7c2f2360277a30d2b368b560cf80712afe72ece3542c",
   "scope": "Immutable resource tree; savedata and the index itself excluded. Regenerate after resource changes."
