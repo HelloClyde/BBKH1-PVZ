@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "scope": "Loading label centered inside progress bar; existing BDA and game logic unchanged",
+  "physical": [
+    480,
+    272
+  ],
+  "program": {
+    "passed": true,
+    "bda_sha256": "92a0178133c6568ee7b6186e660740d10c2cc7b9125dc4afd41b76c9ec4c73cf",
+    "elf_sha256": "1dc625a7b1b62ffdd0e978ea19a5a83bcc3dfe632303ad1a41fa6da84d5496cb",
+    "live_code_fingerprints": 4
+  },
+  "layout": {
+    "passed": true,
+    "physical": [
+      480,
+      272
+    ],
+    "placement": "center inside progress bar",
+    "logical_baseline": 560,
+    "label_draw_x": "bar_x + (314 - label_width) / 2",
+    "visible_text_bounds_empty_and_full": [
+      [
+        222,
+        244,
+        257,
+        256
+      ],
+      [
+        222,
+        244,
+        257,
+        256
+      ]
+    ],
+    "visible_text_center": [
+      239.5,
+      250.0
+    ],
+    "text_bounds_unchanged_at_empty_and_full": true,
+    "progress_rectangle": [
+      167,
+      232,
+      142,
+      15
+    ],
+    "patch_bytes": 8520,
+    "resource_sha256": "c99cdf7ddef529b964e8ec0310b6713b971ff4e66c95d21801eab7dc6ce7fe32",
+    "native_full_frame_byte_identical": true,
+    "native_matching_progress": 0,
+    "native_screenshot": "fresh-loading.png"
+  },
+  "resources": {
+    "level-loading.h1ll": {
+      "sha256": "c99cdf7ddef529b964e8ec0310b6713b971ff4e66c95d21801eab7dc6ce7fe32",
+      "bytes": 361765,
+      "device_crc_verified": true
+    },
+    "resource-files.h1fi": {
+      "sha256": "d1734ec7448c8f02229d4c170be1e342af8314a0b540dcc5414239ac81bf7575",
+      "bytes": 143917,
+      "device_crc_verified": true
+    }
+  },
+  "normal_UI_exit": true,
+  "exit_code": 0,
+  "user_heap_bytes": 0,
+  "native_charge": 0,
+  "original_saves_restored": {
+    "user1.dat": {
+      "bytes": 886,
+      "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+      "device_crc_verified": true,
+      "readback_identical": true
+    },
+    "users.dat": {
+      "bytes": 22,
+      "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+      "device_crc_verified": true,
+      "readback_identical": true
+    }
+  },
+  "original_no_V4_restored": true,
+  "debugger_left_running": true
+}

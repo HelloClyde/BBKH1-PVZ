@@ -1,8 +1,8 @@
 {
   "version": 1,
   "runtime_path": "level-loading.h1ll",
-  "bytes": 361531,
-  "sha256": "59bebb2a81748a4f165cccb1a8553dd48a79153141a39214d299181a428e6d0b",
+  "bytes": 361765,
+  "sha256": "c99cdf7ddef529b964e8ec0310b6713b971ff4e66c95d21801eab7dc6ce7fe32",
   "dimensions": [
     480,
     272
@@ -15,10 +15,10 @@
     15
   ],
   "patch_bytes": 8520,
-  "background_crc32": "ccd7685e",
-  "patch_crc32": "4e7f652f",
+  "background_crc32": "ad929ab0",
+  "patch_crc32": "35e51626",
   "lossless": true,
-  "exporter_sha256": "c06aeb7f792abc4f88d744a2d00d40a618a890fa9e85a4fa7d041b48a8a529da",
+  "exporter_sha256": "aa13e644f4a132abbfbe3f3572d89d11ac5eebc6edc5381d0b8c855fc8163e89",
   "encoder_sha256": "4f6f0e75653b4d391ef92f53d83104ef57d8983d2e74453ca1dcc7b389b705ad",
   "scope": "Original startup background, logo, dirt/grass bar and translated loading label; lossless final-LCD pixels. Runtime inflates into the existing screen buffer and reveals the precomposited grass patch."
 }

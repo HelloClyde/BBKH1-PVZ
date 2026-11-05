@@ -1,0 +1,21 @@
+{
+  "status": {
+    "version": 1,
+    "state": 1,
+    "usb_configured": 1,
+    "usb_fault": 0,
+    "usb_resets": 2,
+    "commands": 944123,
+    "bad_frames": 0,
+    "tick": 4319152,
+    "poll_count": 274946243,
+    "last_poll_tick": 4319152,
+    "resident_base": 2185888384,
+    "resident_size": 727104,
+    "keys_low": 0,
+    "keys_high": 0,
+    "exec_state": 0,
+    "last_error": 0
+  },
+  "debugger_left_running": true
+}

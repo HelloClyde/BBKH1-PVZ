@@ -1,11 +1,13 @@
 # 关卡 Loading 文字位置
 
-将“读取中…”的逻辑基线从 576 调整为 496，在 480×272 屏幕上上移约 36 像素，放到进度条上方并保持水平居中。通过原游戏渲染器重新离线生成 `level-loading.h1ll`。
+“读取中…”放在进度条内部，按 314 逻辑像素的填充宽度水平居中；文字基线为 560。实际可见字形框为 `[222,244,257,256]`，中心为 `(239.5,250)`，位于进度条条身中间。
 
-画面仍为 480×272 无损像素。进度条补丁 `[167,232,142,15]`、8,520 字节内容逐字节一致；除新旧文字所在区域外，背景像素相同。资源缩小 102 字节至 361,531 字节；同时更新资源文件索引中的尺寸与校验清单。
+通过原游戏渲染器重新离线生成 `level-loading.h1ll`。空进度与满进度均绘制文字，部分填充时从完成态补丁中取像素，因此不会把文字擦掉。0% 和 100% 可见字形边界一致，50% 预览也保持完整。
 
-真机 Loading 截图与新离线背景逐像素一致。程序仍是此前验证的 BDA `92a0178133c6568ee7b6186e660740d10c2cc7b9125dc4afd41b76c9ec4c73cf`；本轮验证离线像素、资源传输 CRC 和原尺寸截图；已有游戏逻辑验证继续复用。
+画面仍为 480×272 无损像素；进度条补丁区域 `[167,232,142,15]`、内存 8,520 字节。新版资源为 361,765 字节，并同步更新资源文件索引。
 
-![H1 实际 Loading 画面](verification/loading-label/fresh-loading.png)
+真机 Loading 截图与新离线画面一致。使用既有 BDA `92a0178133c6568ee7b6186e660740d10c2cc7b9125dc4afd41b76c9ec4c73cf`；本轮验证离线像素、资源传输 CRC 和原尺寸截图，已有游戏逻辑验证继续复用。
 
-[像素对比记录](verification/loading-label/layout-verification.json) · [真机与恢复记录](verification/loading-label/native.json)
+![H1 实际 Loading 画面](verification/loading-center/fresh-loading.png)
+
+[位置与进度检查](verification/loading-center/layout-verification.json) · [真机与存档恢复](verification/loading-center/native.json)

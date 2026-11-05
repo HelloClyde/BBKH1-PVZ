@@ -107,10 +107,10 @@
   "evidence_directory": "docs/verification/font-options",
   "presentation_update": {
     "date": "2026-11-06",
-    "description": "Loading Chinese label moved above the progress bar by about 36 physical pixels",
+    "description": "Loading Chinese label centered inside the progress bar",
     "BDA_unchanged": true,
-    "resource_sha256": "59bebb2a81748a4f165cccb1a8553dd48a79153141a39214d299181a428e6d0b",
+    "resource_sha256": "c99cdf7ddef529b964e8ec0310b6713b971ff4e66c95d21801eab7dc6ce7fe32",
     "native_pixels_verified": true,
-    "evidence": "docs/verification/loading-label/native.json"
+    "evidence": "docs/verification/loading-center/native.json"
   }
 }

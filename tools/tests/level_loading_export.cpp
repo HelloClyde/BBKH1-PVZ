@@ -16,7 +16,7 @@ extern "C" void pvzh1_level_loading_export(){
   g.DrawImage(Sexy::IMAGE_TITLESCREEN,0,0);g.DrawImage(Sexy::IMAGE_PVZ_LOGO,(gLawnApp->mWidth-Sexy::IMAGE_PVZ_LOGO->GetWidth())/2,15);
   const int x=(gLawnApp->mWidth-Sexy::IMAGE_LOADBAR_DIRT->GetWidth())/2,y=512;g.DrawImage(Sexy::IMAGE_LOADBAR_DIRT,x,y+18);
   Sexy::Graphics grass(g);grass.ClipRect(x,y,314*stage/100,Sexy::IMAGE_LOADBAR_GRASS->GetHeight());grass.DrawImage(Sexy::IMAGE_LOADBAR_GRASS,x,y);
-  g.SetFont(Sexy::FONT_DWARVENTODCRAFT18);g.SetColor(Sexy::Color(218,184,33));const auto label=gLawnApp->GetString("LOADING","Loading...");g.DrawString(label,(gLawnApp->mWidth-g.GetFont()->StringWidth(label))/2,496);
+  g.SetFont(Sexy::FONT_DWARVENTODCRAFT18);g.SetColor(Sexy::Color(218,184,33));const auto label=gLawnApp->GetString("LOADING","Loading...");g.DrawString(label,x+(314-g.GetFont()->StringWidth(label))/2,560);
   out.write((char*)target->GetBits(),480*272*4);
  }
 }
