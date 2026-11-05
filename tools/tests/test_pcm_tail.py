@@ -24,7 +24,7 @@ static int active=1,playing;
 static uint32_t pvzp_ticks_ms(){return now;}
 static int submit(int,void*,int,int){return 1;}
 '''
- code+='\n'+function(text,'static void reset_ring(')+'\n'+function(text,'static void retire(')+'\n'+function(text,'extern "C" void pvzp_pcm_idle(')
+ code+='\n'+function(text,'static void reset_ring(')+'\n'+function(text,'static void retire(')+'\n'+function(text,'extern "C" void pvzp_pcm_idle(')+'\n'+function(text,'extern "C" void pvzp_pcm_discard_tail(')
  code+=r'''
 static void setup(unsigned consumed,unsigned queuedCount,unsigned elapsed){
  memset(ring,0,RING_SAMPLES*2);memset(pvzh1_audio_diagnostic,0,sizeof(pvzh1_audio_diagnostic));
@@ -44,6 +44,7 @@ int main(){
  }
  setup(200,100,1100);retire(true);assert(pvzh1_audio_diagnostic[1]==1&&!playing); // A missed complete ring is never hidden.
  setup(16,100,25);retire();assert(playing&&queued==84&&!pending_nonzero&&!pvzh1_audio_diagnostic[2]);
+ setup(0,100,25);pvzp_pcm_discard_tail();assert(!playing&&!queued&&!pending_nonzero&&!pvzh1_audio_diagnostic[1]&&!pvzh1_audio_diagnostic[2]&&pvzh1_audio_diagnostic[6]==1);
  VirtualFree(ring,0,MEM_RELEASE);VirtualFree((void*)uintptr_t(0x81000000),0,MEM_RELEASE);
 }
 '''
@@ -51,6 +52,6 @@ int main(){
  env=os.environ.copy();env['PATH']='C:/msys64/ucrt64/bin;'+env.get('PATH','')
  subprocess.run(['C:/msys64/ucrt64/bin/g++.exe','-std=c++20','-O2','-fpermissive',str(out/'probe.cpp'),'-o',str(out/'probe.exe')],env=env,check=True,capture_output=True)
  subprocess.run([str(out/'probe.exe')],env=env,check=True)
- proof=dict(passed=True,production_function_bodies=True,source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),cases=14,active_underrun_detected=True,finite_end_stops=True,full_wrap_still_detected=True)
+ proof=dict(passed=True,production_function_bodies=True,source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),cases=15,active_underrun_detected=True,finite_end_stops=True,full_wrap_still_detected=True,explicit_pause_discards_tail_without_wait=True)
  (out/'verification.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))
 if __name__=='__main__':main()

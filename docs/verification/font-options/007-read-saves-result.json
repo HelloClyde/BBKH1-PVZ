@@ -1,0 +1,91 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+        "output": "test-save/game1_0.v4"
+      },
+      {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "output": "test-save/user1.dat"
+      },
+      {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "output": "test-save/users.dat"
+      }
+    ]
+  },
+  "started_utc": "2026-11-05T16:22:10.329400+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+        "output": "test-save/game1_0.v4"
+      },
+      "result": {
+        "operation": "file_get",
+        "source": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\game1_0.v4",
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\test-save\\game1_0.v4",
+        "partial": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\test-save\\game1_0.v4.part-1793895730330401800",
+        "completed": true,
+        "token": 192,
+        "size": 37888,
+        "crc32": 1934849374,
+        "sha256": "a7810d1872323959760237948b7e16e964456528aca1f731b16cb098135f3919",
+        "device_crc_verified": false,
+        "elapsed_seconds": 1.7349999999860302
+      },
+      "started_monotonic": 644314.546,
+      "finished_monotonic": 644316.281
+    },
+    {
+      "action": {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "output": "test-save/user1.dat"
+      },
+      "result": {
+        "operation": "file_get",
+        "source": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\user1.dat",
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\test-save\\user1.dat",
+        "partial": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\test-save\\user1.dat.part-1793895732068386600",
+        "completed": true,
+        "token": 193,
+        "size": 886,
+        "crc32": 3956318493,
+        "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+        "device_crc_verified": false,
+        "elapsed_seconds": 0.125
+      },
+      "started_monotonic": 644316.281,
+      "finished_monotonic": 644316.406
+    },
+    {
+      "action": {
+        "kind": "get",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "output": "test-save/users.dat"
+      },
+      "result": {
+        "operation": "file_get",
+        "source": "B:\\应用\\数据\\游戏\\PVZ\\userdata\\users.dat",
+        "output": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\test-save\\users.dat",
+        "partial": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\test-save\\users.dat.part-1793895732193735500",
+        "completed": true,
+        "token": 194,
+        "size": 22,
+        "crc32": 3862323292,
+        "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+        "device_crc_verified": false,
+        "elapsed_seconds": 0.0940000000409782
+      },
+      "started_monotonic": 644316.406,
+      "finished_monotonic": 644316.5
+    }
+  ],
+  "ok": true
+}

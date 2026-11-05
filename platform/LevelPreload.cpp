@@ -8,6 +8,7 @@
 #include "PvzpLib/Reanimator.h"
 #include "PvzpLib/PvzpParticle.h"
 #include "Startup.h"
+#include "OptionsFeedback.h"
 #include "actors/ActorPose.h"
 #include "graphics/EarlyLawn.h"
 #include "graphics/RewardEffects.h"
@@ -39,6 +40,7 @@ void H1PrewarmDefinitionImages(int type){
 }
 void H1PreloadCurrentBoard(LawnApp* app){
     if(!app||!app->mBoard)return;
+    Sexy::H1ImageCacheReleaseUI();
     H1AudioSaveScope loading;
     std::set<Sexy::MemoryImage*> images;
     struct Scope {std::set<Sexy::MemoryImage*>* previous;Scope(std::set<Sexy::MemoryImage*>* value):previous(warmImages){warmImages=value;}~Scope(){warmImages=previous;}} scope(&images);
@@ -93,4 +95,7 @@ void H1PreloadCurrentBoard(LawnApp* app){
     // All getters have returned. Advance their pin epoch before the optional
     // baked reward data competes with textures that the actor replay replaces.
     Sexy::H1ImageCacheEndFrame();
+    // Actor-definition loading has a larger temporary peak. Reserve the UI
+    // only after that work and its pixel pins have completed.
+    H1OptionsPrepare();
 }

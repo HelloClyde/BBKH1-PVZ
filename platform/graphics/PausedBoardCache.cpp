@@ -7,6 +7,7 @@
 #include "PhysicalScreen.h"
 #include "DirtyCanvas.h"
 #include "PixelCopy.h"
+#include "graphics/GLInterface.h"
 #include <cstring>
 #include <new>
 #include <algorithm>
@@ -35,6 +36,16 @@ Sexy::MemoryImage* Target(Board* b,Sexy::Graphics* g,Key& key){
     return target;
 }
 bool Same(const Key& a,const Key& b){return !std::memcmp(&a,&b,sizeof(Key));}
+}
+void H1PausedBoardPrime(Board* b){
+    if(!b||!b->mApp->mGLInterface)return;
+    Sexy::Graphics g(b->mApp->mGLInterface->GetScreenImage());
+    g.mTransX=b->mX;g.mTransY=b->mY;
+    Key key{};if(!Target(b,&g,key))return;
+    if(valid&&Same(key,current))return;
+    // Input runs after the previous complete presentation. Its untouched
+    // canvas is already the exact image to freeze under the modal dialog.
+    Drop();current=key;pending=true;H1PausedBoardCapture(b,&g);
 }
 bool H1PausedBoardReplay(Board* b,Sexy::Graphics* g){
     if(busy)return false;Key key{};auto* target=Target(b,g,key);

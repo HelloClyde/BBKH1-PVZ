@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "scope": "Loading-feedback acceptance only: real new level 4 and valid saved level 2, original adventure animation, original continuation dialog and normal exit. Does not certify overall memory stability or frame-rate goals.",
+  "device": "Physical BBK H1 / Y100 V1.41",
+  "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
+  "program": {
+    "source_identity_verified": true,
+    "bda_bytes": 3575988,
+    "bda_sha256": "1d321f97bb18a43726c20227d404c7dab8602ef43436380041acfabae88b9b4d",
+    "elf_sha256": "8db5015d79e4ed90758f5dc842ec225e04d66d727e2f37859bdd49aa47349ebb",
+    "build_receipt_sha256": "d3408609ca4dab062cbdb25a5d47b1a94dd50da110469951f6e4a0ddef09d522",
+    "compiled_sources": 186
+  },
+  "physical": [
+    480,
+    272
+  ],
+  "fresh": {
+    "level": 4,
+    "first_loading_feedback_ms": 100,
+    "loading_ms": 13100,
+    "ordinary_touch": true
+  },
+  "saved": {
+    "level": 2,
+    "valid_V4_fixture": true,
+    "first_loading_feedback_ms": 100,
+    "loading_ms": 12000,
+    "ordinary_touch": true,
+    "continue_dialog_visible": true
+  },
+  "preserved_adventure_updates": 450,
+  "loader_heap_during_board_warmup": 8520,
+  "loader_heap_after_loading": 0,
+  "original_saves_restored": {
+    "original_level": 4,
+    "files": {
+      "user1.dat": {
+        "bytes": 886,
+        "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+        "device_crc_verified": true,
+        "readback_identical": true
+      },
+      "users.dat": {
+        "bytes": 22,
+        "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+        "device_crc_verified": true,
+        "readback_identical": true
+      }
+    },
+    "original_no_v4_restored": true
+  },
+  "exit": {
+    "normal_UI_exit": true,
+    "return_code": 0,
+    "user_heap_bytes": 0,
+    "native_charge": 0,
+    "allocation_failures": 0,
+    "audio_underruns": 0
+  },
+  "known_remaining_issues": [
+    "The level 4 options/return-to-menu regression exited for memory exhaustion (code 12); it remains unresolved.",
+    "Prior reward-pickup performance remains below 20 FPS; this change adds loading feedback and does not claim to resolve it."
+  ],
+  "debugger_left_running": true
+}

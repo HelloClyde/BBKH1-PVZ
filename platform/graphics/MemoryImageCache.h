@@ -64,6 +64,9 @@ bool H1ImageCacheReducedPack();
 void H1ImageCacheTouch(MemoryImage *image);
 void H1ImageCacheForget(MemoryImage *image);
 bool H1ImageCacheContains(MemoryImage *image);
+bool H1ImageCacheReserveUI(MemoryImage *image);
+void H1ImageCacheReleaseUI();
+std::size_t H1ImageCacheReserveLoadedUI(MemoryImage *image);
 void H1ImageCacheEndFrame();
 /* Limit applies after completed frames; an active draw may exceed it. */
 void H1ImageCacheSetBudget(std::size_t bytes);

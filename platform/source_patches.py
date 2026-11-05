@@ -25,6 +25,14 @@ def replace(path,old,new):
     path.write_text(source.replace(old,new),encoding='utf8')
 
 def apply(source_root:Path):
+    app=source_root/'LawnApp.cpp'
+    app.write_text('#include "OptionsFeedback.h"\n'+app.read_text(encoding='utf8'),encoding='utf8')
+    replace(app,'void LawnApp::DoNewOptions(bool theFromGameSelector)\n{',
+            'void LawnApp::DoNewOptions(bool theFromGameSelector)\n{\n    H1OptionsBegin();\n    struct Done {~Done(){H1OptionsConstructed();}} done;')
+    options=source_root/'Lawn/Widget/NewOptionsDialog.cpp'
+    options.write_text('#include "OptionsFeedback.h"\n'+options.read_text(encoding='utf8'),encoding='utf8')
+    replace(options,'void NewOptionsDialog::Draw(Sexy::Graphics* g)\n{',
+            'void NewOptionsDialog::Draw(Sexy::Graphics* g)\n{\n    struct Done {~Done(){H1OptionsDrawn();}} done;')
     # The bundled Mac strings use RESTART_LEVEL for a confirmation question;
     # only these two button labels need the original short button key.
     replace(source_root/'Lawn/Widget/ContinueDialog.cpp',
@@ -336,6 +344,11 @@ bool PvzpLoadNextResource()
     # simulation. Reuse that layer; original dialog/child widgets still draw.
     board=source_root/'Lawn/Board.cpp'
     text=board.read_text(encoding='utf8')
+    # H1 policy selected by the user: persist at return-to-menu, shutdown and
+    # level completion. Pausing a modal dialog does not perform SD writes.
+    pause_save='\tif (thePause && NeedSaveGame())\n\t{\n\t\tTryToSaveGame();\n\t}'
+    assert text.count(pause_save)==1
+    text=text.replace(pause_save,'\t// H1: pausing changes memory state only; lifecycle boundaries save the game.')
     text='#include "graphics/PausedBoardCache.h"\n#include "graphics/RewardEffects.h"\n#include "misc/ResourceManager.h"\n'+text
     needle='void Board::ZombiesWon(Zombie* theZombie)\n{\n\tif (mApp->mGameScene == GameScenes::SCENE_ZOMBIES_WON)\n\t\treturn;'
     assert text.count(needle)==1

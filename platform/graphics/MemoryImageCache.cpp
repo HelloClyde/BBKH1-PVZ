@@ -10,6 +10,7 @@
 #include <limits>
 #include <cstdlib>
 #include <cstring>
+#include <stdexcept>
 
 /* Optional render metadata cache. Its no-allocation, same-thread hook releases
  * one idle plan and returns an allocation-size hint, never a native heap span.
@@ -42,6 +43,9 @@ extern "C" { volatile uint32_t pvzh1_rgba_raster_page_diagnostic[8]; }
 /* Reduced dense bytes, source count, loads, physical bytes read, failures,
  * sampler views, logical materializations, maximum physical allocation. */
 extern "C" { volatile uint32_t pvzh1_storage_texture_diagnostic[8]; }
+/* Bounded reduced-font blits, streamed crop fallbacks, logical atlas requests,
+ * last logical width/height, largest crop allocation, failed crops, reserved. */
+extern "C" { volatile uint32_t pvzh1_font_storage_diagnostic[8]; }
 
 namespace Sexy {
 namespace {
@@ -70,6 +74,11 @@ bool IsFontDataPath(const std::string& file){
     /* No parent traversal may turn a font qualification into another folder. */
     return path.find("/../")==std::string::npos&&path.compare(path.size()-3,3,"/..")!=0;
 }
+bool IsCJKDataPath(const std::string& file){
+    if(!IsFontDataPath(file))return false;
+    const auto path=FontPath(file);const auto slash=path.find_last_of('/');
+    return path.compare(slash==std::string::npos?0:slash+1,4,"h1zh")==0;
+}
 struct Source {
     uint64_t identity=NextStorageRevision();
     std::string path;
@@ -86,7 +95,8 @@ struct Source {
     std::unique_ptr<unsigned char*[]> alphaPages;
     std::size_t alphaPageCount=0,alphaPageBytes=0;
     std::unique_ptr<H1FontTileStorage> fontTiles;
-    bool fontTilesRejected=false;
+    bool cjkFont=false;
+    bool uiReserved=false;
     std::unique_ptr<uint32_t*[]> storagePages;
     std::size_t storagePageCount=0,storagePageBytes=0;
     uint64_t storageRevision=NextStorageRevision();
@@ -107,7 +117,7 @@ struct Source {
          storageHeight(info.storage_height?info.storage_height:info.height),rgbEligible(info.channels==3&&info.flags==0),
          alphaPaletteEligible(info.channels==1&&info.flags==H1_IMAGE_MASK_ONLY),
          rgbaFontEligible(info.channels==4&&info.flags==0&&IsFontDataPath(file)),
-         rgbaEligible(info.channels==4&&info.flags==0){}
+         rgbaEligible(info.channels==4&&info.flags==0){cjkFont=alphaPaletteEligible&&IsCJKDataPath(file);}
     Source(Source&&)=default;
     Source(const Source&)=delete;
     ~Source(){ClearRGB();ClearFontPages();ClearStorage();}
@@ -533,6 +543,18 @@ bool H1ImageCacheDescribe(MemoryImage *image,const std::string& path,bool autoAl
 }
 bool H1ImageCacheContains(MemoryImage *image)
 {return State().sources.find(image)!=State().sources.end();}
+bool H1ImageCacheReserveUI(MemoryImage *image){
+    auto& cache=State();auto it=cache.sources.find(image);if(it==cache.sources.end())return false;
+    auto& s=it->second;s.uiReserved=true;
+    const uint32_t* bits=nullptr;const uint32_t*const* pages=nullptr;uint32_t w=0,h=0;
+    const bool ok=H1ImageCachePrepareStorageRGBPages(image,&pages,&w,&h)||H1ImageCachePrepareStorageTexture(image,&bits,&w,&h);
+    if(!ok)s.uiReserved=false;return ok;
+}
+void H1ImageCacheReleaseUI(){for(auto& e:State().sources)e.second.uiReserved=false;}
+size_t H1ImageCacheReserveLoadedUI(MemoryImage* image){
+    auto& cache=State();auto it=cache.sources.find(image);if(it==cache.sources.end()||it->second.uiReserved)return 0;
+    const size_t bytes=Size(image,&it->second);if(bytes)it->second.uiReserved=true;return bytes;
+}
 void H1ImageCacheTouch(MemoryImage *image)
 {
     Cache& cache=State();auto found=cache.sources.find(image);
@@ -547,6 +569,13 @@ bool H1ImageCacheLoad(MemoryImage *image)
 {
     Cache& cache=State();auto found=cache.sources.find(image);
     if(found==cache.sources.end())return false;
+    if(!image->mBits&&found->second.Reduced()&&found->second.cjkFont){
+        ++pvzh1_font_storage_diagnostic[2];
+        pvzh1_font_storage_diagnostic[3]=image->mWidth;pvzh1_font_storage_diagnostic[4]=image->mHeight;
+        // H1 fonts are immutable offline A8 glyphs. There is deliberately no
+        // original-size RGBA representation for generic pixel consumers.
+        throw std::logic_error("H1 CJK fonts require the glyph renderer");
+    }
     found->second.lastUse=++cache.useClock;
     found->second.lastEpoch=cache.pixelEpoch; /* before every allocation below */
     /* Generic pixel consumers require the original contiguous ARGB format.
@@ -666,6 +695,65 @@ bool H1ImageCacheBltFontGlyph(MemoryImage *image,MemoryImage *destination,int x,
        (mode!=Graphics::DRAWMODE_NORMAL&&mode!=Graphics::DRAWMODE_ADDITIVE))return false;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
     Source& source=found->second;
+    if(source.Reduced()&&source.alphaPaletteEligible&&IsFontDataPath(source.path)&&
+       (uint32_t(source.alphaColor)&0xffffffu)==0xffffffu&&source.alphaPath.empty()&&
+       image->mFilePath==source.path&&image->mWidth==int(source.width)&&image->mHeight==int(source.height)&&
+       !image->mBits&&!image->mColorIndices&&!image->mColorTable&&!image->mNativeAlphaData&&
+       !image->mRLAlphaData&&!image->mRLAdditiveData&&rect.mX>=0&&rect.mY>=0&&x>=0&&y>=0&&
+       int64_t(rect.mX)+rect.mWidth<=source.width&&int64_t(rect.mY)+rect.mHeight<=source.height&&
+       int64_t(x)+rect.mWidth<=destination->mWidth&&int64_t(y)+rect.mHeight<=destination->mHeight){
+        // Normal/AdditiveBlt also draw unscaled glyphs into small UI images.
+        // Their old fallback called GetBits on the complete logical CJK atlas.
+        // Materialize only this clipped glyph, with the same nearest logical
+        // samples and original blitter rounding as that fallback.
+        H1ImageCacheTouch(image);
+        const size_t area=size_t(rect.mWidth)*rect.mHeight;
+        auto pixels=std::unique_ptr<uint32_t[]>(new(std::nothrow) uint32_t[area+1]);
+        if(!pixels){++pvzh1_font_storage_diagnostic[6];throw std::bad_alloc();}
+        pvzh1_font_storage_diagnostic[5]=std::max(uint32_t(pvzh1_font_storage_diagnostic[5]),uint32_t((area+1)*4));
+        // Triangle sampling uses floor-aligned cell ends; logical nearest
+        // sampling can also touch that last physical texel. Include one texel.
+        const unsigned right=std::min(source.width,unsigned(rect.mX+rect.mWidth)+(source.width+source.storageWidth-1)/source.storageWidth);
+        const unsigned bottom=std::min(source.height,unsigned(rect.mY+rect.mHeight)+(source.height+source.storageHeight-1)/source.storageHeight);
+        const float u[3]={float(rect.mX)/source.width,float(right)/source.width,float(rect.mX)/source.width};
+        const float v[3]={float(rect.mY)/source.height,float(rect.mY)/source.height,float(bottom)/source.height};
+        const unsigned char*const* tiles=nullptr;uint32_t columns=0,w=0,h=0;
+        bool ok=H1ImageCachePrepareStorageFontTiles(image,u,v,&tiles,&columns,&w,&h);
+        if(ok){
+            unsigned sampleX[256];
+            uint64_t start=uint64_t(rect.mX)*w;
+            unsigned sx=start/source.width,error=start%source.width,step=w/source.width,remainder=w%source.width;
+            for(int col=0;col<rect.mWidth;++col){sampleX[col]=sx;sx+=step;error+=remainder;if(error>=source.width){++sx;error-=source.width;}}
+            start=uint64_t(rect.mY)*h;
+            unsigned sy=start/source.height,yError=start%source.height;
+            const unsigned yStep=h/source.height,yRemainder=h%source.height;
+            for(int row=0;row<rect.mHeight;++row){
+                for(int col=0;col<rect.mWidth;++col){
+                    const unsigned sx=sampleX[col];
+                    const auto* tile=tiles[(sy>>4)*columns+(sx>>4)];
+                    pixels[size_t(row)*rect.mWidth+col]=0xffffffu|(unsigned(tile?tile[(sy&15)*16+(sx&15)]:0)<<24);
+                }
+                sy+=yStep;yError+=yRemainder;if(yError>=source.height){++sy;yError-=source.height;}
+            }
+        }else{
+#ifndef PVZ_HOST_RUNNER
+            if(source.cjkFont)throw std::logic_error("H1 CJK glyph did not use its offline tiles");
+#endif
+            // Latin A8 descriptors use their offline image directly. Read
+            // this glyph only; they do not have a CJK tile-pack directory.
+            H1Image input{};ok=h1_image_open(&input,source.path.c_str(),source.autoAlpha,source.alphaColor);
+            for(int row=0;ok&&row<rect.mHeight;++row)
+                ok=h1_image_read_span(&input,rect.mX,rect.mY+row,rect.mWidth,pixels.get()+size_t(row)*rect.mWidth);
+            if(input.file)h1_image_close(&input);
+            ++pvzh1_font_storage_diagnostic[1];
+            if(!ok){++pvzh1_font_storage_diagnostic[6];throw std::runtime_error("Failed to read bounded H1 font glyph");}
+        }
+        pixels[area]=MEMORYCHECK_ID;
+        MemoryImage glyph(image->mApp);glyph.mWidth=rect.mWidth;glyph.mHeight=rect.mHeight;glyph.mBits=std::move(pixels);
+        glyph.SetImageMode(image->mHasTrans,image->mHasAlpha);glyph.mBitsChanged=false;
+        destination->MemoryImage::Blt(&glyph,x,y,Rect(0,0,rect.mWidth,rect.mHeight),color,mode,false);
+        image->mDrawn=true;++pvzh1_font_storage_diagnostic[0];return true;
+    }
     if(!source.rgbaFontEligible||!source.rgbaFontRejected||!source.alphaPath.empty()||source.sanded||
        image->mFilePath!=source.path||image->mWidth!=(int)source.width||image->mHeight!=(int)source.height||
        image->mBits||image->mColorIndices||image->mColorTable||image->mNativeAlphaData||
@@ -779,25 +867,33 @@ bool H1ImageCachePrepareStorageFontTiles(MemoryImage* image,const float (&inputU
 #endif
     auto it=cacheInstance->sources.find(image);if(it==cacheInstance->sources.end())return false;
     auto& s=it->second;
-    if(s.fontTilesRejected||!s.Reduced()||!s.alphaPaletteEligible||!IsFontDataPath(s.path)||
+    if(!s.cjkFont||!s.Reduced())return false;
+    if(
        (uint32_t(s.alphaColor)&0xffffffu)!=0xffffffu||!s.alphaPath.empty()||image->mFilePath!=s.path||
        image->mWidth!=int(s.width)||image->mHeight!=int(s.height)||image->mBits||image->mColorIndices||image->mColorTable||
-       image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData||s.storageAlpha||s.alphaPages||s.storageBits)return false;
+       image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData||s.storageAlpha||s.alphaPages||s.storageBits)
+        throw std::logic_error("Invalid H1 CJK glyph image representation");
+    H1ImageCacheTouch(image);
     const auto path=FontPath(s.path);const auto slash=path.find_last_of('/');
     auto name=path.substr(slash==std::string::npos?0:slash+1);
     if(name.size()>4&&name[name.size()-4]=='.')name.resize(name.size()-4);
-    if(name.compare(0,4,"h1zh"))return false;
     float u[3],v[3];for(int i=0;i<3;++i){u[i]=inputU[i];v[i]=inputV[i];}
     H1ReducedTextureBounds bounds{};
-    if(!H1MapReducedTriangle(u,v,s.width,s.height,s.storageWidth,s.storageHeight,bounds))return false;
+    if(!H1MapReducedTriangle(u,v,s.width,s.height,s.storageWidth,s.storageHeight,bounds)){
+        // A glyph narrower than one physical texel has no pixels to draw.
+        // The sampler repeats this mapping and skips it before fetching data.
+        *columns=(s.storageWidth+15)/16;*width=s.storageWidth;*height=s.storageHeight;return true;
+    }
     H1ImageCacheTouch(image);const size_t before=s.fontTiles?s.fontTiles->Bytes():0;
     bool first=!s.fontTiles;
     if(first){s.fontTiles.reset(new(std::nothrow) H1FontTileStorage());
-        if(!s.fontTiles||!s.fontTiles->Open(name.c_str(),s.storageWidth,s.storageHeight)){
-            s.fontTiles.reset();s.fontTilesRejected=true;return false;}}
+        if(!s.fontTiles)throw std::bad_alloc();
+        if(!s.fontTiles->Open(name.c_str(),s.storageWidth,s.storageHeight)){
+            s.fontTiles.reset();throw std::runtime_error("Cannot load offline H1 font tiles");}}
     uint32_t read=0;
     if(!s.fontTiles->Prepare(bounds.left,bounds.top,bounds.right,bounds.bottom,read)){
-        s.fontTiles.reset();s.fontTilesRejected=true;++cacheInstance->stats.loadFailures;Recount(true);return false;}
+        s.fontTiles.reset();++cacheInstance->stats.loadFailures;Recount(true);
+        throw std::runtime_error("Cannot read offline H1 glyph tiles");}
     if(!image->mForcedMode)image->mHasAlpha=image->mHasTrans=true;
     image->mBitsChanged=false;
     if(first){++cacheInstance->stats.loads;++s.storageLoads;++pvzh1_storage_texture_diagnostic[2];}
@@ -1074,9 +1170,13 @@ void H1ImageCacheSetBudget(std::size_t bytes){State().stats.budgetBytes=bytes;}
 void H1ImageCacheEndFrame()
 {
     Cache& cache=State();std::size_t bytes=Recount();
+    // The small fixed UI reserve has its own residency. Counting it against
+    // the gameplay working set made the lawn reload textures every frame.
+    size_t reserved=0;for(auto& e:cache.sources)if(e.second.uiReserved)reserved+=Size(e.first,&e.second);
+    const size_t frameBudget=cache.stats.budgetBytes+reserved;
     // Most completed frames only reuse resident images. No eviction victim or
     // second set of counters is needed while the accurate recount fits.
-    if(bytes<=cache.stats.budgetBytes){
+    if(bytes<=frameBudget){
         cache.frameBeginUse=cache.useClock;++cache.stats.frames;++cache.pixelEpoch;
         UpdateDiagnostic(cache);return;
     }
@@ -1098,10 +1198,10 @@ void H1ImageCacheEndFrame()
             preferred=entry.first;preferredBytes=size;preferredUse=entry.second.lastUse;
         }
     }
-    while(bytes>cache.stats.budgetBytes){
+    while(bytes>frameBudget){
         auto oldest=cache.sources.end();
         for(auto it=cache.sources.begin();it!=cache.sources.end();++it){
-            if(!Size(it->first,&it->second)||it->first==preferred)continue;
+            if(!Size(it->first,&it->second)||it->first==preferred||it->second.uiReserved)continue;
             if(it->first->mFilePath!=it->second.path)continue;
             if(oldest==cache.sources.end()||it->second.lastUse<oldest->second.lastUse)oldest=it;
         }
@@ -1164,7 +1264,7 @@ extern "C" size_t pvzh1_cache_memory_pressure(size_t requested){
      * Current drawing-batch getters and palette readers pin before allocating. */
     for(auto& entry:cache.sources){
         MemoryImage *image=entry.first;
-        if(entry.second.lastEpoch>=cache.pixelEpoch||image->mFilePath!=entry.second.path)continue;
+        if(entry.second.uiReserved||entry.second.lastEpoch>=cache.pixelEpoch||image->mFilePath!=entry.second.path)continue;
         const size_t bytes=Size(image,&entry.second);if(!bytes)continue;
         const bool cold=entry.second.lastUse<=cache.frameBeginUse;
         const size_t buffer=LargestBuffer(image,&entry.second);const bool fits=buffer>=requested;

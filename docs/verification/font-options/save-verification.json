@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "bytes": 37888,
+  "version": 1,
+  "payload_bytes": 37864,
+  "crc32": "0x8cdd0c0b",
+  "sha256": "a7810d1872323959760237948b7e16e964456528aca1f731b16cb098135f3919",
+  "format_unchanged": true,
+  "read_after_normal_exit": true
+}

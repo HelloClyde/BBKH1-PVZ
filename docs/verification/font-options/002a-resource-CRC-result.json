@@ -1,0 +1,114 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "owned_gui_sampler"
+      }
+    ]
+  },
+  "started_utc": "2026-11-05T16:18:33.426423+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "owned_gui_sampler"
+      },
+      "result": {
+        "metadata": {
+          "abi": 1,
+          "base": 2186549952,
+          "image_capacity": 65536,
+          "image_size": 672,
+          "memory_size": 672,
+          "entry_offset": 0,
+          "crc32": 1557320387,
+          "sha256": "89eb09c10a2e87e4e3b77df9ce152482cec59bd91132bda36bf5b736c0d548c3",
+          "ELF_sha256": "b8918b400db727a26a636a0772dbf4a96ca9d36f8ef85188fbf37adcf83c298d",
+          "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\gui_pc_sampler.c",
+          "source_sha256": "7947f25a195b9c97ed43adbfb18c2ade80ddf53d5bf03d6176326bc3d775e423",
+          "ABI_sha256": "7b9d1ea308fba1bdcf95525979362fdeea5e3cdcdf7856ba692335f0fe408b64",
+          "binary": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\hardware-test-20261105-font-fix-v13\\gui-sampler-module\\module.bin",
+          "hardware_verified": false,
+          "sandbox": false,
+          "forced_preemption": false
+        },
+        "upload": {
+          "abi": 1,
+          "base": 2186549952,
+          "image_capacity": 65536,
+          "scratch_capacity": 16384,
+          "stack_capacity": 32768,
+          "output_capacity": 4096,
+          "state": 2,
+          "image_size": 672,
+          "memory_size": 672,
+          "entry_offset": 0,
+          "upload_crc": 1557320387,
+          "written": 672,
+          "runs": 0,
+          "flags": 0,
+          "forced_preemption": 0,
+          "api_size": 28
+        },
+        "result": {
+          "state": 5,
+          "image_size": 672,
+          "memory_size": 672,
+          "entry_offset": 0,
+          "upload_crc": 1557320387,
+          "written": 672,
+          "runs": 1,
+          "flags": 0,
+          "start_tick": 3254774,
+          "end_tick": 3255031,
+          "budget_ticks": 400,
+          "opcode": 1,
+          "arg_size": 0,
+          "output_size": 40,
+          "return_value": 0,
+          "flag_names": [],
+          "elapsed_ticks": 257,
+          "tick_units": "raw uncalibrated device ticks",
+          "host_elapsed_seconds": 6.599490900058299,
+          "host_elapsed_includes_usb_and_polling": true,
+          "execution_returned": true,
+          "output_sha256": "6a5c253112e3330a04f2e2ecceed8489b77e0078df0a5cf2fa11021c0ec5ee79"
+        },
+        "output_hex": "5650524388cb3f002cf0770e00010000000000000000000000000000000000000000000000000000",
+        "output_words": [
+          1129467990,
+          4180872,
+          242741292,
+          256,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "scope": "Read-only GUI10 saved-PC sampling; current O2 ELF private stack, 320 native ticks",
+        "reset_finished_owned_module": {
+          "abi": 1,
+          "base": 2186549952,
+          "image_capacity": 65536,
+          "scratch_capacity": 16384,
+          "stack_capacity": 32768,
+          "output_capacity": 4096,
+          "state": 0,
+          "image_size": 0,
+          "memory_size": 0,
+          "entry_offset": 0,
+          "upload_crc": 0,
+          "written": 0,
+          "runs": 0,
+          "flags": 0,
+          "forced_preemption": 0,
+          "api_size": 28
+        }
+      },
+      "started_monotonic": 644097.64,
+      "finished_monotonic": 644104.531
+    }
+  ],
+  "ok": true
+}

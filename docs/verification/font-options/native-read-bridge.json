@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "source_sha256": "2f07c7f08e20c20472bea9da218ebb82a7a738887f9bbe8f762c9b37bc821da2",
+  "probe_sha256": "937f1d120b9f44c42b1f0f819be327186c35ee16513867356e9704e7fcf9f920",
+  "template_sha256": "ed7efdbdb7d79815442ef3953051a53baa6460b20a9e609d82296b40caeeb9ff",
+  "command": [
+    "C:/msys64/ucrt64/bin/gcc.exe",
+    "-std=c11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-misleading-indentation",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\native-io-tests\\probe.c",
+    "-o",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\native-io-tests\\probe.exe"
+  ],
+  "output": "PASS native I/O observations preserve open/read/short-read/EOF/error/seek/fstat semantics, histograms and raw tick wrap",
+  "device_access_performed": false,
+  "timebase_frequency_assumed": false
+}

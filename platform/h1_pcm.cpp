@@ -56,6 +56,7 @@ extern "C" void pvzp_pcm_idle(){
     if(!pending_nonzero){if(playing){reset_ring();++pvzh1_audio_diagnostic[5];}else used=read_position=queued=0;}
 }
 extern "C" unsigned pvzp_pcm_pending_tail(){if(!active)return 0;retire(true);return playing?pending_nonzero:0;}
+extern "C" void pvzp_pcm_discard_tail(){if(active){reset_ring();++pvzh1_audio_diagnostic[6];}}
 extern "C" void pvzp_pcm_write(const int16_t *samples,unsigned count){
     if(!active)return;retire();
     for(unsigned i=0;i<count&&queued+2<=RING_SAMPLES;i++){

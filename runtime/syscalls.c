@@ -441,7 +441,9 @@ ssize_t _write(int fd,const void *buffer,size_t size){
         if(!log_file||(uintptr_t)log_file==0xffffffffu){log_file=0;return (ssize_t)size;}file=log_file;
     }else{if(fd<3||fd>=FILE_COUNT+3||!files[fd-3]){errno=EBADF;return -1;}file=files[fd-3];}
     pvz_runtime_diagnostic[8]=22;pvz_runtime_diagnostic[9]=(uint32_t)fd;
-    while(done<size){unsigned count=(unsigned)((size-done)>4096?4096:size-done);
+    /* Native SD writes have substantial per-call overhead. A typical 40KB
+       V4 save should be one request, as verified against the firmware API. */
+    while(done<size){unsigned count=(unsigned)((size-done)>49152?49152:size-done);
         n=h1_fwrite((const unsigned char*)buffer+done,1,count,file);
         if(n>count)return native_failure(EIO);done+=n;audio_io_yield();if(n<count)break;}
     pvz_runtime_diagnostic[8]=23;pvz_runtime_diagnostic[9]=(uint32_t)done;return (ssize_t)done;

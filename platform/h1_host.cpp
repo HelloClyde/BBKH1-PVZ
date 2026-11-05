@@ -1,5 +1,6 @@
 /* LGPL-3.0-or-later. BBK H1/Y100 V1.41 native presentation and input. */
 #include "h1_host.h"
+#include "OptionsFeedback.h"
 #include "h1_sdk.h"
 #include "runtime.h"
 #include "Startup.h"
@@ -80,7 +81,7 @@ extern "C" void pvzp_present_argb(const uint32_t *pixels,int w,int h){
     pvzh1_dirty_present_diagnostic[5]=dirtyPresentation.skippedBlocks;
     pvzh1_dirty_present_diagnostic[6]=dirtyPresentation.allocationFailures;
     }
-    pvzp_diagnostic[2]++;pvzp_audio_pump();
+    pvzp_diagnostic[2]++;H1OptionsPresented();pvzp_audio_pump();
     if(pvzp_diagnostic[7]==0)pvzh1_startup_mark(9);
     if(pvzp_diagnostic[7]==1)pvzh1_startup_mark(12);
 #ifdef PVZ_NATIVE_PROFILE

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "production_function_bodies": true,
+  "source_sha256": "615767556ea4831c51b3ef0bf739960302fbd6021d53f2c6faa7b35f61ecb346",
+  "cases": 15,
+  "active_underrun_detected": true,
+  "finite_end_stops": true,
+  "full_wrap_still_detected": true,
+  "explicit_pause_discards_tail_without_wait": true
+}

@@ -18,6 +18,7 @@ extern "C" void pvzp_pcm_write(const int16_t*,unsigned);
 extern "C" void pvzp_music_mix(int32_t*,unsigned);
 extern "C" int pvzp_music_has_audio();
 extern "C" void pvzp_pcm_idle() __attribute__((weak));
+extern "C" void pvzp_pcm_discard_tail() __attribute__((weak));
 extern "C" unsigned pvzp_pcm_pending_tail() __attribute__((weak));
 extern "C" void pvzp_pcm_buffer_target(unsigned) __attribute__((weak));
 using namespace Sexy;
@@ -44,12 +45,11 @@ extern "C" void pvzp_audio_loading_begin(){
     audio_loading=true;
     if(pvzp_pcm_buffer_target)pvzp_pcm_buffer_target(32768);
     for(unsigned i=0;i<8;i++)pvzp_audio_pump();
-    // A paused song can leave a short audible tail queued. Finish that tail
-    // before entering a synchronous silent task instead of letting it wrap.
-    if(!has_audio_sources()&&pvzp_pcm_pending_tail){
-        const uint32_t start=pvzp_ticks_ms();
-        while(pvzp_pcm_pending_tail()&&pvzp_ticks_ms()-start<1100)pvzp_audio_pump();
-        if(pvzp_pcm_idle)pvzp_pcm_idle();
+    // Pausing must stop the queued tail immediately. Waiting for up to 1.1s
+    // here delayed every options dialog before it could paint its first frame.
+    if(!has_audio_sources()){
+        if(pvzp_pcm_discard_tail)pvzp_pcm_discard_tail();
+        else if(pvzp_pcm_idle)pvzp_pcm_idle();
     }
 }
 extern "C" void pvzp_audio_loading_end(){audio_loading=false;if(pvzp_pcm_buffer_target)pvzp_pcm_buffer_target(8192);pvzp_audio_pump();}

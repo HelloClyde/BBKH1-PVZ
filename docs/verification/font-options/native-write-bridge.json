@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "production_source_sha256": "2f07c7f08e20c20472bea9da218ebb82a7a738887f9bbe8f762c9b37bc821da2",
+  "save_41909_bytes_native_calls": 1,
+  "large_write_byte_exact": true,
+  "short_write_preserved": true,
+  "invalid_native_result_rejected": true,
+  "invalid_descriptor_and_empty_write": true
+}

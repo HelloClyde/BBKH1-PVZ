@@ -1,37 +1,78 @@
 {
   "passed": true,
-  "scope": "Loading-feedback acceptance only: real new level 4 and valid saved level 2, original adventure animation, original continuation dialog and normal exit. Does not certify overall memory stability or frame-rate goals.",
+  "scope": "Physical level 4 options first paint, repeated open/close, original main-menu confirmation, B-drive V4 save/readback, and normal exit. Does not certify overall 20 FPS or long unattended play.",
   "device": "Physical BBK H1 / Y100 V1.41",
   "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
-  "program": {
-    "source_identity_verified": true,
-    "bda_bytes": 3575988,
-    "bda_sha256": "1d321f97bb18a43726c20227d404c7dab8602ef43436380041acfabae88b9b4d",
-    "elf_sha256": "8db5015d79e4ed90758f5dc842ec225e04d66d727e2f37859bdd49aa47349ebb",
-    "build_receipt_sha256": "d3408609ca4dab062cbdb25a5d47b1a94dd50da110469951f6e4a0ddef09d522",
-    "compiled_sources": 186
-  },
+  "resident_image_id": "71a0983b",
   "physical": [
     480,
     272
   ],
-  "fresh": {
-    "level": 4,
-    "first_loading_feedback_ms": 100,
-    "loading_ms": 13100,
-    "ordinary_touch": true
+  "program": {
+    "source_identity_verified": true,
+    "bda_bytes": 3583468,
+    "bda_sha256": "92a0178133c6568ee7b6186e660740d10c2cc7b9125dc4afd41b76c9ec4c73cf",
+    "elf_sha256": "1dc625a7b1b62ffdd0e978ea19a5a83bcc3dfe632303ad1a41fa6da84d5496cb",
+    "build_receipt_sha256": "bfc25b95a056c6a721c71d722c1fb6ea62cf0a7a7e45e7d89a4ce9ce98181c47",
+    "compiled_sources": 187
   },
-  "saved": {
-    "level": 2,
-    "valid_V4_fixture": true,
-    "first_loading_feedback_ms": 100,
-    "loading_ms": 12000,
+  "level4_options": {
     "ordinary_touch": true,
-    "continue_dialog_visible": true
+    "first_complete_present_ms": [
+      125,
+      125,
+      150
+    ],
+    "constructor_and_canvas_prime_ms": [
+      50,
+      75,
+      75
+    ],
+    "raw_tick_hz": 40,
+    "timing_resolution_ms": 25,
+    "native_UI_warmup_ms": 75,
+    "reserved_UI_and_fonts_bytes": 310260,
+    "paused_canvas_bytes": 522240,
+    "new_terminal_allocation_failures": 0,
+    "initial_recoverable_allocation_failures": 1,
+    "CJK_full_atlas_requests": 0,
+    "largest_glyph_temp_bytes": 3012,
+    "all_three_complete_dialogs_presented": true,
+    "main_menu_confirmation_presented": true
+  },
+  "font_pack": {
+    "single_native_stream": true,
+    "native_stream_opens": 1,
+    "peak_font_readers": 4,
+    "open_failures": 0,
+    "tile_read_failures": 0,
+    "all_readers_released_on_exit": true,
+    "B_file_bytes": 4180872,
+    "B_full_file_crc32": "0x0e77f02c",
+    "matches_repository_resource": true,
+    "CRC_scope": "Native read-only module, after popup timings while the confirmation was displayed; separate stream, no file changes."
+  },
+  "save_policy": {
+    "approved_by_user": true,
+    "pause_does_not_save": true,
+    "save_at": [
+      "return to main menu",
+      "exit",
+      "level completion"
+    ],
+    "original_V4_format_preserved": true,
+    "native_file": {
+      "passed": true,
+      "bytes": 37888,
+      "version": 1,
+      "payload_bytes": 37864,
+      "crc32": "0x8cdd0c0b",
+      "sha256": "a7810d1872323959760237948b7e16e964456528aca1f731b16cb098135f3919",
+      "format_unchanged": true,
+      "read_after_normal_exit": true
+    }
   },
   "preserved_adventure_updates": 450,
-  "loader_heap_during_board_warmup": 8520,
-  "loader_heap_after_loading": 0,
   "original_saves_restored": {
     "original_level": 4,
     "files": {
@@ -55,12 +96,13 @@
     "return_code": 0,
     "user_heap_bytes": 0,
     "native_charge": 0,
-    "allocation_failures": 0,
-    "audio_underruns": 0
+    "font_readers": 0
   },
   "known_remaining_issues": [
-    "The level 4 options/return-to-menu regression exited for memory exhaustion (code 12); it remains unresolved.",
-    "Prior reward-pickup performance remains below 20 FPS; this change adds loading feedback and does not claim to resolve it."
+    "40KB native firmware write test: 6 raw ticks (150ms) in one call, but fclose still takes 185 ticks (4.625s); close latency is not fixed.",
+    "Prior reward-pickup performance of about 12-19 FPS was not retested or claimed fixed by this change.",
+    "Long unattended play and failure-screen stability are not certified by this focused acceptance. Earlier candidates failed font-pack access; final shared-stream candidate passed the same options and return-menu sequence."
   ],
-  "debugger_left_running": true
+  "debugger_left_running": true,
+  "evidence_directory": "docs/verification/font-options"
 }

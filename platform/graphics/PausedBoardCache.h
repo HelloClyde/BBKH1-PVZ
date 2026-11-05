@@ -13,3 +13,4 @@ extern "C" volatile unsigned pvzh1_paused_board_diagnostic[4];
 #ifdef PVZ_HOST_RUNNER
 void H1PausedBoardTestEnable(bool);
 #endif
+void H1PausedBoardPrime(Board* board);
