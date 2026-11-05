@@ -76,9 +76,9 @@ def patch_memory(path):
     path=Path(path);text=path.read_text(encoding='utf-8')
     if MARKER in text:return
     text=_replace(text,'#include "MemoryImage.h"',
-        '#include "MemoryImage.h"\n#include "graphics/MemoryImageCache.h" // '+MARKER,'MemoryImage include')
+        '#include "MemoryImage.h"\n#include "graphics/MemoryImageCache.h"\n#include "graphics/TextReplay.h" // '+MARKER,'MemoryImage include')
     text=_replace(text,'MemoryImage::~MemoryImage()\n{',
-        'MemoryImage::~MemoryImage()\n{\n\tH1ImageCacheForget(this);','MemoryImage destructor')
+        'MemoryImage::~MemoryImage()\n{\n\tH1ImageReplayForget(this);\n\tH1ImageCacheForget(this);','MemoryImage destructor')
     text=_replace(text,'void MemoryImage::BitsChanged()\n{',
         'void MemoryImage::BitsChanged()\n{\n\tH1ImageCacheForget(this);','MemoryImage mutation')
     text=_replace(text,'void MemoryImage::PurgeBits()\n{',
@@ -106,7 +106,11 @@ def patch_memory_pressure(path):
                       'uchar* MemoryImage::GetRLAlphaData(',
                       'uchar* MemoryImage::GetRLAdditiveData(',
                       'bool MemoryImage::Palletize('):
-        text=_pin_entry(text,signature,'    H1ImageCacheTouch(this);')
+        member={'void* MemoryImage::GetNativeAlphaData(':'mNativeAlphaData',
+                'uchar* MemoryImage::GetRLAlphaData(':'mRLAlphaData',
+                'uchar* MemoryImage::GetRLAdditiveData(':'mRLAdditiveData',
+                'bool MemoryImage::Palletize(':'mColorTable'}[signature]
+        text=_pin_entry(text,signature,'    H1ImageCacheTouch(this);\n    H1ImageCacheAccountingChange h1Accounting(this,!'+member+');')
     for signature in ('void MemoryImage::NormalBlt(', 'void MemoryImage::AdditiveBlt(',
                       'void MemoryImage::Blt(', 'void MemoryImage::BltF(',
                       'void MemoryImage::BltRotated(', 'void MemoryImage::SlowStretchBlt(',
@@ -163,7 +167,7 @@ def patch_app_pressure(path):
 def patch_app(path):
     path=Path(path);text=path.read_text(encoding='utf-8')
     if MARKER in text:return
-    text='#include "graphics/MemoryImageCache.h" // '+MARKER+'\n'+text
+    text='#include "graphics/MemoryImageCache.h"\n#include "graphics/TextReplay.h" // '+MARKER+'\n'+text
     start=text.index('Sexy::GLImage* SexyAppBase::GetImage(const std::string& theFileName, bool commitBits)')
     end=text.index('Sexy::GLImage* SexyAppBase::CreateCrossfadeImage',start)
     text=text[:start]+'''Sexy::GLImage* SexyAppBase::GetImage(const std::string& theFileName, bool commitBits)
@@ -183,7 +187,7 @@ def patch_app(path):
 def patch_sanding(path):
     path=Path(path);text=path.read_text(encoding='utf-8')
     if MARKER in text:return
-    text='#include "graphics/MemoryImageCache.h" // '+MARKER+'\n'+text
+    text='#include "graphics/MemoryImageCache.h"\n#include "graphics/TextReplay.h" // '+MARKER+'\n'+text
     start=text.index('void FixPixelsOnAlphaEdgeForBlending(Image* theImage)')
     end=text.index('\nvoid SexyMatrix3Transpose',start)
     section=text[start:end]
@@ -207,7 +211,7 @@ def patch_resource_alpha(path):
     path=Path(path);text=path.read_text(encoding='utf-8')
     marker='PVZH1_LAZY_ALPHA_GRIDS'
     if marker in text:return
-    text='#include "graphics/MemoryImageCache.h" // '+marker+'\n'+text
+    text='#include "graphics/MemoryImageCache.h"\n#include "graphics/TextReplay.h" // '+marker+'\n'+text
     text=_body(text,'bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, GLImage *theImage)',
         '''    if (!H1ImageCacheSetAlpha(theImage, theRes->mAlphaGridImage, theRes->mRows, theRes->mCols))
         return Fail(std::format("Failed to describe alpha grid: {}", theRes->mAlphaGridImage));
@@ -277,6 +281,21 @@ def patch_triangle_zero_alpha(path):
 
 def apply(source_root):
     root=Path(source_root)
+    common=root/'PvzpLib/PvzpCommon.cpp'
+    common_text=common.read_text(encoding='utf8')
+    if 'PVZH1_MATRIX_TEXT_REPLAY' not in common_text:
+        common_text='#include "graphics/TextReplay.h" // PVZH1_MATRIX_TEXT_REPLAY\n'+common_text
+        start=common_text.index('void PvzpDrawStringMatrix(')
+        left=common_text.index('{',start);right=left+1;depth=1
+        while depth:
+            if common_text[right]=='{':depth+=1
+            elif common_text[right]=='}':depth-=1
+            right+=1
+        body=common_text[start:right]
+        body=_replace(body,'\taFont->Prepare();','\taFont->Prepare();\n    if(Sexy::H1TextReplayTryDrawMatrix(aFont,g,theMatrix,aFinalString,theColor))return;\n    Sexy::H1TextReplayCapture matrixText(aFont,g,0,0,aFinalString,theColor,&theMatrix);','matrix text before glyph layout')
+        body=body[:-1]+'    matrixText.Commit();\n}'
+        common_text=common_text[:start]+body+common_text[right:]
+        common.write_text(common_text,encoding='utf8',newline='\n')
     framework=next((p for p in (root/'src/SexyAppFramework',root/'SexyAppFramework',root)
                     if (p/'graphics/MemoryImage.cpp').is_file()),None)
     if framework is None:raise RuntimeError(f'No SexyAppFramework under {root}')
@@ -385,5 +404,10 @@ def apply(source_root):
     module.apply(framework.parent)
     alpha_patch=Path(__file__).with_name('alpha_storage_patches.py')
     spec=importlib.util.spec_from_file_location('pvzh1_alpha_storage',alpha_patch)
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    module.apply(framework.parent)
+
+    additive_patch=Path(__file__).with_name('additive_patches.py')
+    spec=importlib.util.spec_from_file_location('pvzh1_direct_additive',additive_patch)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     module.apply(framework.parent)

@@ -1,4 +1,4 @@
-// Original renderer versus the production compressed-frame reader and replay.
+// Original renderer versus the production offline-frame reader and replay.
 #include "LawnApp.h"
 #include "Lawn/Widget/GameSelector.h"
 #include "PvzpLib/Reanimator.h"
@@ -7,6 +7,7 @@
 #include "graphics/Graphics.h"
 #include "graphics/ScreenLayout.h"
 #include "selector/SelectorOffline.h"
+#include "Common.h"
 #include <vector>
 #include <cstring>
 #include <stdexcept>
@@ -31,5 +32,6 @@ extern "C" void pvzh1_adventure_probe(){
         }
     }
     std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"adventure-verification.json");
-    out<<"{\"passed\":true,\"poses\":114,\"whole_frame_pixel_cases\":"<<checks<<",\"original_450_updates_preserved\":true,\"compressed_reader_exercised\":true}\n";
+    std::ifstream file(GetResourcePath("h1menu/adventure.h1mb"),std::ios::binary);unsigned char codec[4]{};file.seekg(52);file.read((char*)codec,4);if(!file)throw std::runtime_error("Missing adventure codec header");
+    out<<"{\"passed\":true,\"poses\":114,\"whole_frame_pixel_cases\":"<<checks<<",\"original_450_updates_preserved\":true,\"runtime_codec\":\""<<(codec[0]?"zlib":"raw")<<"\"}\n";
 }

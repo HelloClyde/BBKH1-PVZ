@@ -5,6 +5,8 @@
 #include <cstring>
 #include "ScreenLayout.h"
 
+inline void (*h1AdditiveNormalDraw)()=nullptr;
+inline void (*h1AdditiveBeginFrame)(uint32_t*)=nullptr;
 struct H1DirtyCanvas {
     static constexpr unsigned Width=Sexy::H1ScreenWidth,Height=Sexy::H1ScreenHeight,
         TileWidth=Sexy::H1TileWidth,TileHeight=Sexy::H1TileHeight,Rows=Height/TileHeight,
@@ -41,6 +43,7 @@ struct H1DirtyCanvas {
 #ifdef PVZH1_WIDESCREEN
         if(beforeDraw)beforeDraw(beforeContext,0,Rows-1,All);
 #endif
+        if(h1AdditiveNormalDraw)h1AdditiveNormalDraw();
         MarkAll();}}
     void Begin(void* image){
         if(image!=owner)return;
@@ -48,10 +51,12 @@ struct H1DirtyCanvas {
         beforeDraw=nullptr;beforeContext=nullptr;
 #endif
         for(unsigned i=0;i<Rows;++i){previous[i]=current[i];current[i]=0;}
+        if(h1AdditiveBeginFrame)h1AdditiveBeginFrame(pixels);
         pending=true;rooted=limited=false;
     }
     void Mark(void* image,int x,int y,int width,int height){
         if(image!=owner)return;RequireClear();
+        if(h1AdditiveNormalDraw)h1AdditiveNormalDraw();
         if(width<=0||height<=0)return;
         int64_t right=(int64_t)x+width,bottom=(int64_t)y+height;
         if(x<0)x=0;if(y<0)y=0;if(right>Width)right=Width;if(bottom>Height)bottom=Height;

@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "scope": "Exercise actual syscalls pool integration and shutdown with a native-span mock.\n\nThe host's pointers enlarge Allocation (its size is reported by the probe);\nthe MIPS build separately enforces the original 24-byte header. Ownership and\naccounting code is unmodified.\n",
+  "output": "PASS actual runtime pool bridge; host_header=40 native_acquires_for_30000_payload32=148 native_calls=228 frees=222 peak=2434304; alignment/calloc/realloc/nativefallback/pressure/reentry/shutdown all balanced",
+  "command": [
+    "gcc",
+    "-std=c11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-misleading-indentation",
+    "-I",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\runtime-pool-integration\\probe.c",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime\\small_pool.c",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime\\pressure_retry.c",
+    "-o",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\runtime-pool-integration\\probe.exe"
+  ],
+  "pressure_command": [
+    "gcc",
+    "-std=c11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime\\pressure_retry.c",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\tools\\test_pressure_retry.c",
+    "-o",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\runtime-pool-integration\\pressure.exe"
+  ],
+  "pressure_output": "pressure retry passed: early success, coalescing, fragmented/terminal, reentry, optional hook, bounded progress",
+  "source_sha256": {
+    "runtime/syscalls.c": "67f6a52d4b83e7a4532b3f0f3c385df50a6fd243bd8a056533b592ad2eff5d65",
+    "runtime/small_pool.c": "213946268bda39a4bff76384315bd34a6d9bb5b0806d1bc36b91266ff36b3698",
+    "runtime/small_pool.h": "3b115f4f80e12aba0107e8bdf6cd3259ee9f86ae17e267d08df323d62c56ab74",
+    "runtime/pressure_retry.c": "cbe96967c194b239c8a4c3c8c8a069b49c13e0b13568e14ceca1d4905761b086",
+    "tools/test_pressure_retry.c": "500face1afc15d95b4822098f60dab3bbad8a7e04c66f25f553c9ff33c7a6f5f",
+    "tools/tests/test_runtime_pool.py": "e55ee21f3a6ceab48741d4e06ed8da06985f5ae0b2a796e66ff495c236ccc72d",
+    "tools/tests/runtime_pool_probe.c.in": "3dcfe6d7a8bc113f441650531eb8ae5e0ce71dd69506673bde25c72fbf97ad26",
+    "build/runtime-pool-integration/probe.c": "ae4bab35c4b9adac576154e9642202cf18eb3daab9ad67202b73136de7c033b6"
+  },
+  "device_access_performed": false,
+  "native_abi_enforced_by_production_static_assert": true
+}

@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later */
 #include "PvzpLib/Definition.h"
 #include "PvzpLib/Trail.h"
+#include "PvzpLib/Reanimator.h"
 #include "SexyAppFramework/Common.h"
 #include "zlib.h"
 #include <cstdint>
@@ -44,6 +45,7 @@ static void LoadStartupPack(){
     else ++pvzh1_definition_diagnostic[7];
 }
 const void* exactLoadedDefinition=nullptr;
+const void* numericLoadedDefinition=nullptr;
 uint32_t Hash(const DefMap* map,uint32_t h=2166136261u) {
     auto byte=[&](unsigned char b){h=(h^b)*16777619u;};
     for(auto f=map->mMapFields;*f->mFieldName;++f){
@@ -166,7 +168,8 @@ bool Decode(const std::vector<unsigned char>& bytes,const DefMap* map,void* obje
     if(bytes.size()<8||bytes.size()>Limit)return false;
     Input input(bytes);if(!input.ok)return false;
     Reader r{input};unsigned char magic[4]{};r.raw(magic,4);
-    if(memcmp(magic,"H1D1",4)||r.word()!=Hash(map)||r.word()!=input.limit-16)return false;
+    const bool numeric=!memcmp(magic,"H1D2",4);
+    if((!numeric&&memcmp(magic,"H1D1",4))||(numeric&&map!=&gReanimatorDefMap)||r.word()!=Hash(map)||r.word()!=input.limit-16)return false;
     uint32_t crc=r.word();
     uint32_t count=r.word();if(!count||count>65536)return false;
     r.strings.reserve(count);
@@ -182,6 +185,7 @@ bool Decode(const std::vector<unsigned char>& bytes,const DefMap* map,void* obje
     r.budget=Limit;r.images.resize(count);r.fonts.resize(count);
     r.imageReady.resize(count);r.fontReady.resize(count);
     if(!r.walk(map,object,true)||!input.finish()||input.crc!=crc)return false;
+    numericLoadedDefinition=numeric?object:nullptr;
     return true;
 }
 bool DecodeFile(const std::vector<unsigned char>& bytes,const DefMap* map,void* object){
@@ -213,7 +217,7 @@ struct Writer {
 std::vector<unsigned char> Encode(const DefMap* map,void* object){
     Writer w;w.walk(map,object);Writer p;p.word(w.strings.size());
     for(auto& s:w.strings){p.word(s.size());p.raw(s.data(),s.size());}p.raw(w.data.data(),w.data.size());
-    Writer file;file.raw("H1D1",4);file.word(Hash(map));file.word(p.data.size());file.word(crc32(0,p.data.data(),p.data.size()));
+    Writer file;file.raw(map==&gReanimatorDefMap?"H1D2":"H1D1",4);file.word(Hash(map));file.word(p.data.size());file.word(crc32(0,p.data.data(),p.data.size()));
     file.raw(p.data.data(),p.data.size());return file.data;
 }
 void FreeStrings(const DefMap* map,void* object){
@@ -227,6 +231,7 @@ void FreeStrings(const DefMap* map,void* object){
 }
 bool H1DefinitionLoad(const std::string& xml,const DefMap* map,void* object){
     exactLoadedDefinition=nullptr;
+    numericLoadedDefinition=nullptr;
     LoadStartupPack();std::string key=xml;for(auto& c:key){if(c=='\\')c='/';if(c>='A'&&c<='Z')c+=32;}
     auto packed=startupPack.find(key);
     if(packed!=startupPack.end()){
@@ -246,6 +251,7 @@ bool H1DefinitionLoad(const std::string& xml,const DefMap* map,void* object){
 bool H1DefinitionTakeExact(const void* object){
     bool exact=object==exactLoadedDefinition;exactLoadedDefinition=nullptr;return exact;
 }
+bool H1DefinitionNumericResolved(const void* object){return object==numericLoadedDefinition;}
 #ifdef PVZ_HOST_RUNNER
 extern "C" void pvzh1_export_definitions(){
     const char* output=getenv("PVZ_H1_EXPORT_DEFINITIONS");if(!output||!*output)return;
@@ -269,6 +275,17 @@ extern "C" void pvzh1_export_definitions(){
             fprintf(stderr,"H1D_EXPORT_BEGIN %s\n",relative.c_str());
             std::vector<unsigned char> a(map->mDefSize),b(map->mDefSize);
             if(!DefinitionCompileFile(relative,"",map,a.data()))throw std::runtime_error("Compile failed: "+relative);
+            if(map==&gReanimatorDefMap){
+                auto* definition=(ReanimatorDefinition*)a.data();
+                for(int ti=0;ti<definition->mTracks.count;++ti){
+                    float previous[8]={0,0,0,0,1,1,0,1};
+                    auto& track=definition->mTracks.tracks[ti];
+                    for(int fi=0;fi<track.mTransforms.count;++fi){auto& t=track.mTransforms.mTransforms[fi];
+                        float* fields[]={&t.mTransX,&t.mTransY,&t.mSkewX,&t.mSkewY,&t.mScaleX,&t.mScaleY,&t.mFrame,&t.mAlpha};
+                        for(int k=0;k<8;++k){if(*fields[k]==DEFAULT_FIELD_PLACEHOLDER)*fields[k]=previous[k];else previous[k]=*fields[k];}
+                    }
+                }
+            }
             auto encoded=Encode(map,a.data());
             if(!Decode(encoded,map,b.data())||Encode(map,b.data())!=encoded)throw std::runtime_error("Roundtrip mismatch: "+relative);
             auto bad=encoded;bad.back()^=1;if(Decode(bad,map,b.data()))throw std::runtime_error("CRC check failed");

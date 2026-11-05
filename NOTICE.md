@@ -7,7 +7,7 @@
 - Copyright (C) 2026 Zhou Qiankang <wszqkzqk@qq.com>
 - 许可：LGPL-3.0-or-later，文本保存在本目录 `LICENSE`、`COPYING`。
 
-BDA 图标沿用该提交的 `icon.png`。上游说明此图标由 Zhou Qiankang 借助图像生成工具制作，并非 PopCap/EA 官方标识。
+上游 `icon.png` 由 Zhou Qiankang 借助图像生成工具制作，并非 PopCap/EA 官方标识。本工程当前 BDA 图标按 H1 原生桌面风格经 GPT Image 重新生成，生成提示、参考用途和转换记录见 `assets/icon.provenance.json`。
 
 H1 平台层、资源加载适配、运行库桥接和软件绘图修复随本工程提供。原始上游源码在 `upstream/`，修改由 `platform/source_patches.py`、`platform/graphics/memory_patches.py` 与替换源文件描述。构建不修改上游 checkout。
 

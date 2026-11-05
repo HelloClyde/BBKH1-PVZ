@@ -34,7 +34,7 @@ void H1RenderPlanRecordSpan(uint32_t*,int,const uint32_t*,int,int,int,int,int,
  * tests. Production callers use the guarded engine wrapper above. No hook may
  * allocate from revision(), and prepare() is completed BEFORE entry lookup. */
 namespace H1PlanTest {
-struct View {const uint32_t* pixels=nullptr;uint32_t width=0,height=0;uint64_t revision=0;};
+struct View {const uint32_t* pixels=nullptr;uint32_t width=0,height=0;uint64_t revision=0;const uint32_t*const* pages=nullptr;uint32_t Read(unsigned i)const{return pages?pages[i>>10u][i&1023u]:pixels[i];}};
 struct Key {const void* source=nullptr;const void* destination=nullptr;uint64_t revision=0;uint32_t words[28]{};};
 struct Request {Key key{};uint32_t* destination=nullptr;uint32_t width=0,height=0;};
 struct Hooks {

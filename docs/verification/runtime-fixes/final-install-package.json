@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "package": "H1PVZ-runtime-20261105-full-install.zip",
+  "bytes": 58918373,
+  "sha256": "b64cb1e2036c9756038bae95683cb69a92b52772ec4dd1d449165c68299daaa4",
+  "bda_sha256": "64dd50b64e9d5b88648be940d5bbc0996df96a4984da06ddb648eb42a5606bcc",
+  "runtime_files": 3425,
+  "archive_members": 3440,
+  "includes_savedata": false,
+  "validation": "package_install.py verified each archived member against its SHA-256 and validated the repository and BDA envelope"
+}

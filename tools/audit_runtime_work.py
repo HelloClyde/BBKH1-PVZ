@@ -30,8 +30,9 @@ extern "C" int pvzh1_audit_fclose(FILE*);
 #define fclose pvzh1_audit_fclose
 '''
  (out/'sound.cpp').write_text(sound.replace(needle,hooks+needle),encoding='utf8')
- cache=(ROOT/'platform/graphics/MemoryImageCache.cpp').read_text();needle='std::size_t Recount()\n{\n    Cache& cache=State();';assert cache.count(needle)==1
- cache='#include <cstddef>\nextern "C" void pvzh1_audit_recount(std::size_t);\n'+cache.replace(needle,needle+'pvzh1_audit_recount(cache.sources.size());')
+ cache=(ROOT/'platform/graphics/MemoryImageCache.cpp').read_text();start=cache.index('std::size_t Recount(');at=cache.index('    std::size_t size=0;',start)
+ cache=cache[:at]+'    pvzh1_audit_recount(cache.sources.size());\n'+cache[at:]
+ cache='#include <cstddef>\nextern "C" void pvzh1_audit_recount(std::size_t);\n'+cache
  (out/'cache.cpp').write_text(cache,encoding='utf8')
  env=os.environ.copy();env['PATH']='C:/msys64/ucrt64/bin;'+env.get('PATH','');cxx='C:/msys64/ucrt64/bin/g++.exe'
  for src in [out/'observer.cpp',out/'sound.cpp',out/'cache.cpp',ROOT/'tools/audit/runtime_work_probe.cpp']:

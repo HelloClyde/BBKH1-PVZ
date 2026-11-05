@@ -9,6 +9,7 @@
 #endif
 #include "Common.h"
 #include "xmp_shared.h"
+#include "PagedTitlePCM.h"
 #include <xmp.h>
 #include <stdio.h>
 #include <string>
@@ -28,9 +29,9 @@ struct Mix_Music{
     SharedTracker *shared=nullptr;
     FILE *pcm=nullptr;
     unsigned pcm_samples=0,pcm_position=0;
-    std::vector<int16_t> title_samples;
+    H1PagedTitlePCM title_samples;
     int volume=128,loops=0;
-    bool tracker=false,title_pcm=false,playing=false,paused=false,pending_order=false;
+    bool tracker=false,title_pcm=false,title_streaming=false,playing=false,paused=false,pending_order=false;
     int requested_order=0;
     int channels[64];
     Mix_Music(){for(int &v:channels)v=128;}
@@ -51,19 +52,30 @@ static void update_stats(){
     pvzp_music_diagnostic[2]=unique;pvzp_music_diagnostic[3]=samples;pvzp_music_diagnostic[4]=players;
 }
 static uint32_t little32(const unsigned char *p){return (uint32_t)p[0]|(uint32_t)p[1]<<8|(uint32_t)p[2]<<16|(uint32_t)p[3]<<24;}
+static std::string module_path(const Mix_Music *music){
+    const std::string suffix="mainmusic.xm";
+    const unsigned order=music->requested_order&65535;
+    if((order<0x30||(order>=0x7a&&order<0x7d))&&music->path.size()>=suffix.size()&&
+       music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
+        return music->path.substr(0,music->path.size()-3)+"-day.xm";
+    return music->path;
+}
+static void release_module(Mix_Music *music);
 static bool acquire_module(Mix_Music *music){
     // Keep the compact module for the descriptor's lifetime. Tune switches
     // stop/recreate independent players without rereading/reexpanding all XM
     // tracks, which would otherwise create a large transient memory peak.
-    if(music->shared)return true;
-    for(SharedTracker *entry:modules)if(entry->path==music->path){
+    const std::string path=module_path(music);
+    if(music->shared&&music->shared->path==path)return true;
+    if(music->shared)release_module(music);
+    for(SharedTracker *entry:modules)if(entry->path==path){
         ++entry->readers;music->shared=entry;return true;
     }
-    pvzh1_xmp_module *handle=pvzh1_xmp_module_load(music->path.c_str());
+    pvzh1_xmp_module *handle=pvzh1_xmp_module_load(path.c_str());
     if(!handle)return false;
     auto *entry=new(std::nothrow) SharedTracker;
     if(!entry){pvzh1_xmp_module_free(handle);return false;}
-    entry->path=music->path;entry->module=handle;entry->readers=1;
+    entry->path=path;entry->module=handle;entry->readers=1;
     modules.push_back(entry);music->shared=entry;pvzp_music_diagnostic[5]=pvzp_music_diagnostic[5]+1;update_stats();
     char message[160];snprintf(message,sizeof(message),"H1 XM shared module: track bytes %u -> %u; samples %u.",
         pvzp_music_diagnostic[1],pvzp_music_diagnostic[2],pvzp_music_diagnostic[3]);pvzp_log_line(message);
@@ -78,7 +90,7 @@ static void release_module(Mix_Music *music){
 static void close_player(Mix_Music *music){
     music->playing=music->paused=false; // Releasing a tracker may service other audio streams.
     if(music->module){pvzh1_xmp_module_free_player(music->module);music->module=nullptr;update_stats();}
-    if(music->pcm){fclose(music->pcm);music->pcm=nullptr;}std::vector<int16_t>().swap(music->title_samples);music->playing=music->paused=music->title_pcm=false;
+    if(music->pcm){fclose(music->pcm);music->pcm=nullptr;}music->playing=music->paused=music->title_pcm=music->title_streaming=false;
 }
 static bool start_player(Mix_Music *music){
     if(music->tracker){
@@ -133,8 +145,17 @@ extern "C" int Mix_VolumeMusic(int volume){int old=global_volume;if(volume>=0)gl
 extern "C" int Mix_VolumeMusicGeneral(int volume){return Mix_VolumeMusic(volume);}
 extern "C" int Mix_ModMusicStreamJumpToOrder(Mix_Music *music,int order){
     if(!music)return -1;int position=order&65535,row=(unsigned)order>>16;
+    music->requested_order=order;
     if(music->tracker&&position==0x98&&row==0){
-        close_player(music);auto path=music->path;auto dot=path.rfind('.');if(dot!=std::string::npos)path.resize(dot);path+="-title.h1pcm";
+        close_player(music);
+        if(!music->title_samples.empty()){
+            // Cached title PCM has the same ownership rule as its cold path:
+            // halted game streams retain descriptors, not the parsed XM data.
+            for(auto* stream:streams)if(!stream->module&&stream->shared)release_module(stream);
+            music->pcm_samples=music->title_samples.size();music->pcm_position=0;music->title_pcm=true;music->playing=true;music->requested_order=order;
+            return 0;
+        }
+        auto path=music->path;auto dot=path.rfind('.');if(dot!=std::string::npos)path.resize(dot);path+="-title.h1pcm";
         FILE* file=fopen(path.c_str(),"rb");unsigned char header[16];
         if(file&&fread(header,1,16,file)==16&&!memcmp(header,"H1PC",4)&&little32(header+4)==1&&little32(header+8)==16000){
             unsigned count=little32(header+12);
@@ -142,14 +163,14 @@ extern "C" int Mix_ModMusicStreamJumpToOrder(Mix_Music *music,int order){
                 // No title sample needs the parsed tracker payload. Release
                 // halted shared players before allocating its cached PCM.
                 for(auto* stream:streams)if(!stream->module&&stream->shared)release_module(stream);
-                music->title_samples.resize(count);
-                bool valid=fread(music->title_samples.data(),2,count,file)==count&&fgetc(file)==EOF;fclose(file);file=nullptr;
+                bool valid=music->title_samples.Load(file,count);fclose(file);file=nullptr;
                 if(valid){music->pcm_samples=count;music->pcm_position=0;music->title_pcm=true;music->playing=true;music->requested_order=order;
                     pvzp_music_diagnostic[6]++;return 0;}
-                std::vector<int16_t>().swap(music->title_samples);
+                music->title_samples.Clear();
             }
         }if(file)fclose(file);
     }
+    if(music->module&&music->shared&&music->shared->path!=module_path(music))close_player(music);
     if(!music->module){if(!start_player(music))return -1;music->playing=true;}
     if(xmp_set_position(music->module,position)<=-2)return -1;
     if(xmp_set_row(music->module,row)<0)return -1;
@@ -179,8 +200,9 @@ extern "C" void pvzp_music_mix(int32_t *output,unsigned count){
         }else if(music->title_pcm){
             produced=0;
             while(produced<count){unsigned n=std::min(count-produced,music->pcm_samples-music->pcm_position);
-                memcpy(samples+produced,music->title_samples.data()+music->pcm_position,n*2);produced+=n;music->pcm_position+=n;
-                if(music->pcm_position==music->pcm_samples)music->pcm_position=0;
+                if(music->title_streaming){unsigned got=(unsigned)fread(samples+produced,2,n,music->pcm);if(got!=n){music->playing=false;break;}}
+                else music->title_samples.Copy(samples+produced,music->pcm_position,n);produced+=n;music->pcm_position+=n;
+                if(music->pcm_position==music->pcm_samples){music->pcm_position=0;if(music->title_streaming)fseek(music->pcm,16,SEEK_SET);}
             }
         }else{
             produced=0;int empty_reads=0;
@@ -197,3 +219,36 @@ extern "C" int pvzp_music_has_audio(){
     for(auto* music:streams)if(music->playing&&!music->paused)return 1;return 0;
 }
 extern "C" void pvzp_music_shutdown(void){while(!streams.empty())Mix_FreeMusic(streams.back());}
+/* Parse the shared game module while the board is loading, before its intro
+ * starts. Starting playback later still uses the original orders/channels. */
+extern "C" void pvzh1_music_warm_game(){
+    // The title PCM and in-game XM share the same descriptor in the game.
+    // Acquiring its module also works while title PCM is still playing; it
+    // does not replace the player or change its current order.
+    for(auto* music:streams)if(music->tracker){
+        if(music->title_pcm&&!music->title_streaming&&!music->title_samples.empty()){
+            auto path=music->path;auto dot=path.rfind('.');if(dot!=std::string::npos)path.resize(dot);path+="-title.h1pcm";
+            FILE* file=fopen(path.c_str(),"rb");unsigned char header[16];
+            if(file&&fread(header,1,16,file)==16&&!memcmp(header,"H1PC",4)&&little32(header+4)==1&&little32(header+8)==16000&&little32(header+12)==music->pcm_samples&&fseek(file,16+music->pcm_position*2,SEEK_SET)==0){
+                // Preserve playback position while releasing the menu-only
+                // 2.79 MB cache before board dependencies compete for RAM.
+                music->pcm=file;music->title_streaming=true;music->title_samples.Clear();
+            }else if(file)fclose(file);
+        }
+        const int previous=music->requested_order;music->requested_order=0;
+        acquire_module(music);music->requested_order=previous;return;
+    }
+}
+/* Idle title PCM is a useful return-to-menu cache, but less valuable than
+ * active game textures if an actual heap allocation needs its span. */
+extern "C" size_t pvzh1_music_release_idle(size_t){
+    for(auto* music:streams)if(!music->playing&&!music->title_pcm&&!music->title_samples.busy()&&!music->title_samples.empty()){
+        const size_t bytes=music->title_samples.capacity_bytes();
+        music->title_samples.Clear();return bytes;
+    }
+    return 0;
+}
+#ifdef PVZ_HOST_RUNNER
+extern "C" unsigned pvzh1_music_title_position(Mix_Music* music){return music->pcm_position;}
+extern "C" unsigned pvzh1_music_title_streaming(Mix_Music* music){return music->title_streaming&&!music->title_samples.capacity_bytes();}
+#endif

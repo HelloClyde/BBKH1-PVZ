@@ -1,0 +1,106 @@
+{
+  "scene": 3,
+  "frames": 469,
+  "PC_elapsed_seconds": 20.031000000075437,
+  "FPS": 23.413708751347098,
+  "native_raw_ticks": 800,
+  "native_tick_hz": 40,
+  "successful_file_opens_delta": 0,
+  "native_open_calls_delta": 0,
+  "native_open_failures_delta": 0,
+  "native_read_bytes_delta": 0,
+  "image_loads_delta": 0,
+  "image_evictions_delta": 0,
+  "allocation_pressure_callbacks_delta": 0,
+  "final_allocation_failures_delta": 0,
+  "raw_canvas_fallbacks_delta": 0,
+  "scope": "Physical H1; 20-second quiet wait, bounded endpoint reads. PC time is the FPS denominator; native clock stores last-frame timestamps and can lag at low FPS.",
+  "result_sha256": "512b9fc882c91c7dc90c57e51ce1d36003538f24a54951af2d2520508f829c05",
+  "pvzh1_audio_diagnostic_start": [
+    250,
+    0,
+    0,
+    32768,
+    32768,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_audio_diagnostic_end": [
+    250,
+    0,
+    0,
+    32768,
+    32768,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_audio_diagnostic_delta": [
+    0,
+    0,
+    0
+  ],
+  "pvzh1_paused_board_diagnostic_start": [
+    522240,
+    3977,
+    1,
+    0
+  ],
+  "pvzh1_paused_board_diagnostic_end": [
+    522240,
+    4451,
+    1,
+    0
+  ],
+  "pvzh1_paused_board_diagnostic_delta": [
+    0,
+    474,
+    0,
+    0
+  ],
+  "pvzh1_additive_diagnostic_start": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_additive_diagnostic_end": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_additive_diagnostic_delta": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "inclusive_profile_ms_per_presented_frame": {
+    "update": 0.42643923240938164,
+    "draw": 32.356076759061835,
+    "present": 10.287846481876333,
+    "audio": 0.053304904051172705,
+    "music": 0.0,
+    "frame": 42.69722814498934,
+    "repeat_triangle": 0.0,
+    "software_shape": 14.339019189765459
+  }
+}

@@ -12,6 +12,7 @@ bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTexture
                       unsigned u,unsigned v,int du,int dv,bool sourceAlpha);
 #ifdef PVZ_HOST_RUNNER
 void H1FastReducedSpanTestEnable(bool enabled);
+void H1DirectAdditiveTestEnable(bool enabled);
 void H1GeometryFastTestEnable(bool enabled);
 #endif
 void H1DrawTriangles(MemoryImage *dest, Image *texture, const TriVertex vertices[][3], int count,

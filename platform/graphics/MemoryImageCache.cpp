@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later */
 #include "MemoryImageCache.h"
 #include "graphics/Graphics.h"
+#include "FontTileStorage.h"
+#include "ReducedTextureMapping.h"
 #include "h1_resources.h"
 #include <map>
 #include <new>
@@ -14,6 +16,9 @@
  * The allocator retries before asking this callback for another release. */
 extern "C" size_t pvzh1_render_plan_release_pressure(size_t requested) __attribute__((weak));
 extern "C" size_t pvzh1_text_replay_release_pressure(size_t requested) __attribute__((weak));
+extern "C" size_t pvzh1_paused_board_release_pressure(size_t requested) __attribute__((weak));
+extern "C" size_t pvzh1_music_release_idle(size_t requested) __attribute__((weak));
+extern "C" size_t pvzh1_selector_release_idle(size_t requested) __attribute__((weak));
 
 extern "C" { volatile uint32_t pvzh1_cache_pressure_diagnostic[4]; }
 /* Resident, peak, loads, evictions, physical frames, payload bytes (low32). */
@@ -78,6 +83,12 @@ struct Source {
     uint32_t storageWidth=0,storageHeight=0;
     std::unique_ptr<uint32_t[]> storageBits;
     std::unique_ptr<unsigned char[]> storageAlpha;
+    std::unique_ptr<unsigned char*[]> alphaPages;
+    std::size_t alphaPageCount=0,alphaPageBytes=0;
+    std::unique_ptr<H1FontTileStorage> fontTiles;
+    bool fontTilesRejected=false;
+    std::unique_ptr<uint32_t*[]> storagePages;
+    std::size_t storagePageCount=0,storagePageBytes=0;
     uint64_t storageRevision=NextStorageRevision();
     bool storageSanded=false;
     uint64_t storageLoads=0,storageBlits=0,storageARGBLoads=0;
@@ -99,9 +110,16 @@ struct Source {
          rgbaEligible(info.channels==4&&info.flags==0){}
     Source(Source&&)=default;
     Source(const Source&)=delete;
-    ~Source(){ClearRGB();ClearFontPages();}
+    ~Source(){ClearRGB();ClearFontPages();ClearStorage();}
     bool Reduced()const{return storageWidth!=width||storageHeight!=height;}
-    void ClearStorage(){storageRevision=0;storageBits.reset();storageAlpha.reset();storageSanded=false;}
+    void ClearStorage(){
+        fontTiles.reset();
+        storageRevision=0;storageBits.reset();storageAlpha.reset();storageSanded=false;
+        if(alphaPages)for(size_t i=0;i<alphaPageCount;++i)delete[] alphaPages[i];
+        alphaPages.reset();alphaPageCount=alphaPageBytes=0;
+        if(storagePages)for(size_t i=0;i<storagePageCount;++i)delete[] storagePages[i];
+        storagePages.reset();storagePageCount=storagePageBytes=0;
+    }
     void ClearRGB(){
         if(rgbPages)for(std::size_t i=0;i<rgbPageCount;++i)delete[] rgbPages[i];
         rgbPages.reset();rgbPageCount=rgbBytes=0;
@@ -121,6 +139,7 @@ struct Cache {
     uint64_t pixelEpoch=0;
     uint64_t loadedPixelBytes=0;
     uint64_t pressureCalls=0,pressureEvictions=0,pressureBytes=0;
+    bool accountingDirty=true;
     void (*sanding)(Image*)=nullptr;
 };
 Cache *cacheInstance=nullptr;
@@ -128,6 +147,8 @@ bool pressureInProgress=false;
 bool reducedPackConfigured=false,reducedPack=false;
 #ifdef PVZ_HOST_RUNNER
 bool storageAlphaEnabled=true;
+bool alphaPagesEnabled=true;
+bool fontTilesEnabled=true;
 int rgbAllocFailure=-1,rgbReadFailure=-1;
 int alphaAllocFailure=-1,alphaReadFailure=-1;
 int fontAllocFailure=-1,fontReadFailure=-1;
@@ -157,6 +178,9 @@ std::size_t Size(MemoryImage *image,const Source *source=nullptr)
     if(source&&source->fontPages)size+=source->fontBytes+source->fontPageCount*sizeof(uint32_t*);
     if(source&&source->storageBits)size+=(std::size_t)source->storageWidth*source->storageHeight*4+4;
     if(source&&source->storageAlpha)size+=(std::size_t)source->storageWidth*source->storageHeight;
+    if(source&&source->alphaPages)size+=source->alphaPageBytes+source->alphaPageCount*sizeof(unsigned char*);
+    if(source&&source->fontTiles)size+=source->fontTiles->Bytes();
+    if(source&&source->storagePages)size+=source->storagePageBytes+source->storagePageCount*sizeof(uint32_t*);
     return size;
 }
 /* The size of one real backing allocation, rather than the sum of separate
@@ -180,11 +204,16 @@ std::size_t LargestBuffer(MemoryImage *image,const Source *source=nullptr)
     }
     if(source&&source->storageBits)largest=std::max(largest,(std::size_t)source->storageWidth*source->storageHeight*4+4);
     if(source&&source->storageAlpha)largest=std::max(largest,(std::size_t)source->storageWidth*source->storageHeight);
+    if(source&&source->alphaPages)largest=std::max(largest,std::max(std::min(size_t(1024),source->alphaPageBytes),source->alphaPageCount*sizeof(unsigned char*)));
+    if(source&&source->fontTiles)largest=std::max(largest,source->fontTiles->Largest());
+    if(source&&source->storagePages)largest=std::max(largest,std::max(std::min(size_t(4096),source->storagePageBytes),source->storagePageCount*sizeof(uint32_t*)));
     return largest;
 }
-std::size_t Recount()
+std::size_t Recount(bool changed=false)
 {
-    Cache& cache=State();std::size_t size=0;
+    Cache& cache=State();
+    if(!changed&&!cache.accountingDirty)return cache.stats.residentBytes;
+    std::size_t size=0;
     std::size_t rgbBytes=0,rgbPages=0,alphaBytes=0,alphaSources=0,fontBytes=0,fontSources=0,fontPageBytes=0,fontPages=0,rasterBytes=0,rasterPages=0,storageBytes=0,storageSources=0;
     for(auto& pair:cache.sources){
         size+=Size(pair.first,&pair.second);rgbBytes+=pair.second.rgbBytes;
@@ -199,6 +228,9 @@ std::size_t Recount()
         else{fontPageBytes+=pair.second.fontBytes;if(pair.second.fontPages)fontPages+=pair.second.fontPageCount;}
         if(pair.second.storageBits){storageBytes+=(std::size_t)pair.second.storageWidth*pair.second.storageHeight*4+4;++storageSources;}
         if(pair.second.storageAlpha){storageBytes+=(std::size_t)pair.second.storageWidth*pair.second.storageHeight;++storageSources;}
+        if(pair.second.alphaPages){storageBytes+=pair.second.alphaPageBytes+pair.second.alphaPageCount*sizeof(unsigned char*);++storageSources;}
+        if(pair.second.fontTiles){storageBytes+=pair.second.fontTiles->Bytes();++storageSources;}
+        if(pair.second.storagePages){storageBytes+=pair.second.storagePageBytes+pair.second.storagePageCount*sizeof(uint32_t*);++storageSources;}
     }
     pvzh1_alpha_palette_diagnostic[0]=(uint32_t)alphaBytes;pvzh1_alpha_palette_diagnostic[1]=(uint32_t)alphaSources;
     pvzh1_rgba_font_palette_diagnostic[0]=(uint32_t)fontBytes;pvzh1_rgba_font_palette_diagnostic[1]=(uint32_t)fontSources;
@@ -209,6 +241,7 @@ std::size_t Recount()
     cache.stats.residentBytes=size;
     cache.stats.peakBytes=std::max(cache.stats.peakBytes,size);
     cache.stats.descriptors=cache.sources.size();
+    cache.accountingDirty=false;
     UpdateDiagnostic(cache);
     return size;
 }
@@ -255,11 +288,11 @@ bool LoadRGB(MemoryImage *image,Source& source){
     }
     h1_image_close(&input);
     if(!ok){
-        source.ClearRGB();++cache.stats.loadFailures;++pvzh1_paged_rgb_diagnostic[5];Recount();return false;
+        source.ClearRGB();++cache.stats.loadFailures;++pvzh1_paged_rgb_diagnostic[5];Recount(true);return false;
     }
     /* RGB3 has no transparent pixels, so original zero-alpha edge sanding is
      * an identity operation. No ARGB/native-alpha/RL cache is manufactured. */
-    ++cache.stats.loads;++source.rgbLoads;++pvzh1_paged_rgb_diagnostic[3];Recount();return true;
+    ++cache.stats.loads;++source.rgbLoads;++pvzh1_paged_rgb_diagnostic[3];Recount(true);return true;
 }
 bool LoadRGBAFontPalette(MemoryImage *image,Source& source)
 {
@@ -323,37 +356,40 @@ bool LoadRGBAFontPalette(MemoryImage *image,Source& source)
     if(!image->mForcedMode){image->mHasTrans=hasTrans;image->mHasAlpha=hasAlpha;}
     image->mBitsChanged=false;
     ++cache.stats.loads;++pvzh1_rgba_font_palette_diagnostic[2];++pvzh1_rgba_font_palette_diagnostic[5];
-    Recount();return true;
+    Recount(true);return true;
 }
-bool SandRGBAPages(MemoryImage *image,Source& source)
+bool SandRGBAPages(MemoryImage *image,Source& source,uint32_t* const* pixels=nullptr,uint32_t width=0,uint32_t height=0)
 {
     if(!source.sandingAverage)return false;
     if(!image->mHasTrans)return true;
+    if(!pixels){pixels=source.fontPages.get();width=source.width;height=source.height;}
+    MemoryImage physical(image->mApp);physical.mWidth=int(width);physical.mHeight=int(height);
+    auto* sampleImage=(width==source.width&&height==source.height)?image:&physical;
 #ifdef PVZ_HOST_RUNNER
     if(!RGBTestAllow(fontPageAllocFailure))return false;
 #endif
-    auto rows=std::unique_ptr<uint32_t[]>(new(std::nothrow) uint32_t[(std::size_t)source.width*3]);
+    auto rows=std::unique_ptr<uint32_t[]>(new(std::nothrow) uint32_t[(std::size_t)width*3]);
     if(!rows)return false;
-    for(uint32_t y=0;y<source.height;++y){
+    for(uint32_t y=0;y<height;++y){
         for(int neighbor=-1;neighbor<=1;++neighbor){
-            uint32_t *out=rows.get()+(std::size_t)(neighbor+1)*source.width;
+            uint32_t *out=rows.get()+(std::size_t)(neighbor+1)*width;
             const int64_t sourceY=(int64_t)y+neighbor;
-            if(sourceY<0||sourceY>=source.height){std::fill_n(out,source.width,0u);continue;}
-            std::size_t offset=(std::size_t)sourceY*source.width,remaining=source.width;
+            if(sourceY<0||sourceY>=height){std::fill_n(out,width,0u);continue;}
+            std::size_t offset=(std::size_t)sourceY*width,remaining=width;
             while(remaining){
                 const std::size_t page=offset/FontPagePixels,within=offset%FontPagePixels;
                 const std::size_t n=std::min(remaining,FontPagePixels-within);
-                std::memcpy(out,source.fontPages[page]+within,n*4);out+=n;offset+=n;remaining-=n;
+                std::memcpy(out,pixels[page]+within,n*4);out+=n;offset+=n;remaining-=n;
             }
         }
-        uint32_t *middle=rows.get()+source.width;
-        for(uint32_t x=0;x<source.width;++x)if(!(middle[x]&0xff000000u)){
-            const std::size_t index=(std::size_t)y*source.width+x;
+        uint32_t *middle=rows.get()+width;
+        for(uint32_t x=0;x<width;++x)if(!(middle[x]&0xff000000u)){
+            const std::size_t index=(std::size_t)y*width+x;
             /* Invoke the untouched original neighborhood implementation. Its
              * transparent-neighbor exclusion makes prior zero-alpha RGB edits
              * irrelevant, and its original border/i==0 behavior is retained. */
-            source.fontPages[index/FontPagePixels][index%FontPagePixels]=
-                source.sandingAverage(image,middle+x,(int)x,(int)y);
+            pixels[index/FontPagePixels][index%FontPagePixels]=
+                source.sandingAverage(sampleImage,middle+x,(int)x,(int)y);
         }
     }
     return true;
@@ -404,7 +440,7 @@ bool LoadStorage(MemoryImage *image,Source& source)
     ++cache.stats.loads;++source.storageLoads;++pvzh1_storage_texture_diagnostic[2];cache.loadedPixelBytes+=bytes;
     pvzh1_storage_texture_diagnostic[3]+=bytes;
     pvzh1_storage_texture_diagnostic[7]=std::max((uint32_t)pvzh1_storage_texture_diagnostic[7],(uint32_t)(area*4+4));
-    Recount();return true;
+    Recount(true);return true;
 }
 bool LoadFontPages(MemoryImage *image,Source& source,bool raster=false)
 {
@@ -415,7 +451,10 @@ bool LoadFontPages(MemoryImage *image,Source& source,bool raster=false)
     if(!h1_image_open(&input,source.path.c_str(),source.autoAlpha,(uint32_t)source.alphaColor)){
         ++cache.stats.loadFailures;++diagnostic[4];return false;
     }
-    bool ok=input.info.width==source.width&&input.info.height==source.height&&input.info.channels==4&&input.info.flags==0;
+    bool ok=input.info.width==source.width&&input.info.height==source.height&&
+        ((input.info.channels==4&&input.info.flags==0)||
+         (source.alphaPaletteEligible&&input.info.channels==1&&input.info.flags==H1_IMAGE_MASK_ONLY));
+    const bool physical=input.info.storage_width==source.width&&input.info.storage_height==source.height;
     const std::size_t area=(std::size_t)source.width*source.height,count=(area+FontPagePixels-1)/FontPagePixels;
 #ifdef PVZ_HOST_RUNNER
     if(ok&&!RGBTestAllow(fontPageAllocFailure))ok=false;
@@ -436,23 +475,24 @@ bool LoadFontPages(MemoryImage *image,Source& source,bool raster=false)
 #ifdef PVZ_HOST_RUNNER
             if(!RGBTestAllow(fontPageReadFailure)){ok=false;break;}
 #endif
-            if(!h1_image_read_span(&input,x,y,span,source.fontPages[page]+within)){ok=false;break;}
+            if(!(physical?h1_image_read_storage_pixels(&input,uint32_t(offset),span,source.fontPages[page]+within):
+                          h1_image_read_span(&input,x,y,span,source.fontPages[page]+within))){ok=false;break;}
             cache.loadedPixelBytes+=(uint64_t)span*4;diagnostic[3]+=span*4;
             for(uint32_t i=0;i<span;++i){unsigned a=source.fontPages[page][within+i]>>24;if(!a)hasTrans=true;else if(a!=255)hasAlpha=true;}
             offset+=span;within+=span;remaining-=span;
         }
     }
     h1_image_close(&input);
-    if(!ok){source.ClearFontPages();++cache.stats.loadFailures;++diagnostic[4];Recount();return false;}
+    if(!ok){source.ClearFontPages();++cache.stats.loadFailures;++diagnostic[4];Recount(true);return false;}
     if(!image->mForcedMode){image->mHasTrans=hasTrans;image->mHasAlpha=hasAlpha;}
     image->mBitsChanged=false;
     if(source.sanded){
-        if(!SandRGBAPages(image,source)){source.ClearFontPages();++cache.stats.loadFailures;++diagnostic[4];Recount();return false;}
+        if(!SandRGBAPages(image,source)){source.ClearFontPages();++cache.stats.loadFailures;++diagnostic[4];Recount(true);return false;}
         if(image->mHasTrans)++image->mBitsChangedCount;
     }
     ++cache.stats.loads;++source.fontLoads;++diagnostic[2];
     diagnostic[7]=std::max((uint32_t)diagnostic[7],(uint32_t)std::min(FontPageBytes,source.fontBytes));
-    Recount();return true;
+    Recount(true);return true;
 }
 bool ApplyAlpha(MemoryImage *image,const Source& source)
 {
@@ -488,6 +528,7 @@ bool H1ImageCacheDescribe(MemoryImage *image,const std::string& path,bool autoAl
     image->mFilePath=path;image->mPurgeBits=false;image->mBitsChanged=false;
     image->mHasTrans=image->mHasAlpha=info.channels!=3;
     State().sources.emplace(image,Source(path,autoAlpha,alphaColor,++State().useClock,State().pixelEpoch,info));
+    State().accountingDirty=true;
     return true;
 }
 bool H1ImageCacheContains(MemoryImage *image)
@@ -501,7 +542,7 @@ void H1ImageCacheTouch(MemoryImage *image)
     found->second.lastEpoch=cache.pixelEpoch;
 }
 void H1ImageCacheForget(MemoryImage *image)
-{if(State().sources.erase(image))Recount();}
+{if(State().sources.erase(image))Recount(true);}
 bool H1ImageCacheLoad(MemoryImage *image)
 {
     Cache& cache=State();auto found=cache.sources.find(image);
@@ -510,8 +551,8 @@ bool H1ImageCacheLoad(MemoryImage *image)
     found->second.lastEpoch=cache.pixelEpoch; /* before every allocation below */
     /* Generic pixel consumers require the original contiguous ARGB format.
      * Release RGB pages before its allocation, never retain both copies. */
-    if(found->second.rgbPages||found->second.fontPages){found->second.ClearRGB();found->second.ClearFontPages();Recount();}
-    if(found->second.storageBits||found->second.storageAlpha){found->second.ClearStorage();Recount();}
+    if(found->second.rgbPages||found->second.fontPages){found->second.ClearRGB();found->second.ClearFontPages();Recount(true);}
+    if(found->second.storageBits||found->second.storageAlpha||found->second.alphaPages||found->second.storagePages||found->second.fontTiles){found->second.ClearStorage();Recount(true);}
     /* Let upstream GetBits expand its lossless palette and release the index
      * table. Reloading here would retain both ARGB and the palette buffers. */
     if(image->mBits||(image->mColorIndices&&image->mColorTable))return true;
@@ -556,7 +597,7 @@ bool H1ImageCacheLoad(MemoryImage *image)
     found->second.lastEpoch=cache.pixelEpoch;
     ++cache.stats.loads;
     if(found->second.sanded&&cache.sanding)cache.sanding(image);
-    Recount();
+    Recount(true);
     return loaded;
 }
 bool H1ImageCachePrepareAlphaPalette(MemoryImage *image)
@@ -615,7 +656,7 @@ bool H1ImageCachePrepareAlphaPalette(MemoryImage *image)
     image->mBitsChanged=false;
     ++cache.stats.loads;++pvzh1_alpha_palette_diagnostic[2];++pvzh1_alpha_palette_diagnostic[5];
     cache.loadedPixelBytes+=readBytes;pvzh1_alpha_palette_diagnostic[3]+=readBytes;
-    Recount();return true;
+    Recount(true);return true;
 }
 bool H1ImageCacheBltFontGlyph(MemoryImage *image,MemoryImage *destination,int x,int y,
     const Rect& rect,const Color& color,int mode)
@@ -635,7 +676,7 @@ bool H1ImageCacheBltFontGlyph(MemoryImage *image,MemoryImage *destination,int x,
     H1ImageCacheTouch(image);
     if(!LoadFontPages(image,source))return false;
     auto failedTile=[&](){source.ClearFontPages();++cacheInstance->stats.loadFailures;
-        ++pvzh1_rgba_font_page_diagnostic[4];Recount();return false;};
+        ++pvzh1_rgba_font_page_diagnostic[4];Recount(true);return false;};
     try{
         const std::size_t area=(std::size_t)rect.mWidth*rect.mHeight;
 #ifdef PVZ_HOST_RUNNER
@@ -667,16 +708,16 @@ bool H1ImageCachePrepareTexturePages(MemoryImage *image,const uint32_t* const**p
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
     Source& source=found->second;
     if(source.Reduced())return false;
-    if(!source.rgbaEligible||!source.alphaPath.empty()||(source.sanded&&!source.sandingAverage)||
+    const bool font=source.rgbaFontEligible||(source.alphaPaletteEligible&&IsFontDataPath(source.path));
+    if((!source.rgbaEligible&&!font)||!source.alphaPath.empty()||(source.sanded&&!source.sandingAverage)||
        image->mFilePath!=source.path||image->mWidth!=(int)source.width||image->mHeight!=(int)source.height||
-       ((std::size_t)source.width*source.height<262144u&&!source.fontPages)||
+       ((std::size_t)source.width*source.height<262144u&&!source.fontPages&&!font)||
        image->mBits||image->mColorIndices||image->mColorTable||image->mNativeAlphaData||
        image->mRLAlphaData||image->mRLAdditiveData||source.rgbPages)return false;
     H1ImageCacheTouch(image);
-    if(source.rgbaFontEligible&&!source.rgbaFontRejected&&!source.fontPages){
-        H1ImageCachePrepareAlphaPalette(image);
-        if(image->mColorIndices||image->mColorTable)return false;
-    }
+    // Triangle samplers can read exact ARGB pages directly. A palette here
+    // would immediately expand again through GetBits, recreating the large
+    // contiguous font allocation this path is meant to avoid.
     if(!LoadFontPages(image,source,true))return false;
     *pages=source.fontPages.get();++pvzh1_rgba_raster_page_diagnostic[5];return true;
 }
@@ -697,6 +738,123 @@ void H1ImageCacheConfigureReducedPack()
         (info.storage_width!=info.width||info.storage_height!=info.height);
 }
 bool H1ImageCacheReducedPack(){return reducedPackConfigured&&reducedPack;}
+bool H1ImageCachePrepareStorageRGBPages(MemoryImage *image,const uint32_t *const **pages,uint32_t *width,uint32_t *height){
+    if(pages)*pages=nullptr;
+    if(!pages||!width||!height||!image||!cacheInstance)return false;
+    auto it=cacheInstance->sources.find(image);if(it==cacheInstance->sources.end())return false;
+    auto& s=it->second;const size_t area=size_t(s.storageWidth)*s.storageHeight;
+    if(!s.Reduced()||(!s.rgbEligible&&!s.rgbaEligible)||area<16384||!s.alphaPath.empty()||image->mFilePath!=s.path||
+       image->mWidth!=int(s.width)||image->mHeight!=int(s.height)||image->mBits||image->mColorIndices||image->mColorTable||
+       image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData||s.storageBits)return false;
+    H1ImageCacheTouch(image);
+    if(!s.storagePages){
+        H1Image input;if(!h1_image_open(&input,s.path.c_str(),s.autoAlpha,s.alphaColor))return false;
+        bool ok=(input.info.channels==3||input.info.channels==4)&&input.info.flags==0&&input.info.width==s.width&&input.info.height==s.height&&input.info.storage_width==s.storageWidth&&input.info.storage_height==s.storageHeight;
+        const auto channels=input.info.channels;
+        bool trans=false,alpha=false;
+        const size_t count=(area+1023)/1024;
+        if(ok){s.storagePages.reset(new(std::nothrow) uint32_t*[count]());ok=s.storagePages!=nullptr;if(ok)s.storagePageCount=count;}
+        for(size_t i=0;ok&&i<count;++i){size_t n=std::min(size_t(1024),area-i*1024);s.storagePages[i]=new(std::nothrow) uint32_t[n];
+            ok=s.storagePages[i]&&h1_image_read_storage_pixels(&input,i*1024,n,s.storagePages[i]);if(ok){s.storagePageBytes+=n*4;
+                if(channels==4)for(size_t p=0;p<n;++p){const auto a=s.storagePages[i][p]>>24;trans|=a==0;alpha|=a!=0&&a!=255;}}}
+        h1_image_close(&input);
+        if(!ok){s.ClearStorage();++cacheInstance->stats.loadFailures;Recount(true);return false;}
+        image->mBitsChanged=false;if(!image->mForcedMode){image->mHasTrans=trans;image->mHasAlpha=alpha;}
+        if(s.sanded&&channels==4){
+            if(!SandRGBAPages(image,s,s.storagePages.get(),s.storageWidth,s.storageHeight)){s.ClearStorage();++cacheInstance->stats.loadFailures;Recount(true);return false;}
+            if(image->mHasTrans)++image->mBitsChangedCount;
+        }
+        s.storageSanded=true;s.storageRevision=NextStorageRevision();++s.storageLoads;++cacheInstance->stats.loads;
+        ++pvzh1_storage_texture_diagnostic[2];pvzh1_storage_texture_diagnostic[3]+=area*channels;cacheInstance->loadedPixelBytes+=area*channels;
+        pvzh1_storage_texture_diagnostic[7]=std::max(uint32_t(pvzh1_storage_texture_diagnostic[7]),uint32_t(4096));Recount(true);
+    }
+    *pages=s.storagePages.get();*width=s.storageWidth;*height=s.storageHeight;++pvzh1_storage_texture_diagnostic[5];return true;
+}
+bool H1ImageCachePrepareStorageFontTiles(MemoryImage* image,const float (&inputU)[3],const float (&inputV)[3],
+    const unsigned char* const** tiles,uint32_t* columns,uint32_t* width,uint32_t* height){
+    if(tiles)*tiles=nullptr;
+    if(!tiles||!columns||!width||!height||!image||!cacheInstance)return false;
+#ifdef PVZ_HOST_RUNNER
+    if(!storageAlphaEnabled||!fontTilesEnabled)return false;
+#endif
+    auto it=cacheInstance->sources.find(image);if(it==cacheInstance->sources.end())return false;
+    auto& s=it->second;
+    if(s.fontTilesRejected||!s.Reduced()||!s.alphaPaletteEligible||!IsFontDataPath(s.path)||
+       (uint32_t(s.alphaColor)&0xffffffu)!=0xffffffu||!s.alphaPath.empty()||image->mFilePath!=s.path||
+       image->mWidth!=int(s.width)||image->mHeight!=int(s.height)||image->mBits||image->mColorIndices||image->mColorTable||
+       image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData||s.storageAlpha||s.alphaPages||s.storageBits)return false;
+    const auto path=FontPath(s.path);const auto slash=path.find_last_of('/');
+    auto name=path.substr(slash==std::string::npos?0:slash+1);
+    if(name.size()>4&&name[name.size()-4]=='.')name.resize(name.size()-4);
+    if(name.compare(0,4,"h1zh"))return false;
+    float u[3],v[3];for(int i=0;i<3;++i){u[i]=inputU[i];v[i]=inputV[i];}
+    H1ReducedTextureBounds bounds{};
+    if(!H1MapReducedTriangle(u,v,s.width,s.height,s.storageWidth,s.storageHeight,bounds))return false;
+    H1ImageCacheTouch(image);const size_t before=s.fontTiles?s.fontTiles->Bytes():0;
+    bool first=!s.fontTiles;
+    if(first){s.fontTiles.reset(new(std::nothrow) H1FontTileStorage());
+        if(!s.fontTiles||!s.fontTiles->Open(name.c_str(),s.storageWidth,s.storageHeight)){
+            s.fontTiles.reset();s.fontTilesRejected=true;return false;}}
+    uint32_t read=0;
+    if(!s.fontTiles->Prepare(bounds.left,bounds.top,bounds.right,bounds.bottom,read)){
+        s.fontTiles.reset();s.fontTilesRejected=true;++cacheInstance->stats.loadFailures;Recount(true);return false;}
+    if(!image->mForcedMode)image->mHasAlpha=image->mHasTrans=true;
+    image->mBitsChanged=false;
+    if(first){++cacheInstance->stats.loads;++s.storageLoads;++pvzh1_storage_texture_diagnostic[2];}
+    cacheInstance->loadedPixelBytes+=read;pvzh1_storage_texture_diagnostic[3]+=read;
+    if(s.fontTiles->Bytes()!=before)Recount(true);
+    *tiles=s.fontTiles->View();*columns=s.fontTiles->Columns();*width=s.storageWidth;*height=s.storageHeight;
+    ++pvzh1_storage_texture_diagnostic[5];return true;
+}
+bool H1ImageCachePrepareStorageAlphaPages(MemoryImage *image,const unsigned char *const **pages,uint32_t *width,uint32_t *height)
+{
+    if(pages)*pages=nullptr;
+    if(!pages||!width||!height||!cacheInstance||!image)return false;
+#ifdef PVZ_HOST_RUNNER
+    if(!storageAlphaEnabled||!alphaPagesEnabled)return false;
+#endif
+    auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
+    auto& source=found->second;const size_t area=size_t(source.storageWidth)*source.storageHeight;
+    if(area<65536||!source.Reduced()||!source.alphaPaletteEligible||
+       (uint32_t(source.alphaColor)&0xffffffu)!=0xffffffu||!source.alphaPath.empty()||
+       image->mFilePath!=source.path||image->mWidth!=int(source.width)||image->mHeight!=int(source.height)||
+       image->mBits||image->mColorIndices||image->mColorTable||source.storageBits||source.storageAlpha||
+       image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData)return false;
+    H1ImageCacheTouch(image);
+    if(!source.alphaPages){
+        H1Image input;if(!h1_image_open(&input,source.path.c_str(),source.autoAlpha,source.alphaColor))return false;
+        bool ok=input.info.width==source.width&&input.info.height==source.height&&
+            input.info.storage_width==source.storageWidth&&input.info.storage_height==source.storageHeight;
+        const size_t count=(area+1023)/1024;
+#ifdef PVZ_HOST_RUNNER
+        if(ok&&!RGBTestAllow(alphaAllocFailure))ok=false;
+#endif
+        if(ok){source.alphaPages.reset(new(std::nothrow) unsigned char*[count]());ok=source.alphaPages!=nullptr;if(ok)source.alphaPageCount=count;}
+        bool trans=false,alpha=false;
+        for(size_t i=0;ok&&i<count;++i){
+            const size_t n=std::min(size_t(1024),area-i*1024);
+#ifdef PVZ_HOST_RUNNER
+            if(!RGBTestAllow(alphaAllocFailure)||!RGBTestAllow(alphaReadFailure)){ok=false;break;}
+#endif
+            source.alphaPages[i]=new(std::nothrow) unsigned char[n];
+            ok=source.alphaPages[i]&&h1_image_read_alpha_bytes(&input,i*1024,n,source.alphaPages[i]);
+            if(ok){source.alphaPageBytes+=n;for(size_t j=0;j<n;++j){const auto a=source.alphaPages[i][j];trans|=!a;alpha|=a&&a!=255;}}
+        }
+        h1_image_close(&input);
+        if(!ok){source.ClearStorage();++cacheInstance->stats.loadFailures;Recount(true);return false;}
+        if(!image->mForcedMode){image->mHasTrans=trans;image->mHasAlpha=alpha;}
+        image->mBitsChanged=false;source.storageRevision=NextStorageRevision();
+        ++cacheInstance->stats.loads;++source.storageLoads;++pvzh1_storage_texture_diagnostic[2];
+        cacheInstance->loadedPixelBytes+=area;pvzh1_storage_texture_diagnostic[3]+=area;
+        pvzh1_storage_texture_diagnostic[7]=std::max(uint32_t(pvzh1_storage_texture_diagnostic[7]),uint32_t(count*sizeof(unsigned char*)));
+        Recount(true);
+    }
+    *pages=source.alphaPages.get();*width=source.storageWidth;*height=source.storageHeight;
+    ++pvzh1_storage_texture_diagnostic[5];return true;
+}
+void H1ImageCacheAllocationChanged(MemoryImage *image){
+    if(cacheInstance&&cacheInstance->sources.find(image)!=cacheInstance->sources.end())cacheInstance->accountingDirty=true;
+}
 bool H1ImageCachePrepareStorageAlpha(MemoryImage *image,const unsigned char **alpha,uint32_t *width,uint32_t *height)
 {
     if(alpha)*alpha=nullptr;
@@ -719,7 +877,7 @@ bool H1ImageCachePrepareStorageAlpha(MemoryImage *image,const unsigned char **al
         source.storageAlpha=std::move(data);source.storageRevision=NextStorageRevision();
         if(!image->mForcedMode){image->mHasAlpha=image->mHasTrans=false;for(size_t i=0;i<area;++i){auto a=source.storageAlpha[i];if(!a)image->mHasTrans=true;else if(a!=255)image->mHasAlpha=true;}}
         ++cacheInstance->stats.loads;++source.storageLoads;++pvzh1_storage_texture_diagnostic[2];cacheInstance->loadedPixelBytes+=area;
-        pvzh1_storage_texture_diagnostic[3]+=uint32_t(area);pvzh1_storage_texture_diagnostic[7]=std::max(uint32_t(pvzh1_storage_texture_diagnostic[7]),uint32_t(area));Recount();
+        pvzh1_storage_texture_diagnostic[3]+=uint32_t(area);pvzh1_storage_texture_diagnostic[7]=std::max(uint32_t(pvzh1_storage_texture_diagnostic[7]),uint32_t(area));Recount(true);
     }
     *alpha=source.storageAlpha.get();*width=source.storageWidth;*height=source.storageHeight;++pvzh1_storage_texture_diagnostic[5];return true;
 }
@@ -734,6 +892,7 @@ bool H1ImageCachePrepareStorageTexture(MemoryImage *image,const uint32_t **bits,
        image->mColorIndices||image->mColorTable||image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData)return false;
     // The command cache asks for dense storage before the triangle sampler.
     // Keep eligible white masks on the A8 path instead of expanding them here.
+    if(source.storagePages)return false;
     if(!source.storageBits&&source.alphaPaletteEligible&&(uint32_t(source.alphaColor)&0xffffffu)==0xffffffu
 #ifdef PVZ_HOST_RUNNER
        &&storageAlphaEnabled
@@ -749,7 +908,7 @@ uint64_t H1ImageCacheStorageRevision(MemoryImage *image) noexcept
     if(!cacheInstance||!image)return 0;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return 0;
     const Source& source=found->second;
-    if(!source.storageBits||!source.Reduced()||!source.alphaPath.empty()||image->mFilePath!=source.path||
+    if((!source.storageBits&&!source.storagePages)||!source.Reduced()||!source.alphaPath.empty()||image->mFilePath!=source.path||
        image->mWidth!=(int)source.width||image->mHeight!=(int)source.height||image->mBits||
        image->mColorIndices||image->mColorTable||image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData)return 0;
     return source.storageRevision;
@@ -760,7 +919,7 @@ bool H1ImageCacheGetStorageStats(MemoryImage *image,H1ImageCacheStorageStats *st
     if(!stats||!image||!cacheInstance)return false;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
     const Source& source=found->second;if(!source.Reduced())return false;
-    *stats={(source.storageBits?(std::size_t)source.storageWidth*source.storageHeight*4+4:0)+(source.storageAlpha?(std::size_t)source.storageWidth*source.storageHeight:0),
+    *stats={(source.storageBits?(std::size_t)source.storageWidth*source.storageHeight*4+4:0)+(source.storageAlpha?(std::size_t)source.storageWidth*source.storageHeight:0)+(source.alphaPages?source.alphaPageBytes+source.alphaPageCount*sizeof(unsigned char*):0)+(source.storagePages?source.storagePageBytes+source.storagePageCount*sizeof(uint32_t*):0)+(source.fontTiles?source.fontTiles->Bytes():0),
         source.width,source.height,source.storageWidth,source.storageHeight,
         source.storageLoads,source.storageBlits,source.storageARGBLoads};
     return true;
@@ -780,7 +939,8 @@ bool H1ImageCacheBltStorageOpaqueRGB(MemoryImage *image,MemoryImage *destination
        (int64_t)valid.mX+valid.mWidth>(int64_t)original.mX+original.mWidth||
        (int64_t)valid.mY+valid.mHeight>(int64_t)original.mY+original.mHeight)return false;
     const uint32_t *pixels=nullptr;uint32_t width=0,height=0;
-    if(!H1ImageCachePrepareStorageTexture(image,&pixels,&width,&height))return false;
+    const uint32_t*const* pages=nullptr;
+    if(!H1ImageCachePrepareStorageRGBPages(image,&pages,&width,&height)&&!H1ImageCachePrepareStorageTexture(image,&pixels,&width,&height))return false;
     const uint32_t left=(uint32_t)((uint64_t)original.mX*width/source.width);
     const uint32_t top=(uint32_t)((uint64_t)original.mY*height/source.height);
     const uint32_t right=(uint32_t)((uint64_t)(original.mX+original.mWidth)*width/source.width);
@@ -797,11 +957,11 @@ bool H1ImageCacheBltStorageOpaqueRGB(MemoryImage *image,MemoryImage *destination
     const uint64_t xWhole=xStep/xDen,xRemainder=xStep%xDen;
     const uint64_t yWhole=yStep/yDen,yRemainder=yStep%yDen;
     for(int row=0;row<valid.mHeight;++row){
-        const uint32_t *input=pixels+(std::size_t)(top+sampleY)*width+left;
+        const size_t inputOffset=(std::size_t)(top+sampleY)*width+left;
         uint32_t *target=out+(std::size_t)(y+row)*destination->mWidth+x;
         uint64_t sampleX=xStart/xDen,errorX=xStart%xDen;
         for(int col=0;col<valid.mWidth;++col){
-            *target++=input[sampleX];
+            const size_t at=inputOffset+sampleX;*target++=pages?pages[at>>10][at&1023]:pixels[at];
             sampleX+=xWhole;errorX+=xRemainder;if(errorX>=xDen){++sampleX;errorX-=xDen;}
         }
         sampleY+=yWhole;errorY+=yRemainder;if(errorY>=yDen){++sampleY;errorY-=yDen;}
@@ -819,6 +979,10 @@ bool H1ImageCacheSandingStorage(MemoryImage *image,void (*sanding)(Image*),H1San
     // White A8 masks have no visible RGB edge to modify. Generic GetBits still
     // applies the saved recipe; physical nearest sampling needs only alpha.
     if(source.alphaPaletteEligible&&(uint32_t(source.alphaColor)&0xffffffu)==0xffffffu){source.sanded=true;if(image->mHasTrans)++image->mBitsChangedCount;return true;}
+    if(source.rgbEligible&&!image->mHasTrans&&!image->mHasAlpha){source.sanded=true;++image->mBitsChangedCount;return true;}
+    // Record the recipe before the sampler prepares bounded physical pages.
+    // A previously materialized dense source still uses the original path.
+    if(source.rgbaEligible&&!source.storageBits&&size_t(source.storageWidth)*source.storageHeight>=16384){source.sanded=true;return true;}
     if(!LoadStorage(image,source)||!SandStorage(image,source))return false;
     source.sanded=true;++image->mBitsChangedCount;return true;
 }
@@ -830,7 +994,7 @@ bool H1ImageCacheSetAlpha(MemoryImage *image,const std::string& path,int rows,in
        !h1_image_probe(path.c_str(),1,&info)||image->mWidth%columns||image->mHeight%rows||
        info.width!=(uint32_t)(image->mWidth/columns)||info.height!=(uint32_t)(image->mHeight/rows))return false;
     found->second.alphaPath=path;found->second.alphaRows=rows;found->second.alphaColumns=columns;
-    found->second.ClearRGB();found->second.ClearFontPages();found->second.ClearStorage();Recount();
+    found->second.ClearRGB();found->second.ClearFontPages();found->second.ClearStorage();Recount(true);
     image->mHasAlpha=image->mHasTrans=true;
     return !image->mBits||ApplyAlpha(image,found->second);
 }
@@ -864,7 +1028,9 @@ bool H1ImageCacheGetFontPageStats(MemoryImage *image,H1ImageCacheFontPageStats *
     return true;
 }
 #ifdef PVZ_HOST_RUNNER
-void H1ImageCacheStorageAlphaTestEnable(bool enabled){storageAlphaEnabled=enabled;if(cacheInstance){for(auto& item:cacheInstance->sources)if(item.second.alphaPaletteEligible)item.second.ClearStorage();Recount();}}
+void H1ImageCacheStorageAlphaTestEnable(bool enabled){storageAlphaEnabled=enabled;if(cacheInstance){for(auto& item:cacheInstance->sources)if(item.second.alphaPaletteEligible)item.second.ClearStorage();Recount(true);}}
+void H1ImageCacheFontTilesTestEnable(bool enabled){fontTilesEnabled=enabled;if(cacheInstance){for(auto& item:cacheInstance->sources)if(item.second.alphaPaletteEligible)item.second.ClearStorage();Recount(true);}}
+void H1ImageCacheAlphaPagesTestEnable(bool enabled){alphaPagesEnabled=enabled;if(cacheInstance){for(auto& item:cacheInstance->sources)if(item.second.alphaPaletteEligible)item.second.ClearStorage();Recount(true);}}
 void H1ImageCacheRGBTestFailure(int allocationsBeforeFailure,int readsBeforeFailure){rgbAllocFailure=allocationsBeforeFailure;rgbReadFailure=readsBeforeFailure;}
 void H1ImageCacheAlphaTestFailure(int allocationsBeforeFailure,int readsBeforeFailure){alphaAllocFailure=allocationsBeforeFailure;alphaReadFailure=readsBeforeFailure;}
 void H1ImageCacheFontPaletteTestFailure(int allocationsBeforeFailure,int readsBeforeFailure){fontAllocFailure=allocationsBeforeFailure;fontReadFailure=readsBeforeFailure;}
@@ -951,7 +1117,7 @@ void H1ImageCacheEndFrame()
     }
     cache.stats.residentBytes=bytes;cache.frameBeginUse=cache.useClock;++cache.stats.frames;++cache.pixelEpoch;
     // Eviction changed backing allocations; one recount publishes all formats.
-    Recount();
+    Recount(true);
 }
 /* A top-level Widget::DrawAll has completely returned. Mark an allocation-
  * pressure boundary only: no eviction, screen clearing or presentation. */
@@ -983,6 +1149,14 @@ extern "C" size_t pvzh1_cache_memory_pressure(size_t requested){
             pvzh1_cache_pressure_diagnostic[3]=0;
             pressureInProgress=false;return hint;
         }
+    }
+    if(pvzh1_music_release_idle){
+        const size_t hint=pvzh1_music_release_idle(requested);
+        if(hint){pressureInProgress=false;return hint;}
+    }
+    if(pvzh1_selector_release_idle){
+        const size_t hint=pvzh1_selector_release_idle(requested);
+        if(hint){pressureInProgress=false;return hint;}
     }
     size_t freed=0,bestBuffer=0,bestBytes=0;bool bestCold=false,bestFits=false;
     auto chosen=cache.sources.end();
@@ -1028,7 +1202,12 @@ extern "C" size_t pvzh1_cache_memory_pressure(size_t requested){
     pvzh1_rgba_raster_page_diagnostic[0]=(uint32_t)rasterBytes;pvzh1_rgba_raster_page_diagnostic[1]=(uint32_t)rasterPages;
     cache.stats.residentBytes=bytes;
     UpdateDiagnostic(cache);
-    Recount();
+    Recount(true);
+    /* A paused board replaces all of its source textures. Reclaim those idle
+     * textures first: dropping the replacement first makes a modal alternate
+     * between rebuilding the board and reloading its own background forever. */
+    if(!freed&&pvzh1_paused_board_release_pressure)
+        freed=pvzh1_paused_board_release_pressure(requested);
     pressureInProgress=false;return freed;
 }
 extern "C" void pvzh1_cache_pressure_stats(uint64_t *calls,uint64_t *evictions,uint64_t *bytes){

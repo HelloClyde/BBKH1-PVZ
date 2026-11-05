@@ -22,9 +22,13 @@ extern "C" unsigned pvzp_pcm_pending_tail() __attribute__((weak));
 extern "C" void pvzp_pcm_buffer_target(unsigned) __attribute__((weak));
 using namespace Sexy;
 struct Voice{FILE *file=nullptr;const int16_t* cached=nullptr;Mix_Chunk *chunk=nullptr;uint64_t position=0;unsigned step=65536;
-    unsigned buffer_start=0,buffer_count=0;int16_t buffer[512];int volume=256;bool loop=false;SDLSoundInstance *owner=nullptr;};
+    unsigned buffer_start=0,buffer_count=0,file_position=0;int16_t buffer[512];int volume=256;bool loop=false;SDLSoundInstance *owner=nullptr;};
 static Voice voices[MAX_CHANNELS];
 static std::map<Mix_Chunk*,std::vector<int16_t>> cached_menu_sounds;
+static std::map<Mix_Chunk*,std::vector<int16_t>> cached_effects;
+static std::vector<Mix_Chunk*> loaded_chunks;
+static bool sound_bank_attempted;
+extern "C" {volatile uint32_t pvzh1_sound_bank_diagnostic[4];}
 static bool pcm_ready;
 static bool audio_pumping;
 static bool audio_loading=true;
@@ -55,6 +59,34 @@ extern "C" void pvzp_audio_service(){
     last_service=now;pvzp_audio_pump();
 }
 static unsigned u32le(const unsigned char *p){return p[0]|p[1]<<8|p[2]<<16|p[3]<<24;}
+extern "C" void pvzh1_sound_warmup(){
+    if(sound_bank_attempted)return;sound_bank_attempted=true;
+    FILE* file=fopen(GetResourcePath("sounds/effects.h1sb").c_str(),"rb");if(!file)return;
+    unsigned char h[16];bool ok=fread(h,1,16,file)==16&&!memcmp(h,"H1SB",4)&&u32le(h+4)==1;
+    const uint32_t count=ok?u32le(h+8):0,bytes=ok?u32le(h+12):0;
+    ok=ok&&count<=256&&bytes<=4*1024*1024;uint32_t consumed=0;
+    for(uint32_t i=0;ok&&i<count;++i){
+        unsigned char row[12];ok=fread(row,1,12,file)==12;if(!ok)break;
+        uint32_t length=u32le(row),samples=u32le(row+4),crc=u32le(row+8);
+        ok=length&&length<256&&samples&&samples<=32760&&uint64_t(consumed)+12+length+samples*2<=bytes;
+        if(!ok)break;std::string name(length,'\0');ok=fread(name.data(),1,length,file)==length;
+        auto path=GetResourcePath(name);Mix_Chunk* chunk=nullptr;
+        for(auto* candidate:loaded_chunks)if(path==candidate->path&&candidate->samples==samples&&!candidate->cached){chunk=candidate;break;}
+        if(chunk){
+            auto& data=cached_effects[chunk];data.resize(samples);
+            ok=ok&&fread(data.data(),2,samples,file)==samples&&crc32(0,(const Bytef*)data.data(),samples*2)==crc;
+            if(ok){chunk->cached=data.data();++pvzh1_sound_bank_diagnostic[0];pvzh1_sound_bank_diagnostic[1]+=samples*2;}
+        }else{
+            unsigned char discard[4096];uint32_t left=samples*2,check=0;
+            while(ok&&left){uint32_t n=std::min(left,uint32_t(sizeof(discard)));ok=fread(discard,1,n,file)==n;check=crc32(check,discard,n);left-=n;}
+            ok=ok&&check==crc;
+        }
+        consumed+=12+length+samples*2;pvzp_audio_service();
+    }
+    ok=ok&&consumed==bytes&&fgetc(file)==EOF;fclose(file);
+    if(!ok){for(auto& entry:cached_effects)entry.first->cached=nullptr;cached_effects.clear();pvzh1_sound_bank_diagnostic[0]=pvzh1_sound_bank_diagnostic[1]=0;++pvzh1_sound_bank_diagnostic[3];}
+    else ++pvzh1_sound_bank_diagnostic[2];
+}
 static std::map<std::string,unsigned> sound_index;
 extern "C" { volatile uint32_t pvzh1_sound_index_diagnostic[4]; }
 static bool sound_index_attempted;
@@ -105,8 +137,9 @@ extern "C" void pvzp_audio_pump(){
                     else {if(v.file)fclose(v.file);v.file=nullptr;v.cached=nullptr;break;}
                 }
                 if(!v.cached&&(position<v.buffer_start||position>=v.buffer_start+v.buffer_count)){
-                    if(fseek(v.file,16+(long)position*2,SEEK_SET)){fclose(v.file);v.file=nullptr;break;}
+                    if(position!=v.file_position&&fseek(v.file,16+(long)position*2,SEEK_SET)){fclose(v.file);v.file=nullptr;break;}
                     v.buffer_start=position;v.buffer_count=(unsigned)fread(v.buffer,2,512,v.file);
+                    v.file_position=position+v.buffer_count;
                     if(!v.buffer_count){fclose(v.file);v.file=nullptr;break;}
                 }
                 const int sample=v.cached?v.cached[position]:v.buffer[position-v.buffer_start];
@@ -122,7 +155,7 @@ SDLSoundManager::SDLSoundManager():mInitializedMixer(false),mMasterVolume(1.0),m
     for(int i=0;i<MAX_SOURCE_SOUNDS;i++){mSourceSounds[i]=nullptr;mBaseVolumes[i]=1;mBasePans[i]=0;}
     pcm_ready=pvzp_pcm_open()!=0;mInitializedMixer=pcm_ready;
 }
-SDLSoundManager::~SDLSoundManager(){ReleaseChannels();ReleaseSounds();pvzp_audio_close();pcm_ready=false;sound_index.clear();sound_index_attempted=false;}
+SDLSoundManager::~SDLSoundManager(){ReleaseChannels();ReleaseSounds();pvzp_audio_close();pcm_ready=false;sound_index.clear();sound_index_attempted=false;sound_bank_attempted=false;cached_effects.clear();loaded_chunks.clear();}
 bool SDLSoundManager::Initialized(){return mInitializedMixer;}
 bool SDLSoundManager::LoadSound(intptr_t id,const std::string& name){
     if(id<0||id>=MAX_SOURCE_SOUNDS)return false;if(mSourceSounds[id])return true;
@@ -132,15 +165,15 @@ bool SDLSoundManager::LoadSound(intptr_t id,const std::string& name){
         FILE* file=fopen(c->path,"rb");if(file){
             auto& samples=cached_menu_sounds[c];samples.resize(c->samples);
             bool ok=fseek(file,16,SEEK_SET)==0&&fread(samples.data(),2,c->samples,file)==c->samples;fclose(file);
-            if(!ok)cached_menu_sounds.erase(c);
+            if(!ok)cached_menu_sounds.erase(c);else c->cached=samples.data();
         }
     }
-    mSourceSounds[id]=c;mSourceFileNames[id]=name;return true;
+    loaded_chunks.push_back(c);mSourceSounds[id]=c;mSourceFileNames[id]=name;return true;
 }
 intptr_t SDLSoundManager::LoadSound(const std::string& name){for(int i=0;i<MAX_SOURCE_SOUNDS;i++)if(mSourceFileNames[i]==name)return i;
     intptr_t id=GetFreeSoundId();return id>=0&&LoadSound(id,name)?id:-1;}
 void SDLSoundManager::ReleaseSound(intptr_t id){if(id<0||id>=MAX_SOURCE_SOUNDS)return;auto *c=mSourceSounds[id].load();
-    for(int i=0;i<MAX_CHANNELS;i++)if(voices[i].chunk==c)stop_voice(i);cached_menu_sounds.erase(c);delete c;mSourceSounds[id]=nullptr;mSourceFileNames[id].clear();}
+    for(int i=0;i<MAX_CHANNELS;i++)if(voices[i].chunk==c)stop_voice(i);cached_menu_sounds.erase(c);cached_effects.erase(c);loaded_chunks.erase(std::remove(loaded_chunks.begin(),loaded_chunks.end(),c),loaded_chunks.end());delete c;mSourceSounds[id]=nullptr;mSourceFileNames[id].clear();}
 void SDLSoundManager::SetVolume(double volume){mMasterVolume=volume;for(auto &s:mPlayingSounds)if(s)s->RehupVolume();}
 bool SDLSoundManager::SetBaseVolume(intptr_t id,double volume){if(id<0||id>=MAX_SOURCE_SOUNDS)return false;mBaseVolumes[id]=volume;return true;}
 bool SDLSoundManager::SetBasePan(intptr_t id,int pan){if(id<0||id>=MAX_SOURCE_SOUNDS)return false;mBasePans[id]=pan;return true;}
@@ -174,10 +207,10 @@ void SDLSoundInstance::SetVolume(double v){mVolume=v;RehupVolume();}
 void SDLSoundInstance::SetPan(int p){mPan=p;}
 bool SDLSoundInstance::Play(bool loop,bool automatic){
     Stop();if(!mMixChunk||mReservedChannel<0)return false;
-    auto cached=cached_menu_sounds.find(mMixChunk);FILE* file=nullptr;
-    if(cached==cached_menu_sounds.end()){file=fopen(mMixChunk->path,"rb");if(!file)return false;if(fseek(file,16,SEEK_SET)){fclose(file);return false;}}
+    FILE* file=nullptr;
+    if(!mMixChunk->cached){file=fopen(mMixChunk->path,"rb");if(!file)return false;if(fseek(file,16,SEEK_SET)){fclose(file);return false;}}
     mChannel=mReservedChannel;stop_voice(mChannel);Voice &v=voices[mChannel];
-    if(cached!=cached_menu_sounds.end())v.cached=cached->second.data();
+    if(mMixChunk->cached)v.cached=mMixChunk->cached;
     v.file=file;v.chunk=mMixChunk;v.position=0;v.step=(unsigned)std::clamp(mPitch*65536.0f,8192.0f,524288.0f);
     v.loop=loop;v.owner=this;mHasPlayed=true;mReleased=false;mAutoRelease=automatic;RehupVolume();return true;
 }

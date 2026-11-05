@@ -26,7 +26,7 @@ def main():
  sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
  files={p.relative_to(target).as_posix():dict(bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(target.rglob('*.h1d'))}
  sources={name[:-4]:sha(a.resources/name[:-4]) for name in files}
- manifest=dict(format='H1D1',files=files,source_xml_sha256=sources,host_sha256=sha(a.host),
+ manifest=dict(format='H1D1 particles/trails; H1D2 numeric-resolved reanimations',files=files,source_xml_sha256=sources,host_sha256=sha(a.host),
   count=len(files),bytes=sum(f['bytes'] for f in files.values()),all_fields_roundtrip=True,crc_rejection=True,
   exporter_source_sha256=sha(ROOT/'platform/definition/H1Definition.cpp'),
   upstream_parser_sha256=sha(ROOT/'upstream/src/PvzpLib/Definition.cpp'))

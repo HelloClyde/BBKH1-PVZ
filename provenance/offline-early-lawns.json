@@ -1,0 +1,36 @@
+{
+  "runtime_path": "early-lawns.h1lb",
+  "bytes": 1217040,
+  "sha256": "17bd2a43b1d210a355a6a06c5bce88c2888ae2015a94d05903edecf5c87c2f5e",
+  "tiles": 2353,
+  "frames": 6,
+  "decoded_pixels_compared": 783360,
+  "source_frames": {
+    "lawn-0.argb": "9ba79462f952df5292a50102a44682d2a3c281fdf0fa18a857679be3552fe75e",
+    "lawn-1.argb": "8eb210b69b05e10bd4436fdefd3d318964f0c7f5059dafd49008ff0391077760",
+    "lawn-2.argb": "8eb210b69b05e10bd4436fdefd3d318964f0c7f5059dafd49008ff0391077760",
+    "lawn-3.argb": "3d3b40287ae59804bdd409c203cc57b1ad1f056cedd270c6db07949438ad59e1",
+    "lawn-4.argb": "48870e9277699cde138d7bd59ac8bff5072be8ac825076a2e93580ecd3e551bf",
+    "lawn-5.argb": "00120b68d150446c7e3aa6da0beb542c87c0eda2e354f54b057f09fff16c98b2"
+  },
+  "lossy": false,
+  "intermediate_policy": "Fixed original endpoint samples; horizontal reveal on the LCD pixel grid eliminates crop-width-dependent UV shimmer",
+  "encoder_sha256": "109dd9e31d62c244a9e43b39234ec0a50849b5ecd08e5d3a6bf862f83c0d191e",
+  "renderer_exporter_sha256": "a290c6ea4bf5f6708ebce4e977af77f5a86f01fce525e6b88fcee4eb0099ed82",
+  "source_commit": "98b659380014c89c3553fbb2839f5e5a84d6df3d",
+  "original_endpoint_frames": true,
+  "reproduction_identical": true,
+  "applies_to_adventure_levels": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "runtime_replay_verification": "docs/verification/runtime-fixes/host-early-lawn-replay.json",
+  "intermediate_matches_original_bit_for_bit": false,
+  "reason": "Original triangle UV sampling changes with source-crop width. The offline renderer uses stable original endpoint samples, copied to the LCD pixel grid. Complete rolling and particle animations remain active.",
+  "resident_scope": "Only 4 KiB pages referenced by current level endpoint pair; remaining file pages stream through a 4 KiB CRC scratch. Level change drops prior pages before loading next pair.",
+  "current_level_2_payload_page_bytes": 757760,
+  "all_endpoint_payload_bytes": 1204736,
+  "current_reader_verification": "docs/verification/runtime-fixes/host-early-lawn-replay.json"
+}

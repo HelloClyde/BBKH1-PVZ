@@ -14,6 +14,11 @@
 #include "profiler.h"
 #endif
 #include <cmath>
+#include <cstring>
+#include <cstdio>
+#include <new>
+#include "h1_resources.h"
+#include "zlib.h"
 #include <algorithm>
 #if defined(PVZ_HOST_RUNNER)
 #include "h1_host.h"
@@ -25,6 +30,44 @@
 /* Attempted rows, accepted rows, pixels, opaque stores, partial-alpha pixels,
  * transparent skips, unit-step rows, reserved. Updated only at row boundaries. */
 extern "C" {volatile uint32_t pvzh1_axis_span_diagnostic[8];}
+extern "C" {uint32_t pvzh1_direct_additive;volatile uint32_t pvzh1_additive_diagnostic[4];}
+extern "C" {const unsigned char* pvzh1_additive_lut=nullptr;}
+extern "C" bool pvzh1_additive_prepare(){
+    if(pvzh1_additive_lut)return true;
+    char path[640];if(std::snprintf(path,sizeof(path),"%sdata/additive.h1lut",h1_resources_get_root())>=int(sizeof(path)))return false;
+    FILE* file=std::fopen(path,"rb");if(!file)return false;
+    unsigned char header[16];auto u32=[](const unsigned char* p){return uint32_t(p[0])|(uint32_t(p[1])<<8)|(uint32_t(p[2])<<16)|(uint32_t(p[3])<<24);};
+    bool ok=std::fread(header,1,16,file)==16&&!std::memcmp(header,"H1AL",4)&&u32(header+4)==1&&u32(header+8)==65536;
+    unsigned char* data=ok?new(std::nothrow) unsigned char[65536]:nullptr;
+    ok=ok&&data&&std::fread(data,1,65536,file)==65536&&std::fgetc(file)==EOF&&crc32(0,data,65536)==u32(header+12);
+    std::fclose(file);if(!ok){delete[] data;return false;}pvzh1_additive_lut=data;return true;
+}
+extern "C" void pvzh1_additive_shutdown(){delete[] pvzh1_additive_lut;pvzh1_additive_lut=nullptr;}
+
+namespace {
+uintptr_t additiveBase=0;unsigned char saturatedTiles[30*34]{};
+bool saturatedAny=false;
+bool AdditivePosition(const uint32_t* p,unsigned& x,unsigned& y){
+    const auto address=(uintptr_t)p;
+    if(!additiveBase||address<additiveBase||address-additiveBase>=480u*272u*4u||(address-additiveBase)%4)return false;
+    const unsigned index=(address-additiveBase)/4;x=index%480;y=index/480;return true;
+}
+}
+extern "C" void pvzh1_additive_normal_draw(){if(!pvzh1_direct_additive&&saturatedAny){std::memset(saturatedTiles,0,sizeof(saturatedTiles));saturatedAny=false;}}
+extern "C" void pvzh1_additive_begin_frame(uint32_t* pixels){additiveBase=(H1DirtyCanvas::Width==480&&H1DirtyCanvas::Height==272)?(uintptr_t)pixels:0;std::memset(saturatedTiles,0,sizeof(saturatedTiles));saturatedAny=false;}
+extern "C" unsigned pvzh1_additive_span(uint32_t* pixels,unsigned count,unsigned* span){
+    unsigned x,y;if(!AdditivePosition(pixels,x,y)){*span=count;return 0;}
+    *span=std::min(count,16u-(x&15));if(saturatedTiles[(y/8)*30+x/16]){++pvzh1_additive_diagnostic[3];return *span;}return 0;
+}
+extern "C" void pvzh1_additive_span_done(uint32_t* pixels){
+    unsigned x,y;if(!AdditivePosition(pixels,x,y)||(y&7)!=7)return;
+    const auto tile=(y/8)*30+x/16;auto* base=(const uint32_t*)additiveBase+(y&~7u)*480+(x&~15u);
+    for(unsigned row=0;row<8;++row)for(unsigned col=0;col<16;++col)if((base[row*480+col]&0xffffffu)!=0xffffffu)return;
+    saturatedTiles[tile]=1;saturatedAny=true;
+}
+#ifdef PVZ_HOST_RUNNER
+static bool directAdditiveEnabled=true;
+#endif
 #ifdef PVZ_HOST_RUNNER
 extern "C" {bool pvzh1_geometry_fast_enabled=true;}
 #endif
@@ -35,6 +78,7 @@ extern "C" bool pvzh1_sampler_test_enabled;
 namespace Sexy {
 #ifdef PVZ_HOST_RUNNER
 static bool axisSpanEnabled=true;
+void H1DirectAdditiveTestEnable(bool enabled){directAdditiveEnabled=enabled;}
 void H1FastReducedSpanTestEnable(bool enabled){axisSpanEnabled=enabled;}
 void H1GeometryFastTestEnable(bool enabled){pvzh1_geometry_fast_enabled=enabled;}
 #endif
@@ -51,7 +95,7 @@ bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTexture
 #ifdef PVZ_HOST_RUNNER
     if(!axisSpanEnabled)return false;
 #endif
-    if(count<8||!destination||!texture||texture->captureText||!texture->reducedClamp||!texture->pTexture||dv!=0||
+    if(count<8||!destination||!texture||texture->captureText||!texture->reducedClamp||(!texture->pTexture&&!texture->pages)||dv!=0||
        texture->clampRight<=texture->clampLeft||texture->clampBottom<=texture->clampTop)return false;
     /* Only accept spans wholly inside their physical cell. Border clamps,
      * wrapped fixed-point coordinates and arbitrary triangles keep the original
@@ -64,7 +108,8 @@ bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTexture
     unsigned y=v>>16;
     if(y<(unsigned)texture->clampTop)y=(unsigned)texture->clampTop;
     if(y>=(unsigned)texture->clampBottom)y=(unsigned)texture->clampBottom-1;
-    const uint32_t *row=texture->pTexture+(size_t)y*texture->pitch;
+    const uint32_t *row=texture->pTexture?texture->pTexture+(size_t)y*texture->pitch:nullptr;
+    auto texel=[&](unsigned x){const unsigned at=y*texture->pitch+x;return row?row[x]:texture->pages[at>>10u][at&1023u];};
     unsigned opaque=0,partial=0,transparent=0;
     if(!sourceAlpha
 #ifdef PVZH1_SAMPLER_TEST
@@ -75,16 +120,16 @@ bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTexture
         // supplies overlapping memory; no restrict or batched speculative load.
         int remaining=count;
         while(remaining>=4){
-            *destination++=row[u>>16]|0xff000000u;u+=(unsigned)du;
-            *destination++=row[u>>16]|0xff000000u;u+=(unsigned)du;
-            *destination++=row[u>>16]|0xff000000u;u+=(unsigned)du;
-            *destination++=row[u>>16]|0xff000000u;u+=(unsigned)du;
+            *destination++=texel(u>>16)|0xff000000u;u+=(unsigned)du;
+            *destination++=texel(u>>16)|0xff000000u;u+=(unsigned)du;
+            *destination++=texel(u>>16)|0xff000000u;u+=(unsigned)du;
+            *destination++=texel(u>>16)|0xff000000u;u+=(unsigned)du;
             remaining-=4;
         }
-        while(remaining--){*destination++=row[u>>16]|0xff000000u;u+=(unsigned)du;}
+        while(remaining--){*destination++=texel(u>>16)|0xff000000u;u+=(unsigned)du;}
         opaque=(unsigned)count;
     }else for(int i=0;i<count;++i,u+=(unsigned)du){
-        const uint32_t tex=row[u>>16];
+        const uint32_t tex=texel(u>>16);
         const unsigned alpha=sourceAlpha?tex>>24:255;
         if(alpha<=8){++transparent;continue;}
         if(alpha>=240){destination[i]=tex|0xff000000u;++opaque;continue;}
@@ -156,6 +201,7 @@ static uint32_t Composite(uint32_t dest,uint32_t src,int mode)
 
 void H1FillRect(MemoryImage *dest,const Rect& rect,const Color& color,int mode)
 {
+    h1AdditiveNormalDraw=pvzh1_additive_normal_draw;h1AdditiveBeginFrame=pvzh1_additive_begin_frame;
     Rect r=Bounds(dest,rect);
     if (r.mWidth<=0||r.mHeight<=0) return;
     H1CanvasKnownDraw canvas(dest,r.mX,r.mY,r.mWidth,r.mHeight);
@@ -332,7 +378,7 @@ static void RepeatTriangle(MemoryImage *dest,MemoryImage *texture,const TriVerte
     uint32_t *bits=dest->GetBits();
     TexturePixels textureBits;
     uint32_t textureWidth=texture->mWidth,textureHeight=texture->mHeight;
-    if(H1ImageCachePrepareStorageTexture(texture,&textureBits.bits,&textureWidth,&textureHeight))linear=false;
+    if(H1ImageCachePrepareStorageRGBPages(texture,&textureBits.pages,&textureWidth,&textureHeight)||H1ImageCachePrepareStorageTexture(texture,&textureBits.bits,&textureWidth,&textureHeight))linear=false;
     else if(!H1ImageCachePrepareTexturePages(texture,&textureBits.pages))textureBits.bits=texture->GetBits();
     for (int y=top;y<bottom;++y) for (int x=left;x<right;++x) {
         float w0=Edge(v[1],v[2],x+0.5f,y+0.5f);
@@ -361,6 +407,12 @@ static void RepeatTriangle(MemoryImage *dest,MemoryImage *texture,const TriVerte
 void H1DrawTriangles(MemoryImage *dest,Image *image,const TriVertex vertices[][3],int count,
                      const Rect& requestedClip,const Color& color,int mode,float tx,float ty,bool linear)
 {
+    h1AdditiveNormalDraw=pvzh1_additive_normal_draw;h1AdditiveBeginFrame=pvzh1_additive_begin_frame;
+    bool directMode=mode==Graphics::DRAWMODE_ADDITIVE;
+#ifdef PVZ_HOST_RUNNER
+    directMode=directMode&&directAdditiveEnabled;
+#endif
+    struct AdditiveModeScope {uint32_t previous=pvzh1_direct_additive;AdditiveModeScope(bool enabled){pvzh1_direct_additive=enabled;}~AdditiveModeScope(){pvzh1_direct_additive=previous;}} directModeScope(directMode);
     Rect clip=Bounds(dest,requestedClip);
     if (clip.mWidth<=0||clip.mHeight<=0||count<=0) return;
     MemoryImage *texture=dynamic_cast<MemoryImage*>(image);
@@ -392,6 +444,27 @@ void H1DrawTriangles(MemoryImage *dest,Image *image,const TriVertex vertices[][3
             int bottom=(int)std::ceil(std::max({v[0].y,v[1].y,v[2].y}))+1;
             Rect box=Rect(left,top,right-left,bottom-top).Intersection(clip);
             if (box.mWidth<=0||box.mHeight<=0) continue;
+            bool direct=true;
+#ifdef PVZ_HOST_RUNNER
+            direct=directAdditiveEnabled;
+#endif
+            if(direct){
+                // The original 8888 shader still computes the exact sample over
+                // zero, then commits that scalar sample additively. Use the old
+                // box origin/clip so raster coordinates and rounding stay exact.
+                for(int j=0;j<3;++j){v[j].x-=box.mX;v[j].y-=box.mY;}
+                struct Mode {uint32_t previous=pvzh1_direct_additive;Mode(){pvzh1_direct_additive=1;}~Mode(){pvzh1_direct_additive=previous;}} additive;
+                const Rect local(0,0,box.mWidth,box.mHeight);
+                auto* target=dest->GetBits()+size_t(box.mY)*dest->mWidth+box.mX;
+                if(texture){TriVertex a[1][3]={{v[0],v[1],v[2]}};
+                    dest->MemoryImage::BltTrianglesTexHelper(texture,a,1,local,color,Graphics::DRAWMODE_NORMAL,target,dest->mWidth*4,0x8888,0,0,linear);
+                }else{
+                    SWHelper::XYZStruct a[3];for(int j=0;j<3;++j){a[j].mX=v[j].x;a[j].mY=v[j].y;a[j].mU=a[j].mV=0;a[j].mDiffuse=v[j].color?v[j].color:0xffffffffu;}
+                    SWHelper::SWDrawShape(a,3,nullptr,color,Graphics::DRAWMODE_NORMAL,local,target,dest->mWidth*4,0x8888,linear,true);
+                }
+                dest->BitsChanged();++pvzh1_additive_diagnostic[0];H1TracePixel(dest,image,"direct-additive-triangle");continue;
+            }
+            ++pvzh1_additive_diagnostic[1];pvzh1_additive_diagnostic[2]=std::max(uint32_t(pvzh1_additive_diagnostic[2]),uint32_t(box.mWidth*box.mHeight*4+4));
             MemoryImage scratch(dest->mApp);
             scratch.Create(box.mWidth,box.mHeight);
             for (int j=0;j<3;++j) {v[j].x-=box.mX;v[j].y-=box.mY;}
@@ -414,6 +487,9 @@ void H1DrawTransformed(MemoryImage *dest,Image *image,const Rect& sourceRect,
                        const SexyMatrix3& matrix,bool linear,float x,float y,bool center)
 {
     if (!image||image->mWidth<=0||image->mHeight<=0||sourceRect.mWidth<=0||sourceRect.mHeight<=0) return;
+    const H1ImageReplayContext imageReplay{dest,image,sourceRect,clip,color,mode,matrix,linear,x,y,center};
+    if(H1ImageReplayTryDraw(imageReplay))return;
+    H1TextReplayCapture imageCapture(imageReplay);
     struct CaptureGuard {H1RenderPlanToken token{};~CaptureGuard(){H1RenderPlanAbort(token);}} plan;
     if(H1RenderPlanDrawOrBegin(dest,image,sourceRect,clip,color,mode,matrix,linear,x,y,center,plan.token)){
         H1ImageCacheTouch(dest);H1ImageCacheTouch(dynamic_cast<MemoryImage*>(image));image->mDrawn=true;
@@ -455,6 +531,6 @@ void H1DrawTransformed(MemoryImage *dest,Image *image,const Rect& sourceRect,
         v[i][j].x=p.x+x-0.5f;v[i][j].y=p.y+y-0.5f;
     }
     H1DrawTriangles(dest,image,v,2,clip,color,mode,0,0,linear);
-    H1RenderPlanFinish(plan.token);plan.token.value=0;
+    H1RenderPlanFinish(plan.token);plan.token.value=0;imageCapture.Commit();
 }
 }

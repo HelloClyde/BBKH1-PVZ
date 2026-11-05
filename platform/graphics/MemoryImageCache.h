@@ -28,6 +28,21 @@ bool H1ImageCachePrepareTexturePages(MemoryImage *image,const uint32_t* const**p
 bool H1ImageCacheIsReduced(MemoryImage *image);
 bool H1ImageCachePrepareStorageTexture(MemoryImage *image,const uint32_t **bits,uint32_t *width,uint32_t *height);
 bool H1ImageCachePrepareStorageAlpha(MemoryImage *image,const unsigned char **alpha,uint32_t *width,uint32_t *height);
+/* Large reduced A8 masks use 1024-byte ordinary heap blocks. The table and
+ * blocks are pinned for this synchronous draw, just like dense source views. */
+bool H1ImageCachePrepareStorageAlphaPages(MemoryImage *image,const unsigned char *const **pages,uint32_t *width,uint32_t *height);
+bool H1ImageCachePrepareStorageFontTiles(MemoryImage *image,const float (&u)[3],const float (&v)[3],
+    const unsigned char *const **tiles,uint32_t *columns,uint32_t *width,uint32_t *height);
+bool H1ImageCachePrepareStorageRGBPages(MemoryImage *image,const uint32_t *const **pages,uint32_t *width,uint32_t *height);
+void H1ImageCacheAllocationChanged(MemoryImage *image);
+/* Mark after a lazy native/RL/palette getter finishes: its nested GetBits may
+ * publish an intermediate recount before the outer backing allocation exists. */
+struct H1ImageCacheAccountingChange {
+    MemoryImage* image;
+    bool changed;
+    H1ImageCacheAccountingChange(MemoryImage* value,bool missing):image(value),changed(missing){}
+    ~H1ImageCacheAccountingChange(){if(changed)H1ImageCacheAllocationChanged(image);}
+};
 /* Query after a successful PrepareStorageTexture in this synchronous batch.
  * Zero means no eligible live dense pixels. The process-wide content cookie
  * changes after release/reload, sanding or Image-address reuse. It does not
@@ -72,6 +87,8 @@ void H1ImageCacheAlphaTestFailure(int allocationsBeforeFailure,int readsBeforeFa
 void H1ImageCacheFontPaletteTestFailure(int allocationsBeforeFailure,int readsBeforeFailure);
 void H1ImageCacheFontPageTestFailure(int allocationsBeforeFailure,int readsBeforeFailure);
 void H1ImageCacheStorageAlphaTestEnable(bool enabled);
+void H1ImageCacheAlphaPagesTestEnable(bool enabled);
+void H1ImageCacheFontTilesTestEnable(bool enabled);
 #endif
 struct H1ImageCacheStats {
     std::size_t descriptors,residentBytes,peakBytes,budgetBytes;

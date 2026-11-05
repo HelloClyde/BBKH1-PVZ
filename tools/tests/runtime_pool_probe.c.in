@@ -9,6 +9,9 @@
 #include <string.h>
 #include "small_pool.h"
 #include "runtime.h"
+#include "asset_index.h"
+static PvzAssetIndex asset_index;
+static unsigned char *asset_index_data;
 
 static void *host_allocate(size_t n){return malloc(n);}
 static void host_release(void *p){free(p);}
@@ -34,14 +37,16 @@ size_t pvzh1_cache_memory_pressure(size_t requested);
 
 void pvz_runtime_abort(int code){fprintf(stderr,"unexpected runtime abort %d\n",code);abort();}
 void pvz_runtime_capture_heap_failure(size_t user,size_t raw){++capture_calls;captured_user=user;captured_raw=raw;}
-void *pvz_runtime_native_allocate(size_t requested,size_t size){
+void *pvz_runtime_native_allocate_span(size_t requested,size_t size,size_t *actual){
     size_t span=(size+63u+3u)&~(size_t)3u;unsigned i;void *p;(void)requested;
-    ++native_calls;pvz_runtime_hole_diagnostic[7]=0;
+    ++native_calls;*actual=0;pvz_runtime_hole_diagnostic[7]=0;
     if(force_fail||size>native_limit||native_bytes>native_budget||span>native_budget-native_bytes)return 0;
     for(i=0;i<2048&&native[i].raw;i++);assert(i<2048);
     p=host_allocate(span);assert(p);native[i].raw=p;native[i].bytes=span;
     native_bytes+=span;if(native_bytes>native_peak)native_peak=native_bytes;
-    ++native_successes;pvz_runtime_hole_diagnostic[7]=(uint32_t)span;return p;
+    ++native_successes;*actual=span;
+    /* A shared observation can change before the allocator's caller resumes. */
+    pvz_runtime_hole_diagnostic[7]=UINT32_MAX;return p;
 }
 static void h1_free(void *raw){
     unsigned i;for(i=0;i<2048&&native[i].raw!=raw;i++);assert(i<2048);
@@ -99,6 +104,23 @@ int main(void){
             free(p);consistent();
         }
     }empty();
+    /* Full 4KiB texture/cache payloads must include the allocation header in
+       the slab eligibility check. This used to miss the 4096-raw cutoff. */
+    {
+        void *texture_pages[256];unsigned acquisitions=native_successes;
+        for(unsigned i=0;i<256;++i){
+            texture_pages[i]=malloc(4096);assert(texture_pages[i]);
+            Allocation *header=(Allocation *)((unsigned char *)texture_pages[i]-sizeof(Allocation));
+            assert(header->f.raw_span&1u);memset(texture_pages[i],i,4096);
+        }
+        assert(native_successes-acquisitions<=33);
+        for(unsigned i=0;i<256;++i){
+            assert(((unsigned char *)texture_pages[i])[0]==(unsigned char)i);
+            assert(((unsigned char *)texture_pages[i])[4095]==(unsigned char)i);
+            free(texture_pages[i]);
+        }
+        empty();
+    }
     assert(!aligned_alloc(16,17)&&errno==EINVAL);assert(posix_memalign(&p,3,12)==EINVAL);
     p=aligned_alloc(32,96);assert(p&&!((uintptr_t)p&31u));free(p);empty();
     p=calloc(19,13);assert(p);for(unsigned i=0;i<247;i++)assert(!((unsigned char *)p)[i]);free(p);

@@ -9,8 +9,11 @@
 extern "C" {
 #endif
 
-#define PVZ_SMALL_POOL_MAX_RAW 4096u
-#define PVZ_SMALL_POOL_CLASS_COUNT 56u
+/* A 4KiB application page also carries Allocation and alignment headers.
+ * Include its complete raw request rather than sending every texture page
+ * back through the firmware's descriptor-heavy individual allocation path. */
+#define PVZ_SMALL_POOL_MAX_RAW 4352u
+#define PVZ_SMALL_POOL_CLASS_COUNT 57u
 #define PVZ_SMALL_POOL_PAGE_BYTES 16384u
 
 typedef struct PvzSmallPoolOwner PvzSmallPoolOwner;

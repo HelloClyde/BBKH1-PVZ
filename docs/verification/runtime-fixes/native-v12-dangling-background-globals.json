@@ -1,0 +1,124 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "read",
+        "address": "0x83f54ba8",
+        "bytes": 4
+      },
+      {
+        "kind": "read",
+        "address": "0x83f54bf4",
+        "bytes": 4
+      },
+      {
+        "kind": "read",
+        "address": "0x83f54bac",
+        "bytes": 4
+      },
+      {
+        "kind": "read",
+        "address": "0x83f54ba4",
+        "bytes": 4
+      },
+      {
+        "kind": "read",
+        "address": "0x83f54bf0",
+        "bytes": 4
+      },
+      {
+        "kind": "read",
+        "address": "0x83f54bec",
+        "bytes": 4
+      }
+    ]
+  },
+  "started_utc": "2026-11-04T20:06:49.321382+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83f54ba8",
+        "bytes": 4
+      },
+      "result": {
+        "address": "0x83f54ba8",
+        "bytes": 4,
+        "hex": "f8af3483"
+      },
+      "started_monotonic": 571392.015,
+      "finished_monotonic": 571392.031
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83f54bf4",
+        "bytes": 4
+      },
+      "result": {
+        "address": "0x83f54bf4",
+        "bytes": 4,
+        "hex": "f8a53483"
+      },
+      "started_monotonic": 571392.031,
+      "finished_monotonic": 571392.031
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83f54bac",
+        "bytes": 4
+      },
+      "result": {
+        "address": "0x83f54bac",
+        "bytes": 4,
+        "hex": "58af3483"
+      },
+      "started_monotonic": 571392.031,
+      "finished_monotonic": 571392.031
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83f54ba4",
+        "bytes": 4
+      },
+      "result": {
+        "address": "0x83f54ba4",
+        "bytes": 4,
+        "hex": "98b03483"
+      },
+      "started_monotonic": 571392.031,
+      "finished_monotonic": 571392.031
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83f54bf0",
+        "bytes": 4
+      },
+      "result": {
+        "address": "0x83f54bf0",
+        "bytes": 4,
+        "hex": "98a63483"
+      },
+      "started_monotonic": 571392.031,
+      "finished_monotonic": 571392.031
+    },
+    {
+      "action": {
+        "kind": "read",
+        "address": "0x83f54bec",
+        "bytes": 4
+      },
+      "result": {
+        "address": "0x83f54bec",
+        "bytes": 4,
+        "hex": "b8ae3483"
+      },
+      "started_monotonic": 571392.031,
+      "finished_monotonic": 571392.031
+    }
+  ],
+  "ok": true
+}

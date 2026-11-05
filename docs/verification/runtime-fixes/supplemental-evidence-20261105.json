@@ -1,0 +1,45 @@
+{
+  "files": {
+    "host-paused-board-pressure.json": {
+      "source": "build/runtime-paused-v10/run/paused-board-verification.json",
+      "sha256": "0fcce55515ea54df8e0b6354d74cacf1625a0d2c43a3a0ea4e73c359c97d4456"
+    },
+    "host-selector-paged-welcome.json": {
+      "source": "build/runtime-selector-v11/run/selector-offline-engine-verification.json",
+      "sha256": "b56cc08ed7f5607e704e99cf35b58d6c3a6b79d055a88caac3f85489d0114a5a"
+    },
+    "host-render-plan-current-lcd.json": {
+      "source": "build/runtime-plan-v11-wide-final/run/render-plan-verification.json",
+      "sha256": "6faa29c919cafae909da403e51816d1b4a0cb4418051aa53bfc00155e6c36b4b"
+    },
+    "host-grass-backdrop-current.json": {
+      "source": "build/runtime-grass-v11/run/grass-backdrop-verification.json",
+      "sha256": "e90ffc445fdc992e667fe8985c088a4e6d5d59f2904f24f6b0b1192d077fb24c"
+    },
+    "host-small-pool-4k-payloads.json": {
+      "source": "build/small-pool-test/report.json",
+      "sha256": "a7a499f962ae4c3397e1899fd6e2d783b8554472c0c0a8e53560d983f371e12a"
+    },
+    "host-runtime-pool-4k-payloads.json": {
+      "source": "build/runtime-pool-integration/report.json",
+      "sha256": "29b6a684773985cd2628abbdddc8343aa134bd153e700f4656a6e3f03bc0492d"
+    },
+    "native-v9-options-window.json": {
+      "source": "build/hardware-test-20261105-runtime-v9/010-options-fps-result-analysis.json",
+      "sha256": "d26743bed9821eac7bd4fbfb0daf71ae30fc0175ce6f7fa92eef589b11782504"
+    },
+    "native-v9-reward-resident-window.json": {
+      "source": "build/hardware-test-20261105-runtime-v9/012-reward-fps-result-analysis.json",
+      "sha256": "198d75bc33d98493ff8b15ffa830efc4328917eda9556a143adc6f71ec6d8f35"
+    },
+    "native-v9-return-menu-allocation-failure.json": {
+      "source": "build/hardware-test-20261105-runtime-v9/023-paused-cpu-result.json",
+      "sha256": "e8bf23e778f3c1d9b0be4599cfaafadea5b5a35fdd825463efc45d3184fb6287"
+    },
+    "native-v9-clean-exit.json": {
+      "source": "build/hardware-test-20261105-runtime-v9/028-exit-check-result.json",
+      "sha256": "4721022ed5026169d88897321ae83c885df0b6ac4630f627f81d47f13c4fdd78"
+    }
+  },
+  "scope": "Host correctness and earlier candidate native observations; current candidate performance still requires physical H1 measurement."
+}

@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "scene_sequence": [
+    0,
+    1,
+    3,
+    1
+  ],
+  "original_touch_inputs": true,
+  "save_level": 2,
+  "save_bytes": 43332,
+  "save_internal_crc_valid": true,
+  "continue_options_return_dialogs_observed": true,
+  "selector_generations": 2,
+  "source_cache_exit_bytes": 0,
+  "program_sha256": "5cac225d364a690bd46a53a51e069b9844af9c62900a4502520649bc54952e80",
+  "states_sha256": "26b93cc7f9485d4bcc4be138001a772225f470358c7024cf039d416346d9fe82",
+  "scope": "Host integration with isolated copy of real level-2 save; not physical H1 timing"
+}

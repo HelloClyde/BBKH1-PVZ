@@ -5,6 +5,7 @@
 #include <string.h>
 
 extern void *pvz_runtime_native_allocate(size_t,size_t);
+extern void *pvz_runtime_native_allocate_span(size_t,size_t,size_t *);
 extern volatile uint32_t pvz_runtime_hole_diagnostic[12];
 static const uint32_t code[][2]={
  {0x800dc790u,0x27bdffd8u},{0x800dc7c8u,0x01491023u},{0x800dc7ccu,0x28420008u},
@@ -20,6 +21,7 @@ static uint32_t base,end,bottom,count,top,record[RECORDS][2],sem;
 static unsigned locks,unlocks,writes,locked,lock_error,bad_code,bad_table,bad_type;
 static unsigned count_reads,change_count,record_reads;
 static unsigned native_calls;
+static unsigned clobber_on_unlock;
 
 uint32_t pvz_whole_hole_test_read32(uintptr_t address)
 {
@@ -57,7 +59,7 @@ unsigned pvz_whole_hole_test_lock(uintptr_t semaphore)
  locked=1;return 0;
 }
 void pvz_whole_hole_test_unlock(uintptr_t semaphore)
-{assert(semaphore==sem&&locked);++unlocks;locked=0;}
+{assert(semaphore==sem&&locked);++unlocks;locked=0;if(clobber_on_unlock)pvz_runtime_hole_diagnostic[7]=UINT32_MAX;}
 /* Model of the pinned raw SDK allocation: unconditional 8B headroom, FIRST
  * fitting hole, optional split descriptor, otherwise bump plus descriptor. */
 void *pvz_whole_hole_test_native_allocate(size_t requested)
@@ -229,6 +231,8 @@ int main(void)
   else{assert(!p&&!native_calls&&!writes);}
   assert(!locked&&locks==1&&unlocks==1);valid_layout();
  }
- puts("whole-hole passed: best-fit/full-span/free-coalescing, guards, SDK first-fit/bump prediction, preserved descriptor headroom");
+ {size_t actual=0;setup(2,70000);part(0,base,64,0);part(1,base+64,top-base-64,1);clobber_on_unlock=1;
+  p=pvz_runtime_native_allocate_span(33,64,&actual);assert((uintptr_t)p==base&&actual==64&&pvz_runtime_hole_diagnostic[7]==UINT32_MAX);valid_layout();clobber_on_unlock=0;}
+ puts("whole-hole passed: best-fit/full-span/free-coalescing, guards, SDK first-fit/bump prediction, preserved descriptor headroom; span return survives overwritten diagnostics");
  return 0;
 }

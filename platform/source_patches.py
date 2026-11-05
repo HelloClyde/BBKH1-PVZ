@@ -44,7 +44,10 @@ def apply(source_root:Path):
     replace(source_root/'main.cpp','int main(int argc, char** argv)','int pvzp_upstream_main(int argc, char** argv)')
     lawn=source_root/'LawnApp.cpp'
     text=lawn.read_text(encoding='utf8')
-    text='#include "Startup.h"\nstatic bool h1_game_preload_pending=false;\n'+text
+    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\n'+text
+    anchor='void LawnApp::ShowGameSelector()\n{\n\tKillBoard();'
+    assert text.count(anchor)==1
+    text=text.replace(anchor,anchor+'\n    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();',1)
     for phase,anchor in ((1,'aHesitationResources.EndBracket();'),(2,'mMusic->MusicInit();'),
                          (3,'PvzpFoleyInitialize(gLawnFoleyParamArray, LENGTH(gLawnFoleyParamArray));'),
                          (4,'TrailLoadDefinitions(gLawnTrailArray, LENGTH(gLawnTrailArray));'),
@@ -59,7 +62,7 @@ def apply(source_root:Path):
     // warmup still runs once, before creating/loading the first board.
     ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_SELECTOR_SCREEN, true);
     mCompletedLoadingThreadTasks += GetNumPreloadingTasks();
-    h1_game_preload_pending=true;
+    // Gameplay dependencies are warmed from the actual board and chosen cards.
 #else
     PreloadForUser();
 #endif
@@ -69,8 +72,12 @@ def apply(source_root:Path):
     if text.count(anchor)!=1:raise ValueError('First-board preload boundary changed')
     text=text.replace(anchor,anchor+'''
     H1AudioLoadingScope audioLoadingScope;
-    if(h1_game_preload_pending){h1_game_preload_pending=false;PreloadForUser();}
+    // No profile-wide resource preload at this boundary.
 ''',1)
+    text=text.replace('\tmBoard->InitLevel();','\tmBoard->InitLevel();\n    H1PreloadCurrentBoard(this);',1)
+    text=text.replace('\tmBoard->StartLevel();','    H1PreloadCurrentBoard(this);\n\tmBoard->StartLevel();',1)
+    assert text.count('\t\t\tDoContinueDialog();')==2
+    text=text.replace('\t\t\tDoContinueDialog();','            H1PreloadCurrentBoard(this);\n\t\t\tDoContinueDialog();')
     lawn.write_text(text,encoding='utf8')
     # Save completes before DoBackToMain tears down the board. Its PCM tail
     # must drain before config writes / object destruction, too, rather than
@@ -311,3 +318,46 @@ bool PvzpLoadNextResource()
     spec=importlib.util.spec_from_file_location("pvzh1_localization",optional)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     module.apply(source_root)
+
+    # Board pixels are immutable while a normal adventure dialog pauses the
+    # simulation. Reuse that layer; original dialog/child widgets still draw.
+    board=source_root/'Lawn/Board.cpp'
+    text=board.read_text(encoding='utf8')
+    text='#include "graphics/PausedBoardCache.h"\n#include "misc/ResourceManager.h"\n'+text
+    # KillBoard defers Widget destruction, while NewGame loads the next board
+    # immediately. Release this board's tracked groups before their next load,
+    # so its later Widget destructor cannot unload the replacement's images.
+    needle='\tmApp->mEffectSystem->EffectSystemFreeAll();\n}'
+    assert text.count(needle)==1
+    text=text.replace(needle,'\tmApp->mEffectSystem->EffectSystemFreeAll();\n'
+        '    mApp->mResourceManager->ReleaseTrackedResources(mLoadedResourceNames);\n}')
+    needle='\tDrawGameObjects(g);\n}'
+    assert text.count(needle)==1
+    text=text.replace(needle,'\tif(!H1PausedBoardReplay(this,g)){DrawGameObjects(g);H1SodOfflineDraw(this,g);H1PausedBoardCapture(this,g);}\n}')
+    needle='Board::~Board() = default;';assert text.count(needle)==1
+    text=text.replace(needle,'Board::~Board(){H1PausedBoardForget(this);}')
+    board.write_text(text,encoding='utf8',newline='\n')
+
+    text=board.read_text(encoding='utf8')
+    start=text.index('void Board::DrawBackdrop(Graphics* g)')
+    first=text.index('\tif (mLevel == 1 && mApp->IsFirstTimeAdventureMode())',start)
+    last=text.index('\n\tif (mApp->mGameScene == GameScenes::SCENE_ZOMBIES_WON)',first)
+    text='#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n'+text[:first]+'    if(!H1EarlyLawnDraw(this,g)){\n'+text[first:last]+'\n    }\n'+text[last:]
+    board.write_text(text,encoding='utf8',newline='\n')
+
+    reanim=source_root/'PvzpLib/Reanimator.cpp';text=reanim.read_text(encoding='utf8')
+    needle='void ReanimatorEnsureDefinitionLoaded(ReanimationType theReanimType, bool theIsPreloading)\n{'
+    assert text.count(needle)==1
+    text='#include "actors/ActorPose.h"\nextern void H1PrewarmDefinitionImages(int);\n'+text.replace(needle,needle+'\n    struct H1WarmScope {int type;~H1WarmScope(){H1PrewarmDefinitionImages(type);}} warmScope{int(theReanimType)};')
+    needle='void Reanimation::DrawRenderGroup(Graphics* g, int theRenderGroup)\n{'
+    assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    if(H1ActorPoseDraw(this,g,theRenderGroup))return;')
+    needle='void Reanimation::StartBlend(int theBlendTime)\n{';assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    H1ActorPoseNoteBlend(this,theBlendTime);')
+    reanim.write_text(text,encoding='utf8',newline='\n')
+
+    cut=source_root/'Lawn/CutScene.cpp';text=cut.read_text(encoding='utf8')
+    start=text.index('// Sod rolling on early adventure levels')
+    needle='\t\t\tif (mBoard->mLevel == 1)';at=text.index(needle,start)
+    text='#include "actors/ActorPose.h"\n'+text[:at]+text[at:].replace(needle,'            if(H1SodOfflineBegin(mBoard)){}\n            else if (mBoard->mLevel == 1)',1)
+    cut.write_text(text,encoding='utf8',newline='\n')

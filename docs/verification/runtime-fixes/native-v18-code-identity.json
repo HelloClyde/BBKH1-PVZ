@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "bda_sha256": "adcf589ccb13338c252f090f087d74233d0feac87bb4231d90087cda9516c7a6",
+  "elf_sha256": "002017fad0f0a2ef6f54f9c665912ff4a657b32c4df90d431aa2a4dfb40cde9c",
+  "fingerprints": [
+    {
+      "symbol": "h1_bda_main",
+      "address": "0x83c00020",
+      "size": 48,
+      "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003ff831d3c50dbbd27e0ffbd271800a8af8593f80c000000001800bd8f1800bc8f",
+      "sha256": "c887081a47a1f00d345fd815e4eb92afd813f612d0cdf659714ce150c796a8a8"
+    },
+    {
+      "symbol": "_open",
+      "address": "0x83e26f3c",
+      "size": 64,
+      "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+      "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+    },
+    {
+      "symbol": "pvzp_present_argb",
+      "address": "0x83e171b8",
+      "size": 64,
+      "expected_hex": "80ffbd277800beaf6800b4af25f0a0036400b3af6000b2af5800b0af7c00bfaf7400b7af7000b6af6c00b5af5c00b1af25a08000020004242580a000c190f80c",
+      "sha256": "276e662577f68109358ebc631ffdeb1a281703d5b8d46373415ffb2c485313be"
+    },
+    {
+      "symbol": "detect_resource_drive",
+      "address": "0x83e2567c",
+      "size": 64,
+      "expected_hex": "fd83023c14a6438c4200601400000000d8ffbd27010003241800b1af1400b0afee83113cfd83103c2400bfaf2000beaf1c00b2af25f0a003a8d72426a48c1026",
+      "sha256": "216105482068ae0df66dfaef25c29cd8252168a2454e5b2574e081b734fc4a38"
+    }
+  ],
+  "read_only": true
+}

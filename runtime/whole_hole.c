@@ -103,13 +103,15 @@ static void *ordinary_allocate(size_t requested)
 #endif
 }
 
-void *pvz_runtime_native_allocate(size_t requested,size_t native_requested)
+void *pvz_runtime_native_allocate_span(size_t requested,size_t native_requested,size_t *actual_span)
 {
     uint32_t base,end,bottom,count,top,cursor,i,need,selected=0,selected_address=0,span=0,index=0;
     uint32_t first_span=0,tail;
     uintptr_t semaphore;
     unsigned error;
-    void *result=0;
+    void *result=0;size_t allocated_span=0;
+    if(!actual_span)return 0;
+    *actual_span=0;
     pvz_runtime_hole_diagnostic[0]=0x48314846u; /* H1HF */
     ++pvz_runtime_hole_diagnostic[1];
     pvz_runtime_hole_diagnostic[3]=9;
@@ -173,6 +175,7 @@ void *pvz_runtime_native_allocate(size_t requested,size_t native_requested)
     WRITE32(selected+4u,span|1u); /* Only heap mutation: take the WHOLE hole. */
     pvz_runtime_hole_diagnostic[3]=1;++pvz_runtime_hole_diagnostic[2];
     pvz_runtime_hole_diagnostic[7]=span;pvz_runtime_hole_diagnostic[9]=index;
+    allocated_span=span;
     {
         uint32_t wasted=span-(uint32_t)native_requested;
         uint32_t before=pvz_runtime_hole_diagnostic[8];
@@ -188,11 +191,18 @@ ordinary:
     if(result&&(uintptr_t)result!=UINT32_MAX){
         pvz_runtime_hole_diagnostic[3]=10;
         pvz_runtime_hole_diagnostic[7]=need;
+        allocated_span=need;
     }else{
         pvz_runtime_hole_diagnostic[3]=11;
         result=0;
     }
 done:
     heap_unlock(semaphore);
+    /* OSSemPost may schedule another caller. Diagnostic words are shared
+       observations, never the allocation's return channel. */
+    *actual_span=allocated_span;
     return result;
+}
+void *pvz_runtime_native_allocate(size_t requested,size_t native_requested){
+    size_t span;return pvz_runtime_native_allocate_span(requested,native_requested,&span);
 }

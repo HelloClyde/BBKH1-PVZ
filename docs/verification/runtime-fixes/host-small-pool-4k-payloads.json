@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "checks": 346602551,
+  "tiny_objects": 30000,
+  "tiny_native_acquires": 60,
+  "tiny_native_reserved_peak": 989040,
+  "classes": 57,
+  "device_used": false,
+  "scope": "Actual C small_pool implementation; SDK callbacks replaced by guarded host backing memory. No syscalls integration or BDA build.",
+  "sources": {
+    "runtime\\small_pool.c": "213946268bda39a4bff76384315bd34a6d9bb5b0806d1bc36b91266ff36b3698",
+    "runtime\\small_pool.h": "3b115f4f80e12aba0107e8bdf6cd3259ee9f86ae17e267d08df323d62c56ab74",
+    "tools\\tests\\small_pool_probe.c": "72f9c2a08765d77bf0425934d5ee3ad72d2a7840cd36b9774bb12ba35e5a8cfc"
+  },
+  "command": [
+    "C:/msys64/ucrt64/bin/gcc.exe",
+    "-std=c99",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-I",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\runtime\\small_pool.c",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\tools\\tests\\small_pool_probe.c",
+    "-o",
+    "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\small-pool-test\\probe.exe"
+  ]
+}

@@ -1,6 +1,6 @@
 {
-  "bytes": 2893827,
-  "sha256": "f210a7383d2f489ea628e8efe08af3d850ee58dfbe131f7a5f1b0e3ecd9723b4",
+  "bytes": 5237764,
+  "sha256": "6bfce8616b8c2f8fb220bdea6457a6a299b74ea1f2e1d79fd975ab3c516927f2",
   "entry_count": 120,
   "runs": 162753,
   "pixels": 819966,
@@ -1716,5 +1716,14 @@
   "runtime_path": "h1menu/adventure.h1mb",
   "renderer_exporter_sha256": "e7cbfdf8fbbaab9f95c77f3568a9d250c1db48dbf40760ca0ec85181efe21057",
   "encoder_sha256": "a85af13071eb34aae128f2af3bc71ef67ed9b30974947bf9a074f577c21125d5",
-  "sampling": "Original 100-Hz hand updates; stored at 25 poses/second plus the final pose; all 450 updates and original sound timings retained."
+  "sampling": "Original 100-Hz hand updates; stored at 25 poses/second plus the final pose; all 450 updates and original sound timings retained.",
+  "offline_expansion": {
+    "input_sha256": "f210a7383d2f489ea628e8efe08af3d850ee58dfbe131f7a5f1b0e3ecd9723b4",
+    "output_sha256": "6bfce8616b8c2f8fb220bdea6457a6a299b74ea1f2e1d79fd975ab3c516927f2",
+    "bytes": 5237764,
+    "entries": 120,
+    "all_payloads_byte_exact": true
+  },
+  "offline_expander_sha256": "a1c31f70091948bba97680ad6b7cb03079df438601136945b7b97c94653ca22c",
+  "runtime_codec": "uncompressed original fragments"
 }

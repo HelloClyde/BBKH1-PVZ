@@ -20,4 +20,11 @@ def apply(source_root):
 
 	for (int aTrackIndex = 0; aTrackIndex < theDefinition->mTracks.count; aTrackIndex++)'''
     if text.count(original)!=1:raise RuntimeError('Pinned ReanimationLoadDefinition context changed')
-    path.write_text(text.replace(original,replacement,1),encoding='utf8',newline='\n')
+    text=text.replace(original,replacement,1)
+    anchor='\tfor (int aTrackIndex = 0; aTrackIndex < theDefinition->mTracks.count; aTrackIndex++)'
+    text=text.replace(anchor,'    extern bool H1DefinitionNumericResolved(const void*);\n    const bool h1NumericResolved=H1DefinitionNumericResolved(theDefinition);\n'+anchor,1)
+    first='\t\t\tReanimationFillInMissingData(aPrevTransX, aTransform.mTransX);'
+    last='\t\t\tReanimationFillInMissingData(aPrevAlpha, aTransform.mAlpha);'
+    assert text.count(first)==text.count(last)==1
+    text=text.replace(first,'            if(!h1NumericResolved){\n'+first,1).replace(last,last+'\n            }',1)
+    path.write_text(text,encoding='utf8',newline='\n')

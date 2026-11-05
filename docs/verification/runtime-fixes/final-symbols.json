@@ -1,0 +1,800 @@
+{
+  "schema": "h1-pvz-hardware-opt-offline-menu-read-only-symbols-1",
+  "bda_sha256": "64dd50b64e9d5b88648be940d5bbc0996df96a4984da06ddb648eb42a5606bcc",
+  "elf_sha256": "2052ad1097952b6db906f22c9b25e955567671b52bed4b22cceb96320b7595f1",
+  "build_receipt_sha256": "dd5ccc91680d79f9c407d4176c562ea7d098ac3710869a85b2b8cbcaaafd3eb0",
+  "symbols": {
+    "pvzp_diagnostic": {
+      "address": "0x83fc94f4",
+      "size": 128,
+      "word_count": 32,
+      "fields": [
+        "magic_PVP1",
+        "window_status",
+        "presented_frames",
+        "display_error",
+        "log_lines",
+        "key_events",
+        "pen_down_events",
+        "scene",
+        "application_updates",
+        "board_level_last",
+        "sun_last",
+        "current_wave_last",
+        "main_counter_last",
+        "profile_level",
+        "reserved14",
+        "reserved15",
+        "pcm_active",
+        "nonzero_pcm_samples",
+        "pcm_ring_resets",
+        "reserved19",
+        "source_resident_at_present",
+        "source_peak_at_present",
+        "source_load_failures",
+        "reserved23",
+        "reserved24",
+        "reserved25",
+        "reserved26",
+        "reserved27",
+        "reserved28",
+        "reserved29",
+        "reserved30",
+        "reserved31"
+      ]
+    },
+    "pvz_runtime_diagnostic": {
+      "address": "0x83fca8c4",
+      "size": 64,
+      "word_count": 16,
+      "fields": [
+        "magic_PVZP",
+        "stage",
+        "exit_status",
+        "user_heap_bytes",
+        "peak_user_heap_bytes",
+        "file_opens",
+        "rtc_valid",
+        "resource_drive_ASCII",
+        "filesystem_stage",
+        "filesystem_detail",
+        "constructor_count",
+        "last_constructor",
+        "first_failed_user_bytes",
+        "first_malloc_caller",
+        "first_native_result",
+        "runtime_version"
+      ]
+    },
+    "pvzh1_cache_diagnostic": {
+      "address": "0x83fa2260",
+      "size": 24,
+      "word_count": 6,
+      "fields": [
+        "resident_bytes",
+        "peak_bytes",
+        "loads",
+        "evictions",
+        "completed_physical_frames",
+        "loaded_payload_bytes_low32"
+      ]
+    },
+    "pvzh1_cache_pressure_diagnostic": {
+      "address": "0x83fa2278",
+      "size": 16,
+      "word_count": 4,
+      "fields": [
+        "callbacks",
+        "source_evictions",
+        "freed_bytes_low32",
+        "last_freed_bytes"
+      ]
+    },
+    "pvzh1_storage_texture_diagnostic": {
+      "address": "0x83fa21a0",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "dense_resident_bytes",
+        "dense_sources",
+        "loads",
+        "physical_bytes_read_low32",
+        "failures",
+        "sampler_views",
+        "logical_materializations",
+        "max_physical_allocation"
+      ]
+    },
+    "pvzh1_physical_screen_diagnostic": {
+      "address": "0x83fa24e8",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "active",
+        "physical_width",
+        "physical_height",
+        "logical_width",
+        "logical_height",
+        "permanent_raw_fallbacks",
+        "presents",
+        "routed_draw_calls"
+      ]
+    },
+    "pvz_runtime_pressure_diagnostic": {
+      "address": "0x83fcbf94",
+      "size": 24,
+      "word_count": 6,
+      "fields": [
+        "callbacks",
+        "native_retries",
+        "recoveries",
+        "reclaimed_byte_hints_saturated_not_physical_total",
+        "last_user_request",
+        "final_allocation_failures"
+      ]
+    },
+    "pvz_runtime_native_charge": {
+      "address": "0x83fcbfc0",
+      "size": 8
+    },
+    "pvzh1_render_plan_diagnostic": {
+      "word_count": 24,
+      "size": 96,
+      "fields": [
+        "ready_entries",
+        "allocated_capacity_bytes",
+        "peak_capacity_bytes",
+        "replays",
+        "eligible_misses",
+        "cold_count_starts",
+        "fill_starts",
+        "commits",
+        "new_keys",
+        "revision_rejects",
+        "budget_rejects",
+        "allocation_failures",
+        "busy_fallbacks",
+        "pressure_calls",
+        "pressure_released_plans",
+        "pressure_released_capacity_bytes",
+        "shutdown_calls",
+        "replayed_original_pixels",
+        "transparent_skipped_pixels",
+        "memcpy_pixels",
+        "opaque_OR_pixels",
+        "partial_pixels",
+        "capture_aborts",
+        "static_metadata_bytes"
+      ],
+      "address": "0x83fa77a4"
+    },
+    "pvz_runtime_profile_diagnostic": {
+      "word_count": 32,
+      "size": 128,
+      "fields": [
+        "UPDATE_integer_and_fractional.calls",
+        "UPDATE_integer_and_fractional.total_raw_tick_low",
+        "UPDATE_integer_and_fractional.total_raw_tick_high",
+        "UPDATE_integer_and_fractional.max_since_start_mod32_raw_ticks",
+        "DRAW_widget_screen.calls",
+        "DRAW_widget_screen.total_raw_tick_low",
+        "DRAW_widget_screen.total_raw_tick_high",
+        "DRAW_widget_screen.max_since_start_mod32_raw_ticks",
+        "PRESENT_map_lcd.calls",
+        "PRESENT_map_lcd.total_raw_tick_low",
+        "PRESENT_map_lcd.total_raw_tick_high",
+        "PRESENT_map_lcd.max_since_start_mod32_raw_ticks",
+        "AUDIO_pump.calls",
+        "AUDIO_pump.total_raw_tick_low",
+        "AUDIO_pump.total_raw_tick_high",
+        "AUDIO_pump.max_since_start_mod32_raw_ticks",
+        "MUSIC_mix.calls",
+        "MUSIC_mix.total_raw_tick_low",
+        "MUSIC_mix.total_raw_tick_high",
+        "MUSIC_mix.max_since_start_mod32_raw_ticks",
+        "FRAME_DrawDirtyStuff.calls",
+        "FRAME_DrawDirtyStuff.total_raw_tick_low",
+        "FRAME_DrawDirtyStuff.total_raw_tick_high",
+        "FRAME_DrawDirtyStuff.max_since_start_mod32_raw_ticks",
+        "REPEAT_TRIANGLE.calls",
+        "REPEAT_TRIANGLE.total_raw_tick_low",
+        "REPEAT_TRIANGLE.total_raw_tick_high",
+        "REPEAT_TRIANGLE.max_since_start_mod32_raw_ticks",
+        "SW_DRAW_SHAPE_clip_setup_raster.calls",
+        "SW_DRAW_SHAPE_clip_setup_raster.total_raw_tick_low",
+        "SW_DRAW_SHAPE_clip_setup_raster.total_raw_tick_high",
+        "SW_DRAW_SHAPE_clip_setup_raster.max_since_start_mod32_raw_ticks"
+      ],
+      "address": "0x83fca810"
+    },
+    "pvz_runtime_profile_clock": {
+      "word_count": 6,
+      "size": 24,
+      "fields": [
+        "sequence_begin",
+        "raw_tick",
+        "timer_raw_tick_low",
+        "timer_raw_tick_high",
+        "raw_tick_Hz",
+        "sequence_end"
+      ],
+      "address": "0x83fca7f8"
+    },
+    "pvz_runtime_hole_diagnostic": {
+      "word_count": 12,
+      "size": 48,
+      "fields": [
+        "magic_H1HF",
+        "native_provider_attempts_including_page_refills",
+        "whole_hole_successes",
+        "last_status",
+        "last_provider_user_bytes",
+        "last_provider_raw_bytes",
+        "rounded_raw_bytes",
+        "actual_full_native_span",
+        "cumulative_span_minus_raw_waste_saturated",
+        "record_index_or_FFFFFFFF",
+        "semaphore_error",
+        "tail_bytes"
+      ],
+      "address": "0x83fcc53c"
+    },
+    "pvz_runtime_small_pool_diagnostic": {
+      "word_count": 16,
+      "size": 64,
+      "fields": [
+        "magic_H1PL",
+        "reserved_pages",
+        "peak_pages",
+        "live_slots",
+        "live_class_bytes",
+        "requested_page_bytes",
+        "actual_reserved_page_bytes",
+        "peak_reserved_page_bytes",
+        "native_page_acquire_attempts",
+        "native_page_releases",
+        "page_acquire_failures",
+        "slot_allocations",
+        "slot_reuses",
+        "invalid_frees",
+        "small_direct_native_fallback_attempts",
+        "trim_returned_actual_bytes_saturated"
+      ],
+      "address": "0x83fcbfc8"
+    },
+    "pvz_runtime_io_diagnostic": {
+      "word_count": 16,
+      "size": 64,
+      "fields": [
+        "native_open_calls",
+        "native_open_rawticks",
+        "native_open_failures",
+        "native_read_calls",
+        "native_read_requested_bytes_low32",
+        "native_read_returned_bytes_low32",
+        "native_read_rawticks",
+        "max_read_request",
+        "native_seek_calls",
+        "native_seek_rawticks",
+        "native_seek_failures",
+        "reads_0_to_1024",
+        "reads_1025_to_4096",
+        "reads_4097_to_16384",
+        "reads_over_16384",
+        "native_read_errors"
+      ],
+      "address": "0x83fcbd50"
+    },
+    "pvz_runtime_asset_layout_diagnostic": {
+      "word_count": 4,
+      "size": 16,
+      "fields": [
+        "layout_0_unprobed_1_legacy_2_bucketed",
+        "marker_probes",
+        "mapped_paths",
+        "last_bucket"
+      ],
+      "address": "0x83fcbd40"
+    },
+    "pvzh1_xmp_load_diagnostic": {
+      "word_count": 12,
+      "size": 48,
+      "fields": [
+        "phase_1open_2buffer_3parse_4dedup_5ready_6failed",
+        "attempts",
+        "start_ms",
+        "libxmp_ms",
+        "dedup_ms",
+        "file_buffer_bytes",
+        "file_length",
+        "total_ms",
+        "failed_loads",
+        "fclose_count",
+        "libxmp_result_signed",
+        "reserved"
+      ],
+      "address": "0x83fca748"
+    },
+    "pvzh1_axis_span_diagnostic": {
+      "word_count": 8,
+      "size": 32,
+      "fields": [
+        "attempted_rows",
+        "accepted_rows",
+        "pixels",
+        "opaque_stores",
+        "partial_alpha_pixels",
+        "transparent_skips",
+        "unit_step_rows",
+        "reserved"
+      ],
+      "address": "0x83fa845c"
+    },
+    "pvzh1_selector_offline_diagnostic": {
+      "word_count": 16,
+      "size": 64,
+      "fields": [
+        "version",
+        "loaded_entries",
+        "resident_requested_bytes",
+        "peak_resident_requested_bytes",
+        "group_replay_hits",
+        "button_replay_hits",
+        "welcome_cache_hits",
+        "group_fallbacks",
+        "missing_file_failures",
+        "malformed_or_short_read_failures",
+        "allocation_failures",
+        "successful_bundle_loads",
+        "missing_entry_fallbacks",
+        "welcome_cache_rebuilds",
+        "visibility_plan_builds",
+        "occluded_original_pixels"
+      ],
+      "address": "0x83fca658"
+    },
+    "pvzh1_selector_cull_diagnostic": {
+      "word_count": 4,
+      "size": 16,
+      "fields": [
+        "fully_clipped_achievement_page_skips",
+        "reserved1",
+        "reserved2",
+        "reserved3"
+      ],
+      "address": "0x83fca648"
+    },
+    "pvzh1_dirty_present_diagnostic": {
+      "word_count": 8,
+      "size": 32,
+      "fields": [
+        "version",
+        "shadow_bytes",
+        "full_frames",
+        "partial_frames",
+        "changed_blocks",
+        "skipped_blocks",
+        "allocation_failures",
+        "reserved"
+      ],
+      "address": "0x83fc94d4"
+    },
+    "pvzh1_dirty_canvas_diagnostic": {
+      "word_count": 8,
+      "size": 32,
+      "fields": [
+        "version",
+        "foundation_frames",
+        "limited_frames",
+        "full_clears",
+        "background_written",
+        "background_skipped",
+        "pending_clear",
+        "rooted"
+      ],
+      "address": "0x83f5e798"
+    },
+    "pvzh1_text_replay_diagnostic": {
+      "word_count": 8,
+      "size": 32,
+      "fields": [
+        "hits",
+        "misses",
+        "captures",
+        "rejected_recordings",
+        "resident_bytes",
+        "peak_bytes",
+        "entries",
+        "allocation_failures"
+      ],
+      "address": "0x83fc8800"
+    },
+    "pvzh1_font_metric_diagnostic": {
+      "word_count": 4,
+      "size": 16,
+      "fields": [
+        "hits",
+        "misses",
+        "stores",
+        "reserved"
+      ],
+      "address": "0x83fc87f0"
+    },
+    "pvzh1_selector_retained_diagnostic": {
+      "word_count": 4,
+      "size": 16,
+      "fields": [
+        "retained_menu_frames",
+        "tile_initializations",
+        "attachment_prefix_initializations",
+        "reserved"
+      ],
+      "address": "0x83fca618"
+    },
+    "pvzh1_definition_diagnostic": {
+      "address": "0x83fa20e8",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "loaded",
+        "compressed_bytes",
+        "xml_fallbacks",
+        "rejected",
+        "pack_entries",
+        "pack_bytes",
+        "pack_hits",
+        "pack_rejected"
+      ]
+    },
+    "pvzh1_startup_diagnostic": {
+      "address": "0x83fca6c8",
+      "size": 128,
+      "word_count": 32,
+      "fields": [
+        "version",
+        "window_first_ms_plus1",
+        "window_last_ms_plus1",
+        "resources_first_ms_plus1",
+        "resources_last_ms_plus1",
+        "music_first_ms_plus1",
+        "music_last_ms_plus1",
+        "system_first_ms_plus1",
+        "system_last_ms_plus1",
+        "trail_first_ms_plus1",
+        "trail_last_ms_plus1",
+        "particles_first_ms_plus1",
+        "particles_last_ms_plus1",
+        "preload_first_ms_plus1",
+        "preload_last_ms_plus1",
+        "sounds_first_ms_plus1",
+        "sounds_last_ms_plus1",
+        "loading_ready_first_ms_plus1",
+        "loading_ready_last_ms_plus1",
+        "title_present_first_ms_plus1",
+        "title_present_last_ms_plus1",
+        "selector_ctor_start_first_ms_plus1",
+        "selector_ctor_start_last_ms_plus1",
+        "selector_ctor_end_first_ms_plus1",
+        "selector_ctor_end_last_ms_plus1",
+        "menu_present_first_ms_plus1",
+        "menu_present_last_ms_plus1",
+        "reserved13_first_ms_plus1",
+        "reserved13_last_ms_plus1",
+        "reserved14_first_ms_plus1",
+        "reserved14_last_ms_plus1",
+        "reserved31"
+      ]
+    },
+    "pvzh1_font_cache_diagnostic": {
+      "address": "0x83f5eff4",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "loaded",
+        "payload_bytes",
+        "rejected",
+        "text_fallback",
+        "reserved4",
+        "reserved5",
+        "reserved6",
+        "reserved7"
+      ]
+    },
+    "pvzh1_sound_index_diagnostic": {
+      "address": "0x83f5f7a8",
+      "size": 16,
+      "word_count": 4,
+      "fields": [
+        "entries",
+        "indexed_loads",
+        "header_fallback",
+        "reserved3"
+      ]
+    },
+    "pvzh1_audio_diagnostic": {
+      "address": "0x83fc95e8",
+      "size": 64,
+      "word_count": 16,
+      "fields": [
+        "max_retire_gap_ms",
+        "full_ring_wrap_misses",
+        "queue_underruns",
+        "queued_32k_samples",
+        "ring_32k_samples",
+        "reserved5",
+        "reserved6",
+        "reserved7",
+        "reserved8",
+        "reserved9",
+        "reserved10",
+        "reserved11",
+        "reserved12",
+        "reserved13",
+        "reserved14",
+        "reserved15"
+      ]
+    },
+    "pvzh1_adventure_diagnostic": {
+      "address": "0x83fca698",
+      "size": 48,
+      "word_count": 12,
+      "fields": [
+        "version",
+        "touch_ms_plus1",
+        "hand_ready_ms_plus1",
+        "original_update_counter",
+        "hand_draws",
+        "first_hand_draw_ms_plus1",
+        "last_hand_draw_ms_plus1",
+        "animation_complete_ms_plus1",
+        "reserved8",
+        "reserved9",
+        "reserved10",
+        "reserved11"
+      ]
+    },
+    "pvzh1_adventure_raster_diagnostic": {
+      "address": "0x83fca628",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "offline_hits",
+        "fallbacks",
+        "first_draw_ms_plus1",
+        "last_draw_ms_plus1",
+        "max_frame_gap_ms",
+        "last_original_update_counter",
+        "replayed_pixels",
+        "resident_bundle_bytes"
+      ]
+    },
+    "pvzp_music_diagnostic": {
+      "address": "0x83fc9574",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "shared_modules",
+        "original_track_bytes",
+        "compact_track_bytes",
+        "sample_bytes",
+        "players",
+        "tracker_loads",
+        "offline_title_starts",
+        "reserved7"
+      ]
+    },
+    "pvz_runtime_asset_index_diagnostic": {
+      "address": "0x83fcbd04",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "state",
+        "entries",
+        "avoided_opens",
+        "indexed_stats",
+        "unmanaged",
+        "index_bytes",
+        "error",
+        "trace_count"
+      ]
+    },
+    "pvzh1_sound_bank_diagnostic": {
+      "address": "0x83f5f7d8",
+      "size": 16,
+      "word_count": 4,
+      "fields": [
+        "cached_chunks",
+        "resident_sample_bytes",
+        "successful_bank_loads",
+        "bank_failures"
+      ]
+    },
+    "pvzh1_level_preload_diagnostic": {
+      "address": "0x83fc969c",
+      "size": 16,
+      "word_count": 4,
+      "fields": [
+        "calls",
+        "plant_types_warmed",
+        "zombie_types_warmed",
+        "warmed_source_images"
+      ]
+    },
+    "gLawnApp": {
+      "address": "0x83f5ce64",
+      "size": 4,
+      "word_count": 1,
+      "fields": [
+        "application_pointer"
+      ]
+    },
+    "pvzh1_paused_board_diagnostic": {
+      "address": "0x83fa24d8",
+      "size": 16,
+      "word_count": 4,
+      "fields": [
+        "resident_bytes",
+        "replays",
+        "captures",
+        "pressure_releases"
+      ]
+    },
+    "pvzh1_additive_diagnostic": {
+      "address": "0x83fa8448",
+      "size": 16,
+      "word_count": 4,
+      "fields": [
+        "direct_triangles",
+        "legacy_scratch_calls",
+        "max_legacy_scratch_bytes",
+        "saturated_spans_skipped"
+      ]
+    },
+    "pvzh1_additive_lut": {
+      "address": "0x83fa8444",
+      "size": 4,
+      "word_count": 1,
+      "fields": [
+        "loaded_table_pointer"
+      ]
+    },
+    "pvzh1_image_pack_diagnostic": {
+      "address": "0x83fc96b4",
+      "size": 16,
+      "word_count": 4,
+      "fields": [
+        "entries",
+        "index_bytes",
+        "pack_hits",
+        "loose_opens"
+      ]
+    },
+    "pvz_runtime_native_charge_fault": {
+      "address": "0x83fcbfac",
+      "size": 16
+    },
+    "pvzh1_actor_pose_diagnostic": {
+      "address": "0x83fa2084",
+      "size": 64,
+      "word_count": 12,
+      "fields": [
+        "resident_bytes",
+        "entries",
+        "key_frame_misses",
+        "state_guards",
+        "graphics_guards",
+        "replays",
+        "clip_guards",
+        "load_failures",
+        "pea_replays",
+        "sunflower_replays",
+        "zombie_replays",
+        "sod_replays"
+      ]
+    },
+    "pvzh1_sod_offline_diagnostic": {
+      "address": "0x83fa2064",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "active",
+        "replayed_frames",
+        "missing_frames",
+        "begins",
+        "age_ms",
+        "sample_frame",
+        "reserved",
+        "reserved"
+      ]
+    },
+    "pvzh1_early_lawn_diagnostic": {
+      "address": "0x83fa216c",
+      "size": 32,
+      "word_count": 8,
+      "fields": [
+        "resident_bytes",
+        "replays",
+        "guard_misses",
+        "load_failures",
+        "unique_tiles",
+        "full_frames",
+        "retained_frames",
+        "reveal_column"
+      ]
+    },
+    "pvz_runtime_last_path": {
+      "address": "0x83fcbd90",
+      "size": 512,
+      "word_count": 128,
+      "fields": []
+    },
+    "pvzh1_camera_lawn_diagnostic": {
+      "address": "0x83fa214c",
+      "size": 32
+    }
+  },
+  "encoding": "aligned little-endian uint32",
+  "allowed_RAM": [
+    "0x80000000",
+    "0x84000000"
+  ],
+  "application_bound": [
+    "0x83c00020",
+    "0x83ff0000"
+  ],
+  "optional_native_path": {
+    "address": "0x83fca810",
+    "size": 512,
+    "decode": "NUL terminated; UTF-8 strict, otherwise GBK strict"
+  },
+  "scene_values": {
+    "loading": 0,
+    "menu": 1,
+    "intro": 2,
+    "playing": 3,
+    "zombies_won": 4,
+    "award": 5,
+    "credit": 6,
+    "challenge": 7
+  },
+  "state_values": {
+    "runtime": {
+      "constructors": 1,
+      "main": 2,
+      "normal_exit": 9,
+      "abort": 255
+    },
+    "window": {
+      "open": 1,
+      "closed": 9
+    }
+  },
+  "device_access_performed_by_this_preparation": false,
+  "calibrated_raw_tick_hz": 40,
+  "profiling_timer": {
+    "unit": "raw_tick",
+    "backend": "pvz_runtime_ticks",
+    "hz": 40
+  },
+  "profiling_contract": "Native raw ticks at calibrated 40Hz (25ms granularity), no CP0 Count reads. Totals low/high uint64; elapsed modulo32. Same-category nesting counts outermost. MUSIC subset AUDIO; REPEAT and SW_DRAW_SHAPE subset DRAW; DRAW/PRESENT/AUDIO subset FRAME. Clock sequence must match and be even; use steady deltas, not startup maxima.",
+  "native_charge_contract": "Actual direct native spans plus complete pool page reserves, charged once per page; slot free does not deduct a still-resident page.",
+  "render_plan_contract": "Optional original scanline replay; allocated_capacity_bytes plus static_metadata_bytes <=512KiB. Capacity is requested plan pages, not native heap charge. Normal explicit shutdown clears ready_entries and allocated_capacity_bytes; static metadata and cumulative counters remain.",
+  "offline_selector_asset": {
+    "runtime_path": "/PVZ/h1menu/selector-wide.h1mb",
+    "source_path": "private/resources-h1-wide/h1menu/selector-wide.h1mb",
+    "sha256": "b7b75f330144218de855f235346a07b8a1cc0bb4333dd9042fd3fb44ddf86e99",
+    "bytes": 1626524,
+    "entries": 103
+  },
+  "offline_selector_contract": "H1 offline fragments: detach releases hand/transient captures, retains base for reuse; pressure can evict idle base; explicit shutdown releases all requested bytes.",
+  "native_private_stack": {
+    "address": "0x83fcf770",
+    "size": 131072,
+    "end_exclusive": "0x83fef770"
+  },
+  "native_text_range": {
+    "address": "0x83c00020",
+    "size": 2848224,
+    "end_exclusive": "0x83eb7600"
+  }
+}

@@ -6,7 +6,7 @@ import json
 import struct
 
 
-def analyze(path):
+def analyze(path, allow_prior_allocation_failure=False):
     record = json.loads(path.read_text(encoding="utf8"))
     assert record["ok"]
     reads = [a for a in record["actions"] if a["action"]["kind"] == "read"]
@@ -23,7 +23,13 @@ def analyze(path):
     for s in snapshots:
         assert s["pvzh1_physical_screen_diagnostic"][:6] == [1, 480, 272, 1060, 600, 0]
         assert s["pvz_runtime_diagnostic"][1] == 2
-        assert s["pvz_runtime_diagnostic"][12] == 0
+        if not allow_prior_allocation_failure:
+            assert s["pvz_runtime_diagnostic"][12] == 0
+    if allow_prior_allocation_failure:
+        # Historical optional-cache failures are reported explicitly. Neither
+        # new allocation failures nor aborts may be hidden by this opt-in.
+        assert snapshots[0]["pvz_runtime_diagnostic"][12:15] == snapshots[1]["pvz_runtime_diagnostic"][12:15]
+        assert snapshots[0]["pvz_runtime_pressure_diagnostic"][5] == snapshots[1]["pvz_runtime_pressure_diagnostic"][5]
     between = record["actions"][record["actions"].index(frames[0]) + 1:record["actions"].index(frames[1])]
     assert all(a["action"]["kind"] in ("read", "wait") for a in between)
     assert sum(a["action"].get("seconds", 0) for a in between) == 20
@@ -50,6 +56,9 @@ def analyze(path):
         "allocation_pressure_callbacks_delta": delta("pvz_runtime_pressure_diagnostic", 0),
         "final_allocation_failures_delta": delta("pvz_runtime_pressure_diagnostic", 5),
         "raw_canvas_fallbacks_delta": delta("pvzh1_physical_screen_diagnostic", 5),
+        "prior_failed_user_bytes": snapshots[0]["pvz_runtime_diagnostic"][12],
+        "prior_allocation_failures": snapshots[0]["pvz_runtime_pressure_diagnostic"][5],
+        "prior_failure_explicitly_allowed": allow_prior_allocation_failure,
         "scope": "Physical H1; 20-second quiet wait, bounded endpoint reads. PC time is the FPS denominator; native clock stores last-frame timestamps and can lag at low FPS.",
         "result_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
     }
@@ -58,5 +67,6 @@ def analyze(path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path)
+    parser.add_argument("--allow-prior-allocation-failure", action="store_true")
     args = parser.parse_args()
-    print(json.dumps(analyze(args.input), indent=2))
+    print(json.dumps(analyze(args.input,args.allow_prior_allocation_failure), indent=2))

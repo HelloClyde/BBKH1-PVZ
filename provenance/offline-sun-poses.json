@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "dimensions": [
+    480,
+    272
+  ],
+  "entries": 49,
+  "actors": {
+    "22": 49
+  },
+  "palette_colors": 6774,
+  "flash_palette_tuples": 0,
+  "flash_intensities": 0,
+  "shared_flash_streams": 0,
+  "unique_packets": 49,
+  "pixel_operations": 102724,
+  "runs": 7956,
+  "bytes": 259024,
+  "crc32": "44cbe36f",
+  "sha256": "5ab7d42b3ab459ce7ea1e3c9ca0834902c714590dd80a0486c87ef4655741c6b",
+  "raw_sha256": "e22c0cfe29cbd5cd3a598381b2f04b40d19046c25c162dbbfb5ab67a9b7963ec",
+  "lossy": false,
+  "runtime_path": "sun-poses.h1ap",
+  "renderer_exporter_sha256": "73c4277bc473504e8dec7424d9cf4ad47d233351147508f2992a978185fa5b58",
+  "encoder_sha256": "5a3c35b2c9d0e9cdd1b4178b6640dd36c62c1c0a36632458bb385becab02e0a6",
+  "signature_format_sha256": "59210d0fe6a2fc4cf743b9c54dd5ba6d0dfd5aaeefae3691e613c5e6a8fbd90d",
+  "replay_verification": "docs/verification/runtime-fixes/host-sun-replay.json",
+  "sample_rate_hz": 24,
+  "scope": "Normal scale 1, white Sun coin attachment. Other scale, tint and fade states retain original drawing. All simulation updates unchanged. Main actor resource remains byte-identical to v26."
+}

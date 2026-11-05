@@ -46,8 +46,9 @@ struct Entry {
     unsigned char* data=nullptr;
 };
 struct WelcomePixel {uint32_t index,before,after;};
+constexpr uint32_t WelcomePagePixels=1024,WelcomePages=(Pixels+WelcomePagePixels-1)/WelcomePagePixels;
 struct Welcome {
-    uint32_t* before=nullptr;
+    uint32_t* before[WelcomePages]{};
     WelcomePixel* changes=nullptr;
     uint32_t count=0;
     char* name=nullptr;
@@ -60,6 +61,7 @@ struct VisibleGroup {
     VisibleEntry entries[128]{};
     uint32_t count=0,bytes=0,skipped=0;
     bool ready=false,rejected=false,seeded=false;
+    bool borrowed=false;
     uint32_t seedRevision=0;
     uint64_t version=0;
 };
@@ -67,6 +69,8 @@ struct State {
     GameSelector* owner=nullptr;
     Entry* entries=nullptr;
     uint32_t count=0,pose=0,tracks=0,resident=0;
+    uint32_t baseCount=0,entrySlots=0;
+    bool preculled=false;
     bool attempted=false,loaded=false;
     Welcome welcome;
     VisibleGroup background,foreground;
@@ -102,13 +106,15 @@ uint32_t Word(const unsigned char* p){return (uint32_t)p[0]|(uint32_t)p[1]<<8|(u
 uint16_t Half(const unsigned char* p){return (uint16_t)((unsigned)p[0]|(unsigned)p[1]<<8);}
 void ClearWelcome(){
     auto& w=state.welcome;
-    if(w.before){delete[] w.before;state.resident-=Pixels*4;}
+    for(uint32_t i=0;i<WelcomePages;++i)if(w.before[i]){
+        delete[] w.before[i];state.resident-=std::min(WelcomePagePixels,Pixels-i*WelcomePagePixels)*4;
+    }
     if(w.changes){delete[] w.changes;state.resident-=w.count*sizeof(WelcomePixel);}
     if(w.name){state.resident-=(uint32_t)std::strlen(w.name)+1;delete[] w.name;}
     w=Welcome{};Count();
 }
 void ClearVisible(VisibleGroup& group){
-    for(uint32_t i=0;i<group.count;++i)delete[] group.entries[i].runs;
+    if(!group.borrowed)for(uint32_t i=0;i<group.count;++i)delete[] group.entries[i].runs;
     state.resident-=group.bytes;group=VisibleGroup{};
 }
 void Clear(){
@@ -121,6 +127,16 @@ void Clear(){
     for(uint32_t i=0;i<state.count;++i)delete[] state.entries[i].data;
     delete[] state.entries;
     state=State{};Count();
+}
+void Detach(){
+#ifdef PVZH1_WIDESCREEN
+    if(h1DirtyCanvas.beforeContext==&state){h1DirtyCanvas.beforeDraw=nullptr;h1DirtyCanvas.beforeContext=nullptr;}
+    state.retainedScene=false;state.foregroundPrefix=0;state.menuPixels=nullptr;
+#endif
+    ClearWelcome();ClearVisible(state.background);ClearVisible(state.foreground);
+    if(state.foregroundOpaque){delete[] state.foregroundOpaque;state.foregroundOpaque=nullptr;state.resident-=Pixels;}
+    for(uint32_t i=state.baseCount;i<state.count;++i){state.resident-=state.entries[i].bytes;delete[] state.entries[i].data;state.entries[i].data=nullptr;}
+    state.count=state.baseCount;state.owner=nullptr;state.attempted=false;state.presentationScene=false;state.foregroundRevision=0;Count();
 }
 bool Read(FILE* file,void* buffer,size_t bytes){return !bytes||std::fread(buffer,1,bytes,file)==bytes;}
 bool Range(uint32_t offset,uint32_t bytes,uint32_t end){return offset<=end&&bytes<=end-offset;}
@@ -187,8 +203,9 @@ bool Load(const char* filename,bool merge=false){
         auto* combined=new(std::nothrow) Entry[state.count+h[8]];
         if(!combined){for(uint32_t i=0;i<h[8];i++)delete[] entries[i].data;delete[] entries;Add(10);return false;}
         std::copy(state.entries,state.entries+state.count,combined);std::copy(entries,entries+h[8],combined+state.count);
-        delete[] state.entries;delete[] entries;state.entries=combined;state.count+=h[8];
-    }else{state.entries=entries;state.count=h[8];state.pose=h[11];state.tracks=h[12];state.loaded=true;}
+        state.resident-=(state.entrySlots-state.count)*(uint32_t)sizeof(Entry);
+        delete[] state.entries;delete[] entries;state.entries=combined;state.count+=h[8];state.entrySlots=state.count;
+    }else{state.entries=entries;state.count=h[8];state.baseCount=h[8];state.entrySlots=h[8];state.preculled=h[14]==0x31434c56u;state.pose=h[11];state.tracks=h[12];state.loaded=true;}
     state.resident+=resident;
     Add(11);Count();return true;
 }
@@ -214,7 +231,7 @@ bool Ready(GameSelector* selector){
     if(!testEnabled)return false;
 #endif
     if(!Idle(selector))return false;
-    if(state.owner!=selector){Clear();state.owner=selector;}
+    if(state.owner!=selector){if(state.preculled)Detach();else Clear();state.owner=selector;}
     if(!state.attempted){state.attempted=true;
         #ifdef PVZH1_WIDESCREEN
         std::string path=Sexy::GetResourcePath("h1menu/selector-wide.h1mb");
@@ -224,7 +241,7 @@ bool Ready(GameSelector* selector){
 #ifdef PVZ_HOST_RUNNER
         if(const char* test=std::getenv("PVZ_HOST_SELECTOR_BUNDLE"))path=test;
 #endif
-        if(Load(path.c_str()))Load(Sexy::GetResourcePath("h1menu/adventure.h1mb").c_str(),true);}
+        if(state.loaded||Load(path.c_str()))Load(Sexy::GetResourcePath("h1menu/adventure.h1mb").c_str(),true);}
     return state.loaded;
 }
 #endif
@@ -272,6 +289,19 @@ bool BuildVisible(VisibleGroup& plan,Entry* const* selected,unsigned count,bool 
     if(SameVisible(plan,selected,count,seeded))return plan.ready;
     ClearVisible(plan);
     RememberVisibleKey(plan,selected,count,seeded);
+    if(state.preculled
+#ifdef PVZ_HOST_RUNNER
+       &&!testRejectVisibility
+#endif
+    ){
+        // The offline bundle already removed invariant opaque occlusion.
+        // Borrow its exact runs; no per-pixel visibility walk or scratch image.
+        plan.borrowed=true;
+        for(unsigned i=0;i<count;++i){plan.entries[i].runs=(Run*)selected[i]->data;plan.entries[i].count=selected[i]->runs;}
+        if(publishOpaque)++state.foregroundRevision;
+        plan.ready=true;if(visibilitySerial!=UINT64_MAX)plan.version=++visibilitySerial;
+        Add(14);Count();return true;
+    }
     // A run describes an entire visible span, not one pixel. Start small and
     // grow only when an actual span is emitted; reserving by pixel count both
     // wasted RAM and made a failed large allocation repeat every frame.
@@ -415,6 +445,14 @@ bool SelectorPose(const Reanimation* animation){
        animation->mFrameStart+animation->mFrameCount-1!=(int)state.pose||animation->mAnimTime!=1.0f||
        animation->mLoopCount<=0||animation->mColorOverride!=Sexy::Color::White||
        animation->mEnableExtraAdditiveDraw||animation->mEnableExtraOverlayDraw||animation->mFilterEffect!=FILTER_EFFECT_NONE)return false;
+    if(state.preculled){
+        if(animation->mTrackInstances[14].mRenderGroup!=1)return false;
+        for(unsigned i:{22u,23u,25u,27u,29u,45u,46u,47u}){
+            const auto& track=animation->mTrackInstances[i];uint32_t variant=0;
+            if(track.mRenderGroup!=RENDER_GROUP_NORMAL||track.mTrackColor!=Sexy::Color::White||
+               !TrackVariant(i,track,variant)||(variant&&i!=46&&i!=47))return false;
+        }
+    }
     const auto& m=animation->mOverlayMatrix;
     return m.m00==1&&m.m01==0&&m.m02==0.5f&&m.m10==0&&m.m11==1&&m.m12==0.5f&&m.m20==0&&m.m21==0&&m.m22==1;
 }
@@ -574,28 +612,40 @@ bool H1SelectorOfflineWelcomeBegin(GameSelector* selector,Sexy::Graphics* g){
             if(w.count){screen->Target()->BitsChanged();screen->NoteDraw();}Add(6);return true;}
     }
     ClearWelcome();
-    w.before=new(std::nothrow) uint32_t[Pixels];
-    if(!w.before){Add(10);return false;}state.resident+=Pixels*4;
+    for(uint32_t page=0;page<WelcomePages;++page){
+        const uint32_t count=std::min(WelcomePagePixels,Pixels-page*WelcomePagePixels);
+        w.before[page]=new(std::nothrow) uint32_t[count];
+        if(!w.before[page]){ClearWelcome();Add(10);return false;}
+        state.resident+=count*4;
+        std::memcpy(w.before[page],target+page*WelcomePagePixels,count*4);
+    }
     w.name=new(std::nothrow) char[name.size()+1];
     if(!w.name){ClearWelcome();Add(10);return false;}
     std::memcpy(w.name,name.c_str(),name.size()+1);state.resident+=(uint32_t)name.size()+1;
     w.profile=profile;w.font=Sexy::FONT_BRIANNETOD16;w.capturing=true;
-    std::memcpy(w.before,target,Pixels*4);Count();return false;
+    Count();return false;
 }
 void H1SelectorOfflineWelcomeEnd(GameSelector* selector,Sexy::Graphics* g){
     if(state.owner!=selector||!state.welcome.capturing)return;
     auto* screen=Screen(g);if(!screen){ClearWelcome();return;}
     H1CanvasProtectedPixels canvasPixels(screen->Target());
     auto& w=state.welcome;const uint32_t* target=screen->Target()->GetBits();uint32_t count=0;
-    for(uint32_t i=0;i<Pixels;++i)if(w.before[i]!=target[i])++count;
+    auto before=[&](uint32_t i){return w.before[i/WelcomePagePixels][i%WelcomePagePixels];};
+    for(uint32_t i=0;i<Pixels;++i)if(before(i)!=target[i])++count;
     WelcomePixel* changes=count?new(std::nothrow) WelcomePixel[count]:nullptr;
     if(count&&!changes){ClearWelcome();Add(10);return;}
-    uint32_t n=0;for(uint32_t i=0;i<Pixels;++i)if(w.before[i]!=target[i])changes[n++]={i,w.before[i],target[i]};
-    delete[] w.before;state.resident-=Pixels*4;w.before=nullptr;w.changes=changes;w.count=count;
+    uint32_t n=0;for(uint32_t i=0;i<Pixels;++i)if(before(i)!=target[i])changes[n++]={i,before(i),target[i]};
+    for(auto& page:w.before){delete[] page;page=nullptr;}
+    state.resident-=Pixels*4;w.changes=changes;w.count=count;
     state.resident+=count*sizeof(WelcomePixel);w.capturing=false;w.ready=true;Add(13);Count();
 }
 #endif
-void H1SelectorOfflineRelease(GameSelector* selector){if(state.owner==selector)Clear();}
+void H1SelectorOfflineRelease(GameSelector* selector){if(state.owner==selector){if(state.preculled)Detach();else Clear();}}
+extern "C" void pvzh1_selector_shutdown(){Clear();}
+extern "C" size_t pvzh1_selector_release_idle(size_t){
+    if(state.owner||!state.loaded)return 0;
+    const size_t bytes=state.resident;Clear();return bytes;
+}
 #ifdef PVZ_HOST_RUNNER
 void H1SelectorOfflineTestEnable(bool enabled){testEnabled=enabled;}
 void H1SelectorOfflineTestRejectVisibility(bool enabled){testRejectVisibility=enabled;}

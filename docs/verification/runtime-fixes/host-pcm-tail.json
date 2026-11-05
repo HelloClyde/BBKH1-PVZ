@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "production_function_bodies": true,
+  "source_sha256": "3c85bc61c884f00667287da6b4f7ff46433be7dd85845b92dc85a418457aa47a",
+  "cases": 14,
+  "active_underrun_detected": true,
+  "finite_end_stops": true,
+  "full_wrap_still_detected": true
+}

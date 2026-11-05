@@ -1,0 +1,1 @@
+{"passed":true,"levels":[1,2,4],"camera_positions":3,"sod_positions":5,"whole_frame_comparisons":315,"oracle":"Original production draw with retention and render-plan caches disabled"}

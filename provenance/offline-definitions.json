@@ -1,5 +1,5 @@
 {
-  "format": "H1D1",
+  "format": "H1D1 particles/trails; H1D2 numeric-resolved reanimations",
   "files": {
     "particles/award.xml.h1d": {
       "bytes": 523,
@@ -430,588 +430,588 @@
       "sha256": "837c831d6200f041f000495392932b8d5d36803a03ff878f70e63e43377ce7cc"
     },
     "reanim/blover.reanim.h1d": {
-      "bytes": 4082,
-      "sha256": "3c78228893d5e17c1d80c20f5084dd418a1a93c16a0ffa70585bcca31ca7c9b5"
+      "bytes": 4014,
+      "sha256": "1da09bd1e45791a7c24343d365d2c9578019c065acab4a37ddadcdd952dd2604"
     },
     "reanim/cabbagepult.reanim.h1d": {
-      "bytes": 10527,
-      "sha256": "aec5428c2c9e5818484d33a3b571d691f9c39ee261b99bbd750a84d7b2a76952"
+      "bytes": 10279,
+      "sha256": "deaa9811dfbb28e08f3be2336a3ea9db3e57a0be290cb628a95ec61feb501c36"
     },
     "reanim/cactus.reanim.h1d": {
-      "bytes": 9967,
-      "sha256": "9aa3e0ee69c5b5817cbc962d5d660ceef543b61d412c759782f1c14495c56f7b"
+      "bytes": 9657,
+      "sha256": "38b8613f285e8833c2e255f96c455bfb20a61c578fc7b61f8e1069500302b6dd"
     },
     "reanim/caltrop.reanim.h1d": {
-      "bytes": 1863,
-      "sha256": "46d959999fbbd6d332daca676a705eb43dbb62116378a9ff98769aa1d73dc9b3"
+      "bytes": 1792,
+      "sha256": "3e387147dd60048ac47eb91e1cc4812c632bf2b4ee10235ae0bacc712ac2857f"
     },
     "reanim/cattail.reanim.h1d": {
-      "bytes": 3697,
-      "sha256": "f26f39964d314f661467171a95b58bb549c850c83cc0f044945ddaf92015e08a"
+      "bytes": 3551,
+      "sha256": "396045eef1ccce9741bb49ca6a04686b22f8a93e77778746488c469302556df0"
     },
     "reanim/cherrybomb.reanim.h1d": {
-      "bytes": 4864,
-      "sha256": "76d086304277ad04e2098f4c710e2bd489b6fafe7ba911ef5fed35b7535b7463"
+      "bytes": 4722,
+      "sha256": "beb967a018561e37aa1da7390de9ee6ff5be27605fc8b8280a906af24c1c64b3"
     },
     "reanim/chomper.reanim.h1d": {
-      "bytes": 21213,
-      "sha256": "067ad06d5caaf0a561f3926148801249eda3755d0c70638a31dce9aa8cee1cd1"
+      "bytes": 20772,
+      "sha256": "cf3a07326bfed9cff5202d9ec916344db586016d5129904c2124e9cbefff29e1"
     },
     "reanim/cobcannon.reanim.h1d": {
-      "bytes": 6636,
-      "sha256": "81dc2ae011f5fb69e6d6499f44e18311f5264e7eaa433d63c72f43c593c9e617"
+      "bytes": 6479,
+      "sha256": "d03d5d1bba30efa7d91b0414cc89b593d1b2513b99df47d5355fa6f043e5dad9"
     },
     "reanim/coffeebean.reanim.h1d": {
-      "bytes": 623,
-      "sha256": "f269ce2c2363cedb766b0220f9f4bae5275647a92d8daa95d13079c5cf656804"
+      "bytes": 618,
+      "sha256": "5c2770d24d6391477ffc389f390fd0e1955461dd685d2cd5f746777714636450"
     },
     "reanim/coin_gold.reanim.h1d": {
-      "bytes": 993,
-      "sha256": "c1264fe79a69eeac44bbf0e5c05ff493bd8591514537fd9d452368deb5fe17f9"
+      "bytes": 981,
+      "sha256": "7980181c0462460f4cfec20aaa563d0373a528945392bf9aaac9624537331f6a"
     },
     "reanim/coin_silver.reanim.h1d": {
-      "bytes": 862,
-      "sha256": "fca737934d28eb90dac6fba58e06c75212e036b0189d323fec4d269e7b4c7c30"
+      "bytes": 863,
+      "sha256": "c2a2c883f645d88e0d9a9389e738cea838bb56076e04f2920ab352e0b60f2e26"
     },
     "reanim/cornpult.reanim.h1d": {
-      "bytes": 10136,
-      "sha256": "65fab9ad6c8c17cbef71020ef4e3026c4ba507aa7ece51ef2e3027cb4cdeded7"
+      "bytes": 9833,
+      "sha256": "7516495431f7f914d0426268f04dba377bbaff25bcdb018a9d27f040c53bf401"
     },
     "reanim/crazydave.reanim.h1d": {
-      "bytes": 37019,
-      "sha256": "75c9c0e78010a82ea28f348655b10713037f730e9e09b57ae21372f2b2d037a6"
+      "bytes": 36193,
+      "sha256": "f545e8214458e8b243750a38996afe8d6569e9c11e818f9240f9d3495800cb8e"
     },
     "reanim/credits_anyhour.reanim.h1d": {
-      "bytes": 2102,
-      "sha256": "6a007a27278c345bb520b100d04f187f225035a72294dfd2081ea5ee30c9f707"
+      "bytes": 2976,
+      "sha256": "a881fe267e1b2add30300f002d5ba9ffba03c0cc8b84c2e3240542dcefa2329a"
     },
     "reanim/credits_bigbrain.reanim.h1d": {
-      "bytes": 293,
-      "sha256": "df091e60da48d97f8382ffe0a8a2aa1c91eb5fbdf7eeb910c780c76610f7f1b7"
+      "bytes": 290,
+      "sha256": "b6cc8dc1dbb1e73adf3855d9119f69031324ca917b291bce6db3b11e19e2c306"
     },
     "reanim/credits_bossdance.reanim.h1d": {
-      "bytes": 2385,
-      "sha256": "f02e07f139b8c69fa89626594039a2bf4425b210b15b7762a8a1439a0ea61c07"
+      "bytes": 2312,
+      "sha256": "10f66f445eab103ea309f923a2bb8e9f1a103a7c0fbbe37b60f24e630752f1a8"
     },
     "reanim/credits_crazydave.reanim.h1d": {
-      "bytes": 5316,
-      "sha256": "92de1527ab4b0e92fda4e0dd4a8ebe3deea151692f9e7a72e853415c9783a419"
+      "bytes": 5544,
+      "sha256": "e94a7cb258b773fbcf215eef8e4f3137d053e4cf94bf542be3dd5a6d5fd848f9"
     },
     "reanim/credits_discolights.reanim.h1d": {
-      "bytes": 394,
-      "sha256": "532ef9a65dc75af2577df283c35fdd24d5baff0f9595178fb77a48ab11cd99f0"
+      "bytes": 442,
+      "sha256": "eaba2dae31cfb879227da1afa9d26fb3c55ae97caa329656b7d9caa1cde8ca9a"
     },
     "reanim/credits_flower_petals.reanim.h1d": {
-      "bytes": 338,
-      "sha256": "ab0b3150bdbe8354f72d5b1bfcb9013562659a5cac48888dbf587f000f2c59f6"
+      "bytes": 382,
+      "sha256": "4ad4c0d1e8f7212db81ddf05c4165eee0572d6ff7358befcf33e5bfeeb9a977a"
     },
     "reanim/credits_football.reanim.h1d": {
       "bytes": 718,
-      "sha256": "350854e35a9f5b67b5377122a4b7c50672efe3eb57cead896a7178254ae394e0"
+      "sha256": "7a37582c96e0fdc851f2142a4b8cbb28f775736d636ce0c5df051cfff98175a4"
     },
     "reanim/credits_infantry.reanim.h1d": {
-      "bytes": 488,
-      "sha256": "5897efa8a627b311eda5eda36e24d9d1c4138bc33f0a57e58ed93bc15b310c95"
+      "bytes": 494,
+      "sha256": "3df4846e9c50e464f95a8361c3277a18a7074db2e0b6e50e01a7ff259ce1354d"
     },
     "reanim/credits_jackbox.reanim.h1d": {
-      "bytes": 431,
-      "sha256": "3d7adf3872ef887fad2f973dd6b68edc97e835ed84afc45edd4683f07048022b"
+      "bytes": 425,
+      "sha256": "42fd47b8e262a0a7d66ea537cd55eb082baafa968dc564e6f02b9fd734f41808"
     },
     "reanim/credits_main.reanim.h1d": {
-      "bytes": 4768,
-      "sha256": "eba0cc40b49cfd828e831712670413d79ced29dd9cc78e50e95fb2fdc7ad2a6e"
+      "bytes": 4862,
+      "sha256": "a88f048d2d2af47f0ef44bf6ca0941441479032c4e24afb7d7d9a800317b4fe1"
     },
     "reanim/credits_main2.reanim.h1d": {
-      "bytes": 5048,
-      "sha256": "39744d0e0e2e5658145a31a1d351162e67e4f90872de60d6db0f7ab48eb4c3ae"
+      "bytes": 5128,
+      "sha256": "fa290415ffa8258dd40d09089d0101bbf665954af5eb4921335f7f2155dba138"
     },
     "reanim/credits_main3.reanim.h1d": {
-      "bytes": 20263,
-      "sha256": "14ffce44c585b6bc5f407cf2eaf2dfb0f120379315abcf4066bd1e4956200ad3"
+      "bytes": 21215,
+      "sha256": "dc14cc348b23e5a406b01012f88bfde5adb6d236eb6c51cda261555e222a9b6b"
     },
     "reanim/credits_solarpower.reanim.h1d": {
-      "bytes": 2101,
-      "sha256": "1aa86daae3c3f61389983f04394acf7527c79722b20d99f3ee5819f9aa2ee007"
+      "bytes": 2372,
+      "sha256": "3246a79f8bb90103e14d3075157744f1b6cc0f7032538e6621e713ea61810879"
     },
     "reanim/credits_stage.reanim.h1d": {
-      "bytes": 663,
-      "sha256": "d1a63174639c4d04fc623742e46d059a4e69e1f6230bf9cfdba9d35509b87a53"
+      "bytes": 716,
+      "sha256": "635de0c7adf9eab57be1b693686a64000ff59e1e47670a7da93305c8049eca8d"
     },
     "reanim/credits_throat.reanim.h1d": {
-      "bytes": 1682,
-      "sha256": "105fcab8dbb55d31182610a29c16262718f2c69a9e96a5eb68aac2aa2c04a076"
+      "bytes": 1631,
+      "sha256": "9aa3694afe32f21f3722142f845d82a5f081f91bf6aad15ab3b1703d4e2a959c"
     },
     "reanim/credits_tombstones.reanim.h1d": {
-      "bytes": 309,
-      "sha256": "e8c65c22db5dfa4412ace0f1fdd845dbdafc4d97440063ade24e83a8ef7e8fd5"
+      "bytes": 314,
+      "sha256": "062f5a6207eeb6ffc56cc51a4c046a95f865b23d4d2c9e6c0e4854e1ee0ae470"
     },
     "reanim/credits_wearetheundead.reanim.h1d": {
-      "bytes": 1186,
-      "sha256": "a31106b7adce4539c6da5ad3962406bf6c29b5f60caf1769d6ea5efef70e7a28"
+      "bytes": 1289,
+      "sha256": "e42eef25b31f4ee496a3f2694b744ecf9d8981345bc41807a214d91c7c443f6a"
     },
     "reanim/credits_zombiearmy1.reanim.h1d": {
-      "bytes": 842,
-      "sha256": "256f3e24a8d2b36b0d5fa5c0a3b4303906fa67dc1750dfb4a3d78b50cd077c31"
+      "bytes": 945,
+      "sha256": "3e8a9a893de790b410f6fad31fe27737c61ab1dfa3ae82b1910d01bae712ef30"
     },
     "reanim/credits_zombiearmy2.reanim.h1d": {
-      "bytes": 688,
-      "sha256": "02bf07e01d444cdd52d88bf7b89d483d2a77b36209e9fb6ca7cabae2da85e4ef"
+      "bytes": 689,
+      "sha256": "bd3b86acd0e79102c280ce5c58742b89ae725485f8c44a7ece1506aaf35430aa"
     },
     "reanim/diamond.reanim.h1d": {
-      "bytes": 320,
-      "sha256": "f0ef2a3d3f1d260b78add53d79bfcbd493a93649cf59bc3de6ac8f8df455a19f"
+      "bytes": 338,
+      "sha256": "99c9e876ddd71b1d475fbbc22b6c3a8282b773eef9b3bce584374e7be9fca8db"
     },
     "reanim/digger_rising_dirt.reanim.h1d": {
-      "bytes": 182,
-      "sha256": "a0cce827634060e1f77a5f0d80636953c9daab9a0e12a97a5c6ae218546b9820"
+      "bytes": 179,
+      "sha256": "bba43efe05eabd52c4562710fc1bc68c92d569b451a95222c7b8ff583cbca713"
     },
     "reanim/doomshroom.reanim.h1d": {
-      "bytes": 2033,
-      "sha256": "863fbd5cd48fa2176cd732c8d3511353662bcf4fd4d9a435683c2baa19ed76a7"
+      "bytes": 2002,
+      "sha256": "23a5d93fa9b394fe643ecf1ad8868793406698721689c21e051e1e0688861924"
     },
     "reanim/finalwave.reanim.h1d": {
-      "bytes": 274,
-      "sha256": "8a20b97d75245b9e836415c7151ef5351c3cd84ad37e8f10098777ce261fc272"
+      "bytes": 263,
+      "sha256": "f06030759be10e6a3e07b3bae3b15211f8c974b6cdc15d7fcc4af7d40253caf3"
     },
     "reanim/fire.reanim.h1d": {
-      "bytes": 318,
-      "sha256": "1f93abb2b2dc58526d77643252f8e08e27a38c8692ea284b8c9a7fa583ce3e04"
+      "bytes": 310,
+      "sha256": "8baa24b86cb13d5534d1f01e45e7fd6777eaded97301704824dee40793268fcc"
     },
     "reanim/firepea.reanim.h1d": {
-      "bytes": 1142,
-      "sha256": "58aa08db6e719055dd7307ac726291ae6830f2b36a4dfe2cb52e20416501d792"
+      "bytes": 1124,
+      "sha256": "152b3b683d89f25c80791756a4fea687ca52b6fa929e8f4ecb48fdb17aaa38ce"
     },
     "reanim/fumeshroom.reanim.h1d": {
-      "bytes": 2394,
-      "sha256": "e5998334a1f743cbeb7428dc73f31cf3b1b2a019f8ecc4ca3c94dcab330c0b90"
+      "bytes": 2293,
+      "sha256": "5ef86abd66361eb2b766218e046b8f36b20d0018941bfebfa540a75a93470ad5"
     },
     "reanim/garlic.reanim.h1d": {
-      "bytes": 1186,
-      "sha256": "1c1c3ef0454c83b8c093c03486c86021858d1277aa648a4602a125ee62d3d432"
+      "bytes": 1160,
+      "sha256": "5ff168b71f813e90975e2f69bea21e3d246ce6f0b66cdb119c803924eeb95e13"
     },
     "reanim/gatlingpea.reanim.h1d": {
-      "bytes": 7324,
-      "sha256": "3fc44799c03b6834cbc14f802f830859362f2c08074643305b1ee2657dcaf033"
+      "bytes": 7196,
+      "sha256": "63670d6203a0efb1d5f2e3c7e0cca6b4e33a1b11ebfd8a410e05a35571f017a0"
     },
     "reanim/gloomshroom.reanim.h1d": {
-      "bytes": 5014,
-      "sha256": "a828bef7ed643e642a1a46c7e550e93c5efadd7ed4a79dc0a221c3f1c5e98c2e"
+      "bytes": 5131,
+      "sha256": "f6fa2e6d160a9ddf069d822d4ad5f362b309e377e005261fe58a6d0f2c50f6f9"
     },
     "reanim/goldmagnet.reanim.h1d": {
-      "bytes": 7773,
-      "sha256": "34d10fa6977d7b6d789bc37eb6414a90a8b4516f687938769db45fded8fcb6bd"
+      "bytes": 7505,
+      "sha256": "8ac589cd1e32f72759a776c9bca0d825150b1ba42880a8f1d07c12b9792accd8"
     },
     "reanim/gravebuster.reanim.h1d": {
-      "bytes": 4187,
-      "sha256": "d8b564ba4c44ebd6561ccc347e3245a7171b7d98bcae9c49b7f4818f5c1b6e83"
+      "bytes": 4023,
+      "sha256": "43c57181c931c612c51e03963d5e23b54ea8f38ec4effac05bf90d816546c35c"
     },
     "reanim/hammer.reanim.h1d": {
-      "bytes": 724,
-      "sha256": "64dd224e2771514733b5d8ac70d890bb07687814e9905b31029257b3c7321625"
+      "bytes": 715,
+      "sha256": "642085e6b4f86357dd9c88ba9672f506458b1f9d819e3751520186d0c1cf1a33"
     },
     "reanim/hypnoshroom.reanim.h1d": {
-      "bytes": 2287,
-      "sha256": "5c5ec347f5a0046008b9e9682e66f798be43cdb9c953e2dee746277c4d0c44cd"
+      "bytes": 2254,
+      "sha256": "4b928fb2e65d939f14d671b41674ed653dddd3ac8b304e896f145d2a1a892957"
     },
     "reanim/iceshroom.reanim.h1d": {
-      "bytes": 724,
-      "sha256": "c9bf96ede6b14c19800be9fe604d1f7db7439824c7d911e5868c406d00240b82"
+      "bytes": 707,
+      "sha256": "ec5f39f17b1e9c2270519ef661a18661ba9d2156522eab93a4770e8a4ccd058e"
     },
     "reanim/imitater.reanim.h1d": {
-      "bytes": 4342,
-      "sha256": "a6e0de6c67747160bc0382bcd30d1a04ca175c6bb0360ea5dc94c4c1f2881516"
+      "bytes": 4247,
+      "sha256": "0330392b1aa10c588766e1509d5e4e1564f5bbb7e56b8744dc3151efedc479f2"
     },
     "reanim/jalapeno.reanim.h1d": {
-      "bytes": 2476,
-      "sha256": "6f47011f5727eb90fcddda251651c85507723b26730dee71110f41c79b9e35f7"
+      "bytes": 2440,
+      "sha256": "6772b26acb779bc155a4cd84b55429cd42d6981cb9f53f61c3968196796f04b5"
     },
     "reanim/lawnmower.reanim.h1d": {
-      "bytes": 2899,
-      "sha256": "969c0a741fc7668d5d9cf61246ed29bff02330f04eec9a615f84fec5fa01b297"
+      "bytes": 2905,
+      "sha256": "b624a0d2ad249bfa2362c82b8025c76f34336beffbf8a9ac10a46fdfd1b4ea53"
     },
     "reanim/lawnmoweredzombie.reanim.h1d": {
-      "bytes": 198,
-      "sha256": "ac77f4a1d3cc2f5547a9232f925e78b56be24c4cf3e7f8247a39e63f4319e8b8"
+      "bytes": 195,
+      "sha256": "87e25b793bdeed6f4b5223bb2d3ec11b1c8477e9943af09139322c05baa4c95c"
     },
     "reanim/lilypad.reanim.h1d": {
-      "bytes": 172,
-      "sha256": "981ef644e4099415d48b7163a46f2cb44462a5e05ea954ee4a95bec52abf273b"
+      "bytes": 165,
+      "sha256": "22705ea463fb0c3df45c7777d87dc6274367c69ced95088d3925b16c51a0f77a"
     },
     "reanim/loadbar_sprout.reanim.h1d": {
-      "bytes": 1004,
-      "sha256": "5613a7328046877aab32316a5515101d85bbfb11c6d4a10223c4f45b2390bc90"
+      "bytes": 997,
+      "sha256": "728df5d1c001a400929826b197c8acf773cbb0b03acbd0ac6ec8db3008079cd4"
     },
     "reanim/loadbar_zombiehead.reanim.h1d": {
-      "bytes": 1919,
-      "sha256": "abb726daf8f8e7cdc25c4b8b6874af85e77520638f2e2eec943243b18d133b32"
+      "bytes": 1912,
+      "sha256": "220f6d731d423ca0a16637f2c50e92861b9327671f974cf26bc229fb0fb45f61"
     },
     "reanim/magnetshroom.reanim.h1d": {
-      "bytes": 7693,
-      "sha256": "56e35c414dfeaeebad83f77d6c878953344cd41476c84e5c909bda2c8aca660b"
+      "bytes": 7509,
+      "sha256": "334b229845c5b7764aaa8ccf792ffddbd0b749243f780d5e915e97807eda9394"
     },
     "reanim/marigold.reanim.h1d": {
-      "bytes": 3719,
-      "sha256": "9e5c06ef6035576473db9209888e71f4bd0214c96dfc2ec6aa332a237c771a59"
+      "bytes": 3595,
+      "sha256": "2ad6c6ea7f232ba177f055cd855c2471114c77372b9dcfae64a76908a0582942"
     },
     "reanim/melonpult.reanim.h1d": {
-      "bytes": 7099,
-      "sha256": "8a148310214665cb04b48647b7b27d150419b6089419d3da197c524faf875b29"
+      "bytes": 6845,
+      "sha256": "56e9670d164e70cd2280c439cb761ffff3d5bcf52dd64f9247f33ced615e081c"
     },
     "reanim/peashooter.reanim.h1d": {
-      "bytes": 8760,
-      "sha256": "8767bdc1e0e6181ead5527437ef16844af5bea4ef578b4657dc20aea0b43ce5f"
+      "bytes": 8564,
+      "sha256": "dcd3a4bb34cce25656dca1464ad22e964d68ff967f9e35defa0497cd8ee83468"
     },
     "reanim/peashootersingle.reanim.h1d": {
-      "bytes": 5637,
-      "sha256": "5625b7e225e52fc64b81f62f40ac18b0ec03787e337efbaf26421c7660054f03"
+      "bytes": 5568,
+      "sha256": "65d26a6dd48d799db16c073e1db8f792fe04d53c3f329d42d43bfa95b261a30a"
     },
     "reanim/plantern.reanim.h1d": {
-      "bytes": 3238,
-      "sha256": "ccdac8bef9d2acf95ff77aa3f5dfade96b10325d40743d521453c61edcaaf7f0"
+      "bytes": 3196,
+      "sha256": "e756045de94cc53d54999a28c52db96760e720d8993892330ef15d69cde20678"
     },
     "reanim/poolcleaner.reanim.h1d": {
-      "bytes": 3800,
-      "sha256": "4ed3f0d3785c6176952bd8e5ebe2bb690c5f3c12adfd75d61bc6f08904fbc60d"
+      "bytes": 3743,
+      "sha256": "3974080f3e4ad05c7053c8655deb35c982fdfedfe9de7c154dbd3f0e0266be32"
     },
     "reanim/portal_circle.reanim.h1d": {
-      "bytes": 1009,
-      "sha256": "5e9ccf311682144a6986e0023cdc73f8943e150dbd436b94ec4e0ae8f4455143"
+      "bytes": 951,
+      "sha256": "969427a8ab54310fa3d96d2412f76165d925b4de29105ef5b036d822d3a189a6"
     },
     "reanim/portal_square.reanim.h1d": {
-      "bytes": 1219,
-      "sha256": "f6344b5f115a7f17c969177dea088698f1ae4bba71086df777dc9c721c2e5108"
+      "bytes": 1172,
+      "sha256": "d99874639ca02de0550a7f3bc1b8621a00d7b2472da63c33316feb7001263e91"
     },
     "reanim/pot.reanim.h1d": {
-      "bytes": 1229,
-      "sha256": "e08c28bcea422e52a6bc2da15775044d2abf452cac479ff5f9eb1c84def07618"
+      "bytes": 1221,
+      "sha256": "76af83b16174f8c739953a9e254693c4a3a3286562ed25d46e805b7705e4684c"
     },
     "reanim/potatomine.reanim.h1d": {
-      "bytes": 2714,
-      "sha256": "d11d710b91c4e09e26e0445322d8b90b2803a3a550c26a992fd1fb7497ec09be"
+      "bytes": 2576,
+      "sha256": "7762c920481e0b93741bcce7d23c4475b040eb9e3194554acec3cf8e5f2c38f3"
     },
     "reanim/puff.reanim.h1d": {
-      "bytes": 267,
-      "sha256": "e0b8cfa4128fd4eb0f2bdfeb724206d7d8cf5eb88ea681933e95bc1fe390e51c"
+      "bytes": 254,
+      "sha256": "4c72a10af94480902086531b397af432643a991b04742de7f71ae161fd651a40"
     },
     "reanim/puffshroom.reanim.h1d": {
-      "bytes": 1718,
-      "sha256": "060ce75f40c259ad7bc00089943c07dd4dd07cded82b39de21e6d86bb4312fcc"
+      "bytes": 1667,
+      "sha256": "1912ce12c56ec9f42a62a550c38ca7b4891e507b23d709e66b5288de9df5cc21"
     },
     "reanim/pumpkin.reanim.h1d": {
-      "bytes": 455,
-      "sha256": "334ce51a39a96239c0e1a052d70ea80d649ddcc40a82e473f645d14af62c9500"
+      "bytes": 454,
+      "sha256": "370deb78b1f514facf04fca01358bb9de254c2e857a392b3f90530a75c81d353"
     },
     "reanim/rain_circle.reanim.h1d": {
       "bytes": 585,
-      "sha256": "ee70c0f1b2777cbb68b5f47176c4b203efedcbb46557454bbbbd426417f076be"
+      "sha256": "f5415bf48379a906d144403e4b6157fc1dde2823c22620ca76431100be5d2deb"
     },
     "reanim/rain_splash.reanim.h1d": {
-      "bytes": 215,
-      "sha256": "31bc59d154c8357c87d60d9826c9a516cce9f579dad8adcceb39a5c06b3e6f17"
+      "bytes": 207,
+      "sha256": "111aa62ca62e69dfb810c433fdb3a997c5c5d5009cf4346c49a7000d5578a567"
     },
     "reanim/rake.reanim.h1d": {
-      "bytes": 326,
-      "sha256": "6293235fac913ac5198ee45f1c96bc2a173727a8df858482c2d6ae6842ce8da7"
+      "bytes": 325,
+      "sha256": "ff6870b3d067fd93c90f9e988cbe95188d67653e59cc38fa548d2bc33505d747"
     },
     "reanim/roofcleaner.reanim.h1d": {
-      "bytes": 716,
-      "sha256": "9d8f9465dac4a86498b5018912259fb162bfab2eb49fb90774a50fc5899e1595"
+      "bytes": 720,
+      "sha256": "57d7bbff02b18bd60d2960f6107d5e85f3ce252a13578cb86010a4b97f9d1468"
     },
     "reanim/scaredyshroom.reanim.h1d": {
-      "bytes": 6361,
-      "sha256": "13a72bfd406fc926da4679dceec994f4940f222879a2db6ce94de3f0220ac240"
+      "bytes": 6122,
+      "sha256": "e25de77daa55f6836b988b8b16105824b5cae3d0fbe6612788d7efe67919a881"
     },
     "reanim/seashroom.reanim.h1d": {
-      "bytes": 3496,
-      "sha256": "b27b81f1abb0b140ae490a2247fb6d1d814acbe86611c3fca11bb3f1180b7994"
+      "bytes": 3368,
+      "sha256": "b812c1f83ee947300650ee3322eab59e9819ebf776e07985035b15b12c2bfc4d"
     },
     "reanim/selectorscreen.reanim.h1d": {
-      "bytes": 18557,
-      "sha256": "e4f34d93cc0d1d0b95f061ad4f30c6df0ce3dcadf28c9e1cb9f5748a1fa0c777"
+      "bytes": 18233,
+      "sha256": "18f173dd61ffa376a4adcee93a9ca176fccdbca461d806edcb936f2340c1292e"
     },
     "reanim/slotmachine.reanim.h1d": {
-      "bytes": 401,
-      "sha256": "fe66507273b0cb16ee3203ca3a052ec69821c4c373e70a7a224b1e8fafaebcea"
+      "bytes": 391,
+      "sha256": "a9c26958de0c1cddd040184ea502ec6f836f75dcca0ccebc96779ea1bf7c45d1"
     },
     "reanim/snowpea.reanim.h1d": {
-      "bytes": 6861,
-      "sha256": "2e0098be8a4b364667e1e140fbf871d8507581edd73613c6177cfa62a71f2451"
+      "bytes": 6781,
+      "sha256": "e0613e05f66501e26a58e2fdecf2e80dd63f6cb0c05c3f745c179711de7f25e0"
     },
     "reanim/sodroll.reanim.h1d": {
-      "bytes": 1457,
-      "sha256": "3725a2432af6ecfbbfd63c34c655b4ac80c05531164fdec51a11cb01d6f69c15"
+      "bytes": 1440,
+      "sha256": "0f33f4f9078801b425a41746d18a0874a1d9f92843b379e4d2a1c23c7d76f9aa"
     },
     "reanim/spikerock.reanim.h1d": {
-      "bytes": 4009,
-      "sha256": "7ded7ffe313244002c9026178de9e4cfb49506043d7fd8db127a77b47d11b27a"
+      "bytes": 3982,
+      "sha256": "939d421a8148f4a1dbe9c4a1dd68bc9c9b2c55c17ebcc4321cdd3a0fa60fc550"
     },
     "reanim/splash.reanim.h1d": {
-      "bytes": 1520,
-      "sha256": "54ac596a2e3ac7b36f1f8ec6676ac54d2872b5039e72b1a9cb1a42c885d94083"
+      "bytes": 1502,
+      "sha256": "76175623a989d39544f4c9d66be91393317a342f7a764b45d5ec55f59a83583e"
     },
     "reanim/splitpea.reanim.h1d": {
-      "bytes": 5951,
-      "sha256": "7e59b18b5c815d3a6c4cdfd20a04e7917dc3b4f763fbfe04f7d82f57816a096e"
+      "bytes": 5893,
+      "sha256": "710a000a73ec1730cdf843cc1ba3dcf162715341c4ad5c540475717026872bea"
     },
     "reanim/squash.reanim.h1d": {
-      "bytes": 2649,
-      "sha256": "d0fbca3d8b22864061ee925c4506b76573867912250aecec646dd5ed336f0dff"
+      "bytes": 2597,
+      "sha256": "5cfd033b4b703c49490f98808051d889f042bfcc16768bd6e0bfd4d29188a356"
     },
     "reanim/starfruit.reanim.h1d": {
-      "bytes": 2255,
-      "sha256": "f5c494463163c715de473562cb9370e72a824e5b8eb317aeb3e4d10ff58909aa"
+      "bytes": 2204,
+      "sha256": "fca053d362c5a06436dbae4607373bdb6d31329510f08075da27e6e2e7b722c6"
     },
     "reanim/startreadysetplant.reanim.h1d": {
-      "bytes": 318,
-      "sha256": "074233b1425d23443e24af59e413551452be20687d97bc3a1e78e8cc6d6c5a16"
+      "bytes": 324,
+      "sha256": "c01cb89515b2c466fd29a3184c4138cb184cab13428967c091af06c3f04551a1"
     },
     "reanim/stinky.reanim.h1d": {
-      "bytes": 3023,
-      "sha256": "8bb8434617a765f842e362b2e706244594dc76def75baf5d6f04248fa3753154"
+      "bytes": 2918,
+      "sha256": "831487b95ffd9988385fa5f687c69475f4a9c7f9e700fa47ab86442bd45b9fd1"
     },
     "reanim/sun.reanim.h1d": {
-      "bytes": 590,
-      "sha256": "032cb84b562368ff526b3f1c93f40e265bcbb98c52922389a04bd9dbc54f7b2d"
+      "bytes": 582,
+      "sha256": "469cc7f4ca4c00ad38d132179656259ec1bb4e40557a6db76ed722266894a5f1"
     },
     "reanim/sunflower.reanim.h1d": {
-      "bytes": 7869,
-      "sha256": "13f4a03890d624e0920fac1d58cf78a1e1ae7fb4852058f7dd97705064d4cc41"
+      "bytes": 7745,
+      "sha256": "fad7bfc6b50edeaa2ab447ccf65f21f59b2ca549a957d952eed9f2f7a199b945"
     },
     "reanim/sunshroom.reanim.h1d": {
-      "bytes": 1622,
-      "sha256": "028c3d7b89eda496cb3a8b3289f29254caed53841eec2ec0abbe6cbe97801c08"
+      "bytes": 1601,
+      "sha256": "17f2269bbb861a0e2f0db014b0f5fad879d2ab8c010c83f3ac63c2e3560d21d2"
     },
     "reanim/tallnut.reanim.h1d": {
-      "bytes": 431,
-      "sha256": "8d79c68f7269ccb0b4e121bc4ffda026f304bf7a91a59ca9964b61e1a715058d"
+      "bytes": 408,
+      "sha256": "57d2f62bb5d4fb204e5ca67715882294c88ec675db938a555b765fc1b531aa01"
     },
     "reanim/tanglekelp.reanim.h1d": {
-      "bytes": 3232,
-      "sha256": "74d64594fbdd34585777ffa98ccb67d4829a60a341bd3c7d2abecd858ac4e5d7"
+      "bytes": 3248,
+      "sha256": "3dcbccc9e2a7138ef3b2b149efdf17655c4aee68862759a9e14991277229b76e"
     },
     "reanim/textfadeon.reanim.h1d": {
-      "bytes": 414,
-      "sha256": "8341807314985d9d61dd09c9f973a41e5320d40a58f2367e33aaaa8c1b1391c4"
+      "bytes": 403,
+      "sha256": "1f880ee0376c359d08b892d7a25cae071bcff021a8d36690d233fa1dcc21561d"
     },
     "reanim/threepeater.reanim.h1d": {
-      "bytes": 9849,
-      "sha256": "fb33e6da900eff5672b3a9ab0e8ccf4c8cce895e0631463d90c8c1df10d06571"
+      "bytes": 9670,
+      "sha256": "44e20cc131f1da79e7ce2a29d07716d043ce0a5e929519ac3a28ef4a2205662a"
     },
     "reanim/torchwood.reanim.h1d": {
-      "bytes": 1358,
-      "sha256": "007cec430ed1c322484095859d134d26e4e6d6487f819b11e1b3d4c812eddf5f"
+      "bytes": 1376,
+      "sha256": "cf2f2f4fe27a53ab2984a5779ec8ca0f8d2130d1cca49f0bb9eef2e3a9bbbaba"
     },
     "reanim/treefood.reanim.h1d": {
-      "bytes": 468,
-      "sha256": "b2b5ba78c4043b97c4fdaa8940dfc42c3cc68b01ae6d255fa8cd3a33577490a7"
+      "bytes": 449,
+      "sha256": "43a1185c4ef46495b7a0c421968d363992ec827b984b078897414209b0f913a0"
     },
     "reanim/treeofwisdom.reanim.h1d": {
-      "bytes": 15831,
-      "sha256": "f708373abdec8baa027cfd94c590d9be21dbc3bdea0fcbc883167869d6f65cdf"
+      "bytes": 16046,
+      "sha256": "7b594e47b0dab21699ab4cec55aecebc7d6d61b967f7ef30a99ac2bb603e8323"
     },
     "reanim/treeofwisdomclouds.reanim.h1d": {
-      "bytes": 8054,
-      "sha256": "e540bd01625e8759ec9e51d8426f47ad0e88a8f6216ef81c216ae867191ea827"
+      "bytes": 7989,
+      "sha256": "9c8457d68bf4478b28543ff70df86ac28da5c9ff1f8d19d03ba67ce92367ec9c"
     },
     "reanim/twinsunflower.reanim.h1d": {
-      "bytes": 4828,
-      "sha256": "7ff0a2cb5f41036aa35bfd34d3ccefd9b23b6fff1178f51f32b2ee0714e993d6"
+      "bytes": 4753,
+      "sha256": "11de5924888de2b902d98b92bf72f494b39083aa6631007cc9d40b747146355f"
     },
     "reanim/umbrellaleaf.reanim.h1d": {
-      "bytes": 2877,
-      "sha256": "589a535a963a92a9d3ada641aa0366700bcaf92e18dece08d26cd2b87182d55a"
+      "bytes": 2804,
+      "sha256": "ac13f718bab3a26030bfe936b726ea135498c96089dde5fc1c94a522276b55e2"
     },
     "reanim/wallnut.reanim.h1d": {
-      "bytes": 806,
-      "sha256": "a91abdae73e3ec42f117931c703a90da7d8534b85dd44165f7e44dbd5697a372"
+      "bytes": 772,
+      "sha256": "ca7dd195151af220e6f231dde5fc2ffff954149942a91cc15de59e86e8231cc1"
     },
     "reanim/wintermelon.reanim.h1d": {
-      "bytes": 7495,
-      "sha256": "e01a2fcb10dc1a23011eccf18b5fa7cc780e2262b6f28d5fe5bb5fb3152f671f"
+      "bytes": 7230,
+      "sha256": "68c8bce8cb4ba8368fc2108e8ef04e55eaab1cdae7464f682dce5b957e58c8fc"
     },
     "reanim/z.reanim.h1d": {
-      "bytes": 375,
-      "sha256": "2181dfad0f7cfaa6ab4a37b43f64b05befac6d5be840eaeb8528d2179121b1ae"
+      "bytes": 343,
+      "sha256": "2089bcc7bd136fb993f0440498cff6fe31541dd527f2936aafba69bfccabc07d"
     },
     "reanim/zengarden_bugspray.reanim.h1d": {
-      "bytes": 606,
-      "sha256": "7e5b006e5db0597de4209a5187f21bcc0988da5d264ad80c356aebba78586cd0"
+      "bytes": 575,
+      "sha256": "ef18f15967c81a5fe481e9fe34109f494049c2d53f837596fdf38dc23acf73b7"
     },
     "reanim/zengarden_fertilizer.reanim.h1d": {
-      "bytes": 444,
-      "sha256": "9a8c2d3b51b56e445568de99d1e5dc2998dc2ed67d1c5445a466a8bde2c7bc43"
+      "bytes": 428,
+      "sha256": "b08ba7655f4ba81322e69028fbef08c6ebf869c374a026808b7136c254e16ebe"
     },
     "reanim/zengarden_phonograph.reanim.h1d": {
-      "bytes": 888,
-      "sha256": "8ee8ca3636b201066bd1ff093888355ee3ac41bcecad38ef89a0f23f117aaa6e"
+      "bytes": 863,
+      "sha256": "1bbd4e3ec50f3076507851311a0c22632820c8c12f1803589571dc2dac4b19b7"
     },
     "reanim/zengarden_sprout.reanim.h1d": {
-      "bytes": 2937,
-      "sha256": "498b9d8bf8dbcdf8fbf552153dba07edb72621ca380b8cf42fbf662749017edd"
+      "bytes": 2880,
+      "sha256": "e9b942f6946a4937a117c550ae79150f9b1a43fc56b0affdf16759e44d458376"
     },
     "reanim/zengarden_wateringcan.reanim.h1d": {
-      "bytes": 804,
-      "sha256": "286e52efc5ff445638730c9944070f9b5144fd2de8d022106927e65f1b86f0cb"
+      "bytes": 787,
+      "sha256": "190065ec3de26307f15832916819cf48d137c688de071e64a7edf30688ac9699"
     },
     "reanim/zombatar_zombie_head.reanim.h1d": {
-      "bytes": 3241,
-      "sha256": "4d1d0e15f829db3fde6b97f0e75039651c51dca27d0f6f033228bc7ede650b62"
+      "bytes": 3860,
+      "sha256": "ac3462aac4dc7727147cf771275a2bae5ac8e38824b65c22bad3d0c103b2b65e"
     },
     "reanim/zombie.reanim.h1d": {
-      "bytes": 87750,
-      "sha256": "7f56db5c3231c4033136ff1694d6d3c9d25c16c5e73a4a313fec2ebeb373eb77"
+      "bytes": 86423,
+      "sha256": "f111abc21a66f0203be27dd1e3bb1e8a39849da605e7ed1ea7f96dc983a84a75"
     },
     "reanim/zombie_backup.reanim.h1d": {
-      "bytes": 11627,
-      "sha256": "57e3fc34e20cf3d5eda8d44c1bb9259940493db1f79136cf32ea1f31b77042be"
+      "bytes": 11278,
+      "sha256": "7a04e7627f47b51d1bf2861af16048bb0f9858cd29a7eb6d24a08ba86e4c64e5"
     },
     "reanim/zombie_balloon.reanim.h1d": {
-      "bytes": 26130,
-      "sha256": "7853ddbadf140a9472da93a6a9e7fcd4c2074775200649b252b41ff1636a1049"
+      "bytes": 25564,
+      "sha256": "efb6fa064eeb665f14e172f1119c721bcd9b75260d4289617ae8981308d79382"
     },
     "reanim/zombie_bobsled.reanim.h1d": {
-      "bytes": 28060,
-      "sha256": "9a492ea95dd5032d5c007b78c0a74aa280ac54017c47f9ee1f1e3487b0b6c475"
+      "bytes": 27477,
+      "sha256": "537bc44bf369ae21ff12c1072b9df8fee28251553a91a35f4ae26b4c91094e9e"
     },
     "reanim/zombie_boss.reanim.h1d": {
-      "bytes": 109668,
-      "sha256": "1bcd8868d24947ee00b9478ae88dce8e1617cf007c40cd0b4687bc6068c72614"
+      "bytes": 107319,
+      "sha256": "65b6a29846ca21ce48bca30515a7c3f072da9320eeac29fff4f6e3c6094cd499"
     },
     "reanim/zombie_boss_driver.reanim.h1d": {
-      "bytes": 16360,
-      "sha256": "be495caf151230e81063407caa4c4e612e9423b32a76bd77edf8b439cc339965"
+      "bytes": 15788,
+      "sha256": "72c2ab1120cfbc2416270c93c11e4565793e16d30d6aed2a92bb6d58b39462c9"
     },
     "reanim/zombie_boss_fireball.reanim.h1d": {
-      "bytes": 2840,
-      "sha256": "82e1a344a708e7ce6b4c2a0bba308dac3d277bef4ffb4e3302a380116a2d27e5"
+      "bytes": 2762,
+      "sha256": "fe38dce81bb45fc955080457348213c4300d25e42adf222f1a592b724d93026d"
     },
     "reanim/zombie_boss_iceball.reanim.h1d": {
-      "bytes": 5488,
-      "sha256": "b12972b9a4de1802224b7324dd060b6e7d413854b8e77dd95b0e1e9d34c43d70"
+      "bytes": 5436,
+      "sha256": "b3a877dceb3524062fe0615b871f4b4096f1b1dfb667022f83e1d1a199a35882"
     },
     "reanim/zombie_bungi.reanim.h1d": {
-      "bytes": 8899,
-      "sha256": "1c27fe3545028d559dc60d172a672e41ed430d538def44464c84c2a7026243e1"
+      "bytes": 8667,
+      "sha256": "51aa1bf6522fe32e53a411caf65ca79e1a2ad2099c58c563115ccae3eb09495f"
     },
     "reanim/zombie_catapult.reanim.h1d": {
-      "bytes": 15079,
-      "sha256": "81e13cdf04a645658daa77aabdd3d2b057bd59631ae6af5f932a614ba0cc67c8"
+      "bytes": 14696,
+      "sha256": "a77af2493838441edc3cb7d2a1421075db3a5fc2ecc7efecb5a974974af6fdd1"
     },
     "reanim/zombie_charred.reanim.h1d": {
-      "bytes": 1541,
-      "sha256": "f48b5e12d6ef48e4d8c86ecfafd316a79ea88b2fd357d52f42f8af2685d3c557"
+      "bytes": 1521,
+      "sha256": "687955b30758e3c490b47b52036a2600480decdb4acab21132e069ff41a4d644"
     },
     "reanim/zombie_charred_catapult.reanim.h1d": {
-      "bytes": 1325,
-      "sha256": "2c9f57ac94282d2a2b78a594746e42a3671a861a81888df5c387d880e120f045"
+      "bytes": 1292,
+      "sha256": "6707fec29ead10836eccc0cafd1c13b57a174bbfc99e78198425483c208be930"
     },
     "reanim/zombie_charred_digger.reanim.h1d": {
-      "bytes": 1457,
-      "sha256": "7e3a01f1b808493b5e955d10f88ac06fb7776e038d4fe222862c36e2c97dd9ee"
+      "bytes": 1462,
+      "sha256": "29c4619e490b61c4ea38bfeae737d41a0ceba47992028d51c42f7456cdc070b7"
     },
     "reanim/zombie_charred_gargantuar.reanim.h1d": {
-      "bytes": 1289,
-      "sha256": "1a55a5031998dd210bbb6343b867022013b3686f1e02a0d8d902fc2c72d6f631"
+      "bytes": 1261,
+      "sha256": "ed61ef84c2d2ba6b9f6079dc0c76d44d3c765be3ba12d447cd084d621aaf5cdf"
     },
     "reanim/zombie_charred_imp.reanim.h1d": {
-      "bytes": 1022,
-      "sha256": "b009829ee1915af65ddb2e0799743c65eee53d7f2bbe616a722c2d39e8a9fa6b"
+      "bytes": 1002,
+      "sha256": "64cc8f95fac9aaa5c8bf55fcb67f3b902973623020f38f33cd24b951aef8eb60"
     },
     "reanim/zombie_charred_zamboni.reanim.h1d": {
-      "bytes": 1453,
-      "sha256": "47438fcffe5b9ebf1b410644a9638ef64f785c1a639a50e28477d4dabd0f1218"
+      "bytes": 1410,
+      "sha256": "2b2fcea6686473abdfb614e383da588504c513c3bc5f16e239e2920b08bcd0d2"
     },
     "reanim/zombie_credits_conehead.reanim.h1d": {
-      "bytes": 4832,
-      "sha256": "74589583216b2a8a0933630afe3daf2909d21f3f4f8cccc5e31e63101a951919"
+      "bytes": 4802,
+      "sha256": "8555537f7c14de13d5b330f16dc7afdbc6ac651ebe38d97aa30b489d15bd84af"
     },
     "reanim/zombie_credits_dance.reanim.h1d": {
-      "bytes": 81236,
-      "sha256": "c372d9234dcc1f9671558996da2a29e7c26d115bbf0828e2bda6b748bcf2e072"
+      "bytes": 78546,
+      "sha256": "b3b505fb3dc29a5ee4e1c037d251be4c4138bd51c6b654958c30fc6b21a44e06"
     },
     "reanim/zombie_credits_screendoor.reanim.h1d": {
-      "bytes": 4421,
-      "sha256": "9d5a16a4880df528001cf20784d1e849235341cd26ea79db2ff3ecc2167c5b84"
+      "bytes": 4385,
+      "sha256": "a8db0ace2654b519ca48e62a5d257650b417b62f4713b954ab464054c5583511"
     },
     "reanim/zombie_dancer.reanim.h1d": {
-      "bytes": 17470,
-      "sha256": "be906d723b53128f7620e5d4cfaa376efaf7de9cb487f8b4efdf9e48880d6f3a"
+      "bytes": 17105,
+      "sha256": "ab717faff4baf7918fdb58cd3ba68c53a1e98bd0ee09713615b1a2e97eca3632"
     },
     "reanim/zombie_digger.reanim.h1d": {
-      "bytes": 28107,
-      "sha256": "c7cc09ae11b7c70fffdac12dde317b38dfc774abb6193cc8357b2bdfe739a2e7"
+      "bytes": 27815,
+      "sha256": "d7969f63e59fc01941170a4de7a6648f186bceb5e7c823a103ca8404f40a518d"
     },
     "reanim/zombie_disco.reanim.h1d": {
-      "bytes": 23003,
-      "sha256": "31d84673619ed81baf2c764597bc9f4dc0ec92a392aae44431ea27eadb9661b2"
+      "bytes": 22449,
+      "sha256": "8d4c040bd7031b2a250132260fb123bb852f36b69d9611e9aff27932c34b0800"
     },
     "reanim/zombie_dolphinrider.reanim.h1d": {
-      "bytes": 40495,
-      "sha256": "b3b352fa5de4fc283d3ab60f70e9a3fcd0d9933b0502fcf96cc9872e2ef104ab"
+      "bytes": 39846,
+      "sha256": "0cf4f046d763bfbf4dde3867c9ba056c9b7f9669c9816bfd58e00d234a82b707"
     },
     "reanim/zombie_flagpole.reanim.h1d": {
-      "bytes": 378,
-      "sha256": "091ad6acd6176f9208ace969ea904891f0464dd1a45e27233757018d4d21ded1"
+      "bytes": 357,
+      "sha256": "3ada68232a9922fde21fd651cee0483befd8bfb5a158b891da5fd8bf9d16e7b7"
     },
     "reanim/zombie_football.reanim.h1d": {
-      "bytes": 16369,
-      "sha256": "c8ea1c90e6e792286be01089ef43c71c4cdecce6241c91d1bdc4555ab410591d"
+      "bytes": 16034,
+      "sha256": "aede4537ca27fa181b1f9f8153dec7e06436eed1cb2f4aa93c5964d88cce4ba4"
     },
     "reanim/zombie_gargantuar.reanim.h1d": {
-      "bytes": 53261,
-      "sha256": "2563ef1cd15cf5d1596d745f1d06c6dd864893903c3b7916256006b3b1698c90"
+      "bytes": 52569,
+      "sha256": "9133b2f6c8fcf703da2899cbcb9e5fa90d6351559117e4b579cd3e98b28b7ffe"
     },
     "reanim/zombie_hand.reanim.h1d": {
-      "bytes": 5424,
-      "sha256": "31dbd93d32d4aca2753790ba0b4f0bacdc4a0f47eb7b7b18d2515155284c3367"
+      "bytes": 5328,
+      "sha256": "3941c9cf5ac2e8e60277db8fdcb64105a0b8ac09413517687e1d724220a75790"
     },
     "reanim/zombie_imp.reanim.h1d": {
-      "bytes": 15901,
-      "sha256": "2e4d448ab36d27ae2572cb16aa8891805eb5cdf72f6c706f30e1501c1e8b5df5"
+      "bytes": 15592,
+      "sha256": "79095b37a6753d57ec8c3948915d885c46431c2dc5dadbcd3b0f21bafbec5eda"
     },
     "reanim/zombie_jackbox.reanim.h1d": {
-      "bytes": 13898,
-      "sha256": "ddacbfa494706a8c8a15dbdb9ee51c167152d214ed08ca9a4eb6b4a85ea6d584"
+      "bytes": 13588,
+      "sha256": "bb737892ad5d5c04e4bc53eef5143561b6b7d046743fa64236dd7d67bd399052"
     },
     "reanim/zombie_jackson.reanim.h1d": {
-      "bytes": 23586,
-      "sha256": "e6163759b961570a0cf6bbaa187ef89f8a690de87119518fd0120f747121c0f1"
+      "bytes": 22901,
+      "sha256": "c78f87cf9ae4a2ee3d4e327316a33bbbe258ccaf132f8bcabc0b361dd9edf9a3"
     },
     "reanim/zombie_ladder.reanim.h1d": {
-      "bytes": 31020,
-      "sha256": "62cf1ba8fcb06f87c57312cdffbbcf392fb72157e7744fa3f37552abe5411f3a"
+      "bytes": 30499,
+      "sha256": "23bc54e46ad1939486540e7b7e154fc76019a3b33647ca2208b8554072674837"
     },
     "reanim/zombie_paper.reanim.h1d": {
-      "bytes": 27395,
-      "sha256": "c8da937a252fcf25a438b069c47a759dcc79c812b5c23f517ffecd1a7542122b"
+      "bytes": 26799,
+      "sha256": "ddd811d1c33f74971277861440a0e9fc66c26c349e3784fdf7c2759eb3234ede"
     },
     "reanim/zombie_pogo.reanim.h1d": {
-      "bytes": 26805,
-      "sha256": "e4532ebc36a9bdaa7c24a11af1016b287da0a6b7eed5b5e4f2c234f1a320afef"
+      "bytes": 26233,
+      "sha256": "deb67810a2658e3f3524857b8ab4cd2618cc88e9e8bf0de2f93cbea32a190182"
     },
     "reanim/zombie_polevaulter.reanim.h1d": {
-      "bytes": 36418,
-      "sha256": "1fc0a595f5e3c4e7b621d65cbf4dcd06593e70ae5a861e9f6204a15ee28b201b"
+      "bytes": 35880,
+      "sha256": "402c649f10f88b97d348b959c1c93102061b4ae2d5fcc8786a48f77579991af2"
     },
     "reanim/zombie_snorkle.reanim.h1d": {
-      "bytes": 32185,
-      "sha256": "72974069d18e6c56be199e77da1ef94a38f336f56c66cde8b25bc97764fb13af"
+      "bytes": 31394,
+      "sha256": "1f3f8d2be26f6315fd6b088f55866b2f72a14c850ebc4a010a5d16bb09aa1f20"
     },
     "reanim/zombie_surprise.reanim.h1d": {
-      "bytes": 237,
-      "sha256": "6e983347f0db86ff3ff46c49d1797e18e9be4cf9d48ed7ef138f8ac3edc08bde"
+      "bytes": 226,
+      "sha256": "c1b4d60674f8fa7c810b6b13a58afc37d269750cd83c60699252267cefe73741"
     },
     "reanim/zombie_yeti.reanim.h1d": {
-      "bytes": 14363,
-      "sha256": "59b104588fe21425d43f9a2ce81b5cfe5a3ec4dfc27e88743f4fd5075e8c97a6"
+      "bytes": 14219,
+      "sha256": "de58c997279aa2bb8217440860a6f22f12b148a6e11c768610cde3e9455cc0bc"
     },
     "reanim/zombie_zamboni.reanim.h1d": {
-      "bytes": 10735,
-      "sha256": "b150e57a439e3e6676deb4ba7166ac839845197e77d6e9be79da0fdbf9e554ed"
+      "bytes": 10585,
+      "sha256": "c153c741b87a385b6f700a8135257520b97b31944a2325a196d42d142068578e"
     },
     "reanim/zombieswon.reanim.h1d": {
-      "bytes": 450,
-      "sha256": "6cf8806801d9cf07cae7c835a671d42622de4dc4d6c7c7da665123f448fedd33"
+      "bytes": 438,
+      "sha256": "0b664c03e70aae08d94e859f6ac207900b0feaa0a46cb773e175ad54ebdf01eb"
     }
   },
   "source_xml_sha256": {
@@ -1269,11 +1269,11 @@
     "reanim/zombie_zamboni.reanim": "6de7f40117211d8c1c0a22fa3c928712da8a2dc3ce4c4af2db24d52d2ec046a1",
     "reanim/zombieswon.reanim": "236209a5b391496ddce68b725fc7adc8b66a77d3e3aca6d149fc8f8fc4c62be5"
   },
-  "host_sha256": "7fb92539d902fc23c2a0e5784ec593844d5cf3581113b2a7665b9c65d7ced127",
+  "host_sha256": "6489bed181fe472ef42e3efb9721ab0f299f015bbaf78cee459e8328c4617320",
   "count": 253,
-  "bytes": 1246940,
+  "bytes": 1226524,
   "all_fields_roundtrip": true,
   "crc_rejection": true,
-  "exporter_source_sha256": "bfdf3550ee446fa3b247e53522c9431b1746474d5d032358434fad84b0ee9908",
+  "exporter_source_sha256": "8a92327f83810202c6e273e484a7ed3e650d2daab90effd9c05246ac98846029",
   "upstream_parser_sha256": "285b7e29e58bbbc4a958ce95fc18213758b9b0b99355be8908ed01103e7a53a0"
 }

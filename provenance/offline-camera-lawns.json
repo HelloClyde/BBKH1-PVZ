@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "dimensions": [
+    634,
+    272
+  ],
+  "viewport": [
+    480,
+    272
+  ],
+  "frames": 3,
+  "bytes": 2069440,
+  "sha256": "cec2df1c3a05d673ceba9a0d2cb61d35054745377d069d8aa021568614f90cb0",
+  "frame_sha256": [
+    "412098158283edba30f175f93e437f523ca3ef553f25c560bb5da8820de62749",
+    "743806375c4a49b69d54201fa2f41565579d7d958b39ebd95fe5edcfa0df7bbb",
+    "99d7de2065bde72a37b46a11f025246152a1b24be7344ae9dc5909a14347d13e"
+  ],
+  "crc32": [
+    "f9de4475",
+    "8b122325",
+    "74e72b5a"
+  ],
+  "runtime_path": "camera-lawns.h1cp",
+  "encoder_sha256": "cf4a97c334a5e9f0c963ddcdd8220da4385661f23591c1f68c4f9d9e3eb94917",
+  "renderer_exporter_sha256": "88ad2d1c316b009579dbe5d5db63c99930028a6b96346886b792b9061acf6b44",
+  "scope": "Opaque original background/sod composites at LCD density. Camera translation is rounded to an LCD pixel; authored camera and actor update clocks are unchanged. Current-level panorama is read before the intro and freed when sod starts.",
+  "applicable_levels": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "background": "First-adventure daytime only; other backgrounds retain original rendering.",
+  "reproduction_identical": true,
+  "export_verification": "docs/verification/runtime-fixes/host-camera-export.json",
+  "replay_verification": "docs/verification/runtime-fixes/host-camera-replay.json"
+}

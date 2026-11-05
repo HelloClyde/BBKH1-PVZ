@@ -14,6 +14,7 @@
 #include <filesystem>
 #include <fstream>
 extern "C" {int pvzh1_audit_drain=0;}
+extern "C" void pvzh1_sound_warmup();
 static unsigned opens,seeks,reads,closes;
 static unsigned long long recounts,visits;
 extern "C" FILE* pvzh1_audit_fopen(const char* p,const char* m){++opens;return std::fopen(p,m);}
@@ -40,7 +41,9 @@ extern "C" void pvzh1_work_audit(){
         for(float v:fields)if(v==DEFAULT_FIELD_PLACEHOLDER)missing++;
     }
     std::ofstream out(std::filesystem::path(std::getenv("PVZ_HOST_OUTPUT"))/"runtime-work.json");
+    pvzh1_sound_warmup();
     out<<"{\"sounds\":{";Sound(out,"throw",Sexy::SOUND_THROW);out<<',';Sound(out,"splat",Sexy::SOUND_SPLAT);out<<',';Sound(out,"cached_dirt_rise",Sexy::SOUND_DIRT_RISE);out<<"},";
+    (void)Sexy::H1ImageCacheGetStats();
     recounts=visits=0;for(int i=0;i<100;i++)Sexy::H1ImageCacheEndFrame();
     out<<"\"cache_accounting\":{\"frame_end_calls\":100,\"recounts\":"<<recounts<<",\"source_visits\":"<<visits<<"},";
     out<<"\"startup\":{\"particle_definitions\":"<<gParticleDefCount<<",\"selector_tracks\":"<<raw.mTracks.count<<",\"selector_transforms\":"<<transforms<<",\"sparse_float_fields_before_inheritance\":"<<missing<<"}}\n";

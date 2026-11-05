@@ -13,6 +13,19 @@ static unsigned char *metadata_data;
 static uint32_t metadata_count;
 static int metadata_state;
 static uint32_t metadata_record_bytes;
+static FILE *image_pack;
+static unsigned char *image_pack_index;
+static uint32_t image_pack_count,image_pack_position;
+static int image_pack_state;
+volatile uint32_t pvzh1_image_pack_diagnostic[4];
+
+void h1_resources_shutdown(void){
+    if(image_pack)fclose(image_pack);
+    image_pack=0;free(image_pack_index);image_pack_index=0;
+    image_pack_count=image_pack_position=0;image_pack_state=0;
+    free(metadata_data);metadata_data=0;metadata_count=0;metadata_state=0;metadata_record_bytes=0;
+    pvzh1_image_pack_diagnostic[0]=pvzh1_image_pack_diagnostic[1]=0;
+}
 
 void h1_resources_set_logger(H1ResourceLogger logger) { resource_logger=logger; }
 
@@ -25,7 +38,7 @@ void h1_resources_set_root(const char *root) {
     if (n && root[n-1]!='/' && root[n-1]!='\\') {
         resource_root[n++]='/'; resource_root[n]=0;
     }
-    free(metadata_data);metadata_data=0;metadata_count=0;metadata_state=0;metadata_record_bytes=0;
+    h1_resources_shutdown();
     optional_logo_reported=0;
 }
 const char *h1_resources_get_root(void) { return resource_root; }
@@ -65,6 +78,54 @@ static int make_path(char *out,size_t capacity,const char *logical,const char *e
     if (used+strlen(ext)+1>capacity) return 0;
     strcpy(out+used,ext);
     return 1;
+}
+/* One backing stream, independent bounded cursors for each open image. This
+ * also handles alternating RGB/alpha reads without sharing logical positions. */
+static void image_pack_init(void){
+    unsigned char header[32],*index=0;char path[640];FILE *fp=0;
+    uint32_t count,bytes,total,hash=2166136261u,i,previous_end;const char *previous=0;
+    if(image_pack_state)return;image_pack_state=-1;
+    if(strlen(resource_root)+sizeof("images-common.h1pk")>sizeof(path))return;
+    strcpy(path,resource_root);strcat(path,"images-common.h1pk");fp=fopen(path,"rb");if(!fp)return;
+    if(fread(header,1,32,fp)!=32||memcmp(header,"H1PK",4)||little32(header+4)!=1)goto done;
+    count=little32(header+8);bytes=little32(header+12);total=little32(header+16);
+    if(!count||count>4096||bytes<count*16||bytes>1048576||total<32+bytes||total>67108864||little32(header+24)||little32(header+28))goto done;
+    index=(unsigned char*)malloc(bytes);if(!index||fread(index,1,bytes,fp)!=bytes)goto done;
+    for(i=0;i<bytes;++i)hash=(hash^index[i])*16777619u;
+    if(hash!=little32(header+20)||fseek(fp,0,SEEK_END)||ftell(fp)!=(long)total)goto done;
+    previous_end=32+bytes;
+    for(i=0;i<count;++i){
+        const unsigned char *r=index+i*16;uint32_t name=little32(r),offset=little32(r+4),size=little32(r+8);const char *key;
+        if(name>=bytes-count*16||offset<previous_end||offset>total||size<24||size>total-offset)goto done;
+        key=(const char*)index+count*16+name;
+        if(!memchr(key,0,bytes-count*16-name)||!*key||*key=='/'||strchr(key,':')||strstr(key,"..")||(previous&&strcmp(previous,key)>=0))goto done;
+        previous=key;previous_end=offset+size;
+    }
+    image_pack=fp;image_pack_index=index;image_pack_count=count;image_pack_position=total;image_pack_state=1;
+    pvzh1_image_pack_diagnostic[0]=count;pvzh1_image_pack_diagnostic[1]=bytes;return;
+done:
+    free(index);if(fp)fclose(fp);
+}
+static int image_pack_open(H1Image *image,const char *path){
+    uint32_t low=0,high;const char *key=path+strlen(resource_root);image_pack_init();
+    if(image_pack_state!=1)return 0;high=image_pack_count;
+    while(low<high){uint32_t middle=low+(high-low)/2;const unsigned char *r=image_pack_index+middle*16;
+        const char *name=(const char*)image_pack_index+image_pack_count*16+little32(r);int order=strcmp(key,name);
+        if(!order){image->file=image_pack;image->packed=1;image->file_position=little32(r+4);image->file_end=image->file_position+little32(r+8);++pvzh1_image_pack_diagnostic[2];return 1;}
+        if(order<0)high=middle;else low=middle+1;
+    }return 0;
+}
+static int image_seek(H1Image *image,uint32_t position){
+    if(image->packed){if(position>image->file_end)return -1;image->file_position=position;return 0;}
+    return fseek((FILE*)image->file,(long)position,SEEK_SET);
+}
+static size_t image_read(H1Image *image,void *data,size_t bytes){
+    size_t n;if(!image->packed)return fread(data,1,bytes,(FILE*)image->file);
+    if(image->file_position>image->file_end)return 0;
+    if(bytes>image->file_end-image->file_position)bytes=image->file_end-image->file_position;
+    if(!bytes)return 0;
+    if(image_pack_position!=image->file_position&&fseek(image_pack,(long)image->file_position,SEEK_SET))return 0;
+    n=fread(data,1,bytes,image_pack);image->file_position+=(uint32_t)n;image_pack_position=image->file_position;return n;
 }
 static int valid_info(const H1ImageInfo *info) {
     return info->width && info->width<=8192 && info->height && info->height<=8192 &&
@@ -126,32 +187,36 @@ static int metadata_variant(const char *logical,const char *extension,H1ImageInf
     return 0;
 }
 static int open_variant(H1Image *image,const char *logical,const char *ext,uint32_t color) {
-    char path[640]; unsigned char header[H1I2_HEADER_BYTES]; FILE *fp; uint32_t expected;
+    char path[640]; unsigned char header[H1I2_HEADER_BYTES]; uint32_t expected,base;int attempt;
     if (!make_path(path,sizeof(path),logical,ext)) return 0;
-    fp=fopen(path,"rb");
-    if (!fp) return 0;
-    if (fread(header,1,H1I_HEADER_BYTES,fp)!=H1I_HEADER_BYTES ||
+    for(attempt=0;attempt<2;++attempt){
+    memset(image,0,sizeof(*image));
+    if(!attempt){if(!image_pack_open(image,path))continue;}
+    else{++pvzh1_image_pack_diagnostic[3];image->file=fopen(path,"rb");if(!image->file)return 0;}
+    base=image->packed?image->file_position:0;
+    if (image_read(image,header,H1I_HEADER_BYTES)!=H1I_HEADER_BYTES ||
         (memcmp(header,"H1I1",4) && memcmp(header,"H1I2",4))) {
-        fclose(fp); return 0;
+        h1_image_close(image);continue;
     }
     image->info.width=little32(header+4); image->info.height=little32(header+8);
     image->info.channels=little32(header+12); image->info.flags=little32(header+16);
     image->info.pixel_bytes=little32(header+20);
-    image->payload_offset=H1I_HEADER_BYTES;
+    image->payload_offset=base+H1I_HEADER_BYTES;
     image->info.storage_width=image->info.width;image->info.storage_height=image->info.height;
     if (!memcmp(header,"H1I2",4)) {
-        if (fread(header+H1I_HEADER_BYTES,1,8,fp)!=8) { fclose(fp);return 0; }
-        image->payload_offset=H1I2_HEADER_BYTES;
+        if (image_read(image,header+H1I_HEADER_BYTES,8)!=8) { h1_image_close(image);continue; }
+        image->payload_offset=base+H1I2_HEADER_BYTES;
         image->info.storage_width=little32(header+24);image->info.storage_height=little32(header+28);
     }
-    if (!valid_info(&image->info)) { fclose(fp);return 0; }
+    if (!valid_info(&image->info)||(image->packed&&image->file_end-image->payload_offset!=image->info.pixel_bytes)) { h1_image_close(image);continue; }
     expected=image->info.pixel_bytes;
-    image->file=fp; image->alpha_color=color&0xffffffu;
+    image->alpha_color=color&0xffffffu;
     /* This proof comes from the actual opened header, never the optional
      * metadata index. fread above left the stream at payload byte zero. */
     image->rgb_source_bytes=(image->info.channels==3 && image->info.flags==0)?expected:0;
     image->rgb_next_byte=0;image->rgb_stream_valid=1;
     return 1;
+    }return 0;
 }
 int h1_image_open(H1Image *image,const char *logical,int auto_alpha,uint32_t color) {
     char path[640];int tried_image=0;H1ImageInfo indexed;
@@ -196,7 +261,7 @@ int h1_image_open(H1Image *image,const char *logical,int auto_alpha,uint32_t col
     return 0;
 }
 void h1_image_close(H1Image *image) {
-    if (image && image->file) { fclose((FILE*)image->file); image->file=0; }
+    if (image && image->file) { if(!image->packed)fclose((FILE*)image->file); image->file=0; }
     if (image) image->rgb_source_bytes=image->rgb_next_byte=image->rgb_stream_valid=0;
 }
 int h1_image_load_storage_alpha(H1Image *image,unsigned char *alpha,size_t capacity) {
@@ -204,7 +269,7 @@ int h1_image_load_storage_alpha(H1Image *image,unsigned char *alpha,size_t capac
     const uint64_t area=(uint64_t)image->info.storage_width*image->info.storage_height;
     if(!area||area!=image->info.pixel_bytes||area>capacity)return 0;
     FILE *fp=(FILE*)image->file;image->rgb_stream_valid=0;
-    return !fseek(fp,(long)image->payload_offset,SEEK_SET)&&fread(alpha,1,(size_t)area,fp)==area;
+    return !image_seek(image,image->payload_offset)&&image_read(image,alpha,(size_t)area)==area;
 }
 static void decode_pixels(const H1Image *image,const unsigned char *buffer,uint32_t count,uint32_t *argb) {
     uint32_t i,channels=image->info.channels;
@@ -213,6 +278,34 @@ static void decode_pixels(const H1Image *image,const unsigned char *buffer,uint3
         if (channels==1) argb[i]=image->alpha_color|((uint32_t)p[0]<<24);
         else argb[i]=((uint32_t)(channels==4?p[3]:255)<<24)|((uint32_t)p[0]<<16)|((uint32_t)p[1]<<8)|p[2];
     }
+}
+int h1_image_read_alpha_bytes(H1Image *image,uint32_t offset,uint32_t count,unsigned char *alpha) {
+    if(!image||!image->file||image->info.channels!=1||image->info.flags!=H1_IMAGE_MASK_ONLY||
+       (uint64_t)image->info.storage_width*image->info.storage_height!=image->info.pixel_bytes||
+       offset>image->info.pixel_bytes||count>image->info.pixel_bytes-offset||(count&&!alpha))return 0;
+    if(!count)return 1;
+    FILE *fp=(FILE*)image->file;
+    if(!image->rgb_stream_valid||image->rgb_next_byte!=offset){
+        image->rgb_stream_valid=0;clearerr(fp);
+        if(image_seek(image,image->payload_offset+offset))return 0;
+    }
+    if(image_read(image,alpha,count)!=count){image->rgb_stream_valid=0;return 0;}
+    image->rgb_next_byte=offset+count;image->rgb_stream_valid=1;return 1;
+}
+int h1_image_read_storage_pixels(H1Image *image,uint32_t first,uint32_t count,uint32_t *pixels) {
+    unsigned char buffer[4096];
+    if(!image||!image->file||!pixels||!count||count>1024||(image->info.channels!=1&&image->info.channels!=3&&image->info.channels!=4)||
+       first>(uint64_t)image->info.storage_width*image->info.storage_height||
+       count>(uint64_t)image->info.storage_width*image->info.storage_height-first)return 0;
+    const uint32_t offset=first*image->info.channels,bytes=count*image->info.channels;
+    FILE *fp=(FILE*)image->file;
+    if(!image->rgb_stream_valid||image->rgb_next_byte!=offset){
+        image->rgb_stream_valid=0;clearerr(fp);
+        if(image_seek(image,image->payload_offset+offset))return 0;
+    }
+    if(image_read(image,buffer,bytes)!=bytes){image->rgb_stream_valid=0;return 0;}
+    image->rgb_next_byte=offset+bytes;image->rgb_stream_valid=1;
+    decode_pixels(image,buffer,count,pixels);return 1;
 }
 int h1_image_probe(const char *path,int auto_alpha,H1ImageInfo *info) {
     H1Image image;
@@ -236,10 +329,10 @@ int h1_image_read_storage_span(H1Image *image,uint32_t x,uint32_t y,uint32_t cou
     if (!image->file) return 0;
     fp=(FILE*)image->file; channels=image->info.channels;
     offset=image->payload_offset+(y*image->info.storage_width+x)*channels;
-    if (fseek(fp,(long)offset,SEEK_SET)) return 0;
+    if (image_seek(image,offset)) return 0;
     while (count) {
         n=count>sizeof(buffer)/channels?(uint32_t)(sizeof(buffer)/channels):count;
-        if (fread(buffer,channels,n,fp)!=n) return 0;
+        if (image_read(image,buffer,channels*n)!=channels*n) return 0;
         decode_pixels(image,buffer,n,argb);
         count-=n; argb+=n;
     }
@@ -255,12 +348,12 @@ int h1_image_load_storage(H1Image *image,uint32_t *argb,size_t capacity) {
     }
     if (!image->file) return 0;
     fp=(FILE*)image->file;channels=image->info.channels;
-    if (fseek(fp,(long)image->payload_offset,SEEK_SET)) return 0;
+    if (image_seek(image,image->payload_offset)) return 0;
     /* One sequential stream avoids hundreds of native filesystem seeks for
      * full-screen images. Span reads remain available for bounded callers. */
     while (count) {
         n=count>sizeof(buffer)/channels?(uint32_t)(sizeof(buffer)/channels):count;
-        if (fread(buffer,channels,n,fp)!=n) return 0;
+        if (image_read(image,buffer,channels*n)!=channels*n) return 0;
         decode_pixels(image,buffer,n,argb);argb+=n;count-=n;
     }
     return 1;
@@ -306,9 +399,9 @@ int h1_image_read_rgb_bytes(H1Image *image,uint32_t offset,uint32_t count,unsign
     if (!image->rgb_stream_valid || image->rgb_next_byte!=offset) {
         image->rgb_stream_valid=0;
         clearerr(fp);
-        if (fseek(fp,(long)(image->payload_offset+offset),SEEK_SET)) return 0;
+        if (image_seek(image,image->payload_offset+offset)) return 0;
     }
-    if (fread(rgb,1,count,fp)!=count) { image->rgb_stream_valid=0;return 0; }
+    if (image_read(image,rgb,count)!=count) { image->rgb_stream_valid=0;return 0; }
     image->rgb_next_byte=offset+count;image->rgb_stream_valid=1;
     return 1;
 }

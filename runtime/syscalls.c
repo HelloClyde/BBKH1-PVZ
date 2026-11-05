@@ -60,6 +60,7 @@ volatile uint32_t pvz_runtime_small_pool_diagnostic[16];
    includes the complete span of a whole-hole allocation, not just user bytes. */
 volatile uint32_t pvz_runtime_native_charge[2];
 volatile uint32_t pvz_runtime_native_charge_failure;
+volatile uint32_t pvz_runtime_native_charge_fault[4];
 extern volatile uint32_t pvz_runtime_hole_diagnostic[12];
 /* Reclaim callback count (including a terminal zero), allocation retries,
    successful allocations after a retry, released-byte hints (saturated), most
@@ -70,7 +71,7 @@ static int pressure_running;
 extern size_t pvzh1_cache_memory_pressure(size_t requested) __attribute__((weak));
 extern void *pvz_runtime_allocate_with_pressure(size_t,size_t,void *(*)(size_t,size_t,uintptr_t *),
     size_t (*)(size_t),volatile uint32_t [6],int *,uintptr_t *);
-extern void *pvz_runtime_native_allocate(size_t,size_t);
+extern void *pvz_runtime_native_allocate_span(size_t,size_t,size_t *);
 extern void pvz_runtime_capture_heap_failure(size_t requested,size_t native_requested);
 static void first_allocation_failure(size_t requested,uintptr_t caller,uintptr_t native_result){
     if(!pvz_runtime_diagnostic[12]){
@@ -281,21 +282,28 @@ static void update_small_pool_diagnostic(void){
     pvz_runtime_small_pool_diagnostic[15]=small_pool_trimmed;
 }
 static void charge_native(size_t span){
-    if(span>UINT32_MAX-pvz_runtime_native_charge[0])pvz_runtime_abort(107);
+    if(span>UINT32_MAX-pvz_runtime_native_charge[0]){
+        pvz_runtime_native_charge_fault[0]=107;pvz_runtime_native_charge_fault[1]=(uint32_t)span;
+        pvz_runtime_native_charge_fault[2]=pvz_runtime_native_charge[0];pvz_runtime_native_charge_fault[3]=(uint32_t)(uintptr_t)__builtin_return_address(0);
+        pvz_runtime_abort(107);
+    }
     pvz_runtime_native_charge[0]+=(uint32_t)span;
     if(pvz_runtime_native_charge[0]>pvz_runtime_native_charge[1])pvz_runtime_native_charge[1]=pvz_runtime_native_charge[0];
 }
 static void release_native_charge(size_t span){
-    if(span>pvz_runtime_native_charge[0])pvz_runtime_abort(108);
+    if(span>pvz_runtime_native_charge[0]){
+        pvz_runtime_native_charge_fault[0]=108;pvz_runtime_native_charge_fault[1]=(uint32_t)span;
+        pvz_runtime_native_charge_fault[2]=pvz_runtime_native_charge[0];pvz_runtime_native_charge_fault[3]=(uint32_t)(uintptr_t)__builtin_return_address(0);
+        pvz_runtime_abort(108);
+    }
     pvz_runtime_native_charge[0]-=(uint32_t)span;
 }
 static void *small_pool_acquire(void *context,size_t requested,size_t *reserved){
     void *raw;size_t span;(void)context;*reserved=0;
     /* A pool provider must not enter cache pressure: the pool's metadata is
        busy until this callback returns. Outer allocation owns all retries. */
-    raw=pvz_runtime_native_allocate(requested,requested);
+    raw=pvz_runtime_native_allocate_span(requested,requested,&span);
     if(!raw||(uintptr_t)raw==UINT32_MAX)return 0;
-    span=pvz_runtime_hole_diagnostic[7];
     if(span<requested||(span&3u)){h1_free(raw);return 0;}
     *reserved=span;charge_native(span);return raw;
 }
@@ -333,8 +341,8 @@ static void *native_allocate(size_t requested,size_t size,uintptr_t *span){
         if(raw){*span=(uintptr_t)owner|1u;update_small_pool_diagnostic();return raw;}
         ++small_pool_fallbacks;
     }
-    raw=pvz_runtime_native_allocate(requested,size);
-    if(raw&&(uintptr_t)raw!=UINT32_MAX){*span=pvz_runtime_hole_diagnostic[7];charge_native(*span);}
+    {size_t actual=0;raw=pvz_runtime_native_allocate_span(requested,size,&actual);
+    if(raw&&(uintptr_t)raw!=UINT32_MAX){*span=actual;charge_native(actual);}}
     update_small_pool_diagnostic();return raw;
 }
 static void *allocate_aligned(size_t size,size_t alignment,uintptr_t caller){

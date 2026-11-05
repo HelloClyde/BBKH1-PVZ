@@ -19,12 +19,14 @@ typedef struct H1Image {
     /* Reader-owned state. Only h1_image_* functions may operate on file. */
     uint32_t rgb_source_bytes, rgb_next_byte, rgb_stream_valid;
     uint32_t payload_offset;
+    uint32_t packed, file_position, file_end;
 } H1Image;
 #define H1_IMAGE_MASK_ONLY 1u
 #define H1_IMAGE_OPTIONAL_TRANSPARENT 2u
 typedef void (*H1ResourceLogger)(const char *message);
 
 void h1_resources_set_root(const char *root);
+void h1_resources_shutdown(void);
 void h1_resources_set_logger(H1ResourceLogger logger);
 const char *h1_resources_get_root(void);
 int h1_image_open(H1Image *image, const char *logical_path, int auto_alpha, uint32_t alpha_color);
@@ -37,6 +39,9 @@ int h1_image_read_storage_span(H1Image *image, uint32_t x, uint32_t y, uint32_t 
 int h1_image_load_storage(H1Image *image, uint32_t *argb, size_t capacity_pixels);
 /* Exact physical A8 bytes; keeps font masks in their offline representation. */
 int h1_image_load_storage_alpha(H1Image *image,unsigned char *alpha,size_t capacity);
+/* Sequential physical A8 pages, without a whole-atlas allocation or conversion. */
+int h1_image_read_alpha_bytes(H1Image *image,uint32_t offset,uint32_t count,unsigned char *alpha);
+int h1_image_read_storage_pixels(H1Image *image,uint32_t first,uint32_t count,uint32_t *pixels);
 /* Exact stored RGB24 bytes from an opened H1I1 RGB3/flags0 source. Offsets
  * and lengths are payload-relative and must both be divisible by three.
  * Consecutive calls share one stdio stream; other image reads invalidate its

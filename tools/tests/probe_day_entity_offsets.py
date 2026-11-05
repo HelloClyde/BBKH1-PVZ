@@ -28,6 +28,20 @@ entries=[
  ('array.item_ids','OFF(P,mItemIds)'),('array.max_used','OFF(P,mMaxUsedCount)'),
  ('array.max_size','OFF(P,mMaxSize)'),('array.free_head','OFF(P,mFreeListHead)'),
  ('array.size','OFF(P,mSize)'),('array.next_key','OFF(P,mNextKey)'),('array.name','OFF(P,mName)'),
+ ('board.menu_button','OFF(Board,mMenuButton)'),('app.widget_manager','OFF(LawnApp,mWidgetManager)'),
+ ('board.seed_bank','OFF(Board,mSeedBank)'),('board.cursor','OFF(Board,mCursorObject)'),('cursor.type','OFF(CursorObject,mCursorType)'),
+ ('board.cutscene','OFF(Board,mCutScene)'),('board.sod_position','OFF(Board,mSodPosition)'),('board.total_waves','OFF(Board,mNumWaves)'),
+ ('cutscene.time','OFF(CutScene,mCutsceneTime)'),('cutscene.sod_time','OFF(CutScene,mSodTime)'),('cutscene.seed_choosing','OFF(CutScene,mSeedChoosing)'),
+ ('seed_bank.bytes','sizeof(SeedBank)'),('seed_bank.num_packets','OFF(SeedBank,mNumPackets)'),('seed_bank.packets','OFF(SeedBank,mSeedPackets)'),
+ ('seed_bank.x','OFF(SeedBank,mX)'),('seed_bank.y','OFF(SeedBank,mY)'),('seed_packet.stride','sizeof(SeedPacket)'),
+ ('seed_packet.type','OFF(SeedPacket,mPacketType)'),('seed_packet.x','OFF(SeedPacket,mX)'),('seed_packet.y','OFF(SeedPacket,mY)'),
+ ('seed_packet.width','OFF(SeedPacket,mWidth)'),('seed_packet.height','OFF(SeedPacket,mHeight)'),
+ ('seed_packet.active','OFF(SeedPacket,mActive)'),('seed_packet.refreshing','OFF(SeedPacket,mRefreshing)'),
+ ('widget.x','OFF(Sexy::Widget,mX)'),('widget.y','OFF(Sexy::Widget,mY)'),('widget.width','OFF(Sexy::Widget,mWidth)'),('widget.height','OFF(Sexy::Widget,mHeight)'),
+ ('button.parent_widget','OFF(GameButton,mParentWidget)'),('widget.disabled','OFF(Sexy::Widget,mDisabled)'),('button.no_draw','OFF(GameButton,mBtnNoDraw)'),
+ ('button.x','OFF(GameButton,mX)'),('button.y','OFF(GameButton,mY)'),
+ ('button.width','OFF(GameButton,mWidth)'),('button.height','OFF(GameButton,mHeight)'),('button.disabled','OFF(GameButton,mDisabled)'),
+ ('manager.last_mouse_x','OFF(Sexy::WidgetManager,mLastMouseX)'),('manager.last_mouse_y','OFF(Sexy::WidgetManager,mLastMouseY)'),('manager.focus','OFF(Sexy::WidgetManager,mFocusWidget)'),
  ('app.board','OFF(LawnApp,mBoard)'),('app.scene','OFF(LawnApp,mGameScene)'),('app.mode','OFF(LawnApp,mGameMode)'),
  ('board.bytes','sizeof(Board)'),('board.zombies','OFF(Board,mZombies)'),
  ('board.plants','OFF(Board,mPlants)'),('board.projectiles','OFF(Board,mProjectiles)'),
@@ -61,6 +75,11 @@ cpp='''#include "DataArray.public.h"
 #include "Lawn/Zombie.h"
 #include "Lawn/Projectile.h"
 #include "Lawn/Coin.h"
+#include "Lawn/SeedPacket.h"
+#include "Lawn/Cutscene.h"
+#include "Lawn/CursorObject.h"
+#include "Lawn/Widget/GameButton.h"
+#include "widget/WidgetManager.h"
 using P=DataArray<Plant>;using Z=DataArray<Zombie>;using J=DataArray<Projectile>;using C=DataArray<Coin>;
 static_assert(sizeof(void*)==4 && sizeof(P)==sizeof(Z) && sizeof(P)==sizeof(J));
 static_assert(sizeof(P::DataArrayItem)==sizeof(Plant));

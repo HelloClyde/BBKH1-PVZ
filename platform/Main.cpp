@@ -1,16 +1,22 @@
 /* LGPL-3.0-or-later. Only host lifecycle; all game flow is upstream main. */
 #include "h1_host.h"
 #include "graphics/SoftwareDisplay.h"
+#include "graphics/PausedBoardCache.h"
 #include "resources/h1_resources.h"
 #include "graphics/MemoryImageCache.h"
+#include "actors/ActorPose.h"
+#include "graphics/EarlyLawn.h"
 #include "LawnApp.h"
 #include "Lawn/Board.h"
 #include "Lawn/System/PlayerInfo.h"
 
 int pvzp_upstream_main(int,char**);
 extern "C" void pvzp_music_shutdown(void);
+extern "C" bool pvzh1_additive_prepare();
+extern "C" void pvzh1_additive_shutdown();
 extern "C" void pvzh1_reanim_atlas_end_frame(void*);
 extern "C" void pvzh1_render_plan_shutdown(void) __attribute__((weak));
+extern "C" void pvzh1_selector_shutdown(void);
 static int present(const uint32_t *pixels,int w,int h,void*){
     if(gLawnApp){
         pvzp_diagnostic[7]=static_cast<uint32_t>(gLawnApp->mGameScene);
@@ -36,6 +42,7 @@ extern "C" int pvz_portable_main(void){
     const char *root=getenv("PVZ_RESOURCE_DIR");h1_resources_set_root(root?root:"/PVZ/");
     h1_resources_set_logger(pvzp_log_line);
     Sexy::H1ImageCacheConfigureReducedPack();
+    pvzh1_additive_prepare();
     Sexy::H1ImageCacheSetBudget(7u*1024u*1024u);
     pvzh1_graphics_set_display_size(480,272);
     pvzh1_graphics_set_present(present,nullptr);
@@ -45,6 +52,12 @@ extern "C" int pvz_portable_main(void){
     gLawnApp=nullptr; // Upstream main has deleted the app; host diagnostics must not dereference it.
     // Release optional rendering plans before closing either host or native I/O.
     if(pvzh1_render_plan_shutdown)pvzh1_render_plan_shutdown();
+    pvzh1_additive_shutdown();
+    pvzh1_paused_board_shutdown();
+    pvzh1_selector_shutdown();
+    pvzh1_actor_pose_shutdown();
+    pvzh1_early_lawn_shutdown();
     pvzp_music_shutdown();
+    h1_resources_shutdown();
     pvzp_window_close();return result;
 }

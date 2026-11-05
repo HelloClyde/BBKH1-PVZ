@@ -1,0 +1,109 @@
+{
+  "scene": 3,
+  "frames": 556,
+  "PC_elapsed_seconds": 20.01500000001397,
+  "FPS": 27.779165625761276,
+  "native_raw_ticks": 800,
+  "native_tick_hz": 40,
+  "successful_file_opens_delta": 0,
+  "native_open_calls_delta": 0,
+  "native_open_failures_delta": 0,
+  "native_read_bytes_delta": 0,
+  "image_loads_delta": 0,
+  "image_evictions_delta": 0,
+  "allocation_pressure_callbacks_delta": 0,
+  "final_allocation_failures_delta": 0,
+  "raw_canvas_fallbacks_delta": 0,
+  "prior_failed_user_bytes": 36330,
+  "prior_allocation_failures": 2,
+  "prior_failure_explicitly_allowed": true,
+  "scope": "Physical H1; 20-second quiet wait, bounded endpoint reads. PC time is the FPS denominator; native clock stores last-frame timestamps and can lag at low FPS.",
+  "result_sha256": "efdc0596d20a5d71afd357c0ba66bdf9e753688773e5fbbbaf7b8d379e9f91e9",
+  "pvzh1_audio_diagnostic_start": [
+    250,
+    0,
+    0,
+    32768,
+    32768,
+    3,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_audio_diagnostic_end": [
+    250,
+    0,
+    0,
+    32768,
+    32768,
+    3,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_audio_diagnostic_delta": [
+    0,
+    0,
+    0
+  ],
+  "pvzh1_paused_board_diagnostic_start": [
+    522240,
+    783,
+    2,
+    1
+  ],
+  "pvzh1_paused_board_diagnostic_end": [
+    522240,
+    1346,
+    2,
+    1
+  ],
+  "pvzh1_paused_board_diagnostic_delta": [
+    0,
+    563,
+    0,
+    0
+  ],
+  "pvzh1_additive_diagnostic_start": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_additive_diagnostic_end": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "pvzh1_additive_diagnostic_delta": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "inclusive_profile_ms_per_presented_frame": {
+    "update": 0.3597122302158273,
+    "draw": 26.034172661870503,
+    "present": 9.667266187050359,
+    "audio": 0.0,
+    "music": 0.0,
+    "frame": 35.8363309352518,
+    "repeat_triangle": 0.0,
+    "software_shape": 5.575539568345324
+  }
+}

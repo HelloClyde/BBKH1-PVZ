@@ -76,11 +76,11 @@ int main(void){
     CHECK(pvz_small_pool_capacity(1,8)==8&&pvz_small_pool_capacity(129,8)==160);
     CHECK(pvz_small_pool_capacity(1025,8)==1280&&pvz_small_pool_capacity(4096,32)==4096);
     {void *zero=pvz_small_pool_allocate(&pool,0,32,&owner);CHECK(zero&&owner&&((uintptr_t)zero&31u)==0);CHECK(pvz_small_pool_free(&pool,zero,owner));}
-    for(alignment=8;alignment<=32;alignment*=2)for(size=0;size<=4096;++size){
+    for(alignment=8;alignment<=32;alignment*=2)for(size=0;size<=PVZ_SMALL_POOL_MAX_RAW;++size){
         Live item={0};size_t n=size?size:1;
         fill_live(&item,n,alignment,(unsigned char)(size+alignment));free_live(&item);
     }
-    pvz_small_pool_get_stats(&pool,&stats);CHECK(stats.pages==56&&stats.live_allocations==0);
+    pvz_small_pool_get_stats(&pool,&stats);CHECK(stats.pages==PVZ_SMALL_POOL_CLASS_COUNT&&stats.live_allocations==0);
     CHECK(pvz_small_pool_trim(&pool)==provider.peak&&provider.active==0);finish();
 
     /* Exhaust full pages, free in interleaved order, preserve all live bytes. */
@@ -95,7 +95,7 @@ int main(void){
         j=random_number()%512u;
         if(live[j].memory)free_live(&live[j]);
         else {
-            size_t n=1u+random_number()%4096u;alignment=8u<<(random_number()%3u);
+            size_t n=1u+random_number()%PVZ_SMALL_POOL_MAX_RAW;alignment=8u<<(random_number()%3u);
             fill_live(&live[j],n,alignment,(unsigned char)random_number());
             {size_t k;uintptr_t a=(uintptr_t)live[j].memory;
                 for(k=0;k<512;++k)if(k!=j&&live[k].memory){
@@ -116,7 +116,7 @@ int main(void){
     provider.fail_next=1;provider.sentinel=1;
     CHECK(!pvz_small_pool_allocate(&pool,64,8,&owner)&&!owner&&provider.active==0);
     CHECK(provider.calls==2);
-    for(size=4097;size<=8192;size+=4095)CHECK(!pvz_small_pool_allocate(&pool,size,8,&owner)&&!owner);
+    for(size=PVZ_SMALL_POOL_MAX_RAW+1;size<=8192;size+=8192-PVZ_SMALL_POOL_MAX_RAW-1)CHECK(!pvz_small_pool_allocate(&pool,size,8,&owner)&&!owner);
     for(alignment=0;alignment<=64;alignment+=4)if(alignment!=8&&alignment!=16&&alignment!=32)
         CHECK(!pvz_small_pool_allocate(&pool,64,alignment,&owner)&&!owner);
     CHECK(provider.calls==2);
@@ -139,7 +139,7 @@ int main(void){
     tiny_calls=provider.calls;tiny_peak=provider.peak;CHECK(tiny_calls<100);
     for(i=0;i<30000;++i)free_live(&live[(i*7919u)%30000u]);
     pvz_small_pool_get_stats(&pool,&stats);CHECK(stats.pages==1);finish();
-    printf("{\"passed\":true,\"checks\":%llu,\"tiny_objects\":30000,\"tiny_native_acquires\":%lu,\"tiny_native_reserved_peak\":%lu,\"classes\":56,\"device_used\":false}\n",
+    printf("{\"passed\":true,\"checks\":%llu,\"tiny_objects\":30000,\"tiny_native_acquires\":%lu,\"tiny_native_reserved_peak\":%lu,\"classes\":57,\"device_used\":false}\n",
         checks,(unsigned long)tiny_calls,(unsigned long)tiny_peak);
     return 0;
 }

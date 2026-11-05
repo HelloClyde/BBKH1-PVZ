@@ -3,6 +3,7 @@
 #include "graphics/GLImage.h"
 #include "graphics/Graphics.h"
 #include "graphics/PhysicalScreen.h"
+#include "graphics/ScreenLayout.h"
 #include "graphics/SoftwareRaster.h"
 #include "graphics/RenderPlanCache.h"
 #include "graphics/MemoryImageCache.h"
@@ -13,6 +14,8 @@
 #include <vector>
 #include <stdexcept>
 using namespace Sexy;
+// Run this same oracle against both LCD profiles rather than constructing a
+// 360x270 target which the widescreen renderer correctly refuses to cache.
 namespace {
 void Check(bool value,const char* message){if(!value){fprintf(stderr,"PLAN PIXEL FAILURE: %s\n",message);throw std::runtime_error(message);}}
 void Background(MemoryImage* image,unsigned seed){auto*p=image->GetBits();for(size_t i=0,n=(size_t)image->mWidth*image->mHeight;i<n;++i)p[i]=0xff000000u|((i*0x13759bu+seed)&0xffffffu);image->BitsChanged();}
@@ -20,11 +23,11 @@ std::vector<uint32_t> Pixels(MemoryImage* image){auto*p=image->GetBits();return 
 void Occluder(MemoryImage* target,int kind){if(kind)H1FillRect(target,Rect(51,43,137,109),Color(29,107,193,117),0);}
 }
 extern "C" void pvzh1_render_plan_probe(){
- auto*device=gLawnApp->mGLInterface.get();auto saved=std::move(device->mScreenImage);device->mScreenImage=std::make_unique<H1PhysicalScreen>(device,800,600,360,270);auto* target=H1ScreenTarget(device->GetScreenImage());unsigned pixelCases=0,guardCases=0;uint32_t totalHits=0,copyPixels=0,partialPixels=0,skipPixels=0,peak=0;
+ auto*device=gLawnApp->mGLInterface.get();auto saved=std::move(device->mScreenImage);device->mScreenImage=std::make_unique<H1PhysicalScreen>(device,800,600,H1ScreenWidth,H1ScreenHeight);auto* target=H1ScreenTarget(device->GetScreenImage());unsigned pixelCases=0,guardCases=0;uint32_t totalHits=0,copyPixels=0,partialPixels=0,skipPixels=0,peak=0;
  // Exercise the opaque-target fill shortcut against MemoryImage's complete
  // general-alpha oracle, including pixels that violate the usual alpha=255.
  for(unsigned alpha=0;alpha<256;++alpha)for(bool opaque:{false,true}){
-  std::vector<uint32_t> initial(360*270);for(unsigned i=0;i<initial.size();++i)initial[i]=((opaque?255u:i%256)<<24)|((i*0x315793u+alpha)&0xffffffu);
+  std::vector<uint32_t> initial(H1ScreenWidth*H1ScreenHeight);for(unsigned i=0;i<initial.size();++i)initial[i]=((opaque?255u:i%256)<<24)|((i*0x315793u+alpha)&0xffffffu);
   const Rect rectangle(7,11,341,247);const Color color(41,157,239,alpha);
   std::memcpy(target->GetBits(),initial.data(),initial.size()*4);target->MemoryImage::FillRect(rectangle,color,0);auto expected=Pixels(target);
   std::memcpy(target->GetBits(),initial.data(),initial.size()*4);unsigned before=target->mBitsChangedCount;H1FillRect(target,rectangle,color,0);
@@ -33,7 +36,7 @@ extern "C" void pvzh1_render_plan_probe(){
  {
  GLImage base(device),right(device),left(device),center(device);Check(H1ImageCacheDescribe(&base,"reanim/selectorscreen_bg",true,0xffffff),"base missing");Check(H1ImageCacheDescribe(&right,"reanim/selectorscreen_bg_right",true,0xffffff),"right missing");Check(H1ImageCacheDescribe(&left,"reanim/selectorscreen_bg_left",true,0xffffff),"left missing");Check(H1ImageCacheDescribe(&center,"reanim/selectorscreen_bg_center",true,0xffffff),"center missing");Image* images[]={&base,&right,&left,&center};
  for(int kind=0;kind<10;++kind){
-  pvzh1_render_plan_shutdown();Rect clip=kind==2?Rect(13,17,331,239):Rect(0,0,360,270);
+  pvzh1_render_plan_shutdown();Rect clip=kind==2?Rect(13,17,331,239):Rect(0,0,H1ScreenWidth,H1ScreenHeight);
   auto draw=[&](unsigned index){SexyTransform2D matrix;float scale=.45f;if(!index)scale*=8.f;matrix.Scale(scale,scale);float px[]={0,71,0,80},py[]={0,41,-79.8f,250};matrix.Translate(px[index]*.45f+(kind==1?17.125f:kind==3?-33.5f:0),py[index]*.45f+(kind==1?11.75f:kind==4?-71.25f:0));Rect source(0,0,images[index]->mWidth,images[index]->mHeight);
    if(kind>=7){int edge=kind==7?1:kind==8?7:13;source=Rect(edge,edge,source.mWidth-2*edge,source.mHeight-2*edge);}
    H1DrawTransformed(target,images[index],source,clip,Color::White,0,matrix,true);};
@@ -46,12 +49,25 @@ extern "C" void pvzh1_render_plan_probe(){
  }
  // Full geometry/mode/target guards must fall back even while another key is warm.
  for(int kind=0;kind<8;++kind){SexyTransform2D matrix;matrix.Scale(.45f,.45f);if(kind==0)matrix.RotateDeg(17);if(kind==1)matrix.Scale(-1,1);Color color=kind==2?Color(101,179,231,137):Color::White;int mode=kind==3?Graphics::DRAWMODE_ADDITIVE:0;Rect src=kind==4?Rect(1,0,right.mWidth-1,right.mHeight):Rect(0,0,right.mWidth,right.mHeight);unsigned oldFlags=right.mRenderFlags;if(kind==5)right.mRenderFlags|=RenderImageFlag_Repeat;
-  MemoryImage offscreen(gLawnApp);if(kind==6){offscreen.Create(360,270);offscreen.SetImageMode(false,false);}MemoryImage* dest=kind==6?&offscreen:target;
-  H1RenderPlanTestEnable(false);Background(dest,17);H1DrawTransformed(dest,&right,src,Rect(0,0,360,270),color,mode,matrix,true);auto expected=Pixels(dest);
-  H1RenderPlanTestEnable(true);Background(dest,17);unsigned before=pvzh1_render_plan_diagnostic[3];H1DrawTransformed(dest,&right,src,Rect(0,0,360,270),color,mode,matrix,true);Check(expected==Pixels(dest),"guard fallback changed actual pixels");if(kind<7)Check(pvzh1_render_plan_diagnostic[3]==before,"unsupported mode/geometry/target used a cached plan");right.mRenderFlags=oldFlags;++guardCases;
+  MemoryImage offscreen(gLawnApp);if(kind==6){offscreen.Create(H1ScreenWidth,H1ScreenHeight);offscreen.SetImageMode(false,false);}MemoryImage* dest=kind==6?&offscreen:target;
+  H1RenderPlanTestEnable(false);Background(dest,17);H1DrawTransformed(dest,&right,src,Rect(0,0,H1ScreenWidth,H1ScreenHeight),color,mode,matrix,true);auto expected=Pixels(dest);
+  H1RenderPlanTestEnable(true);Background(dest,17);unsigned before=pvzh1_render_plan_diagnostic[3];H1DrawTransformed(dest,&right,src,Rect(0,0,H1ScreenWidth,H1ScreenHeight),color,mode,matrix,true);Check(expected==Pixels(dest),"guard fallback changed actual pixels");if(kind<7)Check(pvzh1_render_plan_diagnostic[3]==before,"unsupported mode/geometry/target used a cached plan");right.mRenderFlags=oldFlags;++guardCases;
  }
  // Re-description of the same Image address must reject its old generation.
- const auto oldRevision=H1ImageCacheStorageRevision(&right);H1ImageCacheForget(&right);Check(H1ImageCacheDescribe(&right,"reanim/selectorscreen_bg_right",true,0xffffff),"re-describe failed");SexyTransform2D matrix;matrix.Scale(.45f,.45f);unsigned before=pvzh1_render_plan_diagnostic[3];H1DrawTransformed(target,&right,Rect(0,0,right.mWidth,right.mHeight),Rect(0,0,360,270),Color::White,0,matrix,true);Check(pvzh1_render_plan_diagnostic[3]==before,"changed Source cookie hit stale plan");Check(H1ImageCacheStorageRevision(&right)!=oldRevision,"fixture failed to change source generation");++guardCases;
+ const auto oldRevision=H1ImageCacheStorageRevision(&right);H1ImageCacheForget(&right);Check(H1ImageCacheDescribe(&right,"reanim/selectorscreen_bg_right",true,0xffffff),"re-describe failed");SexyTransform2D matrix;matrix.Scale(.45f,.45f);unsigned before=pvzh1_render_plan_diagnostic[3];H1DrawTransformed(target,&right,Rect(0,0,right.mWidth,right.mHeight),Rect(0,0,H1ScreenWidth,H1ScreenHeight),Color::White,0,matrix,true);Check(pvzh1_render_plan_diagnostic[3]==before,"changed Source cookie hit stale plan");Check(H1ImageCacheStorageRevision(&right)!=oldRevision,"fixture failed to change source generation");++guardCases;
+
+ // Keep 26 fixed geometries warm while eight new moving geometries are drawn
+ // every frame. This reproduces the physical battle's >24-key cache churn.
+ unsigned crowdedHits=pvzh1_render_plan_diagnostic[3];
+ for(unsigned frame=0;frame<12;++frame){std::vector<uint32_t> expected;
+  for(bool replay:{false,true}){H1RenderPlanTestEnable(replay);Background(target,frame+31);
+   for(unsigned id=0;id<34;++id){SexyTransform2D m;m.Scale(.1f,.1f);m.Translate(id<26?15.f+(id%8)*58:50.f+(id-26)*48+frame*.125f,id<26?20.f+(id/8)*55:210.f);
+    H1DrawTransformed(target,&right,Rect(0,0,right.mWidth,right.mHeight),Rect(0,0,H1ScreenWidth,H1ScreenHeight),Color::White,0,m,true);
+   }
+   if(!replay)expected=Pixels(target);else Check(expected==Pixels(target),"crowded moving/fixed plan scene changed pixels");
+  }
+ }
+ Check(pvzh1_render_plan_diagnostic[3]-crowdedHits>=150,"moving geometry evicted the fixed 26 plans before replay");
  totalHits=pvzh1_render_plan_diagnostic[3];copyPixels=pvzh1_render_plan_diagnostic[19];partialPixels=pvzh1_render_plan_diagnostic[21];skipPixels=pvzh1_render_plan_diagnostic[18];peak=pvzh1_render_plan_diagnostic[2];
  Check(copyPixels&&partialPixels&&skipPixels,"real BG tests missed memcpy/partial/transparent replay tiers");
  }

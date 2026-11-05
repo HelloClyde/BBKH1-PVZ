@@ -18,6 +18,7 @@
 #include <cstring>
 #include <chrono>
 using namespace Sexy;
+extern "C" void pvzh1_selector_shutdown();
 namespace {
 unsigned checks=0,cases=0;
 void Check(bool okay,const char* message){++checks;if(!okay)throw std::runtime_error(message);}
@@ -109,7 +110,11 @@ extern "C" void pvzh1_offline_selector_engine_probe(){
     Check(pvzh1_selector_offline_diagnostic[10]==failedPlans,"rejected visibility plan retried on every frame");
     H1SelectorOfflineTestRejectVisibility(false);H1SelectorOfflineRelease(selector);Pair(selector);
     const uint32_t resident=pvzh1_selector_offline_diagnostic[2],groups=pvzh1_selector_offline_diagnostic[4],welcome=pvzh1_selector_offline_diagnostic[6];
-    H1SelectorOfflineRelease(selector);Check(pvzh1_selector_offline_diagnostic[2]==0,"scene release must free bundle and username cache");
+    H1SelectorOfflineRelease(selector);
+    const uint32_t retained=pvzh1_selector_offline_diagnostic[2];
+    Check(retained<=2100000,"scene release must drop hand animation and username data");
+    if(retained){const auto opens=pvzh1_selector_offline_diagnostic[11];Pair(selector);Check(pvzh1_selector_offline_diagnostic[11]==opens+1,"return should reuse base menu and load only hand frames");}
+    pvzh1_selector_shutdown();Check(pvzh1_selector_offline_diagnostic[2]==0,"shutdown must release retained menu");
     std::ofstream out(std::filesystem::path(std::getenv("PVZ_HOST_OUTPUT"))/"selector-offline-engine-verification.json");
     out<<"{\"test_only\":true,\"all_passed\":true,\"checks\":"<<checks<<",\"full_frame_pixel_cases\":"<<cases
        <<",\"clipped_page_cases\":"<<pageCases<<",\"hidden_page_skips\":"<<pvzh1_selector_cull_diagnostic[0]

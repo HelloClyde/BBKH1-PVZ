@@ -1,0 +1,42 @@
+{
+  "sounds": {
+    "throw": {
+      "plays": 20,
+      "opens": 0,
+      "seeks": 0,
+      "reads": 0,
+      "closes": 0
+    },
+    "splat": {
+      "plays": 20,
+      "opens": 0,
+      "seeks": 0,
+      "reads": 0,
+      "closes": 0
+    },
+    "cached_dirt_rise": {
+      "plays": 20,
+      "opens": 0,
+      "seeks": 0,
+      "reads": 0,
+      "closes": 0
+    }
+  },
+  "cache_accounting": {
+    "frame_end_calls": 100,
+    "recounts": 0,
+    "source_visits": 0
+  },
+  "startup": {
+    "particle_definitions": 106,
+    "selector_tracks": 48,
+    "selector_transforms": 33888,
+    "sparse_float_fields_before_inheritance": 0
+  },
+  "identity": {
+    "platform/graphics/MemoryImageCache.cpp": "5903de11e201a681f448a4e8e9d8dcdb27a1d7d57932bacad67e156c136d27d0",
+    "platform/h1_sound.cpp": "f35a869aa96e4bfc59227eb993fe88766fcba77d203f3e60ba9b28053a276092",
+    "platform/host/host_io.cpp": "b601c0926150494a0d2c70836552939f38bf6843acd0af344520d673c35d33e8"
+  },
+  "scope": "Real host backend operations with controlled PCM draining; no H1 latency/FPS or subjective audio claim. Production sources unchanged."
+}

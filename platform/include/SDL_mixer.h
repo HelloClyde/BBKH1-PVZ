@@ -3,7 +3,7 @@
 #include "SDL.h"
 #define MIX_MAX_VOLUME 128
 #define AUDIO_S16SYS 0x8010
-typedef struct Mix_Chunk { char path[256]; uint32_t samples,rate; } Mix_Chunk;
+typedef struct Mix_Chunk { char path[256]; uint32_t samples,rate; const int16_t *cached; } Mix_Chunk;
 typedef struct Mix_Music Mix_Music;
 #ifdef __cplusplus
 extern "C" {

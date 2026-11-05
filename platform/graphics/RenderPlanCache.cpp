@@ -27,7 +27,7 @@ uint32_t pvzh1_render_plan_capture_active;
 }
 namespace Sexy { namespace {
 using namespace H1PlanTest;
-constexpr unsigned Entries=8,PageBytes=3072,PageLimit=21,RowLimit=H1ScreenWidth;
+constexpr unsigned Entries=64,PageBytes=3072,PageLimit=21,RowLimit=H1ScreenWidth;
 constexpr std::size_t Budget=512u*1024u;
 enum :uint8_t {Empty,Candidate,Count,Fill,Ready,Rejected};
 enum :uint8_t {Opaque=0,Partial=1,Copy=2,KindMask=3,Row=4,Interior=8};
@@ -39,7 +39,7 @@ struct Bounds {unsigned left=0,top=0,right=0,bottom=0;};
 struct Entry {
     Key key{};Hooks hooks{};uint64_t use=0;uint8_t phase=Empty;
     Op* pages[PageLimit]{};unsigned pageCount=0;Summary expected{};Bounds bounds{};bool completeOpaque=false;
-    uint16_t coverageLeft[H1ScreenHeight]{},coverageRight[H1ScreenHeight]{};
+    Bounds coverageBounds{};
 };
 struct Active {
     Entry* entry=nullptr;Hooks hooks{};View view{};uint32_t* destination=nullptr;
@@ -77,48 +77,50 @@ void Emit(const Op& op){
     if(a.summary.ops==PageLimit*PerPage){Fail();return;}
     ++a.summary.ops;
 }
-template<bool row,bool interior> __attribute__((always_inline)) inline uint32_t Read(const uint32_t* pixels,const Op& op,unsigned width,const Bounds& b,uint32_t u,uint32_t v){
-    if constexpr(row)return pixels[op.v+(u>>16)];
+template<bool row,bool interior> __attribute__((always_inline)) inline uint32_t Read(const View& view,const Op& op,unsigned width,const Bounds& b,uint32_t u,uint32_t v){
+    if constexpr(row)return view.Read(op.v+(u>>16));
     unsigned x=u>>16,y=v>>16;
     if constexpr(!interior){if(x<b.left)x=b.left;if(x>=b.right)x=b.right-1;if(y<b.top)y=b.top;if(y>=b.bottom)y=b.bottom-1;}
-    return pixels[y*width+x];
+    return view.Read(y*width+x);
 }
 template<bool partial,bool row,bool interior> void Run(const Op& op,const View& view,const Bounds& bounds,uint32_t* destination){
     uint32_t u=op.u,v=op.v;auto* out=destination+op.destination;unsigned count=op.count;
     if constexpr(!partial){
         while(count>=4){
-            *out++=Read<row,interior>(view.pixels,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;
-            *out++=Read<row,interior>(view.pixels,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;
-            *out++=Read<row,interior>(view.pixels,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;
-            *out++=Read<row,interior>(view.pixels,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;count-=4;
+            *out++=Read<row,interior>(view,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;
+            *out++=Read<row,interior>(view,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;
+            *out++=Read<row,interior>(view,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;
+            *out++=Read<row,interior>(view,op,view.width,bounds,u,v)|0xff000000u;u+=(unsigned)op.du;v+=(unsigned)op.dv;count-=4;
         }
     }
     while(count--){
-        uint32_t tex=Read<row,interior>(view.pixels,op,view.width,bounds,u,v);u+=(unsigned)op.du;v+=(unsigned)op.dv;
+        uint32_t tex=Read<row,interior>(view,op,view.width,bounds,u,v);u+=(unsigned)op.du;v+=(unsigned)op.dv;
         if constexpr(partial){unsigned alpha=tex>>24,inverse=255-alpha;uint32_t p=*out,trb=(((tex&0xff00ffu)*alpha)>>8)&0xff00ffu,tg=(((tex&0xff00u)*alpha)>>8)&0xff00u,prb=(((p&0xff00ffu)*inverse)>>8)&0xff00ffu,pg=(((p&0xff00u)*inverse)>>8)&0xff00u;*out++=0xff000000u|((trb|tg)+(prb|pg));}
         else *out++=tex|0xff000000u;
     }
 }
 void ReplayOp(const Op& op,const View& view,const Bounds& bounds,uint32_t* destination){
-    if((op.kind&KindMask)==Copy){H1CopyPixels(destination+op.destination,view.pixels+op.u,op.count);return;}
+    if((op.kind&KindMask)==Copy){
+        if(!view.pages)H1CopyPixels(destination+op.destination,view.pixels+op.u,op.count);
+        else {unsigned index=op.u,left=op.count;auto* out=destination+op.destination;while(left){unsigned n=std::min(left,1024u-(index&1023u));H1CopyPixels(out,view.pages[index>>10u]+(index&1023u),n);index+=n;out+=n;left-=n;}}
+        return;}
     const bool partial=(op.kind&KindMask)==Partial;
     if(op.kind&Row){if(partial)Run<true,true,true>(op,view,bounds,destination);else Run<false,true,true>(op,view,bounds,destination);}
     else if(op.kind&Interior){if(partial)Run<true,false,true>(op,view,bounds,destination);else Run<false,false,true>(op,view,bounds,destination);}
     else {if(partial)Run<true,false,false>(op,view,bounds,destination);else Run<false,false,false>(op,view,bounds,destination);}
 }
 bool CompleteOpaque(Entry& e){
-    if(e.expected.transparent||e.expected.partial)return false;
-    // Triangles and copy runs need not arrive left-to-right. Prove the final
-    // union once, rather than rejecting a temporary gap that later runs fill.
+    if(e.expected.transparent||e.expected.partial||e.expected.pixels<H1ScreenWidth*H1ScreenHeight/2)return false;
+    // Only a proven opaque rectangle becomes a retained background. Other
+    // shapes keep exact replay without the background-foundation shortcut.
     // Bounded temporary storage: 16,320 bytes at 480x272, outside raster calls.
     uint32_t coverage[(H1ScreenWidth*H1ScreenHeight+31)/32]{};
+    Bounds box{H1ScreenWidth,H1ScreenHeight,0,0};
     for(unsigned i=0;i<e.expected.ops;++i){const auto& op=At(e,i);
         if((op.kind&KindMask)==Partial)return false;
         const unsigned row=op.destination/H1ScreenWidth,x=op.destination%H1ScreenWidth;
         if(row>=H1ScreenHeight||x+op.count>H1ScreenWidth)return false;
-        auto& left=e.coverageLeft[row];auto& right=e.coverageRight[row];
-        if(!right){left=(uint16_t)x;right=(uint16_t)(x+op.count);}
-        else {if(x<left)left=(uint16_t)x;if(x+op.count>right)right=(uint16_t)(x+op.count);}
+        box.left=std::min(box.left,x);box.right=std::max(box.right,x+op.count);box.top=std::min(box.top,row);box.bottom=std::max(box.bottom,row+1);
         unsigned first=op.destination,remaining=op.count;
         while(remaining){unsigned n=std::min<unsigned>(remaining,32-first%32);
             const uint32_t mask=n==32?UINT32_MAX:((uint32_t(1)<<n)-1)<<(first%32);
@@ -126,14 +128,14 @@ bool CompleteOpaque(Entry& e){
         }
     }
     unsigned area=0;
-    for(unsigned row=0;row<H1ScreenHeight;++row){
-        unsigned first=row*H1ScreenWidth+e.coverageLeft[row],remaining=e.coverageRight[row]-e.coverageLeft[row];area+=remaining;
+    for(unsigned row=box.top;row<box.bottom;++row){
+        unsigned first=row*H1ScreenWidth+box.left,remaining=box.right-box.left;area+=remaining;
         while(remaining){unsigned n=std::min<unsigned>(remaining,32-first%32);
             const uint32_t mask=n==32?UINT32_MAX:((uint32_t(1)<<n)-1)<<(first%32);
             if((coverage[first/32]&mask)!=mask)return false;first+=n;remaining-=n;
         }
     }
-    return area>=H1ScreenWidth*H1ScreenHeight/2;
+    e.coverageBounds=box;return area>=H1ScreenWidth*H1ScreenHeight/2;
 }
 
 void Replay(Entry& e,const View& view,uint32_t* destination,bool foundation){
@@ -143,9 +145,11 @@ void Replay(Entry& e,const View& view,uint32_t* destination,bool foundation){
         const uint32_t mask=h1DirtyCanvas.RestoreRow(y);
         if(!mask)continue;
         for(unsigned x=0;x<H1ScreenWidth;){
-            if(x>=e.coverageLeft[y]&&x<e.coverageRight[y]){x=e.coverageRight[y];continue;}
+            const unsigned left=y>=e.coverageBounds.top&&y<e.coverageBounds.bottom?e.coverageBounds.left:0;
+            const unsigned right=y>=e.coverageBounds.top&&y<e.coverageBounds.bottom?e.coverageBounds.right:0;
+            if(x>=left&&x<right){x=right;continue;}
             const unsigned end=std::min<unsigned>(H1ScreenWidth,x+H1DirtyCanvas::TileWidth-x%H1DirtyCanvas::TileWidth);
-            const unsigned stop=x<e.coverageLeft[y]?std::min<unsigned>(end,e.coverageLeft[y]):end;
+            const unsigned stop=x<left?std::min<unsigned>(end,left):end;
             if(mask&(uint32_t(1)<<(x/H1DirtyCanvas::TileWidth)))for(unsigned p=x;p<stop;++p)destination[y*H1ScreenWidth+p]=0xff000000u;
             x=stop;
         }
@@ -206,7 +210,7 @@ bool DrawOrBegin(const Request& request,const Hooks& hooks,H1RenderPlanToken& to
     if(!request.destination||!request.key.source||request.key.source==request.key.destination||request.width!=H1ScreenWidth||request.height!=H1ScreenHeight||!hooks.prepare||!hooks.revision||!hooks.allocate||!hooks.release)return false;
     View view{};
     // Prepare may allocate or pressure-trim plans. Do not take an Entry* first.
-    if(!hooks.prepare(hooks.context,request.key.source,&view)||!view.pixels||!view.revision||!view.width||!view.height||view.width>65535||view.height>65535||(uint64_t)view.width*view.height>UINT32_MAX){
+    if(!hooks.prepare(hooks.context,request.key.source,&view)||(!view.pixels&&!view.pages)||!view.revision||!view.width||!view.height||view.width>65535||view.height>65535||(uint64_t)view.width*view.height>UINT32_MAX){
         for(auto& e:state.entries)if(e.phase!=Empty&&e.key.source==request.key.source)Drop(e);
         Add(9);return false;
     }
@@ -244,7 +248,7 @@ void H1RenderPlanRecordSpan(uint32_t* destination,int count,const uint32_t* pixe
     else if(std::memcmp(&bounds,&a.entry->bounds,sizeof(bounds))){Fail();return;}
     struct Sample {uint32_t index,y;uint16_t copy;uint8_t kind,alpha;bool interior,xInterior;};
     Sample samples[RowLimit];uint32_t su=u,sv=v;
-    for(int i=0;i<count;++i,su+=(unsigned)du,sv+=(unsigned)dv){unsigned x=su>>16,y=sv>>16;bool xi=x>=bounds.left&&x<bounds.right,inside=xi&&y>=bounds.top&&y<bounds.bottom;if(x<bounds.left)x=bounds.left;if(x>=bounds.right)x=bounds.right-1;if(y<bounds.top)y=bounds.top;if(y>=bounds.bottom)y=bounds.bottom-1;unsigned index=y*a.view.width+x;unsigned actual=a.view.pixels[index]>>24,alpha=sourceAlpha?actual:255;samples[i]={index,y,0,(uint8_t)(alpha<=8?3:alpha<240?Partial:Opaque),(uint8_t)actual,inside,xi};}
+    for(int i=0;i<count;++i,su+=(unsigned)du,sv+=(unsigned)dv){unsigned x=su>>16,y=sv>>16;bool xi=x>=bounds.left&&x<bounds.right,inside=xi&&y>=bounds.top&&y<bounds.bottom;if(x<bounds.left)x=bounds.left;if(x>=bounds.right)x=bounds.right-1;if(y<bounds.top)y=bounds.top;if(y>=bounds.bottom)y=bounds.bottom-1;unsigned index=y*a.view.width+x;unsigned actual=a.view.Read(index)>>24,alpha=sourceAlpha?actual:255;samples[i]={index,y,0,(uint8_t)(alpha<=8?3:alpha<240?Partial:Opaque),(uint8_t)actual,inside,xi};}
     for(int i=count-1;i>=0;--i)if(samples[i].kind==Opaque&&samples[i].alpha==255)samples[i].copy=(uint16_t)(1+((i+1<count&&samples[i+1].copy&&samples[i+1].index==samples[i].index+1)?samples[i+1].copy:0));
     ++a.summary.rows;a.summary.pixels+=(unsigned)count;
     for(int i=0;i<count;){
@@ -286,14 +290,31 @@ static bool renderPlanEnabled=true;
 void H1RenderPlanTestEnable(bool enabled){renderPlanEnabled=enabled;}
 #endif
 namespace {
-bool Prepare(void*,const void* source,H1PlanTest::View* view){auto* image=(MemoryImage*)source;if(!H1ImageCachePrepareStorageTexture(image,&view->pixels,&view->width,&view->height))return false;view->revision=H1ImageCacheStorageRevision(image);return view->revision!=0;}
+bool Prepare(void*,const void* source,H1PlanTest::View* view){auto* image=(MemoryImage*)source;if(!H1ImageCachePrepareStorageRGBPages(image,&view->pages,&view->width,&view->height)&&!H1ImageCachePrepareStorageTexture(image,&view->pixels,&view->width,&view->height))return false;view->revision=H1ImageCacheStorageRevision(image);return view->revision!=0;}
 uint64_t Revision(void*,const void* source){return H1ImageCacheStorageRevision((MemoryImage*)source);}
 void* Allocate(void*,std::size_t bytes){return std::malloc(bytes);}
 void Release(void*,void* pointer){std::free(pointer);}
 }
+namespace {
+// Admit a geometry only after it repeats. Continuously moving sprites must not
+// evict fixed UI/shadow plans before those plans reach their replay phase.
+uint32_t seenGeometry[128]{};unsigned seenCount=0,seenNext=0;
+bool RepeatedGeometry(const H1PlanTest::Key& key){
+ uint64_t pointer=(uintptr_t)key.source;uint32_t hash=2166136261u^(uint32_t)pointer^(uint32_t)(pointer>>32);
+ for(unsigned i=0;i<25;++i)hash=(hash^key.words[i])*16777619u;
+ bool repeated=false;for(unsigned i=0;i<seenCount;++i)if(seenGeometry[i]==hash){repeated=true;break;}
+ // Keep a recent query history, including hits, so stable plans stay admitted.
+ seenGeometry[seenNext++%128]=hash;seenCount=std::min(128u,seenCount+1);return repeated;
+}
+}
 bool H1RenderPlanDrawOrBegin(MemoryImage* destination,Image* source,const Rect& src,const Rect& clip,const Color& color,int mode,const SexyMatrix3& matrix,bool linear,float x,float y,bool center,H1RenderPlanToken& token){
     token.value=0;
     if(pvzh1_text_capture_active)return false;
+    // Small stable shadows and UI pieces also repay repeated scan conversion.
+    // Keep a cheap rejection only for very small source rectangles.
+    const uint32_t scaleX=std::bit_cast<uint32_t>(matrix.m00),scaleY=std::bit_cast<uint32_t>(matrix.m11);
+    if(scaleX<=0x3f800000u&&scaleY<=0x3f800000u&&src.mWidth>0&&src.mHeight>0&&
+        uint64_t(src.mWidth)*uint64_t(src.mHeight)<256)return false;
 #ifdef PVZ_HOST_RUNNER
     if(!renderPlanEnabled||std::getenv("PVZ_HOST_TRACE_PIXEL"))return false;
 #endif
@@ -302,16 +323,19 @@ bool H1RenderPlanDrawOrBegin(MemoryImage* destination,Image* source,const Rect& 
     auto* device=destination->mApp?destination->mApp->mGLInterface.get():nullptr;auto* screen=device?H1GetPhysicalScreen(device->mScreenImage.get()):nullptr;
     if(!screen||!screen->Active()||screen->Target()!=destination)return false;
     const float fields[]={matrix.m00,matrix.m01,matrix.m02,matrix.m10,matrix.m11,matrix.m12,matrix.m20,matrix.m21,matrix.m22,x,y};for(float value:fields)if(!std::isfinite(value))return false;
-    if(matrix.m01!=0||matrix.m10!=0||matrix.m20!=0||matrix.m21!=0||matrix.m22!=1||matrix.m00<=0||matrix.m11<=0)return false;
+    if((std::bit_cast<uint32_t>(matrix.m01)&0x7fffffffu)||(std::bit_cast<uint32_t>(matrix.m10)&0x7fffffffu)||
+       (std::bit_cast<uint32_t>(matrix.m20)&0x7fffffffu)||(std::bit_cast<uint32_t>(matrix.m21)&0x7fffffffu)||
+       std::bit_cast<uint32_t>(matrix.m22)!=0x3f800000u||!scaleX||scaleX>=0x7f800000u||!scaleY||scaleY>=0x7f800000u)return false;
+    H1PlanTest::Request request{};request.key.source=image;request.key.destination=destination;request.destination=destination->mBits.get();request.width=H1ScreenWidth;request.height=H1ScreenHeight;
+    const int integers[]={src.mX,src.mY,src.mWidth,src.mHeight,clip.mX,clip.mY,clip.mWidth,clip.mHeight,destination->mWidth,destination->mHeight,destination->mWidth,image->mWidth,image->mHeight,(center?1:0)|(linear?2:0)};
+    for(unsigned i=0;i<14;++i)request.key.words[i]=(uint32_t)integers[i];for(unsigned i=0;i<11;++i)request.key.words[14+i]=std::bit_cast<uint32_t>(fields[i]);
+    if(!RepeatedGeometry(request.key))return false;
     const float x0=center?-src.mWidth/2.f:0,y0=center?-src.mHeight/2.f:0;
     float left=matrix.m00*x0+matrix.m02+x-.5f,top=matrix.m11*y0+matrix.m12+y-.5f,right=matrix.m00*(x0+src.mWidth)+matrix.m02+x-.5f,bottom=matrix.m11*(y0+src.mHeight)+matrix.m12+y-.5f;
     if(!std::isfinite(left)||!std::isfinite(top)||!std::isfinite(right)||!std::isfinite(bottom))return false;
     if(left<clip.mX)left=(float)clip.mX;if(top<clip.mY)top=(float)clip.mY;if(right>clip.mX+clip.mWidth)right=(float)(clip.mX+clip.mWidth);if(bottom>clip.mY+clip.mHeight)bottom=(float)(clip.mY+clip.mHeight);
     if(left<0)left=0;if(top<0)top=0;if(right>H1ScreenWidth)right=H1ScreenWidth;if(bottom>H1ScreenHeight)bottom=H1ScreenHeight;
-    if(right<=left||bottom<=top||(right-left)*(bottom-top)<8192.f)return false;
-    H1PlanTest::Request request{};request.key.source=image;request.key.destination=destination;request.destination=destination->mBits.get();request.width=H1ScreenWidth;request.height=H1ScreenHeight;
-    const int integers[]={src.mX,src.mY,src.mWidth,src.mHeight,clip.mX,clip.mY,clip.mWidth,clip.mHeight,destination->mWidth,destination->mHeight,destination->mWidth,image->mWidth,image->mHeight,(center?1:0)|(linear?2:0)};
-    for(unsigned i=0;i<14;++i)request.key.words[i]=(uint32_t)integers[i];for(unsigned i=0;i<11;++i)request.key.words[14+i]=std::bit_cast<uint32_t>(fields[i]);
+    if(right<=left||bottom<=top||(right-left)*(bottom-top)<64.f)return false;
     const H1PlanTest::Hooks hooks{nullptr,Prepare,Revision,Allocate,Release};return H1PlanTest::DrawOrBegin(request,hooks,token);
 }
 #endif

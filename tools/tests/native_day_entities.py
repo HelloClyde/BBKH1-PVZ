@@ -25,7 +25,7 @@ def read_day_entities(read,symbols,runtime_stage,scene,layout_path=LAYOUT):
         pages=(maximum+o['page_size']-1)//o['page_size']
         if end-begin!=pages*4 or not begin<=end<=finish or not heap(begin,finish-begin) or not heap(ids_address,maximum*4):
             raise ValueError('invalid original page-vector/ID pointers: '+plural)
-        table=read(begin,pages*4);ids=read(ids_address,used*4);entities=[]
+        table=read(begin,pages*4);ids=read(ids_address,used*4) if used else b'';entities=[]
         stride=o[kind+'.stride']
         for index in range(used):
             entity_id=word(ids,index*4)
@@ -45,7 +45,7 @@ def read_day_entities(read,symbols,runtime_stage,scene,layout_path=LAYOUT):
                     values[field]=value if math.isfinite(value) else str(value)
             if kind=='coin':values['collecting']=bool(data[o['coin.collecting']])
             entities.append(values)
-        unchanged=read(address,o['data_array_bytes'])==header and read(ids_address,used*4)==ids and read(begin,pages*4)==table
+        unchanged=read(address,o['data_array_bytes'])==header and (read(ids_address,used*4) if used else b'')==ids and read(begin,pages*4)==table
         return dict(slot_count=count,high_water=used,max_size=maximum,page_table=hex(begin),
                     allocated_pages=sum(bool(word(table,i*4)) for i in range(pages)),
                     header_ids_and_pages_unchanged=unchanged,
@@ -64,6 +64,22 @@ def read_day_entities(read,symbols,runtime_stage,scene,layout_path=LAYOUT):
                     board_y=int.from_bytes(read(board+o['board.y'],4),'little',signed=True))
         for kind,plural in (('plant','plants'),('zombie','zombies'),('projectile','projectiles'),('coin','coins')):
             values[plural]=entity_array(board,kind,plural)
+        if 'board.seed_bank' in o:
+            values['sod_position']=u32(board+o['board.sod_position']);values['total_waves']=u32(board+o['board.total_waves'])
+            cursor=u32(board+o['board.cursor'])
+            if heap(cursor,o['cursor.type']+4):values['cursor_type']=u32(cursor+o['cursor.type'])
+            cutscene=u32(board+o['board.cutscene'])
+            if heap(cutscene,o['cutscene.seed_choosing']+1):values['cutscene']=dict(time=u32(cutscene+o['cutscene.time']),sod_time=u32(cutscene+o['cutscene.sod_time']),seed_choosing=bool(read(cutscene+o['cutscene.seed_choosing'],1)[0]))
+            bank=u32(board+o['board.seed_bank'])
+            if heap(bank,o['seed_bank.bytes']):
+                data=read(bank,o['seed_bank.bytes']);n=word(data,o['seed_bank.num_packets']);packets=[]
+                if not 0<=n<=10:raise ValueError('invalid seed packet count')
+                for i in range(n):
+                    at=o['seed_bank.packets']+i*o['seed_packet.stride'];item=dict(index=i)
+                    for field in ('type','x','y','width','height'):item[field]=word(data,at+o['seed_packet.'+field],True)
+                    for field in ('active','refreshing'):item[field]=bool(data[at+o['seed_packet.'+field]])
+                    packets.append(item)
+                values['seed_bank']=dict(x=word(data,o['seed_bank.x'],True),y=word(data,o['seed_bank.y'],True),packets=packets)
         after_main=u32(board+o['board.main_counter']);after_update=u32(board+o['board.update_counter'])
         values['app_and_board_pointers_unchanged']=u32(symbols['gLawnApp'][0])==app and u32(app+o['app.board'])==board
         values['counters_unchanged_during_read']=before_main==after_main and before_update==after_update
