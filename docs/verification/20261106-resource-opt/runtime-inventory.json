@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "runtime_bytes": 85339946,
+  "runtime_files": 2742,
+  "baseline_bytes": 134247013,
+  "saved_bytes": 48907067,
+  "removed_files": 695,
+  "completed_alpha_grids": 9,
+  "scaled_exception_images": 14,
+  "nonpreferred_RGB_shadows_removed": 28,
+  "unscaled_nontrivial_standalone_images": 0,
+  "source_inputs_retained": true,
+  "logical_geometry_unchanged": true
+}

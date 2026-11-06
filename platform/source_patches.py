@@ -42,6 +42,12 @@ def apply(source_root:Path):
             'mRestartButton = MakeButton(NewOptionsDialog::NewOptionsDialog_Restart, this, "[RESTART_LEVEL]");',
             'mRestartButton = MakeButton(NewOptionsDialog::NewOptionsDialog_Restart, this, "[RESTART_LEVEL_BUTTON]");')
     base=source_root/'SexyAppFramework/SexyAppBase.cpp'
+    base.write_text('#include "SaveFile.h"\n'+base.read_text(encoding='utf8'),encoding='utf8')
+    replace(base,'\tstd::ofstream aFile(PathFromU8(theFileName), std::ios::out | std::ios::binary | std::ios::trunc);\n\tif (!aFile)',
+                 '\tconst bool saved=H1WriteSaveFile(theFileName,theData,theDataLen);\n\tif (!saved)')
+    replace(base,'\taFile.write(reinterpret_cast<const char*>(theData), static_cast<std::streamsize>(theDataLen));\n\tif (!aFile)\n\t\treturn false;\n','')
+    replace(base,'bool SexyAppBase::ReadBufferFromFile(const std::string& theFileName, Buffer* theBuffer, bool dontWriteToDemo)\n{',
+                 'bool SexyAppBase::ReadBufferFromFile(const std::string& theFileName, Buffer* theBuffer, bool dontWriteToDemo)\n{\n    if(theFileName.find("userdata/")!=std::string::npos)H1RecoverSaveFile(theFileName);')
     replace(base,'#ifdef __EMSCRIPTEN__\n\t\tLoadingThreadProcStub(this);',
                  '#if defined(__EMSCRIPTEN__) || defined(H1_PVZ_PORTABLE)\n\t\tLoadingThreadProcStub(this);')
     replace(base,'#elif (defined(__ANDROID__) && !defined(__TERMUX__)) || defined(__IPHONEOS__)\n\tShutdown();\n#else\n\texit(theCode);',
@@ -90,7 +96,11 @@ def apply(source_root:Path):
     // No profile-wide resource preload at this boundary.
 ''',1)
     text=text.replace('\tmBoard->InitLevel();','\tmBoard->InitLevel();\n    H1PreloadCurrentBoard(this);',1)
-    text=text.replace('\tmBoard->StartLevel();','    H1PreloadCurrentBoard(this);\n    H1RewardEffectsPrepare();\n\tmBoard->StartLevel();',1)
+    text=text.replace('\tmBoard->StartLevel();','''    if(mBoard->ChooseSeedsOnCurrentLevel()){
+        H1LevelLoadingScope selectedLoadingScope; H1PreloadCurrentBoard(this);
+        H1RewardEffectsPrepare();
+    }else{H1PreloadCurrentBoard(this);H1RewardEffectsPrepare();}
+\tmBoard->StartLevel();''',1)
     assert text.count('\t\t\tDoContinueDialog();')==2
     text=text.replace('\t\t\tDoContinueDialog();','            H1PreloadCurrentBoard(this);\n            H1RewardEffectsPrepare();\n\t\t\tDoContinueDialog();')
     # A restarted board briefly overlaps its replacement and camera panorama.
@@ -390,6 +400,19 @@ bool PvzpLoadNextResource()
     needle='\t\t\tif (mBoard->mLevel == 1)';at=text.index(needle,start)
     text='#include "actors/ActorPose.h"\n'+text[:at]+text[at:].replace(needle,'            if(H1SodOfflineBegin(mBoard)){}\n            else if (mBoard->mLevel == 1)',1)
     cut.write_text(text,encoding='utf8',newline='\n')
+
+    # Seed selection draws static packets, not every unlocked plant's full
+    # animation. Current board/wave dependencies are warmed in PreNewGame;
+    # actual selected and imitated plants are warmed again before StartLevel.
+    # Keep all original wave, award, dialogue and scripted challenge warmups.
+    unlocked='''\tfor (SeedType aSeedType = SeedType::SEED_PEASHOOTER; aSeedType < SeedType::NUM_SEED_TYPES; aSeedType = static_cast<SeedType>(static_cast<int>(aSeedType) + 1))
+\t{
+\t\tif (mApp->HasSeedType(aSeedType))
+\t\t{
+\t\t\tPlant::PreloadPlantResources(aSeedType);
+\t\t}
+\t}'''
+    replace(cut,unlocked,'    // H1: current/selected plant dependencies are already warmed at their lifecycle boundaries.')
 
     particles=source_root/'PvzpLib/PvzpParticle.cpp'
     text=particles.read_text(encoding='utf8')

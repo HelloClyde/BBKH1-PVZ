@@ -80,7 +80,8 @@ python tools/package_install.py --bda dist/H1PVZPortable.bda
 
 ## 资源与许可
 
-- `private/resources-h1-wide/`：完整中文运行资源，3,428 个文件、134,247,013 字节，含 253 份离线定义、20 份字体缓存、标题 PCM、紧凑日间音乐、冒险/角色预渲染帧与草坪全景。
+- `private/resources-h1-wide/`：精简后的完整中文运行资源，2,742 个文件、85,339,946 字节，含 253 份离线定义、20 份字体缓存、标题 PCM、紧凑日间音乐、冒险/角色预渲染帧与草坪全景。
+- `private/resource-build-inputs/`：构建所需的原始定义、音频、字形输入及打包副本，不复制到 H1；运行资源较上一版减少 48,907,067 字节（36.43%）。程序与资源合计 88,948,806 字节；详见 [资源适配与真机记录](docs/H1-RESOURCE-OPTIMIZATION-20261106.md)。
 - `private/source/`：原始资源输入；`private/widescreen/`：扩图源图与提示词；`private/zh-cn/`：中文图片和文本来源。
 - `localization/`：语言基线与文案补充；`assets/fonts/`：重新生成中文字形所需的 Noto 原字体，H1 安装不需要 OTF 文件。
 - `provenance/`：运行资源与源素材完整文件校验清单。

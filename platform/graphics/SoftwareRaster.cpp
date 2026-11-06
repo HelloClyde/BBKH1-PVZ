@@ -16,6 +16,7 @@
 #include <cmath>
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 #include <new>
 #include "h1_resources.h"
 #include "zlib.h"
@@ -32,6 +33,9 @@
 extern "C" {volatile uint32_t pvzh1_axis_span_diagnostic[8];}
 extern "C" {uint32_t pvzh1_direct_additive;volatile uint32_t pvzh1_additive_diagnostic[4];}
 extern "C" {const unsigned char* pvzh1_additive_lut=nullptr;}
+/* White alpha-only repeated water texture: accepted triangles, shaded pixels,
+ * ordinary fallback triangles. No animation state is changed. */
+extern "C" {volatile uint32_t pvzh1_white_repeat_diagnostic[3];}
 extern "C" bool pvzh1_additive_prepare(){
     if(pvzh1_additive_lut)return true;
     char path[640];if(std::snprintf(path,sizeof(path),"%sdata/additive.h1lut",h1_resources_get_root())>=int(sizeof(path)))return false;
@@ -67,6 +71,7 @@ extern "C" void pvzh1_additive_span_done(uint32_t* pixels){
 }
 #ifdef PVZ_HOST_RUNNER
 static bool directAdditiveEnabled=true;
+static bool whiteRepeatEnabled=true;
 #endif
 #ifdef PVZ_HOST_RUNNER
 extern "C" {bool pvzh1_geometry_fast_enabled=true;}
@@ -81,6 +86,7 @@ static bool axisSpanEnabled=true;
 void H1DirectAdditiveTestEnable(bool enabled){directAdditiveEnabled=enabled;}
 void H1FastReducedSpanTestEnable(bool enabled){axisSpanEnabled=enabled;}
 void H1GeometryFastTestEnable(bool enabled){pvzh1_geometry_fast_enabled=enabled;}
+void H1WhiteRepeatTestEnable(bool enabled){whiteRepeatEnabled=enabled;}
 #endif
 bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTextureInfo *texture,
                       unsigned u,unsigned v,int du,int dv,bool sourceAlpha)
@@ -359,11 +365,86 @@ static float Edge(const TriVertex& a,const TriVertex& b,float x,float y)
 static bool InclusiveEdge(const TriVertex& a,const TriVertex& b)
 { return b.y<a.y || (b.y==a.y&&b.x>a.x); }
 
+/* The original water caustic is white RGB with animated alpha. Interpolate its
+ * alpha directly, with wrapped bilinear taps. Q20 texture coordinates and Q24
+ * vertex modulation remove floating point divisions from the pixel loop.
+ * The general RGBA sampler below remains the oracle and fallback. */
+static bool WhiteRepeatTriangle(MemoryImage* dest,const uint32_t* texture,
+    const TriVertex v[3],float area,int left,int top,int right,int bottom,
+    const Color& color,int mode,bool linear)
+{
+    if(area<4.f||right-left>64||bottom-top>64)return false;
+    for(int i=0;i<3;++i)
+        if(((v[i].color?v[i].color:0xffffffffu)&0xffffffu)!=0xffffffu||
+           !std::isfinite(v[i].u)||!std::isfinite(v[i].v)||
+           std::fabs(v[i].u)>8.f||std::fabs(v[i].v)>8.f||
+           !std::isfinite(v[i].x)||!std::isfinite(v[i].y)||
+           std::fabs(v[i].x)>4096.f||std::fabs(v[i].y)>4096.f)return false;
+    constexpr int64_t unit=1ll<<20,alphaUnit=1ll<<24;
+    struct Plane {int64_t origin,dx,dy;};
+    auto plane=[&](double a,double b,double c,double scale,double offset){
+        const double dx=((b-a)*(v[2].y-v[0].y)-(c-a)*(v[1].y-v[0].y))/area;
+        const double dy=((v[1].x-v[0].x)*(c-a)-(v[2].x-v[0].x)*(b-a))/area;
+        return Plane{(int64_t)std::llround((a+dx*(left+.5-v[0].x)+dy*(top+.5-v[0].y)+offset)*scale),
+                     (int64_t)std::llround(dx*scale),(int64_t)std::llround(dy*scale)};
+    };
+    Plane u=plane(v[0].u*128.,v[1].u*128.,v[2].u*128.,unit,linear?-.5:0);
+    Plane w=plane(v[0].v*64.,v[1].v*64.,v[2].v*64.,unit,linear?-.5:0);
+    const double modulation=color.mAlpha/(255.*255.);
+    Plane alpha=plane((v[0].color?v[0].color:0xffffffffu)>>24,
+                      (v[1].color?v[1].color:0xffffffffu)>>24,
+                      (v[2].color?v[2].color:0xffffffffu)>>24,alphaUnit*modulation,0);
+    int64_t ex[3],ey[3],edge[3];
+    for(int i=0;i<3;++i){
+        const auto& a=v[(i+1)%3];const auto& b=v[(i+2)%3];
+        const int64_t ax=std::llround(a.x*65536.),ay=std::llround(a.y*65536.);
+        const int64_t bx=std::llround(b.x*65536.),by=std::llround(b.y*65536.);
+        ex[i]=-(by-ay)*65536;ey[i]=(bx-ax)*65536;
+        edge[i]=(bx-ax)*(((int64_t)top<<16)+32768-ay)-(by-ay)*(((int64_t)left<<16)+32768-ax);
+    }
+    auto* bits=dest->GetBits();unsigned shaded=0;
+    const uint32_t rgb=(color.mRed<<16)|(color.mGreen<<8)|color.mBlue;
+    constexpr int64_t guard=1ll<<28; // Near an edge use the exact original coverage test.
+    for(int y=top;y<bottom;++y){
+        int64_t e[3]={edge[0],edge[1],edge[2]},uu=u.origin,vv=w.origin,aa=alpha.origin;
+        for(int x=left;x<right;++x,uu+=u.dx,vv+=w.dx,aa+=alpha.dx){
+            bool inside=e[0]>=0&&e[1]>=0&&e[2]>=0;
+            const bool boundary=(std::llabs(e[0])<=guard||std::llabs(e[1])<=guard||std::llabs(e[2])<=guard);
+            e[0]+=ex[0];e[1]+=ex[1];e[2]+=ex[2];
+            if(boundary){
+                inside=true;
+                for(int i=0;i<3;++i){const auto& a=v[(i+1)%3];const auto& b=v[(i+2)%3];
+                    float d=Edge(a,b,x+.5f,y+.5f);if(d<0||(d==0&&!InclusiveEdge(a,b)))inside=false;}
+            }
+            if(!inside)continue;
+            // Ten-bit rounded fractions keep the complete bilinear numerator
+            // below 255*2^20. Native MIPS32 then needs no 64-bit multiply in
+            // this pixel loop, while the original-shader oracle bounds error.
+            const unsigned qu=(unsigned)((uu+512)>>10),qv=(unsigned)((vv+512)>>10);
+            const unsigned ix=linear?(qu>>10)&127:(unsigned)(uu>>20)&127;
+            const unsigned iy=linear?(qv>>10)&63:(unsigned)(vv>>20)&63;
+            unsigned sample=texture[iy*128+ix]>>24;
+            if(linear){
+                const unsigned fx=qu&1023,fy=qv&1023;
+                const unsigned a=sample*(1024-fx)+(texture[iy*128+((ix+1)&127)]>>24)*fx;
+                const unsigned b=(texture[((iy+1)&63)*128+ix]>>24)*(1024-fx)+(texture[((iy+1)&63)*128+((ix+1)&127)]>>24)*fx;
+                sample=(a*(1024-fy)+b*fy+(1u<<19))>>20;
+            }
+            const unsigned modulation=(unsigned)((std::max<int64_t>(0,std::min<int64_t>(alphaUnit,aa))+128)>>8);
+            const unsigned opacity=(sample*modulation+32768)>>16;
+            const auto at=(size_t)y*dest->mWidth+x;bits[at]=Composite(bits[at],rgb|(opacity<<24),mode);++shaded;
+        }
+        for(int i=0;i<3;++i)edge[i]+=ey[i];u.origin+=u.dy;w.origin+=w.dy;alpha.origin+=alpha.dy;
+    }
+    ++pvzh1_white_repeat_diagnostic[0];pvzh1_white_repeat_diagnostic[1]+=shaded;
+    dest->BitsChanged();return true;
+}
+
 /* Only the original pool-caustic repeated texture uses this path. The original
  * SWTri lookup neither wraps UVs nor clamps each texture coordinate, whereas
  * the GL original uses GL_REPEAT and bilinear filtering across tile edges. */
 static void RepeatTriangle(MemoryImage *dest,MemoryImage *texture,const TriVertex input[3],
-                            const Rect& clip,const Color& color,int mode,bool linear)
+                            const Rect& clip,const Color& color,int mode,bool linear,bool whiteRepeat)
 {
 #ifdef PVZ_NATIVE_PROFILE
     PVZProfileScope profile(PVZ_PROFILE_REPEAT_TRIANGLE);
@@ -381,6 +462,9 @@ static void RepeatTriangle(MemoryImage *dest,MemoryImage *texture,const TriVerte
     uint32_t textureWidth=texture->mWidth,textureHeight=texture->mHeight;
     if(H1ImageCachePrepareStorageRGBPages(texture,&textureBits.pages,&textureWidth,&textureHeight)||H1ImageCachePrepareStorageTexture(texture,&textureBits.bits,&textureWidth,&textureHeight))linear=false;
     else if(!H1ImageCachePrepareTexturePages(texture,&textureBits.pages))textureBits.bits=texture->GetBits();
+    if(whiteRepeat&&!textureBits.pages&&textureWidth==128&&textureHeight==64&&
+       WhiteRepeatTriangle(dest,textureBits.bits,v,area,left,top,right,bottom,color,mode,linear))return;
+    ++pvzh1_white_repeat_diagnostic[2];
     for (int y=top;y<bottom;++y) for (int x=left;x<right;++x) {
         float w0=Edge(v[1],v[2],x+0.5f,y+0.5f);
         float w1=Edge(v[2],v[0],x+0.5f,y+0.5f);
@@ -420,6 +504,11 @@ void H1DrawTriangles(MemoryImage *dest,Image *image,const TriVertex vertices[][3
     H1ImageCacheTouch(dest);H1ImageCacheTouch(texture);
     if (image&&(!texture||texture->mWidth<=0||texture->mHeight<=0)) return;
     if (image) image->mDrawn=true;
+    bool whiteRepeat=texture&&(texture->mRenderFlags&RenderImageFlag_Repeat)&&
+        (texture->mRenderFlags&H1WhiteAlphaRepeatFlag)&&texture->mWidth==128&&texture->mHeight==64;
+#ifdef PVZ_HOST_RUNNER
+    whiteRepeat=whiteRepeat&&whiteRepeatEnabled;
+#endif
     for (int i=0;i<count;++i) {
         TriVertex v[3]={vertices[i][0],vertices[i][1],vertices[i][2]};
         for (int j=0;j<3;++j) {v[j].x+=tx;v[j].y+=ty;}
@@ -435,7 +524,7 @@ void H1DrawTriangles(MemoryImage *dest,Image *image,const TriVertex vertices[][3
         }
         H1CanvasKnownDraw canvas(dest,left,top,right-left,bottom-top);
         if (texture&&(texture->mRenderFlags&RenderImageFlag_Repeat)) {
-            RepeatTriangle(dest,texture,v,clip,color,mode,linear);
+            RepeatTriangle(dest,texture,v,clip,color,mode,linear,whiteRepeat);
         } else if (mode==Graphics::DRAWMODE_NORMAL) {
             OriginalTriangle(dest,texture,v,clip,color,mode,linear);
         } else {

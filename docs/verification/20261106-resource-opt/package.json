@@ -1,0 +1,11 @@
+{
+  "bytes": 47199285,
+  "sha256": "835c877219e4ab6afaff215060f82239430f29b4c2ec0642576526b8d01cc6f0",
+  "includes_savedata": false,
+  "all_members_readback_verified": true,
+  "repository_verified": true,
+  "native_repository_inputs_verified": 257,
+  "runtime_files": 2742,
+  "runtime_bytes": 85339946,
+  "program_bytes": 3608860
+}

@@ -15,6 +15,8 @@ typedef void h1_file;
 #define NATIVE_PATH_MAX 512
 static h1_file *files[FILE_COUNT],*log_file;
 static volatile uint32_t pvz_runtime_diagnostic[16];
+static volatile uint32_t pvz_runtime_write_diagnostic[10];
+static uint32_t h1_raw_tick_80hz(void){return 1;}
 static unsigned calls,counts[4],used,behavior;
 static unsigned char copied[120000];
 static int pvz_native_path(const char*a,char*b,size_t c){(void)a;(void)b;(void)c;return -1;}

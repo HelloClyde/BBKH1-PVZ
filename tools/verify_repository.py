@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib,json,subprocess,sys,struct,zlib
 from build_paths import ROOT,SDK
+from resource_inputs import input_path
 def read(path):return json.loads(path.read_text(encoding='utf8'))
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def check_files(folder,expected):
@@ -17,6 +18,8 @@ def main():
  assert not subprocess.check_output([*sdk_git,'status','--porcelain','--untracked-files=no'],text=True).strip(),'SDK has tracked edits'
  upstream=read(ROOT/'pinned-source-manifest.json');n=check_files(ROOT/'upstream',upstream['files'])
  assets=read(ROOT/'provenance/resources.json');count=check_files(ROOT/assets['directory'],assets['files'])
+ from verify_runtime_resources import verify as verify_runtime_resources
+ verify_runtime_resources()
  from bake_file_index import encode
  file_index=read(ROOT/'provenance/offline-file-index.json');index=ROOT/assets['directory']/file_index['runtime_path']
  reward=read(ROOT/'provenance/offline-reward-effects.json');reward_file=ROOT/assets['directory']/reward['runtime_path']
@@ -49,7 +52,7 @@ def main():
   assert data[:4]==b'H1DZ';raw=zlib.decompress(data[8:]);assert len(raw)==struct.unpack_from('<I',data,4)[0]
   assert raw[:4] in (b'H1D1',b'H1D2') and (raw[:4]!=b'H1D2' or name.startswith('reanim/')) and len(raw)-16==struct.unpack_from('<I',raw,8)[0]
   assert zlib.crc32(raw[16:])==struct.unpack_from('<I',raw,12)[0]
- for name,expected in definitions['source_xml_sha256'].items():assert sha(ROOT/assets['directory']/name)==expected
+ for name,expected in definitions['source_xml_sha256'].items():assert sha(input_path(ROOT/assets['directory'],name))==expected
  startup=read(ROOT/'provenance/offline-startup.json')
  assert startup['font_count']==20 and startup['font_all_fields_roundtrip']
  assert startup['font_reader_sha256']==sha(ROOT/'platform/localization/FontCache.h')
@@ -59,7 +62,7 @@ def main():
   magic,version,size,crc=struct.unpack_from('<4s3I',data)
   assert magic in (b'H1FC',b'H1SI') and version==1 and size+16==len(data) and zlib.crc32(data[16:])==crc
  for group in ('source_font_sha256','source_sound_sha256'):
-  for name,expected in startup[group].items():assert sha(ROOT/assets['directory']/name)==expected
+  for name,expected in startup[group].items():assert sha(input_path(ROOT/assets['directory'],name))==expected
  music=read(ROOT/'provenance/offline-title-music.json');path=ROOT/assets['directory']/'sounds/mainmusic-title.h1pcm';data=path.read_bytes()
  assert sha(path)==music['output_sha256'] and len(data)==music['bytes'] and music['whole_loop_sample_exact']
  assert sha(ROOT/'tools/audio/bake_title.cpp')==music['exporter_sha256']
@@ -107,6 +110,11 @@ def main():
  performance=read(ROOT/'provenance/runtime-performance.json')
  actor=read(ROOT/'provenance/offline-actor-poses.json');pose=ROOT/assets['directory']/actor['runtime_path'];data=pose.read_bytes()
  assert sha(pose)==actor['sha256'] and len(data)==actor['bytes'] and not actor['lossy']
+ if actor.get('page_container'):
+  from pack_actor_pages import decode as decode_actor_pages
+  assert sha(ROOT/'tools/pack_actor_pages.py')==actor['page_container']['encoder_sha256']
+  data=decode_actor_pages(data)
+  assert len(data)==actor['decoded_bytes'] and hashlib.sha256(data).hexdigest()==actor['decoded_sha256']
  header=struct.unpack_from('<16I',data)
  assert header[:4]==(0x50413148,1,480,272) and header[4]==actor['entries'] and header[6]==actor['palette_colors']
  assert header[5]==64 and header[7]==64+header[4]*24 and header[11]==header[7]+header[6]*4 and header[13]==26 and header[12]==actor['flash_palette_tuples']
@@ -167,7 +175,7 @@ def main():
  path=ROOT/assets['directory']/pack['runtime_path'];data=path.read_bytes()
  assert data==encode_image_pack(ROOT/assets['directory'],paths) and sha(path)==pack['sha256'] and len(data)==pack['bytes']
  assert len(paths)==pack['count'] and sha(ROOT/'tools/bake_image_pack.py')==pack['encoder_sha256']
- assert pack['source_sha256']=={p:sha(ROOT/assets['directory']/p) for p in paths}
+ assert pack['source_sha256']=={p:sha(input_path(ROOT/assets['directory'],p)) for p in paths}
  bank=performance['sound_bank'];path=ROOT/assets['directory']/bank['runtime_path'];data=path.read_bytes()
  assert sha(path)==bank['sha256'] and len(data)==bank['bytes']
  assert sha(ROOT/'tools/bake_sound_bank.py')==bank['encoder_sha256']
@@ -188,12 +196,26 @@ def main():
  sys.path.insert(0,str(SDK));from h1_bda.validate import validate_bda
  bda=ROOT/'prebuilt/H1PVZPortable.bda';native=read(ROOT/'docs/verification/final-native-verification.json')
  assert sha(bda)==native['program']['bda_sha256']
+ receipt_path=ROOT/'prebuilt/H1PVZPortable.build.json';receipt=read(receipt_path)
+ assert sha(receipt_path)==native['program']['build_receipt_sha256']
+ assert receipt['sha256']==sha(bda) and receipt['bytes']==bda.stat().st_size
+ # Prepared/generated sources and the external C++ runtime have their own
+ # frozen identities. Check every repository-owned native input directly so
+ # later source edits cannot silently retain an older tested program.
+ native_inputs={}
+ for group in ('source_inputs','header_inputs','build_inputs'):
+  for name,expected in receipt[group].items():
+   if name.startswith(('build/','cxx-runtime/')):continue
+   assert not Path(name).is_absolute() and '..' not in Path(name).parts,name
+   assert sha(ROOT/name)==expected,'Tested native input changed: '+name
+   native_inputs[name]=expected
  validation=validate_bda(bda);assert validation['ok'],validation
  assert validation['title']==icon['desktop_title']
  assert all(not p.is_symlink() for p in (ROOT/assets['directory']).rglob('*'))
  report={'passed':True,'sdk_commit':pin['commit'],'upstream_files':n,'runtime_files':count,
          'runtime_bytes':assets['bytes'],'prebuilt_sha256':sha(bda),'BDA_validation':True,
          'desktop_title':validation['title'],'offline_definitions':definitions['count'],
+         'native_repository_inputs_verified':len(native_inputs),
          'scope':'Source, resource bytes and tested BDA envelope; not a new hardware test'}
  print(json.dumps(report,indent=2))
  return report

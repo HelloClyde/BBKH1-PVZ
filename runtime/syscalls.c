@@ -91,6 +91,9 @@ char pvz_runtime_last_path[NATIVE_PATH_MAX];
    seek calls/ticks/failures, read histogram <=1K/<=4K/<=16K/>16K, read failures.
    Counters wrap as uint32_t. No logging, allocation or I/O policy changes. */
 volatile uint32_t pvz_runtime_io_diagnostic[16];
+/* Write calls/requested/returned/shorts; first short fd/request/return/native
+ * errno, max request and raw native write ticks. No retries or policy change. */
+volatile uint32_t pvz_runtime_write_diagnostic[10];
 /* 0 unprobed, 1 legacy, 2 validated 64-bucket layout; probes/maps/last bucket. */
 volatile uint32_t pvz_runtime_asset_layout_diagnostic[4];
 static void trace_path(const char *path){size_t n=path?strnlen(path,sizeof(pvz_runtime_last_path)-1):0;if(n)memcpy(pvz_runtime_last_path,path,n);pvz_runtime_last_path[n]=0;}
@@ -444,7 +447,23 @@ ssize_t _write(int fd,const void *buffer,size_t size){
     /* Native SD writes have substantial per-call overhead. A typical 40KB
        V4 save should be one request, as verified against the firmware API. */
     while(done<size){unsigned count=(unsigned)((size-done)>49152?49152:size-done);
+        uint32_t begin=h1_raw_tick_80hz();
         n=h1_fwrite((const unsigned char*)buffer+done,1,count,file);
+        pvz_runtime_write_diagnostic[0]++;pvz_runtime_write_diagnostic[1]+=count;
+        if(n<=count)pvz_runtime_write_diagnostic[2]+=n;
+        if(count>pvz_runtime_write_diagnostic[8])pvz_runtime_write_diagnostic[8]=count;
+        pvz_runtime_write_diagnostic[9]+=h1_raw_tick_80hz()-begin;
+        if(n<count){
+            if(!pvz_runtime_write_diagnostic[3]){
+                pvz_runtime_write_diagnostic[4]=(uint32_t)fd;pvz_runtime_write_diagnostic[5]=count;pvz_runtime_write_diagnostic[6]=n;
+#ifdef __mips__
+                pvz_runtime_write_diagnostic[7]=*(volatile uint32_t*)0x8057aefcu;
+#else
+                pvz_runtime_write_diagnostic[7]=(uint32_t)errno;
+#endif
+            }
+            pvz_runtime_write_diagnostic[3]++;
+        }
         if(n>count)return native_failure(EIO);done+=n;audio_io_yield();if(n<count)break;}
     pvz_runtime_diagnostic[8]=23;pvz_runtime_diagnostic[9]=(uint32_t)done;return (ssize_t)done;
 }

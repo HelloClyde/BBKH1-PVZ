@@ -82,6 +82,18 @@ def apply(root):
     p.write_text(s,encoding='utf8')
     p=Path(root)/'Lawn/Widget/SeedChooserScreen.cpp';s=p.read_text(encoding='utf8')
     s='#include "graphics/ScreenLayout.h"\n'+s
+    # Manual buttons need the centered chooser's origin for hit testing.
+    # The menu intentionally draws in screen coordinates and stays unparented.
+    for name in ('Start','Random'):
+        anchor=f'm{name}Button = std::make_unique<GameButton>(SeedChooserScreen::SeedChooserScreen_{name});'
+        assert s.count(anchor)==1
+        s=s.replace(anchor,anchor+f'\n    m{name}Button->mParentWidget=this;')
+    anchor='mLastMouseX = -1;';assert s.count(anchor)==1
+    s=s.replace(anchor,anchor+'\n    mMouseInsets.mLeft=-int(Sexy::H1BoardOffset);')
+    # GetSeedPositionInBank already returns chooser-local X. A second
+    # subtraction hid the first selected card beyond the physical left edge.
+    anchor='aPosX -= mX;';assert s.count(anchor)==1
+    s=s.replace(anchor,'// H1: bank X is already local to this centered widget.')
     s=s.replace('mApp->mWidth','BOARD_WIDTH')
     s,count=re.subn(r'mBoard->Move\((.+), 0\);',r'mBoard->Move(Sexy::H1BoardCameraX(\1), 0);',s)
     assert count==3,count

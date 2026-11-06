@@ -206,7 +206,7 @@
     ],
     "unique_nonzero_tiles": 15823,
     "all_physical_pixels_verified": 4095360,
-    "encoder_sha256": "35db796a74773bb94119ef7e3e5443addf93ec4216f7ace96e543708e78fbf04"
+    "encoder_sha256": "337f8b0d403cfa11c85f3fb93f357c378f954399524d5cebe16273ada74c96c2"
   },
   "additive_lut": {
     "runtime_path": "data/additive.h1lut",
@@ -218,13 +218,13 @@
   },
   "image_pack": {
     "runtime_path": "images-common.h1pk",
-    "bytes": 2966724,
-    "sha256": "9987083a2f6ef1b3cd21d259e2bba66a71d3611ebf82b06fafe5a80d8025feca",
-    "count": 180,
-    "encoder_sha256": "1500ef26f213ab6ebbaffcf30d9c7c25a7e27fea7d719c7a68278b6fdd46fbdc",
+    "bytes": 2418209,
+    "sha256": "9920b39c920d034052e3ff3ca010bcca8f2ba4368b2f673bb007a095de710938",
+    "count": 178,
+    "encoder_sha256": "c3d74f8f364033aaae499e35fc70b0cc89199fbb5f47bec770440ad98c21d5fc",
     "source_sha256": {
-      "data/houseofterror16.h1a": "11d22b9db84276ceed4af4a8f2fb03a5f56921d6bb88b158e56217c54ca1a5a4",
-      "data/houseofterror16outline.h1i": "c6661e024d4341454865e204b1c9903076adc5856b10966b0378b675044b3afe",
+      "data/houseofterror16.h1a": "62289acde17c87ff64535fc93e6c87cf1965fc3ecb888da6e2d5dfdad8a82eaf",
+      "data/houseofterror16outline.h1i": "5d833265afecc19112bba1865a98d4c16b174e0d8146717db6a9dd2d3dfc8196",
       "images/background1.h1i": "644c85c44a01a77c5abaec92d204941af149e67e7403a7e5eaf978f79bc829c3",
       "images/background1unsodded.h1i": "8c6e7799d4d1d22d2af69ae1ea450fcb400dd84a05d5981d87b24ddc947cca28",
       "images/dialog_bigbottomleft.h1i": "7951a227661f676cf815a2572f4697cb04216860d61f2c24f43cfab815f2894b",
@@ -243,9 +243,7 @@
       "images/pool_caustic_effect.h1i": "e7313d788791139a95c5d5c8e861df3da04b1f15d37efb5b794003c5a1d1f84a",
       "images/seedbank.h1i": "437d287af3737c19fd6d0f1c659b89efbbe7532e3fe317c3c451144da4b9dc2d",
       "images/sod1row.h1a": "d7930d2e5011b81a6fb13db8ae307896a21abaa07fddf9a7aa0212a9dfda8011",
-      "images/sod1row.h1i": "3528e629e5b2f43176cf967b8c4319d3b7076f8c6297428a460e049e360294b6",
       "images/sod3row.h1a": "8a28b66923854be76fa64a8f08a3085960f09b3c6329ec0f126c9fcf4dd35393",
-      "images/sod3row.h1i": "09111bfd9f762af64449af8a49c4a269f5a98941fa24a522636ccaf1b1ea4a17",
       "images/titlescreen.h1i": "8f6d03287d51d2a9e9021d80d5d9135cf20d8bce9664a90dbcc194a44d06b4e1",
       "particles/awardglow.h1i": "eac75d43bb61836cc0fcdcf204d4f36101dfa5c50e88f743bc188d4eb7d67e26",
       "particles/awardpickupglow.h1i": "f6865501571056fc0997867e809960dc18ed98b683cb6deff5ba2ba8fa5396d9",

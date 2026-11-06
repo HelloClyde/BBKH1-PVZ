@@ -8,6 +8,7 @@ def main():
  verify();sys_path=ROOT/'sdk'
  import sys;sys.path.insert(0,str(sys_path));from h1_bda.validate import validate_bda
  bda=a.bda.resolve();assert validate_bda(bda)['ok']
+ assert sha(bda)==read(ROOT/'docs/verification/final-native-verification.json')['program']['bda_sha256'],'Install resources only with their hardware-tested program'
  output=a.output.resolve();assert output.is_relative_to(ROOT) and not output.exists(),'Choose a new package output; preserve existing archives'
  output.parent.mkdir(parents=True,exist_ok=True)
  resources=read(ROOT/'provenance/resources.json');base=ROOT/resources['directory']

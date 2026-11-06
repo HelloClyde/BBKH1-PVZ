@@ -8,12 +8,16 @@
 extern "C" bool pvzh1_geometry_fast_enabled;
 #endif
 namespace Sexy {
+// The original pool generator preserves white RGB and changes alpha only.
+// Marking its owned texture avoids scanning 128*64 pixels per mesh triangle.
+inline constexpr unsigned H1WhiteAlphaRepeatFlag=0x40000000u;
 bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTextureInfo *texture,
                       unsigned u,unsigned v,int du,int dv,bool sourceAlpha);
 #ifdef PVZ_HOST_RUNNER
 void H1FastReducedSpanTestEnable(bool enabled);
 void H1DirectAdditiveTestEnable(bool enabled);
 void H1GeometryFastTestEnable(bool enabled);
+void H1WhiteRepeatTestEnable(bool enabled);
 #endif
 void H1DrawTriangles(MemoryImage *dest, Image *texture, const TriVertex vertices[][3], int count,
                      const Rect& clip, const Color& color, int mode, float tx=0, float ty=0, bool linear=true);

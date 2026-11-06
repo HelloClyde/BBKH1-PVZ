@@ -28,10 +28,14 @@ extern "C" void pvzh1_cache_complete_screen_batch();
         board.write_text(text,encoding='utf8',newline='\n')
     pool=root/'Lawn/System/PoolEffect.cpp';text=pool.read_text(encoding='utf8')
     if 'PVZH1_COMPLETED_POOL_TEXTURE_BATCHES' in text:return
+    anchor='mCausticImage->mRenderFlags |= RenderImageFlag_Repeat;'
+    if text.count(anchor)!=1:raise RuntimeError('Pinned alpha-only pool texture changed')
+    text=text.replace(anchor,'mCausticImage->mRenderFlags |= RenderImageFlag_Repeat | Sexy::H1WhiteAlphaRepeatFlag; // RGB stays white in UpdateWaterEffect')
     anchor='constexpr const int CAUSTIC_IMAGE_WIDTH = 128;'
     if text.count(anchor)!=1:raise RuntimeError('Pinned pool constants changed')
     text=text.replace(anchor,'''#ifdef H1_PVZ_PORTABLE
 // PVZH1_COMPLETED_POOL_TEXTURE_BATCHES: each original synchronous batch ended.
+#include "graphics/SoftwareRaster.h"
 extern "C" void pvzh1_cache_complete_screen_batch();
 static void H1PoolTextureBatchComplete(Sexy::Graphics *g) {
     if (Sexy::GLImage::Check3D(g->mDestImage)) pvzh1_cache_complete_screen_batch();

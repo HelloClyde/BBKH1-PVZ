@@ -15,7 +15,11 @@ extern "C" void pvzh1_cache_complete_draw_batch();
 extern "C" size_t pvzh1_cache_memory_pressure(size_t);
 /* Open count, pending, start ms, constructor ms, first presented ms, draws,
  * warmups, reserved images, failed preparations, reserved bytes, warmup ms. */
-extern "C" { volatile uint32_t pvzh1_options_diagnostic[11]; }
+extern "C" { volatile uint32_t pvzh1_options_diagnostic[13]; }
+#ifdef PVZ_NATIVE_PROFILE
+// Read/write by the controlled native A/B test only. Normal launches use 0.
+extern "C" { volatile uint32_t pvzh1_options_preclean_test; }
+#endif
 namespace {bool drawn=false;}
 void H1OptionsPrepare(){
     ++pvzh1_options_diagnostic[6];const uint32_t start=SDL_GetTicks();
@@ -55,7 +59,13 @@ void H1OptionsPrepare(){
 }
 void H1OptionsBegin(){
     ++pvzh1_options_diagnostic[0];pvzh1_options_diagnostic[1]=1;pvzh1_options_diagnostic[2]=SDL_GetTicks();pvzh1_options_diagnostic[3]=pvzh1_options_diagnostic[4]=0;drawn=false;
-    if(gLawnApp&&gLawnApp->mBoard&&gLawnApp->mGameScene==SCENE_PLAYING&&!gLawnApp->GetDialogCount()){
+    pvzh1_options_diagnostic[11]=pvzh1_options_diagnostic[12]=0;
+    const uint32_t cleanupStart=SDL_GetTicks();
+    bool preclean=false;
+#ifdef PVZ_NATIVE_PROFILE
+    preclean=pvzh1_options_preclean_test!=0;
+#endif
+    if(preclean&&gLawnApp&&gLawnApp->mBoard&&gLawnApp->mGameScene==SCENE_PLAYING&&!gLawnApp->GetDialogCount()){
         // No renderer is active in this input callback. Reclaim completed
         // gameplay textures before the paused-canvas allocation,
         // while retaining the already-scaled, explicitly reserved UI images.
@@ -68,7 +78,11 @@ void H1OptionsBegin(){
             if(!bytes)break;reclaimed+=bytes;
         }
     }
+    // The allocation bridge already reclaims caches on actual allocation
+    // pressure. Scanning/evicting a fixed 600 KiB here stalls every popup even
+    // when its bounded canvas pages fit. UI resources remain reserved.
+    pvzh1_options_diagnostic[11]=SDL_GetTicks()-cleanupStart;
 }
-void H1OptionsConstructed(){if(gLawnApp)H1PausedBoardPrime(gLawnApp->mBoard);pvzh1_options_diagnostic[3]=SDL_GetTicks()-pvzh1_options_diagnostic[2];}
+void H1OptionsConstructed(){const uint32_t begin=SDL_GetTicks();if(gLawnApp)H1PausedBoardPrime(gLawnApp->mBoard);pvzh1_options_diagnostic[12]=SDL_GetTicks()-begin;pvzh1_options_diagnostic[3]=SDL_GetTicks()-pvzh1_options_diagnostic[2];}
 void H1OptionsDrawn(){++pvzh1_options_diagnostic[5];drawn=true;}
 void H1OptionsPresented(){if(drawn&&pvzh1_options_diagnostic[1]){pvzh1_options_diagnostic[4]=SDL_GetTicks()-pvzh1_options_diagnostic[2];pvzh1_options_diagnostic[1]=0;}}

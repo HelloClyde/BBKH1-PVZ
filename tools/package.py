@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+from resource_inputs import input_path
 import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -156,9 +157,9 @@ def main():
     if not args.resources_only:receipt_path,receipt=build_identity(args.bda)
     native_build=native_elf_path(receipt).parent if not args.resources_only else None
     out=args.output_dir.resolve();out.mkdir(parents=True,exist_ok=True)
-    index=json.loads((args.resources/'resource-index.json').read_text(encoding='utf8'))
-    audio=json.loads((args.resources/'audio-index.json').read_text(encoding='utf8'))
-    modules=json.loads((args.resources/'module-index.json').read_text(encoding='utf8'))
+    index=json.loads(input_path(args.resources,'resource-index.json').read_text(encoding='utf8'))
+    audio=json.loads(input_path(args.resources,'audio-index.json').read_text(encoding='utf8'))
+    modules=json.loads(input_path(args.resources,'module-index.json').read_text(encoding='utf8'))
     manifest=dict(schema='h1-pvz-portable-install-1',version=args.version,
                   target='BBK H1/Y100 V1.41',program_target='A:\\应用\\程序\\H1PVZPortable.bda',
                   resource_target='A:\\应用\\数据\\游戏\\PVZ\\',save_target='A:\\应用\\数据\\游戏\\PVZ\\',
@@ -169,6 +170,9 @@ def main():
                   music_adaptation=modules['adaptation'],sfx_format=audio['header'],
                   savedata_included=False,firmware_included=False)
     scale_path=args.resources/'h1-scale-manifest.json'
+    if not scale_path.is_file():
+        try:scale_path=input_path(args.resources,'h1-scale-manifest.json')
+        except FileNotFoundError:pass
     if scale_path.is_file():
         scaling=json.loads(scale_path.read_text(encoding='utf8'))
         manifest['offline_scaling']=dict(manifest_sha256=digest(scale_path),

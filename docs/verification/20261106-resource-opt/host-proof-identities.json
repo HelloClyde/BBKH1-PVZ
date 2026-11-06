@@ -1,0 +1,92 @@
+{
+  "scope": "Final relevant source identities plus component proof hashes. Tests are reused only when their affected behavior is unchanged; historical test executables keep their own identities below. The pool and level-preload checks were rerun against the final host build.",
+  "sources": {
+    "tools/tests/resource_runtime_engine_probe.cpp": "2a31ab81a7ec035f701096a2dbe4eaf364aa793631486d320cd2bcf90c212c77",
+    "tools/tests/pool_repeat_engine_probe.cpp": "731eeea4acd065222d82075a605fa18adea02d09c671a0841a1454698895f2b4",
+    "tools/tests/save_file_probe.cpp": "f7fff94cc492455a764716366a43be808c34aede3e105594414457a5919a5746",
+    "tools/tests/save_engine_probe.cpp": "a758c458802f76a56e28bce0ca98635fa0025bca79e20af472a506991fb7c158",
+    "tools/tests/seed_chooser_engine_probe.cpp": "8b031113fa25899dae00460ec19a611672962b3ddd0646ad9208ab6fcd28abbf",
+    "platform/SaveFile.cpp": "cc9952a5bc98a73c991c3d9d21848f1211d65c5f4c2ce106d18ed3e578b07332",
+    "platform/graphics/SoftwareRaster.cpp": "936ec47fd07252552df3f0c370ce57513b5a841c756741531fe8dfe025e61668",
+    "platform/widescreen_patches.py": "f1a3028bd51a58fecb674ec9751acb831f93dbe2035a0cef634f98bbc42835e1",
+    "platform/source_patches.py": "4fb7239e33fc49d0b19dee2e75c303344972b73b73c255c86ba3c38d761a9eac",
+    "tools/tests/level_preload_engine_probe.cpp": "c4f2b4c630323d28ee0431114dcbcb72d7c5c2ed49a0fbf9a66835de54cfb6f3",
+    "platform/actors/ActorPose.cpp": "a7d0349f145f7103c6b564b5dec9d0da816540400623f8874aba1a3bfc0db961",
+    "platform/LevelPreload.cpp": "d87e7692f4e134c32ae180cf9f8534fbabd6a6d57eee5a61976a74da24185f2a",
+    "tools/pack_actor_pages.py": "a841229dddbd89620399948aea0c5ce60162738bff4f77d9116237b2b5032441",
+    "tools/tests/actor_pose_engine_probe.cpp": "7d74da171bf8adeba41f6d3ca59099bde67e38ce27188edf596ce2d5d3d19be0",
+    "platform/graphics/SoftwareRaster.h": "9be1658a294b9c8350bfa14ca400e77fb612fa4998a7a70a9a9c8bc97e31a1be",
+    "platform/graphics/pool_epoch_patches.py": "0f8bee78861a9db048a12e6ea4ccbc6c94f63494a4c31b6a749315d487fc8451"
+  },
+  "proofs": {
+    "all-resource-readers.json": "c7f8033b7d9aeb1dbc786ee9d0e41bdcbc0cdd00be3fa52732838d99816e8853",
+    "water-pixels.json": "2bb69bf6f6cce6a841325cecd0c77cdf94e412a33e3eaa16a2beb86ccb535ee4",
+    "save-faults.json": "df294dbe17314a5676677e30bf04c49b119bf0b573b1f9bb9b92b6c8b8ba1562",
+    "save-engine.json": "c842d88731c62737497decc185b3f0f4ac996b1a5308f8d11d6b8c3dd4940046",
+    "seed-chooser.json": "64d0d37ffbe76917384731b30da30f3a73e20126302246ce99bf655e9bc8199c",
+    "paused-replay.json": "0fcce55515ea54df8e0b6354d74cacf1625a0d2c43a3a0ea4e73c359c97d4456",
+    "level-preload.json": "1cbac43536ba517fd442a2710ec0545d8ee897338867c81919f9acb4fa2e2c63",
+    "actor-pages.json": "ff3e734d08de193cc5004ea850e0e0c421e0ad0d48bd7d04bef0adcde99be80e",
+    "actor-pages-flash.json": "6cd6ff269a6703e22eddc6938443a288312739a5dcde28353743892e5e679967",
+    "actor-pages-sun.json": "5c13838a8a34d49f9c26cbf8b3aa4a264b330d6b58a9bd82f3f7c644edb1f8b6",
+    "runtime-inventory.json": "b34e438fc159696b00eb2ca95b4754ee7a9e3beb8cf9b7db9834dded4aa198d3"
+  },
+  "test_artifacts": {
+    "all-resource-readers": {
+      "host_report": "fe529da8bcc369bed35e6e918ebcc4b01b14e7626a7c8a3a73fb333223d3d118",
+      "probe": "2a31ab81a7ec035f701096a2dbe4eaf364aa793631486d320cd2bcf90c212c77",
+      "executable": "9ac85c140727e33330c34406cd21ad8e64c093b290377f28ace341635f5c776d",
+      "test_linker_wrappers": [
+        "h1_image_open",
+        "h1_image_probe"
+      ]
+    },
+    "water-pixels": {
+      "host_report": "41ce77cbb0436538af6061f8079b5981f5d1adbe9530d005aa42bd5f2af3579f",
+      "probe": "731eeea4acd065222d82075a605fa18adea02d09c671a0841a1454698895f2b4",
+      "executable": "fc89d5b5961e52befe868494ae538128f60fd3d716afd6bd9d5d67b426b26ec0",
+      "test_linker_wrappers": []
+    },
+    "save-engine": {
+      "host_report": "08ec798347f61958e3f512807fbe1f72c820068f3f0c94e10afb87681882f4bf",
+      "probe": "a758c458802f76a56e28bce0ca98635fa0025bca79e20af472a506991fb7c158",
+      "executable": "1223554ce3211928de6d547eadddc84f0fd72cf2db3ff49a046d8f8ef0bb9a84",
+      "test_linker_wrappers": []
+    },
+    "seed-chooser": {
+      "host_report": "4d311f99112b52e5a1cea74b76f17aecb5e1bb38c3961ca872ac08ce1704e1c4",
+      "probe": "8b031113fa25899dae00460ec19a611672962b3ddd0646ad9208ab6fcd28abbf",
+      "executable": "f23ab4366a4afc526c14aacd2e23aa99afbf4c900035c2d157bbe3a72d78f927",
+      "test_linker_wrappers": []
+    },
+    "paused-replay": {
+      "host_report": "fe529da8bcc369bed35e6e918ebcc4b01b14e7626a7c8a3a73fb333223d3d118",
+      "probe": "64c0f6f57d735f05654f852cd0703218bca854374338f19a12da5d1fa1e7c6b4",
+      "executable": "7ff7b6f9fc294ac3b504812d5a12cb4083a6006eaa3473f8ab07d8bab68fabf2"
+    },
+    "level-preload": {
+      "host_report": "41ce77cbb0436538af6061f8079b5981f5d1adbe9530d005aa42bd5f2af3579f",
+      "probe": "c4f2b4c630323d28ee0431114dcbcb72d7c5c2ed49a0fbf9a66835de54cfb6f3",
+      "executable": "1334b7ae84bf7d075463d92416e406fda476c93dcc55b95c0a7b78a7d78fde4b",
+      "test_linker_wrappers": []
+    },
+    "actor-pages": {
+      "host_report": "503cda15a3601e98578b011dfc0e768ca187eca980b982fdadd7dd7a87b92c17",
+      "probe": "7d74da171bf8adeba41f6d3ca59099bde67e38ce27188edf596ce2d5d3d19be0",
+      "executable": "3d125847c7ddd7462a0b2009c7395ba8f8110ce760e461cdd17790147da4500a",
+      "test_linker_wrappers": []
+    },
+    "actor-pages-flash": {
+      "host_report": "503cda15a3601e98578b011dfc0e768ca187eca980b982fdadd7dd7a87b92c17",
+      "probe": "39b40aa67100abfdd8fbeac36eaaa509083158135a493408ef28fed1e6cdaf34",
+      "executable": "4276b54e55bebc1ad315ea0e92e6596c5c6e5b78f6bb1c18babf56fc8316b25c",
+      "test_linker_wrappers": []
+    },
+    "actor-pages-sun": {
+      "host_report": "503cda15a3601e98578b011dfc0e768ca187eca980b982fdadd7dd7a87b92c17",
+      "probe": "e9452de5d69c7ef608d38ef63579c958644025fccd4b952e531b9f0c85c2f634",
+      "executable": "71441d81bf0c67d2194dada01fe5044ede75b2efab021c913a5ddd82f30e700e",
+      "test_linker_wrappers": []
+    }
+  }
+}

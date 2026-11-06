@@ -22,9 +22,7 @@
     "images/pool_caustic_effect.h1i",
     "images/seedbank.h1i",
     "images/sod1row.h1a",
-    "images/sod1row.h1i",
     "images/sod3row.h1a",
-    "images/sod3row.h1i",
     "images/titlescreen.h1i",
     "particles/awardglow.h1i",
     "particles/awardpickupglow.h1i",
@@ -182,5 +180,6 @@
     "reanim/zombie_whitewater1.h1i",
     "reanim/zombie_whitewater2.h1i",
     "reanim/zombie_whitewater3.h1i"
-  ]
+  ],
+  "preferred_variants_only": true
 }

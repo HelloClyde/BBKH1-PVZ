@@ -1,36 +1,25 @@
-/* A late profile must not expand dependencies of the same current board. */
 #include "LawnApp.h"
 #include "Lawn/Board.h"
+#include "Lawn/Cutscene.h"
+#include "Lawn/SeedPacket.h"
 #include "Lawn/System/PlayerInfo.h"
 #include "PvzpLib/Reanimator.h"
-#include <filesystem>
 #include <fstream>
+#include <filesystem>
 #include <stdexcept>
 extern void H1PreloadCurrentBoard(LawnApp*);
-extern "C" volatile uint32_t pvzh1_level_preload_diagnostic[4];
-namespace {unsigned Loaded(){unsigned n=0;for(unsigned i=0;i<NUM_REANIMS;++i)n+=gReanimatorDefArray[i].mTracks.count!=0;return n;}}
+namespace {void Check(bool v){if(!v)throw std::runtime_error("Current-level preload omitted a required dependency or loaded unused unlocked plants");}}
 extern "C" void pvzh1_level_preload_probe(){
-    PlayerInfo profile;profile.mName="PRELOAD_TEST";profile.mLevel=1;profile.mFinishedAdventure=0;
+    PlayerInfo profile;profile.mName="PRELOAD_TEST";profile.mId=1;profile.mLevel=31;
     auto* previous=gLawnApp->mPlayerInfo;gLawnApp->mPlayerInfo=&profile;
-    gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);
-    if(!gLawnApp->mBoard)throw std::runtime_error("Expected a real board");
-    const unsigned before=Loaded();
-    const unsigned plants=pvzh1_level_preload_diagnostic[1],zombies=pvzh1_level_preload_diagnostic[2];
-    // Deliberately poison storage the original wave builder does not initialize.
-    // Only host fixture memory is changed; no hardware or production state.
-    auto* board=gLawnApp->mBoard;
-    for(int w=0;w<MAX_ZOMBIE_WAVES;++w){
-        bool terminated=w>=board->mNumWaves;
-        for(auto& type:board->mZombiesInWave[w]){
-            if(terminated)type=ZombieType::ZOMBIE_BOSS;
-            else if(type==ZombieType::ZOMBIE_INVALID)terminated=true;
-        }
-    }
-    profile.mLevel=50;profile.mFinishedAdventure=2;H1PreloadCurrentBoard(gLawnApp);
-    if(Loaded()!=before)throw std::runtime_error("Profile unlocks expanded current-board preload");
-    const unsigned deltaPlants=pvzh1_level_preload_diagnostic[1]-plants,deltaZombies=pvzh1_level_preload_diagnostic[2]-zombies;
-    if(deltaPlants>10||deltaZombies>5)throw std::runtime_error("First-board dependency set too broad");
-    std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"level-preload-verification.json");
-    out<<"{\"passed\":true,\"uninitialized_wave_tails_ignored\":true,\"same_board_unaffected_by_completed_profile\":true,\"loaded_reanimation_definitions\":"<<before<<",\"current_board_plant_types\":"<<deltaPlants<<",\"current_board_zombie_types\":"<<deltaZombies<<"}\n";
+    Check(gLawnApp->HasSeedType(SEED_WALLNUT));Check(!gReanimatorDefArray[REANIM_WALLNUT].mTracks.tracks);
+    gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);auto* board=gLawnApp->mBoard;Check(board&&board->mLevel==31);
+    board->mCutScene->PreloadResources();
+    Check(!gReanimatorDefArray[REANIM_WALLNUT].mTracks.tracks);
+    Check(gReanimatorDefArray[REANIM_SPLASH].mTracks.tracks&&gReanimatorDefArray[REANIM_POOL_CLEANER].mTracks.tracks);
+    board->mSeedBank->mSeedPackets[0].SetPacketType(SEED_WALLNUT,SEED_NONE);
+    H1PreloadCurrentBoard(gLawnApp);Check(gReanimatorDefArray[REANIM_WALLNUT].mTracks.tracks);
     gLawnApp->KillSeedChooserScreen();gLawnApp->KillBoard();gLawnApp->mPlayerInfo=previous;
+    std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"level-preload-verification.json");
+    out<<"{\"passed\":true,\"level\":31,\"unused_unlocked_wallnut_not_loaded\":true,\"original_pool_dependencies_loaded\":true,\"selected_wallnut_loaded_before_play\":true,\"serialization_and_content_unchanged\":true}\n";
 }

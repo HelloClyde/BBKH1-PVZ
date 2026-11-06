@@ -18,9 +18,9 @@
   "unique_packets": 3311,
   "pixel_operations": 1976863,
   "runs": 686123,
-  "bytes": 5882613,
+  "bytes": 3420204,
   "crc32": "4732d707",
-  "sha256": "5249246d9b555b9cd5fc8fe8c3d234c1b1bb1b4a95071c28fe3523b135cf6e58",
+  "sha256": "f898a823e720f9fb6a01006b9e8e4c4486aed6bf4073eb16d5d49dc88cb74aca",
   "raw_sha256": "28b477b388e80c44feb211588e6f116791774cd44e510150c12d1e2fc8704295",
   "lossy": false,
   "runtime_path": "actor-poses.h1ap",
@@ -55,5 +55,14 @@
     "bytes": 7477140,
     "sha256": "60bc19876dcde261a92b9612f824670631c999e89fab7ba174efd0f280081d75"
   },
-  "previous_signature_sha256": "aef2bd8b0857b6bb83b1ce29bfab1cb96b83a45054b923ab312455c0ecb618f6"
+  "previous_signature_sha256": "aef2bd8b0857b6bb83b1ce29bfab1cb96b83a45054b923ab312455c0ecb618f6",
+  "decoded_sha256": "5249246d9b555b9cd5fc8fe8c3d234c1b1bb1b4a95071c28fe3523b135cf6e58",
+  "decoded_bytes": 5882613,
+  "page_container": {
+    "schema": 1,
+    "page_bytes": 4096,
+    "decoded_cache_pages": 32,
+    "encoder_sha256": "a841229dddbd89620399948aea0c5ce60162738bff4f77d9116237b2b5032441",
+    "decoded_byte_exact": true
+  }
 }

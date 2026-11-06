@@ -1,0 +1,1 @@
+{"passed":true,"cases":10,"binary_bytes":20017,"partial_write":true,"zero_write":true,"write_error":true,"close_error":true,"rename_error":true,"rollback_failure_recovery":true,"old_bytes_preserved_on_failure":true}

@@ -1,6 +1,7 @@
 """Bundle byte-identical common H1 images; runtime shares one backing stream."""
 from pathlib import Path
 import hashlib,json,struct,zlib
+from resource_inputs import input_path
 ROOT=Path(__file__).resolve().parents[1]
 def fnv(data):
  h=2166136261
@@ -10,7 +11,7 @@ def encode(root,paths):
  paths=sorted(paths);strings=bytearray();records=[];payload=bytearray();size=len(paths)*16+sum(len(p.encode('ascii'))+1 for p in paths)
  for name in paths:
   assert name==name.lower() and not name.startswith('/') and '..' not in name and ':' not in name
-  data=(root/name).read_bytes();assert data[:4] in (b'H1I1',b'H1I2')
+  data=input_path(root,name).read_bytes();assert data[:4] in (b'H1I1',b'H1I2')
   header=24 if data[:4]==b'H1I1' else 32
   assert header+struct.unpack_from('<I',data,20)[0]==len(data)
   records.append(struct.pack('<4I',len(strings),32+size+len(payload),len(data),zlib.crc32(data)))

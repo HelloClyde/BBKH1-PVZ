@@ -1,12 +1,17 @@
 """Lay out existing H1-density A8 glyph pixels as independently readable tiles."""
 from pathlib import Path
 import hashlib,json,struct,zlib
+from resource_inputs import input_path,ARCHIVE
 ROOT=Path(__file__).resolve().parents[1]
 REL='data/font-tiles.h1ft'
 
 def encode(base):
     fonts=[];unique={bytes(256):0};payload=bytearray();tables=[]
-    for path in sorted((base/'data').glob('h1zh*.h1a')):
+    folders=[base/'data']
+    if Path(base).resolve()==(ROOT/'private/resources-h1-wide').resolve():folders.append(ARCHIVE/'data')
+    names={p.name for folder in folders for p in folder.glob('h1zh*.h1a')}
+    for name in sorted(names):
+        path=input_path(base,'data/'+name)
         src=path.read_bytes();magic,w,h,ch,flags,n,sw,sh=struct.unpack_from('<4s7I',src)
         assert (magic,ch,flags,n,len(src))==(b'H1I2',1,1,sw*sh,32+sw*sh)
         cols=(sw+15)//16;rows=(sh+15)//16;table=[]
@@ -37,7 +42,7 @@ def encode(base):
     assert len(data)==total
     # Reconstruct every physical pixel, including edge tiles, without resampling.
     for f,table in zip(fonts,tables):
-        src=(base/'data'/f"{f['name']}.h1a").read_bytes()[32:];sw=f['storage_width'];sh=f['storage_height']
+        src=input_path(base,'data/'+f"{f['name']}.h1a").read_bytes()[32:];sw=f['storage_width'];sh=f['storage_height']
         for y in range(sh):
             for x in range(sw):
                 off,crc=table[(y//16)*f['columns']+x//16]

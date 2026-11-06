@@ -7,6 +7,8 @@ def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('--host',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
  p.add_argument('--entry',required=True);p.add_argument('--output',type=Path,required=True)
+ p.add_argument('--resources',type=Path,default=ROOT/'private/resources-h1-wide')
+ p.add_argument('--wrap',action='append',default=[],help='Observe a production C reader through a test-only linker wrapper')
  a=p.parse_args();host=a.host.resolve();out=a.output.resolve();assert out.is_relative_to(ROOT/'build');out.mkdir(parents=True,exist_ok=False)
  assert a.entry.replace('_','').isalnum()
  for n in ('run','save'):(out/n).mkdir()
@@ -22,12 +24,13 @@ def main():
  for src in (out/'observer.cpp',a.probe.resolve()):
   obj=out/(src.stem+'.o');r=subprocess.run([cxx,*report['flags'],'-std=c++20','-c',str(src),'-o',str(obj)],env=env,capture_output=True,text=True)
   (out/(src.stem+'.compile.log')).write_text(r.stdout+r.stderr,encoding='utf8');assert not r.returncode,r.stderr;objects.append(obj)
- exe=out/'probe.exe';r=subprocess.run([cxx,'-Wl,--gc-sections','-static-libstdc++','-static-libgcc','-o',str(exe),*map(str,objects),'-lws2_32','-luser32','-lgdi32','-lwinmm','-limm32','-lshlwapi','-lshell32','-lpsapi'],env=env,capture_output=True,text=True)
+ assert all(s.replace('_','').isalnum() for s in a.wrap)
+ exe=out/'probe.exe';r=subprocess.run([cxx,'-Wl,--gc-sections',*('-Wl,--wrap='+s for s in a.wrap),'-static-libstdc++','-static-libgcc','-o',str(exe),*map(str,objects),'-lws2_32','-luser32','-lgdi32','-lwinmm','-limm32','-lshlwapi','-lshell32','-lpsapi'],env=env,capture_output=True,text=True)
  (out/'link.log').write_text(r.stdout+r.stderr);assert not r.returncode,r.stderr
- env.update(PVZ_RESOURCE_DIR=(ROOT/'private/resources-h1-wide').as_posix()+'/',PVZ_SAVE_DIR=(out/'save').as_posix()+'/',PVZ_HOST_OUTPUT=(out/'run').as_posix(),PVZ_HOST_MAX_FRAMES='5',PVZ_HOST_SPEED='100')
+ env.update(PVZ_RESOURCE_DIR=a.resources.resolve().as_posix()+'/',PVZ_SAVE_DIR=(out/'save').as_posix()+'/',PVZ_HOST_OUTPUT=(out/'run').as_posix(),PVZ_HOST_MAX_FRAMES='5',PVZ_HOST_SPEED='100')
  with (out/'console.log').open('w') as f:r=subprocess.run([str(exe)],cwd=ROOT,env=env,stdout=f,stderr=f,timeout=180)
  assert not r.returncode,f'Probe exit {r.returncode}: {out}/console.log'
- (out/'identity.json').write_text(json.dumps(dict(host_report=sha(host/'compile-report.json'),probe=sha(a.probe),executable=sha(exe)),indent=2)+'\n')
+ (out/'identity.json').write_text(json.dumps(dict(host_report=sha(host/'compile-report.json'),probe=sha(a.probe),executable=sha(exe),test_linker_wrappers=a.wrap),indent=2)+'\n')
  for f in (out/'run').glob('*verification.json'):print(f.read_text())
 
 if __name__=='__main__':main()

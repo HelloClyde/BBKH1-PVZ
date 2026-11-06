@@ -19,8 +19,11 @@
 #include "Common.h"
 #include <zlib.h>
 extern "C" volatile uint32_t pvzh1_actor_pose_diagnostic[12];
+extern "C" volatile uint32_t pvzh1_actor_page_diagnostic[8];
+extern void H1ActorPosePageTestSlots(unsigned);
 namespace{void Check(bool ok,const char* why){if(!ok)throw std::runtime_error(why);}}
 extern "C" void pvzh1_actor_pose_engine_probe(){
+ H1ActorPosePageTestSlots(2); // Exercise reader pointers across frequent LRU evictions.
  PlayerInfo profile;profile.mName="POSE_TEST";profile.mLevel=2;auto* old=gLawnApp->mPlayerInfo;gLawnApp->mPlayerInfo=&profile;
  gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);auto* board=gLawnApp->mBoard;
  board->AddPlant(2,1,SeedType::SEED_PEASHOOTER);board->AddPlant(3,2,SeedType::SEED_SUNFLOWER);board->AddZombieInRow(ZombieType::ZOMBIE_NORMAL,2,0);
@@ -59,7 +62,14 @@ extern "C" void pvzh1_actor_pose_engine_probe(){
  Check(replays>=comparisons/3,"pose path was bypassed");
  pvzh1_actor_pose_shutdown();Check(!pvzh1_actor_pose_diagnostic[0],"pose shutdown leaked");
  const std::string resourceFolder=Sexy::GetResourceFolder();std::ifstream input(Sexy::GetResourcePath("actor-poses.h1ap"),std::ios::binary);
- std::vector<char> original((std::istreambuf_iterator<char>(input)),{});const auto temp=std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"bad-assets";std::filesystem::create_directory(temp);Sexy::SetResourceFolder(temp.string());
+ std::vector<char> encoded((std::istreambuf_iterator<char>(input)),{}),original=encoded;
+ if(encoded.size()>=32&&!std::memcmp(encoded.data(),"H1PZ",4)){
+  auto word=[&](unsigned at){uint32_t n;std::memcpy(&n,encoded.data()+at,4);return n;};
+  original.resize(word(8));for(unsigned i=0;i<word(12);++i){auto offset=word(32+i*12),length=word(36+i*12);uLongf n=std::min(size_t(4096),original.size()-i*4096);
+   Check(uncompress((Bytef*)original.data()+i*4096,&n,(const Bytef*)encoded.data()+32+word(24)+offset,length)==Z_OK,"independent actor fixture decode failed");}
+ }
+ Check(pvzh1_actor_page_diagnostic[7]>0&&!pvzh1_actor_page_diagnostic[4]&&pvzh1_actor_page_diagnostic[1]<=8192,"paged cache exceeded two-slot stress limit");
+ const auto temp=std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"bad-assets";std::filesystem::create_directory(temp);Sexy::SetResourceFolder(temp.string());
  unsigned failures=0;
  auto rejected=[&](){auto before=pvzh1_actor_pose_diagnostic[7];H1ActorPosePrepare();Check(!pvzh1_actor_pose_diagnostic[0]&&pvzh1_actor_pose_diagnostic[7]==before+1,"malformed pack was accepted or leaked");
   H1ActorPosePrepare();Check(pvzh1_actor_pose_diagnostic[7]==before+1,"failed pack retried each draw");pvzh1_actor_pose_shutdown();++failures;};
@@ -72,6 +82,9 @@ extern "C" void pvzh1_actor_pose_engine_probe(){
   if(corruption==4){uint32_t entries;std::memcpy(&entries,bytes.data()+16,4);bool changed=false;for(unsigned i=0;i<entries;++i){uint32_t packet;std::memcpy(&packet,bytes.data()+64+i*24+12,4);if(bytes[packet+6]==1){uint32_t bad=0xffffffffu;std::memcpy(bytes.data()+packet+24,&bad,4);changed=true;break;}}Check(changed,"missing shared flash reference fixture");uint32_t crc=crc32(0,reinterpret_cast<const Bytef*>(bytes.data()+64),bytes.size()-64);std::memcpy(bytes.data()+40,&crc,4);}
   {std::ofstream f(temp/"actor-poses.h1ap",std::ios::binary);f.write(bytes.data(),bytes.size());}rejected();
  }
+ for(unsigned fault=0;fault<3;++fault){auto bytes=encoded;if(fault==0)bytes.resize(40);if(fault==1)bytes.back()^=1;if(fault==2)bytes[8]^=16;
+  {std::ofstream f(temp/"actor-poses.h1ap",std::ios::binary);f.write(bytes.data(),bytes.size());}rejected();}
+ H1ActorPosePageTestSlots(32);
  Sexy::SetResourceFolder(resourceFolder);h1DirtyCanvas.enabled=true;gLawnApp->KillBoard();gLawnApp->mPlayerInfo=old;
  std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"actor-pose-engine-verification.json");out<<"{\"passed\":true,\"whole_frame_comparisons\":"<<comparisons<<",\"pose_replays\":"<<replays<<",\"color_override_guards\":"<<guarded<<",\"LCD_bitmap_boundary_cases\":"<<screenCrops<<",\"missing_or_malformed_packs\":"<<failures<<",\"shutdown_bytes\":0}\n";
 }

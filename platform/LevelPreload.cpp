@@ -49,7 +49,14 @@ void H1PreloadCurrentBoard(LawnApp* app){
     pvzh1_level_loading_step(10);
     pvzh1_music_warm_game();
     pvzh1_level_loading_step(25);
-    H1ActorPosePrepare();
+    // The baked actor bundle has no useful preview poses. Before selection,
+    // keep this memory available to the original intro/chooser definitions.
+    // Early lawns need their baked sod animation before play, and continued
+    // games already have real packet types, so those still prepare here.
+    bool packetsChosen=board->mSeedBank&&board->mSeedBank->mNumPackets>0;
+    if(packetsChosen)for(int i=0;i<board->mSeedBank->mNumPackets&&i<SEEDBANK_MAX;++i)
+        packetsChosen&=int(board->mSeedBank->mSeedPackets[i].mPacketType)>=0;
+    if(!board->ChooseSeedsOnCurrentLevel()||packetsChosen)H1ActorPosePrepare();
     pvzh1_level_loading_step(45);
     H1EarlyLawnPrepare(app->mBoard);
     pvzh1_level_loading_step(55);
