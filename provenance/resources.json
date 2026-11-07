@@ -66,6 +66,7 @@
     "data/pix118bold.h1a": "d671d22d4bf3e4fac5998957c09c238f9e0d44bda7b1c30290e00a54af367179",
     "data/pix118bold.txt.h1fc": "1ae644c7bc21889b1f37734196687f9f55f10237e66d9d669973ddbf527d735c",
     "early-lawns.h1lb": "17bd2a43b1d210a355a6a06c5bce88c2888ae2015a94d05903edecf5c87c2f5e",
+    "first-intro.h1if": "4b27984fc1d15dbbbbde782e0364419726bca69d75b8e0d755d8573648ca5e8c",
     "h1menu/adventure.h1mb": "6bfce8616b8c2f8fb220bdea6457a6a299b74ea1f2e1d79fd975ab3c516927f2",
     "h1menu/selector-wide.h1mb": "b7b75f330144218de855f235346a07b8a1cc0bb4333dd9042fd3fb44ddf86e99",
     "image-metadata.h1x": "317db4a7f8905e9272c320078541a31568aebdbe98d65f00f7c24ec9ef3589fc",
@@ -2574,7 +2575,7 @@
     "reanim/zombieswon.reanim.h1d": "0b664c03e70aae08d94e859f6ac207900b0feaa0a46cb773e175ad54ebdf01eb",
     "reanim/zombieswon_.h1i": "e4bc9aca42ee264098882fb1f712e6d8ba5d7e1358ecaff01f59bdce7c455dad",
     "reanim/zombieswonscreen.h1i": "2607ff727c27919aaec17da673fe6ce6ed6ee964f06e6f734066f8b2beddb953",
-    "resource-files.h1fi": "4fcf1bb0840526e61168fae4ad76fff17d0c0ba7d6590db4d21765a7ae450b2d",
+    "resource-files.h1fi": "eff6e062b02f024b15bf61bde3e6256a45f27ba4d38bfdc6fd6f6b9724e90a49",
     "reward-effects.h1re": "92358c3e58b32fdd7774e6c94a5c606ad3887ba7d8ba6665ac195e1aa0458e22",
     "sod-roll.h1ap": "be1e7899bb4a125c3a65a8a02f3639a39002c8889a773e89d2edccc3d06e19a2",
     "sounds/achievement.h1pcm": "2db6d55b925cb0145877c67960cc49f28f0e7eaa81b67487c1bc16ea3122025d",
@@ -2679,6 +2680,7 @@
     "sounds/magnetshroom.h1pcm": "ff9d512d0841605905a357660d171da2ebc1ae84e5e93b60c2a6f8adfed05095",
     "sounds/mainmusic-award.xm": "fb66dc3dfa6de29bd4fd557d6ec8d8ca73c48ad7a4f9c63b78e14134ad16ee37",
     "sounds/mainmusic-day.xm": "22493d32ab94338fce9566268ddb9af169f36c540dca190ed602f364e16e385c",
+    "sounds/mainmusic-intro.xm": "9234712f0696780afd50e81602cd9b1018da51052f79f69da4f62453828701c9",
     "sounds/mainmusic-title.h1pcm": "2e9b71c4c3f954eabe2283779991cd3d6b5283817e3882619c7d91c24111b68d",
     "sounds/mainmusic.xm": "d0b20106d60abf6bf873db6fa5aca2749dacf27345115becca383f3197d02ef8",
     "sounds/mainmusic_hihats.xm": "6a5abaf0d2f8af7455d607f3e497f8bcfb4b4b173ea98143feccb58a0ab2cf3e",
@@ -2757,7 +2759,7 @@
     "sunflower-glow.h1ap": "b3217bd20b6c00f617fbc8cc032e94117829555ee18ca970ade72a51c08682f9",
     "zombie-hit.h1ap": "821f4c97f6d8d4e689a213045108f65060c60549a587637e6eeec2955707fdf7"
   },
-  "bytes": 139832497,
-  "count": 2755,
+  "bytes": 155445398,
+  "count": 2757,
   "locale": "zh_CN"
 }

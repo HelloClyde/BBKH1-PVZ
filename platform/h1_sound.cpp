@@ -12,6 +12,7 @@
 #include <string>
 #include <zlib.h>
 #include <vector>
+#include <stdexcept>
 extern "C" int pvzp_pcm_open();
 extern "C" unsigned pvzp_pcm_writable();
 extern "C" void pvzp_pcm_write(const int16_t*,unsigned);
@@ -86,6 +87,31 @@ extern "C" void pvzh1_sound_warmup(){
     ok=ok&&consumed==bytes&&fgetc(file)==EOF;fclose(file);
     if(!ok){for(auto& entry:cached_effects)entry.first->cached=nullptr;cached_effects.clear();pvzh1_sound_bank_diagnostic[0]=pvzh1_sound_bank_diagnostic[1]=0;++pvzh1_sound_bank_diagnostic[3];}
     else ++pvzh1_sound_bank_diagnostic[2];
+}
+extern "C" void pvzh1_sound_warm_intro(){
+    const std::string required[]={GetResourcePath("sounds/hugewave.h1pcm"),GetResourcePath("sounds/siren.h1pcm")};
+    // Retire unrelated idle game effects before the large opening prefetch.
+    // Active voices retain their backing storage until the ordinary stop.
+    for(auto it=cached_effects.begin();it!=cached_effects.end();){
+        const auto* chunk=it->first;bool active=false;
+        for(const auto& voice:voices)if(voice.cached==it->second.data()&&voice.chunk==chunk){active=true;break;}
+        if(!active&&required[0]!=chunk->path&&required[1]!=chunk->path){
+            it->first->cached=nullptr;--pvzh1_sound_bank_diagnostic[0];pvzh1_sound_bank_diagnostic[1]-=it->second.size()*2;it=cached_effects.erase(it);
+        }else ++it;
+    }
+    sound_bank_attempted=false;
+    for(const auto& path:required){
+        Mix_Chunk* chunk=nullptr;for(auto* candidate:loaded_chunks)if(path==candidate->path){chunk=candidate;break;}
+        if(!chunk||!chunk->samples||chunk->samples>16000*30)throw std::runtime_error("Missing opening sound metadata");
+        if(chunk->cached)continue;
+        FILE* file=fopen(path.c_str(),"rb");unsigned char header[16];
+        bool ok=file&&fread(header,1,16,file)==16&&!memcmp(header,"H1PC",4)&&u32le(header+4)==1&&u32le(header+8)==16000&&u32le(header+12)==chunk->samples;
+        auto& data=cached_effects[chunk];
+        if(ok){data.resize(chunk->samples);ok=fread(data.data(),2,chunk->samples,file)==chunk->samples&&fgetc(file)==EOF;}
+        if(file)fclose(file);
+        if(!ok){cached_effects.erase(chunk);throw std::runtime_error("Damaged opening sound");}
+        chunk->cached=data.data();++pvzh1_sound_bank_diagnostic[0];pvzh1_sound_bank_diagnostic[1]+=data.size()*2;
+    }
 }
 static std::map<std::string,unsigned> sound_index;
 extern "C" { volatile uint32_t pvzh1_sound_index_diagnostic[4]; }

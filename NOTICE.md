@@ -1,5 +1,14 @@
 # 来源与许可记录
 
+## tinyh264 / h264bsd
+
+H.264 对照工具使用 Apache-2.0 的 tinyh264/h264bsd 解码器，固定上游提交
+`524a702b6d98f8b9271238fdda9a064a1e6861e7`，沿用本地 PAL3 H1 移植的访问单元边界修复和 CLZ 优化。
+源码位于 `vendor/tinyh264/src/`；上游来源、适配说明和文件哈希见
+`vendor/tinyh264/ORIGIN.json`，完整许可见 `vendor/tinyh264/LICENSE`。
+Copyright (C) 2009 The Android Open Source Project；保留各源文件中的原始版权与许可声明。
+正式开场使用离线 RGB565 帧差，H.264 解码器不链接进游戏 BDA。
+
 ## PvZ-Portable
 
 - 来源：<https://github.com/wszqkzqk/PvZ-Portable>

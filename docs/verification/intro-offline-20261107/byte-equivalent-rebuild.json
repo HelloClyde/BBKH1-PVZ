@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "tested_bda_sha256": "f74f2f0a902b8267c82e759d80c94e29cb88143a4248a9618fab7c78d01dc1cc",
+  "rebuild_bda_sha256": "f74f2f0a902b8267c82e759d80c94e29cb88143a4248a9618fab7c78d01dc1cc",
+  "tested_elf_sha256": "a4b0ff7debde424abc15fb481e6229bf2d8edf98a405863eef919a86cf50dafa",
+  "rebuild_elf_sha256": "a4b0ff7debde424abc15fb481e6229bf2d8edf98a405863eef919a86cf50dafa",
+  "tested_receipt_sha256": "8dd49cab45bf42a978d3970b4e918383c2c7a0f8ab48928a7b7d8a8f76090bb9",
+  "rebuild_receipt_sha256": "f10d04b13556633c4ec260b7ade5de51f49ec1ee626e5e1d018ab4e4540e4271",
+  "changed_native_inputs": [
+    "source_inputs/platform/video/IntroFrames.c"
+  ],
+  "tested_source_sha256": "a3206fd6ea7f1d052748cc77aab874f2df6fb48142a2a311eeae64d3e55ba1c9",
+  "current_source_sha256": "8173ebab8bc08406fcba2247878c665e05ac633942b22e1582218c00f2fd0499",
+  "edit": "Remove one space on an otherwise empty line; preserve every newline. Compiler outputs are byte identical; existing physical verification is reused."
+}

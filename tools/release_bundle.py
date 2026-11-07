@@ -93,6 +93,7 @@ def build_bundle(directory, tag=""):
     resources = read(ROOT / "provenance/resources.json")
     sdk = read(ROOT / "SDK.json")
     bda_sha = sha(directory / "H1PVZPortable.bda")
+    tested_scope = read(directory / "native-verification.json").get("scope", "详细验证范围见 native-verification.json。")
     manifest = {"source_commit": commit, "tag": tag, "sdk_commit": sdk["commit"],
                 "distribution": "hardware-tested-prebuilt", "program_sha256": bda_sha,
                 "resource_files": len(resources["files"]),
@@ -108,7 +109,9 @@ def build_bundle(directory, tag=""):
 
 CI 校验固定 SDK、源码输入、资源清单、BDA 格式及真机证据，打包仓库中已通过真机验证的程序，下载制品后再次核验每个文件和 ZIP 成员。本流程没有重新编译 C/C++，也没有重新执行真机测试。
 
-本版修复新玩家第一关草坪滚动结束后的异常退出。真机验证的确切范围、存档读回和现存限制见 `native-verification.json` 及仓库验证文档；历史性能数据明确对应当时的程序哈希。本次不把旧版的密集场景计时当成新程序重测结果。首次新玩家专属开场仍慢，尚未达到整体 20 FPS，部分动态状态仍未完全离线烘焙。
+本版真机验证：{tested_scope}
+
+详细性能口径、存档读回和现存限制见 `native-verification.json` 及仓库验证文档；历史数据对应当时的程序哈希，不作为本版重测结果。
 
 源码提交：`{commit}`
 SDK 提交：`{sdk['commit']}`

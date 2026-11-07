@@ -7,7 +7,8 @@ from build_paths import ROOT,TOOLCHAIN,RUNTIME_PREFIX
 HOT=('SoftwareRaster.cpp','RenderPlanCache.cpp','TextReplay.cpp','ActorPose.cpp','EarlyLawn.cpp','RewardEffects.cpp','BoardLoading.cpp',
      'PhysicalScreen.cpp','GLImage.cpp','GLInterface.cpp','MemoryImage.cpp',
      'MemoryImageCache.cpp','ImageFont.cpp','Reanimator.cpp','h1_host.cpp',
-     'mixer.c','period.c','SelectorOffline.cpp')
+     'mixer.c','period.c','SelectorOffline.cpp','IntroMovie.cpp',
+     'IntroFrames.c')
 def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('--prefix',type=Path,default=RUNTIME_PREFIX)

@@ -379,7 +379,15 @@ bool PvzpLoadNextResource()
     assert text.count(needle)==1
     text=text.replace(needle,'\tif(!H1PausedBoardReplay(this,g)){DrawGameObjects(g);H1SodOfflineDraw(this,g);H1PausedBoardCapture(this,g);}\n}')
     needle='Board::~Board() = default;';assert text.count(needle)==1
-    text=text.replace(needle,'Board::~Board(){H1PausedBoardForget(this);}')
+    text=text.replace(needle,'Board::~Board(){H1IntroMovieRelease(this);H1PausedBoardForget(this);}')
+    text='#include "video/IntroMovie.h"\n'+text
+    needle='void Board::Draw(Graphics* g)\n{';assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    if(H1IntroMovieDraw(this,g))return;')
+    needle='\tWidget::Update();\n\tMarkDirty();\n\n\tmBoardUpdateCounter++;\n\tmCutScene->Update();'
+    if text.count(needle)!=1:raise RuntimeError('Pinned board update changed')
+    text=text.replace(needle,'\tWidget::Update();\n\tMarkDirty();\n'
+        '    if(H1IntroMovieActive(this)){++mBoardUpdateCounter;mCutScene->Update();return;}\n'
+        '\n\tmBoardUpdateCounter++;\n\tmCutScene->Update();')
     board.write_text(text,encoding='utf8',newline='\n')
 
     text=board.read_text(encoding='utf8')
@@ -408,6 +416,32 @@ bool PvzpLoadNextResource()
     start=text.index('// Sod rolling on early adventure levels')
     needle='\t\t\tif (mBoard->mLevel == 1)';at=text.index(needle,start)
     text='#include "actors/ActorPose.h"\n'+text[:at]+text[at:].replace(needle,'            if(H1SodOfflineBegin(mBoard)){}\n            else if (mBoard->mLevel == 1)',1)
+    cut.write_text(text,encoding='utf8',newline='\n')
+
+    # The first-player movie is a full viewport scene, not an 800px board.
+    # Its black/fade layers and centered captions must cover the H1 widescreen.
+    text=cut.read_text(encoding='utf8')
+    start=text.index('void CutScene::DrawIntro(Graphics* g)')
+    end=text.index('bool CutScene::ShouldRunUpsellBoard()',start)
+    text='#include "graphics/ScreenLayout.h"\n'+text[:start]+text[start:end].replace('BOARD_WIDTH','Sexy::H1LogicalWidth')+text[end:]
+    needle='void CutScene::LoadIntroBoard()\n{\n\tClearUpsellBoard();\n\tmApp->mMuteSoundsForCutscene = true;'
+    assert text.count(needle)==1
+    text='#include "video/IntroMovie.h"\n'+text.replace(needle,needle+'\n    if(H1IntroMovieActive(mBoard))return;')
+    needle='void CutScene::PreloadResources()\n{'
+    assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    if(mApp->mGameMode==GAMEMODE_INTRO&&H1IntroMovieRequired()){mPreloaded=true;mPlacedZombies=true;mLoadedResourceNames.clear();return;}')
+    needle='void CutScene::PlaceStreetZombies()\n{'
+    assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    if(mApp->mGameMode==GAMEMODE_INTRO&&H1IntroMovieRequired()){mPlacedZombies=true;return;}')
+    needle='void CutScene::PlaceLawnItems()\n{'
+    assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    if(mApp->mGameMode==GAMEMODE_INTRO&&H1IntroMovieRequired()){mPlacedLawnItems=true;return;}')
+    needle='\tif (mCutsceneTime == TimeIntro_End)\n\t{'
+    assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n        H1IntroMovieCompleted(mBoard);')
+    needle='mApp->AddPvzpParticle(400, 300, aRenderPosition, ParticleEffect::PARTICLE_SCREEN_FLASH);'
+    if text.count(needle)!=1:raise RuntimeError('Pinned opening flash changed')
+    text=text.replace(needle,'if(!H1IntroMovieRequired())'+needle)
     cut.write_text(text,encoding='utf8',newline='\n')
 
     # Seed selection draws static packets, not every unlocked plant's full

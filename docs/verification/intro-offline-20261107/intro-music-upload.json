@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\sounds\\mainmusic-intro.xm",
+  "target": "B:\\应用\\数据\\游戏\\PVZ\\sounds\\mainmusic-intro.xm",
+  "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c736f756e64735c6d61696e6d757369632d696e74726f2e786d",
+  "phase": "done",
+  "completed": true,
+  "size": 2678396,
+  "crc32": 3883977590,
+  "sha256": "9234712f0696780afd50e81602cd9b1018da51052f79f69da4f62453828701c9",
+  "token": 13,
+  "received": 2678396,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 13,
+    "size": 2678396,
+    "received": 2678396,
+    "expected_crc": 3883977590,
+    "actual_crc": 3883977590,
+    "verify_offset": 2678396,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 8,
+    "old_size": 0,
+    "old_crc": 0,
+    "last_activity_tick": 249910,
+    "step_count": 1316,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "B:\\应用\\数据\\游戏\\PVZ\\sounds\\mainmusic-intro.xm",
+    "temporary": "B:\\应用\\数据\\游戏\\PVZ\\sounds\\H1D0000000D.TMP",
+    "backup": "B:\\应用\\数据\\游戏\\PVZ\\sounds\\H1D0000000D.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 192.84400000004098
+}

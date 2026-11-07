@@ -1,0 +1,18 @@
+{
+  "bda_sha256": "abb3d838128a6199f7364b49ae98f514b4ebeb3f05ae3c172a1a03c8ef18417e",
+  "resource_inventory_sha256": "5c9b58b3305dfd13d446d45cab28e070b670ad429e45c3e8cdf33edc2944d77f",
+  "raw_clock_hz": 40,
+  "presented_frames": 168,
+  "elapsed_ticks": 3133,
+  "frames_per_second": 2.144909032875838,
+  "draw_calls": 166,
+  "draw_ticks": 2188,
+  "update_calls": 2472,
+  "update_ticks": 837,
+  "input": "Natural first-player prologue, original 28 plants and16 decorative zombies",
+  "source_evidence": [
+    "build/first-level-repro-20261107/085-fixed-snapshot-1-result.json",
+    "build/first-level-repro-20261107/091-fixed-snapshot-4-result.json"
+  ],
+  "scope": "Reused measurements: baseline program and resources were unchanged before this task."
+}

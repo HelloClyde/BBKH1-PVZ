@@ -10,6 +10,8 @@
 #include "graphics/PresentationMap.h"
 #include "graphics/DirtyPresentation.h"
 #include "graphics/DirtyCanvas.h"
+#include "video/IntroMovie.h"
+#include "video/IntroFrames.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -67,8 +69,18 @@ extern "C" void pvzp_present_argb(const uint32_t *pixels,int w,int h){
     // H1 is a touch screen: pointer coordinates still drive input, while the
     // LCD presentation has no mouse/crosshair overlay.
     constexpr int hiddenPointer=-32768;
-    if(!dirtyPresentation.Present(out,pixels,w,h,hiddenPointer,hiddenPointer,mapping,h1DirtyCanvas.Presentation(pixels)))
-        H1PresentMapped(out,pixels,w,h,hiddenPointer,hiddenPointer,mapping);
+    uint32_t movieGeneration=0,movieFrame=0;
+    static volatile uint32_t* lastSurface=nullptr;static uint32_t lastGeneration=0,lastFrame=0;
+    if(const auto* movie=H1IntroMovieNativePixels(&movieGeneration,&movieFrame)){
+        if(out!=lastSurface||movieGeneration!=lastGeneration||movieFrame!=lastFrame){
+            H1IntroPresent565(movie,out);H1IntroMoviePresented();lastSurface=out;lastGeneration=movieGeneration;lastFrame=movieFrame;
+        }
+        dirtyPresentation.valid=false;dirtyPresentation.surface=nullptr;
+    }else{
+        lastSurface=nullptr;
+        if(!dirtyPresentation.Present(out,pixels,w,h,hiddenPointer,hiddenPointer,mapping,h1DirtyCanvas.Presentation(pixels)))
+            H1PresentMapped(out,pixels,w,h,hiddenPointer,hiddenPointer,mapping);
+    }
     pvzh1_dirty_present_diagnostic[0]=1;
     pvzh1_dirty_present_diagnostic[1]=dirtyPresentation.ResidentBytes();
     pvzh1_dirty_present_diagnostic[2]=dirtyPresentation.fullFrames;

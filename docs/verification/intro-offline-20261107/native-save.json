@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "bytes": 47752,
+  "sha256": "04309c226c654b7d1a450d6e2add2393ab00c3ec10ca7581f6807a71cdda90cd",
+  "header": "PVZP_SAVE4",
+  "version": 1,
+  "exact_payload_length": true,
+  "payload_crc32": 1094585814,
+  "native_B_write_and_debug_readback_valid": true
+}

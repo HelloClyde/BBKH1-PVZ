@@ -1,3 +1,5 @@
+#include "LawnApp.h"
+#include "video/IntroMovie.h"
 /* LGPL-3.0-or-later. Original tracker orders/channels through libxmp-lite.
  * MO3 is unpacked offline to XM; original music scheduling stays in Music.cpp.
  * Ogg credits use the same streamed H1PC format as sound effects.
@@ -55,6 +57,10 @@ static uint32_t little32(const unsigned char *p){return (uint32_t)p[0]|(uint32_t
 static std::string module_path(const Mix_Music *music){
     const std::string suffix="mainmusic.xm";
     const unsigned order=music->requested_order&65535;
+    if(gLawnApp&&gLawnApp->mGameMode==GAMEMODE_INTRO&&H1IntroMovieRequired()&&
+       order>=0x5e&&order<0x7a&&music->path.size()>=suffix.size()&&
+       music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
+        return music->path.substr(0,music->path.size()-3)+"-intro.xm";
     if(order>=0xdd&&order<0xec&&music->path.size()>=suffix.size()&&
        music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
         return music->path.substr(0,music->path.size()-3)+"-award.xm";
@@ -224,7 +230,7 @@ extern "C" int pvzp_music_has_audio(){
 extern "C" void pvzp_music_shutdown(void){while(!streams.empty())Mix_FreeMusic(streams.back());}
 /* Parse the shared game module while the board is loading, before its intro
  * starts. Starting playback later still uses the original orders/channels. */
-extern "C" void pvzh1_music_warm_game(){
+static void warm_music_order(int order){
     // The title PCM and in-game XM share the same descriptor in the game.
     // Acquiring its module also works while title PCM is still playing; it
     // does not replace the player or change its current order.
@@ -238,10 +244,14 @@ extern "C" void pvzh1_music_warm_game(){
                 music->pcm=file;music->title_streaming=true;music->title_samples.Clear();
             }else if(file)fclose(file);
         }
-        const int previous=music->requested_order;music->requested_order=0;
+        const int previous=music->requested_order;music->requested_order=order;
         acquire_module(music);music->requested_order=previous;return;
     }
 }
+extern "C" void pvzh1_music_warm_game(){warm_music_order(0);}
+// Original CutScene uses Pool / Watery Graves at XM order 0x5e.
+// Warm its actual module, rather than loading the unused daytime module too.
+extern "C" void pvzh1_music_warm_intro(){warm_music_order(0x5e);}
 /* Idle title PCM is a useful return-to-menu cache, but less valuable than
  * active game textures if an actual heap allocation needs its span. */
 extern "C" size_t pvzh1_music_release_idle(size_t){

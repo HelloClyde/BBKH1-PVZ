@@ -29,6 +29,40 @@ def main():
  assert not subprocess.check_output([*sdk_git,'status','--porcelain','--untracked-files=no'],text=True).strip(),'SDK has tracked edits'
  upstream=read(ROOT/'pinned-source-manifest.json');n=check_files(ROOT/'upstream',upstream['files'])
  assets=read(ROOT/'provenance/resources.json');count=check_files(ROOT/assets['directory'],assets['files'])
+ intro=read(ROOT/'provenance/offline-first-intro.json');movie=ROOT/assets['directory']/intro['runtime_path'];blob=movie.read_bytes()
+ header=struct.unpack_from('<16I',blob);assert header[:7]==(0x46493148,2,480,272,348,40,13890)
+ assert len(blob)==64+header[8]==intro['bytes'] and sha(movie)==intro['sha256']
+ assert zlib.crc32(blob[64:])==header[9] and intro['all_frames_roundtrip_rgb565']==348
+ at=64
+ for _ in range(header[4]):
+  shift,size=struct.unpack_from('<iI',blob,at);at+=8;assert -3<=shift<=3 and 0<size<=header[7] and at+size<=len(blob);at+=size
+ assert at==len(blob)
+ assert sha(ROOT/'tools/bake_first_intro.py')==intro['encoder_sha256']
+ assert sha(ROOT/'tools/tests/first_intro_export.cpp')==intro['exporter_sha256']
+ assert sha(ROOT/'platform/video/IntroMovie.cpp')==intro['runtime_source_sha256']
+ assert sha(ROOT/'platform/video/IntroFrames.c')==intro['decoder_source_sha256']
+ assert sha(ROOT/'tools/tests/intro_delta_encoder.c')==intro['predictor_source_sha256']
+ from bake_first_intro import colour_header
+ assert (ROOT/'platform/video/IntroColours.h').read_bytes()==colour_header()
+ assert sha(ROOT/'platform/video/IntroColours.h')==intro['colour_table_sha256']
+ assert sha(ROOT/'platform/h1_host.cpp')==intro['native_presentation_source_sha256']
+ intro_host=read(ROOT/intro['host_verification']);assert intro_host['passed'] and intro_host['frames']==348 and intro_host['cache_released'] and intro_host['natural_first_level']
+ assert intro_host['all_frames_match_independent_rgb565'] and intro_host['decoded_bgra_sha256']==intro_host['expected_bgra_sha256']==intro['expanded_bgra_sha256']
+ assert intro_host['consumed_space_reused'] and intro_host['repeated_frame_reused']
+ assert sha(ROOT/'tools/tests/first_intro_playback.cpp')==intro_host['test_source_sha256']
+ intro_music=read(ROOT/'provenance/offline-intro-music.json')
+ from bake_intro_music import prune
+ original=ROOT/assets['directory']/'sounds/mainmusic.xm'
+ compact=ROOT/assets['directory']/'sounds/mainmusic-intro.xm'
+ assert sha(original)==intro_music['source_sha256'] and sha(compact)==intro_music['output_sha256']
+ assert sha(ROOT/'tools/bake_intro_music.py')==intro_music['exporter_sha256']
+ compact_bytes,compact_meta=prune(original)
+ assert compact_bytes==compact.read_bytes() and all(intro_music[k]==v for k,v in compact_meta.items())
+ music_proof=read(ROOT/intro_music['verification'])
+ assert music_proof['passed'] and music_proof['sample_exact'] and music_proof['samples_compared']>=7251440
+ assert music_proof['input_sha256']=={original.name:sha(original),compact.name:sha(compact)}
+ assert sha(ROOT/'tools/audio/verify_intro_music.cpp')==music_proof['verifier_sha256']
+ check_files(ROOT/'vendor/tinyh264/src',read(ROOT/'vendor/tinyh264/ORIGIN.json')['files'])
  from verify_runtime_resources import verify as verify_runtime_resources
  verify_runtime_resources()
  from verify_plant_poses import verify as verify_plant_poses

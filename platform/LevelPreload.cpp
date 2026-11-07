@@ -17,10 +17,13 @@
 #include "graphics/RewardEffects.h"
 #include "graphics/MemoryImageCache.h"
 #include "graphics/MemoryImage.h"
+#include "video/IntroMovie.h"
 #include <set>
 #include <stdexcept>
 extern "C" void pvzh1_sound_warmup();
+extern "C" void pvzh1_sound_warm_intro();
 extern "C" void pvzh1_music_warm_game();
+extern "C" void pvzh1_music_warm_intro();
 extern "C" {volatile uint32_t pvzh1_level_preload_diagnostic[4];}
 extern "C" {volatile uint32_t pvzh1_board_replay_retirement_diagnostic[3];}
 extern "C" volatile uint32_t pvzh1_actor_pose_diagnostic[16];
@@ -91,8 +94,12 @@ static void PreloadCurrentBoard(LawnApp* app,bool enteringPlay){
     auto* board=app->mBoard;
     ++pvzh1_level_preload_diagnostic[0];
     pvzh1_level_loading_step(10);
-    pvzh1_music_warm_game();
+    if(app->mGameMode==GAMEMODE_INTRO&&H1IntroMovieRequired()){pvzh1_music_warm_intro();pvzh1_sound_warm_intro();}
+    else pvzh1_music_warm_game();
     pvzh1_level_loading_step(25);
+    // The decorative first-player battle is baked into target-size frames.
+    // Keep original CutScene clock/audio but don't warm unused actor assets.
+    if(H1IntroMoviePrepare(board)){pvzh1_level_loading_step(100);return;}
     // The baked actor bundle has no useful preview poses. Before selection,
     // keep this memory available to the original intro/chooser definitions.
     // Early lawns need their baked sod animation before play, and continued

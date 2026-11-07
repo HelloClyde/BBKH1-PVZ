@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "physical_screenshot": "intro-pan.png",
+  "matching_original_baked_frame_indices": [
+    265
+  ],
+  "display_bgra_sha256": "7fa19f230341a374afb2f9bc5badfaa1ca782e9923484594e269101cef517f0d",
+  "scope": "Full 480x272 native LCD screenshot equals the independently verified host replay pixel for pixel; screenshot obtained after the FPS sampling interval.",
+  "normalization": "PNG RGB decoded as opaque BGRA; the native framebuffer alpha byte is unused."
+}
