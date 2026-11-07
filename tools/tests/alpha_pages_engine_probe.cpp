@@ -14,7 +14,9 @@
 using namespace Sexy;
 namespace {void Check(bool v){if(!v)throw std::runtime_error("A8 page equivalence or cleanup failed");}}
 extern "C" void pvzh1_alpha_pages_probe(){
-    std::unique_ptr<GLImage> image(gLawnApp->GetImage("data/h1zh17",false));Check(image!=nullptr);
+    // CJK fonts now use H1F glyph packs, not image atlases. Exercise the
+    // remaining real A8 atlas rather than a removed historical font image.
+    std::unique_ptr<GLImage> image(gLawnApp->GetImage("data/briannetod32outline",true));Check(image!=nullptr);
     H1RenderPlanTestEnable(false);
     uint32_t w=0,h=0;const unsigned char* dense=nullptr;
     H1ImageCacheAlphaPagesTestEnable(false);Check(H1ImageCachePrepareStorageAlpha(image.get(),&dense,&w,&h));
@@ -23,19 +25,19 @@ extern "C" void pvzh1_alpha_pages_probe(){
     const unsigned char*const* pages=nullptr;Check(H1ImageCachePrepareStorageAlphaPages(image.get(),&pages,&w,&h));
     for(size_t i=0;i<reference.size();++i)Check(pages[i>>10][i&1023]==reference[i]);
     unsigned cases=0;
-    for(int mode:{Graphics::DRAWMODE_NORMAL,Graphics::DRAWMODE_ADDITIVE})for(int tint:{255,129,47})for(int y:{0,250,900}){
+    for(int mode:{Graphics::DRAWMODE_NORMAL,Graphics::DRAWMODE_ADDITIVE})for(int tint:{255,129,47})for(int y:{0,8,24}){
         std::vector<uint32_t> expected;
         for(bool paged:{false,true}){
             H1ImageCacheAlphaPagesTestEnable(paged);
             MemoryImage target(gLawnApp);target.Create(480,272);target.SetImageMode(false,false);
             auto* bits=target.GetBits();for(unsigned i=0;i<480*272;++i)bits[i]=0xff000000u|((i*0x164b35u+17)&0xffffffu);
             SexyTransform2D matrix;matrix.Scale(.45f,.453333333f);matrix.Translate(13.5f,11.25f);
-            H1DrawTransformed(&target,image.get(),Rect(37,y,600,400),Rect(5,7,410,250),Color(90,190,255,tint),mode,matrix,true);
+            H1DrawTransformed(&target,image.get(),Rect(37,y,600,24),Rect(5,7,410,250),Color(90,190,255,tint),mode,matrix,true);
             if(!paged)expected.assign(bits,bits+480*272);else Check(expected==std::vector<uint32_t>(bits,bits+480*272));
         }++cases;
     }
     unsigned failures=0;
-    for(int point:{0,1,17,400}){
+    for(int point:{0,1,17,40}){
         H1ImageCacheAlphaPagesTestEnable(true);H1ImageCacheAlphaTestFailure(point,-1);
         Check(!H1ImageCachePrepareStorageAlphaPages(image.get(),&pages,&w,&h));Check(!pages);
         H1ImageCacheStorageStats stats{};Check(H1ImageCacheGetStorageStats(image.get(),&stats)&&!stats.bytes);

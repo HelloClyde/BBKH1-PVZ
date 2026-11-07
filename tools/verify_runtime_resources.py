@@ -16,6 +16,12 @@ def verify():
     if preferred:
         assert sha(ROOT/'tools/prune_preferred_alpha.py')==preferred['encoder_sha256']
         for n,h in preferred['reader_source_sha256'].items():assert sha(ROOT/n)==h,n
+        if preferred.get('reader_revision_validation'):
+            revision=json.loads((ROOT/preferred['reader_revision_validation']).read_text('utf8'))
+            assert revision['passed'] and revision['preferred_alpha_reader_source_sha256']==preferred['reader_source_sha256']
+    for source in proof.get('unused_runtime_sources',[]):
+        assert not (base/source['runtime_path']).exists()
+        assert sha(ROOT/source['archive_path'])==source['sha256']
     for n,info in proof['removed'].items():
         assert not (base/n).exists(),n
         assert sha(archive/n)==info['baseline_sha256'],n
@@ -33,6 +39,10 @@ def verify():
     for n,i in proof['virtual_images'].items():
         assert (base/i['backing']).is_file() and not (base/n).exists()
         assert read_image(input_path(base,n))[0]==i['info'];infos[n]=i['info']
+    from verify_cached_frames import verify as verify_cached_frames
+    cached = verify_cached_frames(base)
+    assert not infos.keys() & cached.keys()
+    infos.update(cached)
     from optimize_h1_resources import metadata
     assert (base/'image-metadata.h1x').read_bytes()==metadata(infos)
     assert not any(p.suffix in ('.ogg','.mo3','.reanim','.json','.sh') for p in base.rglob('*') if p.is_file())

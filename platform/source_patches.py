@@ -58,10 +58,14 @@ def apply(source_root:Path):
     replace(source_root/'main.cpp','int main(int argc, char** argv)','int pvzp_upstream_main(int argc, char** argv)')
     lawn=source_root/'LawnApp.cpp'
     text=lawn.read_text(encoding='utf8')
-    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n#include "graphics/RewardEffects.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\n'+text
+    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n#include "graphics/RewardEffects.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\nextern void H1RetireBoardReplay();\n'+text
+    # These are the confirmed return-to-menu and app-quit saves. Replays are
+    # no longer drawn, while all original simulation data is still available.
+    if text.count('mBoard->TryToSaveGame();')!=2:raise ValueError('Confirmed board-exit save boundaries changed')
+    text=text.replace('mBoard->TryToSaveGame();','H1RetireBoardReplay();mBoard->TryToSaveGame();')
     anchor='void LawnApp::ShowGameSelector()\n{\n\tKillBoard();'
     assert text.count(anchor)==1
-    text=text.replace(anchor,anchor+'\n    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();pvzh1_reward_effect_shutdown();',1)
+    text=text.replace(anchor,anchor+'\n    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();pvzh1_reward_effect_shutdown();\n    {extern void H1ReanimationDefinitionsTrimForMenu();H1ReanimationDefinitionsTrimForMenu();}',1)
     anchor='void LawnApp::ShowAwardScreen(AwardType theAwardType, bool theShowAchievements)\n{'
     assert text.count(anchor)==1
     text=text.replace(anchor,anchor+'\n    pvzh1_reward_effect_shutdown();',1)
@@ -100,6 +104,7 @@ def apply(source_root:Path):
         H1LevelLoadingScope selectedLoadingScope; H1PreloadCurrentBoard(this);
         H1RewardEffectsPrepare();
     }else{H1PreloadCurrentBoard(this);H1RewardEffectsPrepare();}
+    H1ActorPoseFinishSod();
 \tmBoard->StartLevel();''',1)
     assert text.count('\t\t\tDoContinueDialog();')==2
     text=text.replace('\t\t\tDoContinueDialog();','            H1PreloadCurrentBoard(this);\n            H1RewardEffectsPrepare();\n\t\t\tDoContinueDialog();')
@@ -108,7 +113,7 @@ def apply(source_root:Path):
     # board is ready); release them before building either replacement.
     anchor='void LawnApp::MakeNewBoard()\n{\n\tKillBoard();'
     assert text.count(anchor)==1
-    text=text.replace(anchor,anchor+'\n    pvzh1_reward_effect_shutdown();',1)
+    text=text.replace(anchor,anchor+'\n    pvzh1_actor_pose_shutdown();\n    pvzh1_reward_effect_shutdown();',1)
     lawn.write_text(text,encoding='utf8')
     # Save completes before DoBackToMain tears down the board. Its PCM tail
     # must drain before config writes / object destruction, too, rather than
@@ -393,6 +398,10 @@ bool PvzpLoadNextResource()
     text=text.replace(needle,needle+'\n    if(H1ActorPoseDraw(this,g,theRenderGroup))return;')
     needle='void Reanimation::StartBlend(int theBlendTime)\n{';assert text.count(needle)==1
     text=text.replace(needle,needle+'\n    H1ActorPoseNoteBlend(this,theBlendTime);')
+    needle='void Reanimation::ReanimationDelete()\n{';assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    H1ActorPoseForget(this);')
+    needle='void ReanimationFreeDefinition(ReanimatorDefinition* theDefinition)\n{';assert text.count(needle)==1
+    text=text.replace(needle,needle+'\n    H1ActorPoseForgetDefinition(theDefinition);')
     reanim.write_text(text,encoding='utf8',newline='\n')
 
     cut=source_root/'Lawn/CutScene.cpp';text=cut.read_text(encoding='utf8')
@@ -432,3 +441,33 @@ bool PvzpLoadNextResource()
     assert text.count(anchor)==1
     text='#include "graphics/RewardEffects.h"\n'+text.replace(anchor,'H1RewardStarburst(mApp,mPosX + 30.0f,mPosY + 30.0f,mRenderOrder + 1);')
     coin.write_text(text,encoding='utf8',newline='\n')
+    board=source_root/'Lawn/Board.cpp';text='#include "BoardLookup.h"\n'+board.read_text(encoding='utf8')
+    for signature,statement in (('Board::Board(LawnApp* theApp)','H1BoardSupportChanged();'),('Plant* Board::GetFlowerPotAt(int theGridX, int theGridY)','if(!H1BoardMayHaveSupport(this,SEED_FLOWERPOT))return nullptr;'),('Plant* Board::GetPumpkinAt(int theGridX, int theGridY)','if(!H1BoardMayHaveSupport(this,SEED_PUMPKINSHELL))return nullptr;')):
+        anchor=signature+'\n{';assert text.count(anchor)==1;text=text.replace(anchor,anchor+'\n    '+statement)
+    board.write_text(text,encoding='utf8',newline='\n')
+    plant=source_root/'Lawn/Plant.cpp';text='#include "BoardLookup.h"\n'+plant.read_text(encoding='utf8')
+    for anchor in ('\tmSeedType = theSeedType;','void Plant::Die()\n{'):
+        assert text.count(anchor)==1;text=text.replace(anchor,anchor+'\n    H1BoardSupportChanged();')
+    plant.write_text(text,encoding='utf8',newline='\n')
+    save=source_root/'Lawn/System/SaveGame.cpp';text='#include "BoardLookup.h"\n'+save.read_text(encoding='utf8')
+    anchor='bool LawnLoadGame(Board* theBoard, const std::string& theFilePath)\n{';assert text.count(anchor)==1
+    text=text.replace(anchor,anchor+'\n    struct H1SupportLoadScope {H1SupportLoadScope(){H1BoardSupportChanged();}~H1SupportLoadScope(){H1BoardSupportChanged();}} supportLoadScope;')
+    save.write_text(text,encoding='utf8',newline='\n')
+
+    cached=source_root/'Lawn/System/ReanimationLawn.cpp';text=cached.read_text(encoding='utf8')
+    text='#include "actors/CachedFrames.h"\nextern "C" volatile unsigned pvzh1_cached_frame_diagnostic[8];\n'+text
+    for entry,kind,identifier,variation in (
+        ('std::unique_ptr<MemoryImage> ReanimatorCache::MakeCachedPlantFrame(SeedType theSeedType, DrawVariation theDrawVariation)',0,'int(theSeedType)','int(theDrawVariation)'),
+        ('std::unique_ptr<MemoryImage> ReanimatorCache::MakeCachedMowerFrame(LawnMowerType theMowerType)',1,'int(theMowerType)','0'),
+        ('std::unique_ptr<MemoryImage> ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType)',2,'int(theZombieType)','0')):
+        start=text.index(entry+'\n{');end=text.index('\n}\n',start);body=text[start+len(entry)+2:end]
+        load=f'H1CachedFrameLoad({kind},{identifier},{variation})'
+        replacement=entry+'\n{\n#if defined(H1_PVZ_PORTABLE) && !defined(PVZ_HOST_RUNNER)\n    return '+load+';\n#else\n#ifdef PVZ_HOST_RUNNER\n    if(H1CachedFramesTestEnabled())return '+load+';\n#endif\n'+body+'\n#endif'
+        text=text[:start]+replacement+text[end:]
+    entry='std::unique_ptr<MemoryImage> ReanimatorCache::MakeBlankMemoryImage(int theWidth, int theHeight)\n{'
+    assert text.count(entry)==1;text=text.replace(entry,entry+'\n    ++pvzh1_cached_frame_diagnostic[4];')
+    cached.write_text(text,encoding='utf8',newline='\n')
+    lawn=source_root/'LawnApp.cpp';text='#include "actors/CachedFrames.h"\n'+lawn.read_text(encoding='utf8')
+    anchor='void LawnApp::MakeNewBoard()\n{\n\tKillBoard();';assert text.count(anchor)==1;text=text.replace(anchor,anchor+'\n    H1CachedFramesRelease();')
+    anchor='void LawnApp::ShowGameSelector()\n{\n\tKillBoard();';assert text.count(anchor)==1;text=text.replace(anchor,anchor+'\n    H1CachedFramesRelease();')
+    lawn.write_text(text,encoding='utf8',newline='\n')

@@ -14,6 +14,7 @@ struct H1DirtyPresentation {
     bool attempted=false,valid=false,oldCursor=false;
     int oldX=0,oldY=0;
     uint32_t fullFrames=0,partialFrames=0,changedBlocks=0,skippedBlocks=0,allocationFailures=0;
+    uint32_t partialPixelStores=0;
 #ifdef PVZH1_DIRTY_PRESENT_TEST
     int failAfter=-1;
 #endif
@@ -47,6 +48,18 @@ struct H1DirtyPresentation {
         if(x>=59&&x<421)color=pixels[map.row[y]+map.x[x-59]]&0xffffffu;
         out[y*480+x]=color;
     }
+    static __attribute__((always_inline)) inline unsigned UpdateFour(volatile uint32_t* out,const uint32_t* input,uint32_t* previous){
+        const uint32_t a=input[0],b=input[1],c=input[2],d=input[3];
+        const uint32_t da=(a^previous[0])&0xffffffu,db=(b^previous[1])&0xffffffu,
+            dc=(c^previous[2])&0xffffffu,dd=(d^previous[3])&0xffffffu;
+        if(!(da|db|dc|dd))return 0;
+        unsigned stores=0;
+        if(da){previous[0]=a;out[0]=a&0xffffffu;++stores;}
+        if(db){previous[1]=b;out[1]=b&0xffffffu;++stores;}
+        if(dc){previous[2]=c;out[2]=c&0xffffffu;++stores;}
+        if(dd){previous[3]=d;out[3]=d&0xffffffu;++stores;}
+        return stores;
+    }
     bool Present(volatile uint32_t* out,const uint32_t* pixels,int width,int height,int px,int py,H1PresentationMap& map,const uint32_t* changedTiles=nullptr){
 #ifdef PVZH1_WIDESCREEN
         if(!out||!pixels||!map.Configure(width,height)||!H1CanPresent480(out,pixels,width,height,map)||!Prepare()){
@@ -69,19 +82,19 @@ struct H1DirtyPresentation {
                     if(x>=0&&x<480&&y>=0&&y<272)out[y*480+x]=pixels[y*480+x]&0xffffffu;
                 }
             }
-            uint32_t changed=0,skipped=0;
+            uint32_t changed=0,skipped=0,stores=0;
             for(unsigned y=0;y<Height;++y){
                 const uint32_t* input=pixels+y*Width;uint32_t* previous=Row(y);volatile uint32_t* output=out+y*Width;
                 for(unsigned x=0;x<Width;x+=Block){
                     if(changedTiles&&!(changedTiles[y/RowsPerPage]&(uint32_t(1)<<(x/Block)))){++skipped;continue;}
-                    uint32_t difference=0;
-                    for(unsigned j=0;j<Block;j+=4)difference|=(input[x+j]^previous[x+j])|(input[x+j+1]^previous[x+j+1])|(input[x+j+2]^previous[x+j+2])|(input[x+j+3]^previous[x+j+3]);
-                    if(!(difference&0xffffffu)){++skipped;continue;}
-                    ++changed;
-                    for(unsigned j=0;j<Block;++j){const uint32_t value=input[x+j];previous[x+j]=value;output[x+j]=value&0xffffffu;}
+                    const unsigned n=UpdateFour(output+x,input+x,previous+x)+
+                        UpdateFour(output+x+4,input+x+4,previous+x+4)+
+                        UpdateFour(output+x+8,input+x+8,previous+x+8)+
+                        UpdateFour(output+x+12,input+x+12,previous+x+12);
+                    if(n){++changed;stores+=n;}else ++skipped;
                 }
             }
-            changedBlocks+=changed;skippedBlocks+=skipped;++partialFrames;
+            changedBlocks+=changed;skippedBlocks+=skipped;partialPixelStores+=stores;++partialFrames;
         }
         H1PresentCursorMapped(out,px,py,map);
         oldX=(int)((int64_t)px*480/Sexy::H1LogicalWidth);oldY=(int)((int64_t)py*272/Sexy::H1LogicalHeight);

@@ -1,6 +1,103 @@
 {
   "passed": true,
-  "scope": "Physical resource cleanup acceptance: level 4 and fog/night pool 31, original 450-update Adventure animation, chooser/start/plant, repeated options, B-drive save/read/continue/resave and normal exits. Overall 20 FPS is not certified; night pool remains slow.",
+  "scope": "Physical H1: forty plants in level6, required offline frames/previews, options, native B-drive V4 write/readback, return, normal exit, original saves restored. 20 FPS and all visual states fully offline are not certified.",
+  "program": {
+    "passed": true,
+    "bda_sha256": "90c65cdf0eb88f491ad53c0d53f890b2de5db63061ae51ccd05cebe19d83baf5",
+    "elf_sha256": "0addc4e9f24f1d2003c148a326055c3d535611a29ff78f3aff406565b2f3ec86",
+    "live_code_fingerprints": 4,
+    "bda_bytes": 3654076,
+    "build_receipt_sha256": "8f8e7ebfb0243f7e0cc94b81c40b883641f390acd7760582fcdcb84d318f008c",
+    "source_identity_verified": true,
+    "compiled_sources": 189,
+    "device_upload_crc_verified": true
+  },
+  "dense": {
+    "plants": 40,
+    "frames": 102,
+    "raw_ticks": 338,
+    "raw_tick_hz": 40,
+    "FPS": 12.071005917159763,
+    "original_main_counter_delta": 827,
+    "baseline_FPS": 5.269461077844311
+  },
+  "entity_read_scope": "Stable board pointers, plant container headers and paused gameplay counter. The original widget/board update counter continues while paused; no atomic whole-board snapshot is claimed.",
+  "options": {
+    "first_complete_present_ms": 575,
+    "constructor_ms": 375,
+    "preclean_ms": 0,
+    "paused_canvas_prime_ms": 375
+  },
+  "memory": {
+    "first_failed_malloc_request_bytes": 4096,
+    "fatal_abort": 0,
+    "cached_preview_online_canvas_calls": 0,
+    "cached_preview_failures": 0,
+    "offline_banks_loaded": 6,
+    "offline_banks_failed": 0,
+    "menu_actor_replay_resident_bytes": 0,
+    "menu_preview_owners_released": 6,
+    "exit_heap_bytes": 0,
+    "exit_native_charge_bytes": 0
+  },
+  "ordinary_exit": {
+    "elapsed_ms": 1800,
+    "baseline_ms": 13050
+  },
+  "native_written_V4": {
+    "bytes": 198081,
+    "sha256": "cb000a343f63356fe7c5831abaedbe692e1c1b05416a44c75c985c3639b6a872",
+    "original_V4_header": true,
+    "exact_payload_length": true,
+    "payload_crc32": 3778318860,
+    "device_write_and_PC_readback_valid": true
+  },
+  "original_saves": {
+    "restored-user1.dat": {
+      "bytes": 886,
+      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+      "exact_original_bytes": true
+    },
+    "restored-users.dat": {
+      "bytes": 19,
+      "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+      "exact_original_bytes": true
+    }
+  },
+  "resources": {
+    "runtime_manifest_sha256": "5c9b58b3305dfd13d446d45cab28e070b670ad429e45c3e8cdf33edc2944d77f",
+    "full_plant_pack_bytes": 46789263,
+    "full_plant_pack_device_CRC_verified": true,
+    "large_transfer_attempt_timeout_preserved": true,
+    "continued_same_transaction_without_reupload": true,
+    "bytes": 139832497,
+    "files": 2755,
+    "matching_program_required": true,
+    "full_firmware_inventory_readback_verified": true,
+    "obsolete_mixed_actor_pack_removed_after_replacement_verification": true
+  },
+  "evidence": {
+    "001-launch": {
+      "path": "build\\hardware-test-20261107-exit-plants-v33\\001-launch-result.json",
+      "sha256": "f3a3cf052ad57f759ef89c97942d3ba4e79532870db24fa03d5b7c3d1617494f"
+    },
+    "002-dense": {
+      "path": "build\\hardware-test-20261107-exit-plants-v33\\002-dense-result.json",
+      "sha256": "9f29029908c97e56310152cc5d196622cd957cb648e0853cdc3fdb350880b12c"
+    },
+    "003-cpu": {
+      "path": "build\\hardware-test-20261107-exit-plants-v33\\003-cpu-result.json",
+      "sha256": "923bce420e57b8360d9145eb3c13bdacfa97624e618a02d9678267aa60d827d9"
+    },
+    "004-return-exit": {
+      "path": "build\\hardware-test-20261107-exit-plants-v33\\004-return-exit-result.json",
+      "sha256": "784bb9ba1781b7b1c1cd988a7d5112a5ec4f393af9d236525c52231fbe45a5a2"
+    },
+    "005-restore-originals": {
+      "path": "build\\hardware-test-20261107-exit-plants-v33\\005-restore-originals-result.json",
+      "sha256": "059f9b6580f0a0ce948dc497f17bc06ecf630f7d7008659c933c703630b37262"
+    }
+  },
   "device": "Physical BBK H1 / Y100 V1.41",
   "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
   "resident_image_id": "71a0983b",
@@ -8,171 +105,19 @@
     480,
     272
   ],
-  "program": {
-    "source_identity_verified": true,
-    "bda_bytes": 3608860,
-    "bda_sha256": "c90cbcf5cfbcdc7eaaf0bb2af9512caf99ec70a19a1549773a03e7fe02e1636b",
-    "elf_sha256": "1c4329c4b3182a14afcd277de05e98d17865491c7bf92c7a7d5ec076e7e9c8d0",
-    "build_receipt_sha256": "5a0ffb2b681f80cd4f35f3de2cde877ee22efb9834006585499f15f20c234c9f",
-    "compiled_sources": 188,
-    "live_code_fingerprints": 4,
-    "device_upload_crc_verified": true
-  },
-  "resources": {
-    "bytes": 85339946,
-    "files": 2742,
-    "manifest_sha256": "0357b05588b97a61f8eb9460dc1a137190037d8e84bef2988370c9026719668b",
-    "baseline_bytes": 134247013,
-    "saved_bytes": 48907067,
-    "delta_uploads_device_crc_verified": true,
-    "unchanged_files_reused_after_native_inventory": true,
-    "transfer_evidence": "20261106-resource-opt/native-resource-transfers.json",
-    "actor_page_container": "H1PZ/1",
-    "matching_program_required": true
-  },
-  "level4_options": {
-    "ordinary_touch": true,
-    "first_complete_present_ms": [
-      75,
-      50,
-      50
-    ],
-    "constructor_ms": [
-      0,
-      0,
-      0
-    ],
-    "cleanup_ms": [
-      0,
-      0,
-      0
-    ],
-    "raw_tick_hz": 40,
-    "timing_resolution_ms": 25,
-    "CJK_full_atlas_requests": 0,
-    "largest_glyph_temp_bytes": 3012,
-    "fatal_allocation_failures": 0,
-    "quiet_gameplay": {
-      "frames": 262,
-      "raw_ticks": 339,
-      "raw_tick_hz": 40,
-      "FPS": 30.914454277286136,
-      "screenshot_during_measurement": false
-    }
-  },
-  "night_pool31": {
-    "ordinary_visible_chooser_start": true,
-    "selected_seed_types": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      16
-    ],
-    "planted_sunflower": true,
-    "first_complete_options_present_ms": 100,
-    "repeat_options_present_ms": 100,
-    "fatal_allocation_failures": 0,
-    "actor_resident_bytes": 4033950,
-    "actor_page_diagnostic": [
-      3402928,
-      131072,
-      3365,
-      19954,
-      0,
-      5882613,
-      131072,
-      1
-    ],
-    "quiet_gameplay": {
-      "frames": 30,
-      "raw_ticks": 337,
-      "raw_tick_hz": 40,
-      "FPS": 3.5608308605341246,
-      "screenshot_during_measurement": false
-    }
-  },
-  "font_pack": {
-    "single_native_stream": true,
-    "open_failures": 0,
-    "tile_read_failures": 0,
-    "all_readers_released_on_exit": true
-  },
-  "save_policy": {
-    "pause_does_not_save": true,
-    "save_at": [
-      "return to main menu",
-      "exit",
-      "level completion"
-    ],
-    "original_V4_format_preserved": true,
-    "transactional_replacement": true
-  },
-  "saved_games": {
-    "night_after_exit": {
-      "bytes": 43988,
-      "sha256": "667b30e59b6dc538b3a73d8368f4b68a1c0d9eab335053000a39c71876927b65",
-      "payload_crc32": "0xd1bc8f4a",
-      "header_version": 1,
-      "payload_length_and_crc_passed": true
-    },
-    "level4": {
-      "bytes": 49919,
-      "sha256": "fb3c41e39ea30ef1bc4f662f221291edab3efefc0cf6c437673f18f51c6c55d4",
-      "payload_crc32": "0x2f6ca8a7",
-      "header_version": 1,
-      "payload_length_and_crc_passed": true
-    },
-    "level4_after_continue": {
-      "bytes": 46604,
-      "sha256": "a4df035297068e2422e6e1230cfdd58c080dddef505004842f8d47ddcb8a9afe",
-      "payload_crc32": "0x1add69b",
-      "header_version": 1,
-      "payload_length_and_crc_passed": true
-    },
-    "level4_exit": {
-      "bytes": 46604,
-      "sha256": "a4df035297068e2422e6e1230cfdd58c080dddef505004842f8d47ddcb8a9afe",
-      "payload_crc32": "0x1add69b",
-      "header_version": 1,
-      "payload_length_and_crc_passed": true
-    },
-    "actual_continue_restored_level": 4,
-    "actual_continue_main_counter": 8243,
-    "actual_continue_wave": 3
-  },
-  "preserved_adventure_updates": 450,
-  "original_saves_restored": {
-    "files": {
-      "user1.dat": {
-        "bytes": 886,
-        "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
-        "native_readback_identical": true
-      },
-      "users.dat": {
-        "bytes": 22,
-        "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
-        "native_readback_identical": true
-      }
-    },
-    "original_no_v4_restored": true,
-    "no_temporary_or_backup_files": true
-  },
-  "exit": {
-    "normal_UI_exit": true,
-    "night_return_code": 0,
-    "level4_return_code": 0,
-    "user_heap_bytes": 0,
-    "native_charge": 0,
-    "font_readers": 0
-  },
-  "known_remaining_issues": [
-    "Night pool gameplay measured about 3.56 FPS; resource cleanup does not solve its remaining rendering cost.",
-    "Native firmware file close latency remains; transactional saves preserve bytes but still wait when returning to menu/exit.",
-    "Two test input attempts were rejected with BUSY during native loading/saving. State was observed before continuing with paced ordinary touches; no game progress or result was written to RAM.",
-    "No full campaign or long unattended stability certification."
+  "limitations": [
+    "Dense scene remains below20FPS.",
+    "Dense-scene options first complete presentation575ms, of which375ms is paused-canvas preparation.",
+    "A recoverable4096B allocation failure was recorded; no fatal abort, missing required bank or online preview canvas.",
+    "Dynamic affine visual states are not all offline.",
+    "Stable entity-container pointers and paused gameplay counter were checked; widget update ticks continued during the read."
   ],
+  "evidence_directory": "docs/verification/exit-plants-20261107",
+  "host_verification": "docs/verification/exit-plants-host-verification.json",
   "debugger_left_running": true,
-  "evidence_directory": "docs/verification/20261106-resource-opt"
+  "original_V4_absent_and_test_V4_removed": true,
+  "restored_userdata_names": [
+    "user1.dat",
+    "users.dat"
+  ]
 }

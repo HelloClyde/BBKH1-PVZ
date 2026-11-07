@@ -13,16 +13,14 @@ static unsigned char *metadata_data;
 static uint32_t metadata_count;
 static int metadata_state;
 static uint32_t metadata_record_bytes;
-static FILE *image_pack;
-static unsigned char *image_pack_index;
-static uint32_t image_pack_count,image_pack_position;
-static int image_pack_state;
+typedef struct ImagePack {FILE *file;unsigned char *index;uint32_t count,position,bytes;int state;} ImagePack;
+static ImagePack image_packs[2];
+static const char *image_pack_names[2]={"images-common.h1pk","cached-frames.h1pk"};
 volatile uint32_t pvzh1_image_pack_diagnostic[4];
 
 void h1_resources_shutdown(void){
-    if(image_pack)fclose(image_pack);
-    image_pack=0;free(image_pack_index);image_pack_index=0;
-    image_pack_count=image_pack_position=0;image_pack_state=0;
+    unsigned slot;
+    for(slot=0;slot<2;++slot){if(image_packs[slot].file)fclose(image_packs[slot].file);free(image_packs[slot].index);memset(&image_packs[slot],0,sizeof(ImagePack));}
     free(metadata_data);metadata_data=0;metadata_count=0;metadata_state=0;metadata_record_bytes=0;
     pvzh1_image_pack_diagnostic[0]=pvzh1_image_pack_diagnostic[1]=0;
 }
@@ -81,12 +79,13 @@ static int make_path(char *out,size_t capacity,const char *logical,const char *e
 }
 /* One backing stream, independent bounded cursors for each open image. This
  * also handles alternating RGB/alpha reads without sharing logical positions. */
-static void image_pack_init(void){
+static void image_pack_init(unsigned slot){
+    ImagePack *pack=&image_packs[slot];
     unsigned char header[32],*index=0;char path[640];FILE *fp=0;
     uint32_t count,bytes,total,hash=2166136261u,i,previous_end;const char *previous=0;
-    if(image_pack_state)return;image_pack_state=-1;
-    if(strlen(resource_root)+sizeof("images-common.h1pk")>sizeof(path))return;
-    strcpy(path,resource_root);strcat(path,"images-common.h1pk");fp=fopen(path,"rb");if(!fp)return;
+    if(pack->state)return;pack->state=-1;
+    if(strlen(resource_root)+strlen(image_pack_names[slot])+1>sizeof(path))return;
+    strcpy(path,resource_root);strcat(path,image_pack_names[slot]);fp=fopen(path,"rb");if(!fp)return;
     if(fread(header,1,32,fp)!=32||memcmp(header,"H1PK",4)||little32(header+4)!=1)goto done;
     count=little32(header+8);bytes=little32(header+12);total=little32(header+16);
     if(!count||count>4096||bytes<count*16||bytes>1048576||total<32+bytes||total>67108864||little32(header+24)||little32(header+28))goto done;
@@ -101,17 +100,17 @@ static void image_pack_init(void){
         if(!memchr(key,0,bytes-count*16-name)||!*key||*key=='/'||strchr(key,':')||strstr(key,"..")||(previous&&strcmp(previous,key)>=0))goto done;
         previous=key;previous_end=offset+size;
     }
-    image_pack=fp;image_pack_index=index;image_pack_count=count;image_pack_position=total;image_pack_state=1;
-    pvzh1_image_pack_diagnostic[0]=count;pvzh1_image_pack_diagnostic[1]=bytes;return;
+    pack->file=fp;pack->index=index;pack->count=count;pack->position=total;pack->state=1;
+    pack->bytes=bytes;pvzh1_image_pack_diagnostic[0]=image_packs[0].count+image_packs[1].count;pvzh1_image_pack_diagnostic[1]=image_packs[0].bytes+image_packs[1].bytes;return;
 done:
     free(index);if(fp)fclose(fp);
 }
 static int image_pack_open(H1Image *image,const char *path){
-    uint32_t low=0,high;const char *key=path+strlen(resource_root);image_pack_init();
-    if(image_pack_state!=1)return 0;high=image_pack_count;
-    while(low<high){uint32_t middle=low+(high-low)/2;const unsigned char *r=image_pack_index+middle*16;
-        const char *name=(const char*)image_pack_index+image_pack_count*16+little32(r);int order=strcmp(key,name);
-        if(!order){image->file=image_pack;image->packed=1;image->file_position=little32(r+4);image->file_end=image->file_position+little32(r+8);++pvzh1_image_pack_diagnostic[2];return 1;}
+    uint32_t low=0,high,slot;const char *key=path+strlen(resource_root);ImagePack *pack;slot=!strncmp(key,"cache/",6)?1u:0u;pack=&image_packs[slot];image_pack_init(slot);
+    if(pack->state!=1)return 0;high=pack->count;
+    while(low<high){uint32_t middle=low+(high-low)/2;const unsigned char *r=pack->index+middle*16;
+        const char *name=(const char*)pack->index+pack->count*16+little32(r);int order=strcmp(key,name);
+        if(!order){image->file=pack->file;image->packed=slot+1;image->file_position=little32(r+4);image->file_end=image->file_position+little32(r+8);++pvzh1_image_pack_diagnostic[2];return 1;}
         if(order<0)high=middle;else low=middle+1;
     }return 0;
 }
@@ -120,12 +119,13 @@ static int image_seek(H1Image *image,uint32_t position){
     return fseek((FILE*)image->file,(long)position,SEEK_SET);
 }
 static size_t image_read(H1Image *image,void *data,size_t bytes){
-    size_t n;if(!image->packed)return fread(data,1,bytes,(FILE*)image->file);
-    if(image->file_position>image->file_end)return 0;
+    size_t n;ImagePack *pack;if(!image->packed)return fread(data,1,bytes,(FILE*)image->file);
+    if(image->packed>2)return 0;pack=&image_packs[image->packed-1];
+    if(image->file!=pack->file||image->file_position>image->file_end)return 0;
     if(bytes>image->file_end-image->file_position)bytes=image->file_end-image->file_position;
     if(!bytes)return 0;
-    if(image_pack_position!=image->file_position&&fseek(image_pack,(long)image->file_position,SEEK_SET))return 0;
-    n=fread(data,1,bytes,image_pack);image->file_position+=(uint32_t)n;image_pack_position=image->file_position;return n;
+    if(pack->position!=image->file_position&&fseek(pack->file,(long)image->file_position,SEEK_SET))return 0;
+    n=fread(data,1,bytes,pack->file);image->file_position+=(uint32_t)n;pack->position=image->file_position;return n;
 }
 static int valid_info(const H1ImageInfo *info) {
     return info->width && info->width<=8192 && info->height && info->height<=8192 &&

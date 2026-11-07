@@ -22,7 +22,6 @@ static int window_open,pen_down,pen_sent,pen_x,pen_y;
 static int pointer_x=400,pointer_y=300;
 static uint32_t first_tick;
 static int clock_started;
-static FILE* log_file;
 static int sample_pen(int *x,int *y){
     typedef void(*Fn)(h1_u16*,h1_u16*);h1_u16 px=65535,py=65535;
     const uint32_t *fn=(const uint32_t*)h1_runtime_entry(h1_runtime_table(H1_RUNTIME_GUI_TABLE_SLOT),0x6c0u);
@@ -41,7 +40,6 @@ extern "C" int pvzp_window_open(void){
     if(!fn||!fn())return 0;dirtyPresentation.Reset();window_open=1;pvzh1_startup_mark(0);pvzp_diagnostic[0]=0x50565031;pvzp_diagnostic[1]=1;return 1;
 }
 extern "C" void pvzp_window_close(void){
-    if(log_file){fclose(log_file);log_file=nullptr;}
     if(!window_open)return;pvzp_audio_close();dirtyPresentation.Reset();pvzh1_dirty_present_diagnostic[1]=0;typedef void(*Fn)(void);
     Fn fn=(Fn)h1_runtime_entry(h1_runtime_table(H1_RUNTIME_GUI_TABLE_SLOT),0x850u);
     if(fn)fn();window_open=0;pvzp_diagnostic[1]=9;
@@ -51,9 +49,7 @@ extern "C" uint32_t pvzp_ticks_ms(void){
     uint32_t elapsed=t-first_tick;return (uint32_t)((uint64_t)elapsed*1000/PVZ_H1_RAW_TICK_HZ);
 }
 extern "C" void pvzp_log_line(const char *line){
-    // One buffered file for the session instead of a FAT open/close per line.
-    if(!log_file){log_file=fopen("/PVZSAVE/pvz.log","ab");if(log_file)setvbuf(log_file,nullptr,_IOFBF,4096);}
-    if(log_file){fputs(line,log_file);fputc('\n',log_file);}
+    pvz_runtime_log(line,strlen(line));pvz_runtime_log("\n",1);
     if(!strncmp(line,"Resource Loading Time:",22))pvzh1_startup_mark(8);
     pvzp_diagnostic[4]++;
 }
@@ -80,6 +76,7 @@ extern "C" void pvzp_present_argb(const uint32_t *pixels,int w,int h){
     pvzh1_dirty_present_diagnostic[4]=dirtyPresentation.changedBlocks;
     pvzh1_dirty_present_diagnostic[5]=dirtyPresentation.skippedBlocks;
     pvzh1_dirty_present_diagnostic[6]=dirtyPresentation.allocationFailures;
+    pvzh1_dirty_present_diagnostic[7]=dirtyPresentation.partialPixelStores;
     }
     pvzp_diagnostic[2]++;H1OptionsPresented();pvzp_audio_pump();
     if(pvzp_diagnostic[7]==0)pvzh1_startup_mark(9);

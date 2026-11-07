@@ -1,0 +1,16 @@
+{
+  "legacy_format_sha256": "59210d0fe6a2fc4cf743b9c54dd5ba6d0dfd5aaeefae3691e613c5e6a8fbd90d",
+  "current_format_sha256": "fcce2e96afc1de3b59bd0a4dc21a33101337722463cb1d063560aa7a632ac3b4",
+  "oracle_source": "tools/tests/fixtures/ActorPoseFormat-legacy.h",
+  "test_source": "tools/tests/actor_signature_compatibility_probe.cpp",
+  "test_source_sha256": "605aaafadb48943d6985e0294d40dacb20e1f750f0306f59de00e17e4d6f5f96",
+  "verification": "docs/verification/actor-signature-compatibility-verification.json",
+  "verification_sha256": "bca1b2f7d03bd92e1dfd443c4faab16a0b4108940283f93c232efa6a4ba5ef17",
+  "probe_identity": {
+    "host_report": "d9c159ec619575456d3b05cf00fbaddcb551b06554903413c8ff81fff1f76921",
+    "probe": "605aaafadb48943d6985e0294d40dacb20e1f750f0306f59de00e17e4d6f5f96",
+    "executable": "87c030c72d3feca7a49a58bd1c62f2844014977d4fea6169165093de465b303b",
+    "test_linker_wrappers": []
+  },
+  "scope": "Legacy acceptance decisions and FNV keys compared with the exact header used by existing actor/sun assets; resources were not rebaked."
+}

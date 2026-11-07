@@ -279,6 +279,18 @@ def patch_triangle_zero_alpha(path):
         '\t\t\t}\n\t\t}\n\t}\n\t#elif defined(MOD_ARGB)','transparent pixel end')
     path.write_text(text,encoding='utf-8',newline='\n')
 
+def patch_common_font_command_pool(path):
+    path=Path(path);text=path.read_text(encoding='utf-8')
+    marker='PVZH1_HEAP_MATRIX_FONT_COMMAND_POOL'
+    if marker in text:return
+    text='#include <memory>\n'+_replace(text,'static RenderCommand gRenderCommandPool[POOL_SIZE];',
+        'static std::unique_ptr<RenderCommand[]> gRenderCommandPool; // '+marker,'matrix font command backing')
+    text=_replace(text,'\tif (!aFont->mFontData->mInitialized)\n\t\treturn;\n\n\taFont->Prepare();',
+        '\tif (!aFont->mFontData->mInitialized)\n\t\treturn;\n'
+        '\tif (!gRenderCommandPool) gRenderCommandPool = std::make_unique<RenderCommand[]>(POOL_SIZE);\n\n\taFont->Prepare();',
+        'matrix font command allocation')
+    path.write_text(text,encoding='utf-8',newline='\n')
+
 def apply(source_root):
     root=Path(source_root)
     common=root/'PvzpLib/PvzpCommon.cpp'
@@ -314,6 +326,7 @@ def apply(source_root):
     patch_font_glyph_pages(framework/'graphics/MemoryImage.cpp')
     patch_graphics_scratch(framework/'graphics/Graphics.cpp')
     patch_font_command_pool(framework/'graphics/ImageFont.cpp')
+    patch_common_font_command_pool(framework.parent/'PvzpLib/PvzpCommon.cpp')
     font_path=framework/'graphics/ImageFont.cpp'
     font_text=font_path.read_text(encoding='utf8')
     if 'PVZH1_EXACT_TEXT_REPLAY' not in font_text:

@@ -1,0 +1,47 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "put_long",
+        "source": "private/resources-h1-wide/plant-poses.h1pp",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\plant-poses.h1pp",
+        "receipt": "full-plant-poses.h1pp.json"
+      },
+      {
+        "kind": "put_long",
+        "source": "private/resources-h1-wide/normal-lawn-2.h1lb",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-2.h1lb",
+        "receipt": "full-normal-lawn-2.h1lb.json"
+      },
+      {
+        "kind": "put_long",
+        "source": "private/resources-h1-wide/normal-lawn-3.h1lb",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-3.h1lb",
+        "receipt": "full-normal-lawn-3.h1lb.json"
+      },
+      {
+        "kind": "put_long",
+        "source": "private/resources-h1-wide/normal-lawn-4.h1lb",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-4.h1lb",
+        "receipt": "full-normal-lawn-4.h1lb.json"
+      },
+      {
+        "kind": "put_long",
+        "source": "private/resources-h1-wide/normal-lawn-5.h1lb",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-5.h1lb",
+        "receipt": "full-normal-lawn-5.h1lb.json"
+      },
+      {
+        "kind": "put_long",
+        "source": "private/resources-h1-wide/normal-lawn-6.h1lb",
+        "path": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-6.h1lb",
+        "receipt": "full-normal-lawn-6.h1lb.json"
+      }
+    ]
+  },
+  "started_utc": "2026-11-07T06:41:45.745767+00:00",
+  "actions": [],
+  "ok": false,
+  "error": "TimeoutError('File outcome is not confirmed; query file status and paths, do not repeat commit')",
+  "transport_broken": false
+}

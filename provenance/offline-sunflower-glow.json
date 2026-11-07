@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "runtime_path": "sunflower-glow.h1ap",
+  "bytes": 649024,
+  "sha256": "b3217bd20b6c00f617fbc8cc032e94117829555ee18ca970ade72a51c08682f9",
+  "decoded_bytes": 649024,
+  "decoded_sha256": "b3217bd20b6c00f617fbc8cc032e94117829555ee18ca970ade72a51c08682f9",
+  "storage": "raw_pages",
+  "compressed_comparison_bytes": 321875,
+  "no_runtime_inflate": true,
+  "frames": 57,
+  "intensities": 89,
+  "palette_tuples": 1384,
+  "ordered_track_boundaries": true,
+  "lossy": false,
+  "roundtrip_byte_exact": true,
+  "encoder_sha256": "715db78ee45d4c745f53981c138b53ecc4a9ae7a1b18d64f33746b0572d1bbc2",
+  "exporter_sha256": "71c298b21e6cd0305c00f138849fcec29266eb1787065ee42fa6ce4ae0d7a0a2"
+}

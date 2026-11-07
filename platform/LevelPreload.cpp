@@ -5,21 +5,60 @@
 #include "Lawn/Plant.h"
 #include "Lawn/Zombie.h"
 #include "Lawn/SeedPacket.h"
+#include "Lawn/CutScene.h"
 #include "PvzpLib/Reanimator.h"
 #include "PvzpLib/PvzpParticle.h"
 #include "Startup.h"
 #include "OptionsFeedback.h"
+#include "BoardLookup.h"
 #include "actors/ActorPose.h"
+#include "actors/CachedFrames.h"
 #include "graphics/EarlyLawn.h"
 #include "graphics/RewardEffects.h"
 #include "graphics/MemoryImageCache.h"
 #include "graphics/MemoryImage.h"
 #include <set>
+#include <stdexcept>
 extern "C" void pvzh1_sound_warmup();
 extern "C" void pvzh1_music_warm_game();
 extern "C" {volatile uint32_t pvzh1_level_preload_diagnostic[4];}
+extern "C" {volatile uint32_t pvzh1_board_replay_retirement_diagnostic[3];}
+extern "C" volatile uint32_t pvzh1_actor_pose_diagnostic[16];
+extern "C" void pvzh1_cache_complete_draw_batch();
+extern "C" void pvzh1_selector_definition_trim(void*);
+
+void H1RetireBoardReplay(){
+    // Only the confirmed leave/quit paths call this, after drawing returns and
+    // before the original serializer allocates its payload. Actor/board state
+    // and active definitions remain alive for the unchanged V4 serializer.
+    pvzh1_cache_complete_draw_batch();
+    H1CachedFramesRelease();
+    ++pvzh1_board_replay_retirement_diagnostic[0];
+    pvzh1_board_replay_retirement_diagnostic[1]=pvzh1_actor_pose_diagnostic[0];
+    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();pvzh1_reward_effect_shutdown();
+    pvzh1_board_replay_retirement_diagnostic[2]=pvzh1_actor_pose_diagnostic[0];
+}
 
 namespace {std::set<Sexy::MemoryImage*>* warmImages=nullptr;}
+namespace {Board* supportBoard=nullptr;int supportCounter=0;unsigned supportMask=0;bool supportDirty=true;
+#ifdef PVZ_HOST_RUNNER
+bool supportEnabled=true;
+#endif
+}
+void H1BoardSupportChanged(){supportDirty=true;}
+bool H1BoardMayHaveSupport(Board* board,SeedType type){
+#ifdef PVZ_HOST_RUNNER
+ if(!supportEnabled)return true;
+#endif
+ if(type!=SEED_FLOWERPOT&&type!=SEED_PUMPKINSHELL)return true;
+ if(supportDirty||supportBoard!=board||supportCounter!=board->mMainCounter){
+  supportMask=0;for(auto* p:board->mPlants)if(!p->mDead){if(p->mSeedType==SEED_FLOWERPOT)supportMask|=1;if(p->mSeedType==SEED_PUMPKINSHELL)supportMask|=2;}
+  supportBoard=board;supportCounter=board->mMainCounter;supportDirty=false;
+ }return supportMask&(type==SEED_FLOWERPOT?1u:2u);
+}
+#ifdef PVZ_HOST_RUNNER
+void H1BoardLookupTestEnable(bool enabled){supportEnabled=enabled;}
+#endif
 namespace {
 void WarmImage(Sexy::Image* value){
     if(!warmImages||uintptr_t(value)<=1000)return;
@@ -40,6 +79,11 @@ void H1PrewarmDefinitionImages(int type){
 }
 void H1PreloadCurrentBoard(LawnApp* app){
     if(!app||!app->mBoard)return;
+    // Board's original constructor has already destroyed the menu's effect
+    // instances. Retire its now-unreferenced definition before the synchronous
+    // level preload, rather than waiting for the next screen draw afterwards.
+    pvzh1_selector_definition_trim(nullptr);
+    H1BoardSupportChanged();
     Sexy::H1ImageCacheReleaseUI();
     H1AudioSaveScope loading;
     std::set<Sexy::MemoryImage*> images;
@@ -56,22 +100,28 @@ void H1PreloadCurrentBoard(LawnApp* app){
     bool packetsChosen=board->mSeedBank&&board->mSeedBank->mNumPackets>0;
     if(packetsChosen)for(int i=0;i<board->mSeedBank->mNumPackets&&i<SEEDBANK_MAX;++i)
         packetsChosen&=int(board->mSeedBank->mSeedPackets[i].mPacketType)>=0;
-    if(!board->ChooseSeedsOnCurrentLevel()||packetsChosen)H1ActorPosePrepare();
-    pvzh1_level_loading_step(45);
-    H1EarlyLawnPrepare(app->mBoard);
-    pvzh1_level_loading_step(55);
+    const bool prepareActors=!board->ChooseSeedsOnCurrentLevel()||packetsChosen;
+    pvzh1_level_loading_step(35);
     pvzh1_sound_warmup();
-    pvzh1_level_loading_step(65);
+    pvzh1_level_loading_step(45);
     for(auto type:{REANIM_PUFF,REANIM_LAWN_MOWERED_ZOMBIE,REANIM_READYSETPLANT,
                    REANIM_FINAL_WAVE,REANIM_SUN,REANIM_TEXT_FADE_ON,REANIM_SODROLL,REANIM_LAWNMOWER})
         ReanimatorEnsureDefinitionLoaded(type,true);
     bool plants[static_cast<int>(SeedType::NUM_SEED_TYPES)]{};
+    bool filtered[static_cast<int>(SeedType::NUM_SEED_TYPES)]{};
     bool zombies[static_cast<int>(ZombieType::NUM_ZOMBIE_TYPES)]{};
     if(board->mSeedBank)for(int i=0;i<board->mSeedBank->mNumPackets&&i<SEEDBANK_MAX;++i){
         auto& packet=board->mSeedBank->mSeedPackets[i];
         for(auto type:{packet.mPacketType,packet.mImitaterType}){
             const int n=static_cast<int>(type);if(n>=0&&n<static_cast<int>(SeedType::NUM_SEED_TYPES))plants[n]=true;
         }
+        if(int(packet.mImitaterType)>=0&&int(packet.mImitaterType)<int(NUM_SEED_TYPES))filtered[int(packet.mImitaterType)]=true;
+    }
+    for(auto* plant:board->mPlants)if(!plant->mDead){
+        for(auto type:{plant->mSeedType,plant->mImitaterType}){
+            const int n=int(type);if(n>=0&&n<int(SeedType::NUM_SEED_TYPES))plants[n]=true;
+        }
+        if(int(plant->mImitaterType)>=0&&int(plant->mImitaterType)<int(NUM_SEED_TYPES))filtered[int(plant->mImitaterType)]=true;
     }
     if(app->mGameMode==GAMEMODE_ADVENTURE&&app->IsFirstTimeAdventureMode()){
         const int award=int(app->GetAwardSeedForLevel(board->mLevel));
@@ -95,8 +145,29 @@ void H1PreloadCurrentBoard(LawnApp* app){
     // The upstream flag-zombie preloader warms its body but not this separate
     // attached animation, otherwise first flag spawn still opens image files.
     if(zombies[int(ZombieType::ZOMBIE_FLAG)])ReanimatorEnsureDefinitionLoaded(REANIM_FLAG,true);
+    bool keepTypes[NUM_REANIMS]{},keepFilters[NUM_REANIMS]{};
+    for(int i=0;i<int(NUM_SEED_TYPES);++i)if(plants[i]){const int type=int(gPlantDefs[i].mReanimationType);if(type>=0&&type<NUM_REANIMS){keepTypes[type]=true;keepFilters[type]|=filtered[i];}}
+    H1PlantPoseDiscardUnneeded(keepTypes,keepFilters);
+    H1CachedFramesPrepare(plants,filtered,packetsChosen);
+    // Definition parsers need temporary contiguous arrays. Finish every
+    // original definition before immutable pixel banks occupy those holes.
     for(int i=0;i<static_cast<int>(SeedType::NUM_SEED_TYPES);++i)if(plants[i]){Plant::PreloadPlantResources(static_cast<SeedType>(i));++pvzh1_level_preload_diagnostic[1];}
     for(int i=0;i<static_cast<int>(ZombieType::NUM_ZOMBIE_TYPES);++i)if(zombies[i]){Zombie::PreloadZombieResources(static_cast<ZombieType>(i));++pvzh1_level_preload_diagnostic[2];}
+    // Every definition/image getter above has returned. No borrowed pixel
+    // pointer survives here; end their pin epoch before baked banks compete
+    // with replaceable source textures for the same native heap.
+    Sexy::H1ImageCacheEndFrame();
+    pvzh1_level_loading_step(65);
+    const bool earlySod=app->mGameScene!=SCENE_PLAYING&&app->IsFirstTimeAdventureMode()&&
+        (board->mLevel==1||board->mLevel==2||board->mLevel==4);
+    if(prepareActors&&!H1ActorPosePrepare(keepTypes[REANIM_PEASHOOTER],true,earlySod))
+        throw std::runtime_error("H1 offline actor bank preload failed");
+    if(!H1EarlyLawnPrepare(app->mBoard))
+        throw std::runtime_error("H1 offline lawn preload failed");
+    for(int i=0;i<static_cast<int>(SeedType::NUM_SEED_TYPES);++i)if(plants[i]&&!H1PlantPosePrepare(gPlantDefs[i].mReanimationType,filtered[i]))
+        throw std::runtime_error("H1 offline plant bank preload failed");
+    if(prepareActors&&keepTypes[REANIM_SUNFLOWER]&&!H1SunflowerGlowPrepare())
+        throw std::runtime_error("H1 offline sunflower glow preload failed");
     pvzh1_level_preload_diagnostic[3]=images.size();
     pvzh1_level_loading_step(95);
     // All getters have returned. Advance their pin epoch before the optional

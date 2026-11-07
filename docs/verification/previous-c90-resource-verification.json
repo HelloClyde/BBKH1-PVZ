@@ -1,0 +1,178 @@
+{
+  "passed": true,
+  "scope": "Physical resource cleanup acceptance: level 4 and fog/night pool 31, original 450-update Adventure animation, chooser/start/plant, repeated options, B-drive save/read/continue/resave and normal exits. Overall 20 FPS is not certified; night pool remains slow.",
+  "device": "Physical BBK H1 / Y100 V1.41",
+  "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
+  "resident_image_id": "71a0983b",
+  "physical": [
+    480,
+    272
+  ],
+  "program": {
+    "source_identity_verified": true,
+    "bda_bytes": 3608860,
+    "bda_sha256": "c90cbcf5cfbcdc7eaaf0bb2af9512caf99ec70a19a1549773a03e7fe02e1636b",
+    "elf_sha256": "1c4329c4b3182a14afcd277de05e98d17865491c7bf92c7a7d5ec076e7e9c8d0",
+    "build_receipt_sha256": "5a0ffb2b681f80cd4f35f3de2cde877ee22efb9834006585499f15f20c234c9f",
+    "compiled_sources": 188,
+    "live_code_fingerprints": 4,
+    "device_upload_crc_verified": true
+  },
+  "resources": {
+    "bytes": 85339946,
+    "files": 2742,
+    "manifest_sha256": "0357b05588b97a61f8eb9460dc1a137190037d8e84bef2988370c9026719668b",
+    "baseline_bytes": 134247013,
+    "saved_bytes": 48907067,
+    "delta_uploads_device_crc_verified": true,
+    "unchanged_files_reused_after_native_inventory": true,
+    "transfer_evidence": "20261106-resource-opt/native-resource-transfers.json",
+    "actor_page_container": "H1PZ/1",
+    "matching_program_required": true
+  },
+  "level4_options": {
+    "ordinary_touch": true,
+    "first_complete_present_ms": [
+      75,
+      50,
+      50
+    ],
+    "constructor_ms": [
+      0,
+      0,
+      0
+    ],
+    "cleanup_ms": [
+      0,
+      0,
+      0
+    ],
+    "raw_tick_hz": 40,
+    "timing_resolution_ms": 25,
+    "CJK_full_atlas_requests": 0,
+    "largest_glyph_temp_bytes": 3012,
+    "fatal_allocation_failures": 0,
+    "quiet_gameplay": {
+      "frames": 262,
+      "raw_ticks": 339,
+      "raw_tick_hz": 40,
+      "FPS": 30.914454277286136,
+      "screenshot_during_measurement": false
+    }
+  },
+  "night_pool31": {
+    "ordinary_visible_chooser_start": true,
+    "selected_seed_types": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      16
+    ],
+    "planted_sunflower": true,
+    "first_complete_options_present_ms": 100,
+    "repeat_options_present_ms": 100,
+    "fatal_allocation_failures": 0,
+    "actor_resident_bytes": 4033950,
+    "actor_page_diagnostic": [
+      3402928,
+      131072,
+      3365,
+      19954,
+      0,
+      5882613,
+      131072,
+      1
+    ],
+    "quiet_gameplay": {
+      "frames": 30,
+      "raw_ticks": 337,
+      "raw_tick_hz": 40,
+      "FPS": 3.5608308605341246,
+      "screenshot_during_measurement": false
+    }
+  },
+  "font_pack": {
+    "single_native_stream": true,
+    "open_failures": 0,
+    "tile_read_failures": 0,
+    "all_readers_released_on_exit": true
+  },
+  "save_policy": {
+    "pause_does_not_save": true,
+    "save_at": [
+      "return to main menu",
+      "exit",
+      "level completion"
+    ],
+    "original_V4_format_preserved": true,
+    "transactional_replacement": true
+  },
+  "saved_games": {
+    "night_after_exit": {
+      "bytes": 43988,
+      "sha256": "667b30e59b6dc538b3a73d8368f4b68a1c0d9eab335053000a39c71876927b65",
+      "payload_crc32": "0xd1bc8f4a",
+      "header_version": 1,
+      "payload_length_and_crc_passed": true
+    },
+    "level4": {
+      "bytes": 49919,
+      "sha256": "fb3c41e39ea30ef1bc4f662f221291edab3efefc0cf6c437673f18f51c6c55d4",
+      "payload_crc32": "0x2f6ca8a7",
+      "header_version": 1,
+      "payload_length_and_crc_passed": true
+    },
+    "level4_after_continue": {
+      "bytes": 46604,
+      "sha256": "a4df035297068e2422e6e1230cfdd58c080dddef505004842f8d47ddcb8a9afe",
+      "payload_crc32": "0x1add69b",
+      "header_version": 1,
+      "payload_length_and_crc_passed": true
+    },
+    "level4_exit": {
+      "bytes": 46604,
+      "sha256": "a4df035297068e2422e6e1230cfdd58c080dddef505004842f8d47ddcb8a9afe",
+      "payload_crc32": "0x1add69b",
+      "header_version": 1,
+      "payload_length_and_crc_passed": true
+    },
+    "actual_continue_restored_level": 4,
+    "actual_continue_main_counter": 8243,
+    "actual_continue_wave": 3
+  },
+  "preserved_adventure_updates": 450,
+  "original_saves_restored": {
+    "files": {
+      "user1.dat": {
+        "bytes": 886,
+        "sha256": "9b40325a9f8e90f62af7f0f6caea9447568c9f0695d59e8d8fff03b818fd4672",
+        "native_readback_identical": true
+      },
+      "users.dat": {
+        "bytes": 22,
+        "sha256": "3e6aa06725182d7936e6ea3847c7dc0717b583a6460edda8a1833b00b1bc73ea",
+        "native_readback_identical": true
+      }
+    },
+    "original_no_v4_restored": true,
+    "no_temporary_or_backup_files": true
+  },
+  "exit": {
+    "normal_UI_exit": true,
+    "night_return_code": 0,
+    "level4_return_code": 0,
+    "user_heap_bytes": 0,
+    "native_charge": 0,
+    "font_readers": 0
+  },
+  "known_remaining_issues": [
+    "Night pool gameplay measured about 3.56 FPS; resource cleanup does not solve its remaining rendering cost.",
+    "Native firmware file close latency remains; transactional saves preserve bytes but still wait when returning to menu/exit.",
+    "Two test input attempts were rejected with BUSY during native loading/saving. State was observed before continuing with paced ordinary touches; no game progress or result was written to RAM.",
+    "No full campaign or long unattended stability certification."
+  ],
+  "debugger_left_running": true,
+  "evidence_directory": "docs/verification/20261106-resource-opt"
+}

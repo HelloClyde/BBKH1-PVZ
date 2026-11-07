@@ -1,0 +1,489 @@
+{
+  "passed": true,
+  "scope": "Original complete host engine and production image loader; unaffected behavior-family results reused by recorded identity. Native FPS is recorded separately.",
+  "native_candidate": {
+    "bda_sha256": "90c65cdf0eb88f491ad53c0d53f890b2de5db63061ae51ccd05cebe19d83baf5",
+    "elf_sha256": "0addc4e9f24f1d2003c148a326055c3d535611a29ff78f3aff406565b2f3ec86"
+  },
+  "preferred_alpha_reader_source_sha256": {
+    "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+    "platform/graphics/memory_patches.py": "a81b81aa7e21973b7e7f4454291bac235d02bbaca0e1f2deab42f40baf91ac1b",
+    "platform/graphics/MemoryImageCache.cpp": "65a4ef2938d549f399f5414f76c2e332606c6cdf6c43cf3ea94d27690d96e75a"
+  },
+  "native_preview_link_proof": {
+    "passed": true,
+    "elf_sha256": "0addc4e9f24f1d2003c148a326055c3d535611a29ff78f3aff406565b2f3ec86",
+    "native_original_preview_canvas_factory_linked": false,
+    "native_original_preview_rasterizer_linked": false,
+    "offline_loader_present": true
+  },
+  "checks": [
+    {
+      "evidence": "build\\active-tracks-v4\\run\\active-tracks-verification.json",
+      "result": {
+        "passed": true,
+        "all_seed_types": 53,
+        "simulation_steps_per_path": 150,
+        "animation_state_and_random_snapshots": 300,
+        "original_clock_blend_shake_blink_color_and_attachment_updates_preserved": true,
+        "inactive_track_visits_omitted": 293855
+      },
+      "identity": {
+        "host_report": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be",
+        "probe": "ab35c41178c37c578373157b058534703526ef0db5c72c01baf7cde006608916",
+        "executable": "03a3822fd1bf5844ad8a61a170033c274512ed5bc57a7d4ee2303842c1eb282b",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be"
+    },
+    {
+      "evidence": "build\\board-exit-save-v7\\run\\board-exit-save-verification.json",
+      "result": {
+        "passed": true,
+        "plants": 40,
+        "retained_animation_states": 65,
+        "identical_V4_bytes": 229665,
+        "confirmed_exit_saved_and_original_reader_reloaded": true,
+        "replay_shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be",
+        "probe": "fcdac72b5ebd274c1b177b78b01202cdc29b79460e3f71706474ad56171e5c56",
+        "executable": "21cad20133a1a1c903b8b90bcc0913555eca66e0b6d5b3af3b9851b1ae4b765f",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be"
+    },
+    {
+      "evidence": "build\\cached-frame-factories-v2\\run\\cached-frames-verification.json",
+      "result": {
+        "passed": true,
+        "factory_keys": 214,
+        "plant_variants": 175,
+        "mowers": 4,
+        "zombies": 35,
+        "logical_dimensions_preserved": true,
+        "maximum_data_block_bytes": 4096,
+        "logical_canvas_allocations": 0,
+        "seed_chooser_preloaded_images": 6,
+        "all_preview_owners_released": true,
+        "missing_required_preview_rejected": true
+      },
+      "identity": {
+        "host_report": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be",
+        "probe": "0a96f7e2d0859261da3d5451890abcb80eaf038b19f763d2f7620d469079a427",
+        "executable": "21cfc85caf294b28792a1483c5e56d5d7561e2a0b269a176c4b0d2b5dc73a7a3",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be"
+    },
+    {
+      "evidence": "build\\rgba-pages-font16-v1\\run\\rgba-storage-pages-verification.json",
+      "result": {
+        "passed": true,
+        "physical_pixels_with_original_sanding": 193699,
+        "whole_frame_comparisons": 72,
+        "maximum_data_page_bytes": 4096,
+        "dense_materialization": false
+      },
+      "identity": {
+        "host_report": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523",
+        "probe": "3aaa1401aa3163efae28a796e212ff6cca17e9ecfa00623f38d69ad690b35c6a",
+        "executable": "40d073724669b9d26bfe4fc9959c633cb560b0fa48424592ec31d9cfdf77584b",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523"
+    },
+    {
+      "evidence": "build\\plant-paged-small-v1\\run\\plant-reader-verification.json",
+      "result": {
+        "passed": true,
+        "types": 50,
+        "banks_loaded": 200,
+        "whole_frame_comparisons": 9744,
+        "own_actor_pixels_only": true,
+        "replays": 9744,
+        "generic_replays": 9744,
+        "visibility_states": 1624,
+        "decoded_slots_per_bank": 2,
+        "pressure_releases": 232,
+        "missing_or_malformed_containers": 6,
+        "shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523",
+        "probe": "55ba9324ca8daf0eb5e8de7d03e759c80761cbfd946a2150893d3aeb5885b980",
+        "executable": "5ce570dad7ac5fb340d683208e0215f9c0c8f97921d318c989e5e74a9ff9e324",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523"
+    },
+    {
+      "evidence": "build\\glow-paged-small-v1\\run\\sunflower-glow-reader-verification.json",
+      "result": {
+        "passed": true,
+        "whole_frame_comparisons": 15273,
+        "intensities": 89,
+        "two_slot_pressure_cases": 54,
+        "unsupported_color_guards": 2,
+        "shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523",
+        "probe": "ca5d2f8ed19d5a2748535dc5b6a93aa8ef525d616154438532f9a2c797803ee6",
+        "executable": "31ff8d9765193309c00387e3593c7e38ecaa8bd0ab2111d67543d4a0b610f52f",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523"
+    },
+    {
+      "evidence": "build\\linear-malformed-bounds-v1\\run\\actor-normal-engine-verification.json",
+      "result": {
+        "passed": true,
+        "unique_packets": 211,
+        "authored_frames": 211,
+        "whole_frame_comparisons": 633,
+        "required_asset_failures_rejected": 8,
+        "shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523",
+        "probe": "c7b467c9b88c297c8ec53fbc978caeea3b94db771a2ed51391ff17ecbdea29bd",
+        "executable": "f109a05db0bd0a71f9046e0f6efc5ae604121f41f5c049ba958b069d69189a67",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523"
+    },
+    {
+      "evidence": "build\\linear-malformed-bounds-v1\\run\\actor-pose-engine-verification.json",
+      "result": {
+        "passed": true,
+        "whole_frame_comparisons": 180,
+        "pose_replays": 126,
+        "color_override_guards": 5,
+        "LCD_bitmap_boundary_cases": 12,
+        "missing_or_malformed_packs": 9,
+        "shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523",
+        "probe": "c7b467c9b88c297c8ec53fbc978caeea3b94db771a2ed51391ff17ecbdea29bd",
+        "executable": "f109a05db0bd0a71f9046e0f6efc5ae604121f41f5c049ba958b069d69189a67",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "9c426b5eb35a73aaed915b69b2652ce6f5befd08cdd0947569f79815ed984523"
+    },
+    {
+      "evidence": "build\\actor-transition-zombie-fixture-v1\\run\\actor-pose-engine-verification.json",
+      "result": {
+        "passed": true,
+        "whole_frame_comparisons": 180,
+        "pose_replays": 126,
+        "color_override_guards": 5,
+        "LCD_bitmap_boundary_cases": 12,
+        "missing_or_malformed_packs": 9,
+        "shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be",
+        "probe": "2b11bdcf24e68d05b14a0d3a913e6f8e1c44b6aa1a9f370691a31513163f7da8",
+        "executable": "5cf31be18813a4bac25141607b1d158dac25f98f10d39d1d79c5c881279412f8",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be"
+    },
+    {
+      "evidence": "build\\actor-lifetime-v6\\run\\actor-lifetime-verification.json",
+      "result": {
+        "passed": true,
+        "retired_intro_bytes": 1194126,
+        "unchanged_live_actor_states": 3,
+        "original_start_playing_retires_intro": true,
+        "deleted_actor_memo_released": true,
+        "required_bank_failure_rejected_before_play": true,
+        "midgame_intro_reload": false,
+        "shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be",
+        "probe": "6cff905b8e48a400bf255e95fa514c6f21b205e2b2cbae9bfce818e8b640a0f5",
+        "executable": "5b2774b0e73a4855cea8685ef700c32c39860c911312f67980ccc2d32b1abd08",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "502c71af85b10983df01c58936d8c9261a0b9862d49331c00bb27ece7f2197be"
+    },
+    {
+      "evidence": "build\\regular-lawn-linear-v2\\run\\regular-lawn-reader-verification.json",
+      "result": {
+        "passed": true,
+        "backgrounds": 6,
+        "whole_frame_comparisons": 54,
+        "offline_replays": 54,
+        "retained_damage_frames": 72,
+        "state_guards": 18,
+        "pool_water_and_other_overlays_match": true,
+        "shutdown_bytes": 0
+      },
+      "identity": {
+        "host_report": "de48271a1ed3da70d4cac282e0560951c03054dd845b64eb17e4f604b7a8a419",
+        "probe": "c9dc73147963c5cc5b640d3ddd537b9f215df5ec9877c073c59191a931c31ebc",
+        "executable": "4c6cf10e8179429af16c20268cfac649677269b6a8b703048f03528f1f64bfca",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "de48271a1ed3da70d4cac282e0560951c03054dd845b64eb17e4f604b7a8a419"
+    },
+    {
+      "evidence": "build\\alpha-pages-small-v1\\run\\alpha-pages-verification.json",
+      "result": {
+        "passed": true,
+        "all_alpha_bytes_compared": 45024,
+        "whole_frame_cases": 18,
+        "injected_failures_cleaned": 5,
+        "nested_getter_accounting_exact": true
+      },
+      "identity": {
+        "host_report": "81593d9828d9db6e2a8f180618b79e16d6890ab9e9b8d32211385c3c175a7768",
+        "probe": "284b8abe37eafd74c91c22807d245faaee188bb4a1d7a0c20faf30692d647c3a",
+        "executable": "1ac17b6ae4579c2c75c6324bd6cb82d43851bb1dbe9d237e7a4746d296dd7c6b",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "81593d9828d9db6e2a8f180618b79e16d6890ab9e9b8d32211385c3c175a7768"
+    },
+    {
+      "evidence": "build\\cpu-frame-time-v1\\run\\cpu-hotspot-verification.json",
+      "result": {
+        "passed": true,
+        "numeric_cases": 265900,
+        "constant_cases": 147945,
+        "support_query_comparisons": 4224,
+        "clip_cases": 750,
+        "matrix_comparisons": 12048,
+        "animation_increment_comparisons": 560,
+        "frame_time_comparisons": 22032,
+        "types": 51
+      },
+      "identity": {
+        "host_report": "4dd4f676062e69c495e38641dbb3eca294957cb782f91e36ae9a22dfab86f1f9",
+        "probe": "735ea32f5e93c752e147351abcd1ef722c27938fadc2f3a88430c852a8451018",
+        "executable": "8830f78b8d8678615076a0a54252cc0fc3871bfbe9649d3991c819727466702b",
+        "test_linker_wrappers": []
+      },
+      "host_compile_report_sha256": "4dd4f676062e69c495e38641dbb3eca294957cb782f91e36ae9a22dfab86f1f9"
+    },
+    {
+      "evidence": "build/image-pack-two-streams-v1/verification.json",
+      "result": {
+        "passed": true,
+        "images_compared": 392,
+        "cached_previews_compared": 214,
+        "physical_argb_pixels": 1569387,
+        "interleaved_cursor_reads": 16,
+        "independent_backing_streams": 2,
+        "corrupt_common_pack_loose_image_reads": 3,
+        "corrupt_required_preview_packs_rejected": 3,
+        "shutdown_resident_index_bytes": 0,
+        "loader_source_sha256": "d2d43b937d1988cecee8eb1528c0813a5d0a334e612aa1b7be920291000db779",
+        "pack_sha256": "9920b39c920d034052e3ff3ca010bcca8f2ba4368b2f673bb007a095de710938",
+        "cached_pack_sha256": "90e9775bb1092ecd76109b8906a223043229bb75db373292510d371b060c69cf",
+        "scope": "Actual production C loader on host; not native filesystem timing"
+      }
+    },
+    {
+      "evidence": "build/widescreen-present-single-pass-v1.log",
+      "result": {
+        "passed": true,
+        "width": 480,
+        "height": 272,
+        "exact_LCD_frames": 366,
+        "damage_tiles": true,
+        "cursor_all_edges": true,
+        "allocation_failure_latched": true,
+        "released_bytes": 0
+      }
+    },
+    {
+      "evidence": "build/runtime-resource-current-v3.log",
+      "result": {
+        "passed": true,
+        "runtime_bytes": 139832497,
+        "runtime_files": 2755,
+        "baseline_bytes": 134247013,
+        "saved_bytes": -5585484,
+        "removed_files": 695,
+        "completed_alpha_grids": 9,
+        "scaled_exception_images": 14,
+        "nonpreferred_RGB_shadows_removed": 28,
+        "unscaled_nontrivial_standalone_images": 0,
+        "source_inputs_retained": true,
+        "logical_geometry_unchanged": true
+      }
+    },
+    {
+      "evidence": "build/actor-phase-current-v1.log",
+      "result": {
+        "passed": true,
+        "original_entries": 3837,
+        "phase_banks": 3,
+        "duplicate_frames_removed": 211,
+        "all_pixel_packets_identical": true
+      }
+    },
+    {
+      "evidence": "build/verify-plant-current-v1.log",
+      "result": {
+        "passed": true,
+        "plant_banks": 200,
+        "plant_types": 50,
+        "sunflower_glow_intensities": 89,
+        "ordinary_shadow_poses": 280,
+        "aligned_ordinary_poses": 211,
+        "ordinary_backgrounds": 6
+      }
+    },
+    {
+      "evidence": "build/save-file-host-v2/verification.json",
+      "result": {
+        "passed": true,
+        "cases": 17,
+        "binary_bytes": 20017,
+        "partial_write": true,
+        "zero_write": true,
+        "write_error": true,
+        "close_error": true,
+        "rename_error": true,
+        "rollback_failure_recovery": true,
+        "old_bytes_preserved_on_failure": true,
+        "identical_save_no_writes": true,
+        "whole_file_compared": true,
+        "comparison_read_and_close_errors_rewrite": true,
+        "interrupted_and_short_reads": true,
+        "empty_file": true
+      },
+      "input_sha256": {
+        "platform\\SaveFile.cpp": "78fbf3b2c1e346811c69adf81d3f907b167294e6018294396246240d7704750e",
+        "tools\\tests\\save_file_probe.cpp": "a05a437674dd0990e15a927e59562953c19329d327371af4be3bade6d9d150ab"
+      }
+    },
+    {
+      "evidence": "build\\native-write-test\\verification.json",
+      "result": {
+        "passed": true,
+        "production_source_sha256": "3bbc0a50f90d1b5aeb5f3852dedb7fcb023b1342fb1b091f7a5940e71c2393a3",
+        "save_41909_bytes_native_calls": 1,
+        "large_write_byte_exact": true,
+        "short_write_preserved": true,
+        "invalid_native_result_rejected": true,
+        "invalid_descriptor_and_empty_write": true,
+        "stdout_stderr_no_disk_IO": true,
+        "large_RAM_log_wrap_byte_exact": true
+      },
+      "scope": "Unchanged write/logging body reused. Later heap diagnostics changed the surrounding source.",
+      "unchanged_production_body_sha256": "1c2f2c8266f9de4627e501c53e60ac7f22963b958603c0c93f6a60f5a7aeb80e",
+      "tested_probe_source_sha256": "5e0e6884642e5cf444115fe46dbc9f67ae3b2e73fabfecb69e3dc701cbcdbf24",
+      "current_whole_source_sha256": "2ccb027b2994fcadc8b0c481347392dab54587888db68bf20846b17574e71ea5"
+    }
+  ],
+  "limitations": [
+    "Not a physical H1 performance result.",
+    "Early A8 fixtures referencing the removed CJK image atlas were corrected to a remaining real A8 font; its 1KB-page test passed."
+  ],
+  "integration_observation": {
+    "evidence": "build\\dense-render-current-v1\\run\\dense-fallback-observation.json",
+    "identity": {
+      "host_report": "81593d9828d9db6e2a8f180618b79e16d6890ab9e9b8d32211385c3c175a7768",
+      "probe": "3fbd8c8e7869bc50e4e2a7392856f2b3c2a7a329c28f008b35089c5c35114c61",
+      "executable": "59ff80a6074f1804772aaf856ebd23de1f76b9325d85cdd09c2efeb5306bcbbd",
+      "test_linker_wrappers": []
+    },
+    "result": {
+      "observed": true,
+      "original_board_updates": 1000,
+      "original_board_draws": 250,
+      "fallback": [
+        255,
+        150,
+        58,
+        0,
+        47,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actor": [
+        8386707,
+        5300,
+        8295,
+        15,
+        0,
+        16896,
+        0,
+        0,
+        13750,
+        2500,
+        0,
+        0,
+        646,
+        0,
+        0,
+        0
+      ]
+    },
+    "scope": "1000 original board updates and 250 actual draws completed. An observation, not physical FPS or proof of complete offline coverage."
+  }
+}

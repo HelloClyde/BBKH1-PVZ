@@ -67,4 +67,121 @@ extern "C" bool pvzh1_fast3_test_enabled;
     }
 '''
         text = replace_one(text, old, new, 'hidden DrawTrack')
+    if 'PVZH1_CONSTANT_TRANSFORM' not in text:
+        text='#include "graphics/ConstantTransform.h"\n'+text
+        first='\ttheTransform->mTransX = FloatLerp(aTransBefore.mTransX, aTransAfter.mTransX, theFrameTime->mFraction);'
+        last='\ttheTransform->mAlpha = FloatLerp(aTransBefore.mAlpha, aTransAfter.mAlpha, theFrameTime->mFraction);'
+        assert text.count(first)==text.count(last)==1
+        text=text.replace(first,'''    // PVZH1_CONSTANT_TRANSFORM: equal finite endpoints have the same exact
+    // result, including canonical positive zero, without seven soft FP lerps.
+    if(!(
+#ifdef PVZH1_FAST3_TEST
+       pvzh1_fast3_test_enabled&&
+#endif
+       H1ConstantTransform(aTransBefore,aTransAfter,theFrameTime->mFraction,*theTransform))){
+'''+first).replace(last,last+'\n    }')
+    if 'PVZH1_BASE_INVERSE_MEMO' not in text:
+        start=text.index('void Reanimation::GetAttachmentOverlayMatrix(');end=text.index('\nvoid Reanimation::GetFramesForLayer',start)
+        section=text[start:end]
+        first='\tSexyTransform2D aBasePoseMatrix;'
+        last='\tSexyMatrix3Inverse(aBasePoseMatrix, aBasePoseMatrixInv);'
+        a=section.index(first);b=section.index(last,a)+len(last)
+        section=section[:a]+"""    // PVZH1_BASE_INVERSE_MEMO: definitions and base-frame numbers are immutable
+    // inputs; all current-frame and overlay calculations remain original.
+    SexyTransform2D aBasePoseMatrixInv;
+    if(!H1ActorBaseInverse(this,theTrackIndex,aBasePoseMatrixInv)){
+        SexyTransform2D aBasePoseMatrix;GetTrackBasePoseMatrix(theTrackIndex,aBasePoseMatrix);
+        SexyMatrix3Inverse(aBasePoseMatrix,aBasePoseMatrixInv);
+        H1ActorBaseInverse(this,theTrackIndex,aBasePoseMatrixInv,true);
+    }"""+section[b:]
+        text=text[:start]+section+text[end:]
+    if 'PVZH1_ANIM_INCREMENT_MEMO' not in text:
+        text=replace_one(text,
+            'mAnimTime += SECONDS_PER_UPDATE * mAnimRate / mFrameCount;',
+            'mAnimTime += H1ActorAnimIncrement(this); // PVZH1_ANIM_INCREMENT_MEMO: same double increment until rate/count changes',
+            'animation double increment')
+    if 'PVZH1_PRESENT_RENDER_GROUPS' not in text:
+        old='void Reanimation::DrawAllRenderGroups(Graphics* g)\n{'
+        text=replace_one(text,old,old+'''
+    // PVZH1_PRESENT_RENDER_GROUPS: absent groups draw neither tracks nor
+    // attachments. Collect current groups once, preserving ascending order.
+    if(mDefinition&&mTrackInstances){
+        if(mDead)return;
+        uint32_t groups=0;
+        for(int i=0;i<mDefinition->mTracks.count;++i){
+            const int group=mTrackInstances[i].mRenderGroup;
+            if(group>=RENDER_GROUP_NORMAL&&group<=RENDER_GROUP_MAX)groups|=1u<<group;
+        }
+        for(int group=RENDER_GROUP_NORMAL;group<=RENDER_GROUP_MAX;++group)
+            if(groups&(1u<<group))DrawRenderGroup(g,group);
+        return;
+    }
+''','present render groups')
+    if 'PVZH1_FIXED_ATTACHER_TAG' not in text:
+        text='#include "graphics/ReanimTrack.h"\n'+text
+        text=replace_one(text,
+            'strncasecmp(mDefinition->mTracks.tracks[aTrackIndex].mName, "attacher__", 10) == 0',
+            'H1IsAttacherTrack(mDefinition->mTracks.tracks[aTrackIndex].mName) /* PVZH1_FIXED_ATTACHER_TAG */',
+            'fixed attacher tag')
     path.write_text(text, encoding='utf8', newline='\n')
+    target=Path(source_root)/'PvzpLib/Reanimator.cpp'
+    source=target.read_text(encoding='utf8')
+    if 'PVZH1_EXACT_FRAME_TIME_MEMO' not in source:
+        entry='void Reanimation::GetFrameTime(ReanimatorFrameTime* theFrameTime)\n{'
+        source=replace_one(source,entry,entry+'\n    // PVZH1_EXACT_FRAME_TIME_MEMO: animation clock and events still update normally.\n    if(H1ActorFrameTime(this,*theFrameTime))return;','frame time lookup')
+        tail='\tPVZP_ASSERT(theFrameTime->mAnimFrameBeforeInt >= 0 && theFrameTime->mAnimFrameAfterInt < mDefinition->mTracks.tracks[0].mTransforms.count);'
+        source=replace_one(source,tail,tail+'\n    H1ActorFrameTime(this,*theFrameTime,true);','frame time publication')
+        target.write_text(source,encoding='utf8',newline='\n')
+    target=Path(source_root)/'PvzpLib/Reanimator.cpp'
+    source=target.read_text(encoding='utf8')
+    if 'PVZH1_ACTIVE_UPDATE_TRACKS' not in source:
+        start=source.index('void Reanimation::Update()\n{');end=source.index('\n}\n',start)+3
+        body=source[start:end]
+        loop='for (int aTrackIndex = 0; aTrackIndex < mDefinition->mTracks.count; aTrackIndex++)'
+        body=replace_one(body,loop,'for (int aTrackIndex=H1ActorNextActiveTrack(this,-1);aTrackIndex>=0;aTrackIndex=H1ActorNextActiveTrack(this,aTrackIndex)) /* PVZH1_ACTIVE_UPDATE_TRACKS */','active update tracks')
+        source=source[:start]+body+source[end:]
+        start=source.index('void Reanimation::PropogateColorToAttachments()\n{');end=source.index('\n}\n',start)+3
+        body=source[start:end]
+        body=replace_one(body,'for (int i = 0; i < mDefinition->mTracks.count; i++)','for (int i=H1ActorNextActiveTrack(this,-1);i>=0;i=H1ActorNextActiveTrack(this,i))\n        if(mTrackInstances[i].mAttachmentID!=AttachmentID::ATTACHMENTID_NULL)','active color propagation tracks')
+        source=source[:start]+body+source[end:]
+        for entry in ['void Reanimation::StartBlend(int theBlendTime)\n{','void Reanimation::SetShakeOverride(const char* theTrackName, float theShakeAmount)\n{']:
+            source=replace_one(source,entry,entry+'\n    H1ActorTrackStateChanged(this);','active track mutation')
+        target.write_text(source,encoding='utf8',newline='\n')
+        target=Path(source_root)/'PvzpLib/Attachment.cpp';source=target.read_text(encoding='utf8')
+        entry='AttachEffect* CreateEffectAttachment(AttachmentID& theAttachmentID, EffectType theEffectType, unsigned int theDataID, float theOffsetX, float theOffsetY)\n{'
+        source='#include "actors/ActorPose.h"\n'+replace_one(source,entry,entry+'\n    H1ActorAttachmentsChanged(); // Adding an effect can activate its parent track.','active attachment mutation')
+        target.write_text(source,encoding='utf8',newline='\n')
+    for relative,entry,body in (
+        ('PvzpLib/PvzpCommon.cpp',
+         'void SexyMatrix3Multiply(SexyMatrix3& m, const SexyMatrix3& l, const SexyMatrix3& r)\n{',
+         '    if(H1MultiplyAffine(m,l,r))return;'),
+        ('SexyAppFramework/misc/SexyMatrix.cpp',
+         'SexyMatrix3 SexyMatrix3::operator*(const SexyMatrix3 &theMat) const\n{',
+         '    SexyMatrix3 affine;if(H1MultiplyAffine(affine,*this,theMat,true))return affine;'),
+    ):
+        target=Path(source_root)/relative
+        source=target.read_text(encoding='utf8')
+        if 'PVZH1_EXACT_AFFINE_PRODUCT' not in source:
+            source='#include "graphics/AffineMatrix.h"\n'+replace_one(source,entry,entry+'\n    // PVZH1_EXACT_AFFINE_PRODUCT: original non-affine/nonfinite path below.\n'+body,'affine matrix product')
+            target.write_text(source,encoding='utf8',newline='\n')
+    target=Path(source_root)/'PvzpLib/PvzpCommon.cpp'
+    source=target.read_text(encoding='utf8')
+    if 'PVZH1_OFFLINE_GRID_SHADOW' not in source:
+        entry='void PvzpDrawImageCelCenterScaledF(Graphics* g, Image* theImageStrip, float thePosX, float thePosY, int theCelCol, float theScaleX, float theScaleY)\n{'
+        source='#include "actors/ActorPose.h"\n'+replace_one(source,entry,entry+'\n    // PVZH1_OFFLINE_GRID_SHADOW: matching ordinary LCD shadows are pre-rendered.\n    if(H1PlantShadowDraw(g,theImageStrip,thePosX,thePosY,theCelCol,theScaleX,theScaleY))return;','offline ordinary shadow')
+        target.write_text(source,encoding='utf8',newline='\n')
+    target=Path(source_root)/'PvzpLib/PvzpCommon.h'
+    source=target.read_text(encoding='utf8')
+    if 'PVZH1_EQUAL_LERP_ENDPOINTS' not in source:
+        source='#include <bit>\n'+source
+        old='inline float\t\t\tFloatLerp(float theStart, float theEnd, float theFactor)\t{ return theStart + theFactor * (theEnd - theStart); }'
+        new='''inline float FloatLerp(float theStart,float theEnd,float theFactor){
+    // PVZH1_EQUAL_LERP_ENDPOINTS: retain the exact original positive-zero
+    // result for equal finite endpoints and a finite fraction in [0,1].
+    const unsigned a=std::bit_cast<unsigned>(theStart),b=std::bit_cast<unsigned>(theEnd);
+    if(a==b&&(a&0x7f800000u)!=0x7f800000u&&std::bit_cast<unsigned>(theFactor)<=0x3f800000u)
+        return (a&0x7fffffffu)?theStart:0.0f;
+    return theStart+theFactor*(theEnd-theStart);
+}'''
+        source=replace_one(source,old,new,'equal FloatLerp endpoints')
+        target.write_text(source,encoding='utf8',newline='\n')

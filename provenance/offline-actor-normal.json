@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "runtime_path": "actor-normal.h1ap",
+  "bytes": 462976,
+  "sha256": "2f2b42f01997ac7c59023f5323a37db825e0b7c02953c54745e97dfcfaca207d",
+  "entries": 211,
+  "source_sha256": "f898a823e720f9fb6a01006b9e8e4c4486aed6bf4073eb16d5d49dc88cb74aca",
+  "encoder_sha256": "9949f129b02859406885ec6b4d3cac15a5a90ce892815b15327e1f99bdcf6b16",
+  "pixel_operations_before": 90993,
+  "pixel_operations_after": 76227,
+  "independent_pixel_checks": 218628,
+  "attachment_boundaries_preserved": true,
+  "complete_transition_bank_retained": true,
+  "storage": "aligned_raw_RGBA32",
+  "lossy": false
+}

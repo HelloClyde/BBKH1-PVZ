@@ -5,6 +5,17 @@ from build_paths import ROOT,SDK
 from resource_inputs import input_path
 def read(path):return json.loads(path.read_text(encoding='utf8'))
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def verify_actor_signature(recorded):
+ current=sha(ROOT/'platform/actors/ActorPoseFormat.h')
+ if current==recorded:return
+ compatible=read(ROOT/'provenance/actor-signature-compatibility.json')
+ assert compatible['legacy_format_sha256']==recorded==sha(ROOT/compatible['oracle_source'])
+ assert compatible['current_format_sha256']==current
+ assert sha(ROOT/compatible['test_source'])==compatible['test_source_sha256']
+ assert sha(ROOT/compatible['verification'])==compatible['verification_sha256']
+ proof=read(ROOT/compatible['verification'])
+ assert proof['passed'] and proof['comparisons']==proof['accepted']+proof['rejected'] and proof['comparisons']>=393312
 def check_files(folder,expected):
  actual={p.relative_to(folder).as_posix():sha(p) for p in sorted(folder.rglob('*')) if p.is_file()}
  if actual!=expected:
@@ -20,6 +31,10 @@ def main():
  assets=read(ROOT/'provenance/resources.json');count=check_files(ROOT/assets['directory'],assets['files'])
  from verify_runtime_resources import verify as verify_runtime_resources
  verify_runtime_resources()
+ from verify_plant_poses import verify as verify_plant_poses
+ verify_plant_poses(ROOT/assets['directory'])
+ from verify_actor_phases import verify as verify_actor_phases
+ verify_actor_phases(ROOT/assets['directory'])
  from bake_file_index import encode
  file_index=read(ROOT/'provenance/offline-file-index.json');index=ROOT/assets['directory']/file_index['runtime_path']
  reward=read(ROOT/'provenance/offline-reward-effects.json');reward_file=ROOT/assets['directory']/reward['runtime_path']
@@ -108,7 +123,7 @@ def main():
   if kind==3:poses.add(identifier)
  assert poses==set(range(0,449,4))|{450}
  performance=read(ROOT/'provenance/runtime-performance.json')
- actor=read(ROOT/'provenance/offline-actor-poses.json');pose=ROOT/assets['directory']/actor['runtime_path'];data=pose.read_bytes()
+ actor=read(ROOT/'provenance/offline-actor-poses.json');pose=input_path(ROOT/assets['directory'],actor['runtime_path']);data=pose.read_bytes()
  assert sha(pose)==actor['sha256'] and len(data)==actor['bytes'] and not actor['lossy']
  if actor.get('page_container'):
   from pack_actor_pages import decode as decode_actor_pages
@@ -121,7 +136,7 @@ def main():
  assert header[8]==header[11]+header[12]*104 and header[9]==len(data) and header[14]==0x314d4352
  assert zlib.crc32(data[64:])==header[10]==int(actor['crc32'],16)
  assert sha(ROOT/'tools/pack_actor_poses.py')==actor['encoder_sha256'] and sha(ROOT/'tools/tests/actor_pose_export.cpp')==actor['renderer_exporter_sha256']
- assert sha(ROOT/'platform/actors/ActorPoseFormat.h')==actor['signature_format_sha256']
+ verify_actor_signature(actor['signature_format_sha256'])
  assert sha(ROOT/'tools/tests/sod_roll_export.cpp')==actor['sod_roll_exporter_sha256']
  assert sha(ROOT/'tools/tests/pea_blend_export.cpp')==actor['pea_blend_exporter_sha256']
  assert sha(ROOT/'tools/tests/zombie_flash_export.cpp')==actor['zombie_flash_exporter_sha256']
@@ -141,7 +156,7 @@ def main():
  assert {struct.unpack_from('<Q4I',blob,64+i*24)[1] for i in range(49)}==set(range(49))
  assert {struct.unpack_from('<Q4I',blob,64+i*24)[4] for i in range(49)}=={22}
  assert sha(ROOT/'tools/tests/sun_pose_export.cpp')==sun['renderer_exporter_sha256']
- assert sha(ROOT/'platform/actors/ActorPoseFormat.h')==sun['signature_format_sha256']
+ verify_actor_signature(sun['signature_format_sha256'])
  assert read(ROOT/sun['replay_verification'])['passed']
  lawns=read(ROOT/'provenance/offline-early-lawns.json');path=ROOT/assets['directory']/lawns['runtime_path'];data=path.read_bytes();h=struct.unpack_from('<16I',data)
  assert sha(path)==lawns['sha256'] and len(data)==lawns['bytes']

@@ -2,6 +2,7 @@
 #pragma once
 #include "PvzpLib/Reanimator.h"
 #include "Resources.h"
+#include "PlantPoseTypes.h"
 #include <bit>
 #include <cstdint>
 #include <cstring>
@@ -26,33 +27,48 @@ inline bool ZombieVisibilityVaries(const char* name){
         !std::strcmp(name,"anim_hair")||!std::strcmp(name,"anim_tongue")||
         !std::strcmp(name,"Zombie_outerarm_upper")||!std::strcmp(name,"Zombie_outerarm_lower")||!std::strcmp(name,"Zombie_outerarm_hand");
 }
-inline bool Signature(const Reanimation* r,int group,uint64_t& hash,bool allowBlend=false,bool allowFlash=false){
- if(!r||!Supported(r->mReanimationType)||r->mDead||!r->mDefinition||!r->mTrackInstances||
+inline unsigned PlantImageOverrideKey(Sexy::Image* image){
+ if(!image)return 0;
+ const Sexy::Image* choices[]={Sexy::IMAGE_REANIM_WALLNUT_CRACKED1,Sexy::IMAGE_REANIM_WALLNUT_CRACKED2,
+  Sexy::IMAGE_REANIM_TALLNUT_CRACKED1,Sexy::IMAGE_REANIM_TALLNUT_CRACKED2,
+  Sexy::IMAGE_REANIM_GARLIC_BODY2,Sexy::IMAGE_REANIM_GARLIC_BODY3,
+  Sexy::IMAGE_REANIM_PUMPKIN_DAMAGE1,Sexy::IMAGE_REANIM_PUMPKIN_DAMAGE3};
+ for(unsigned i=0;i<8;++i)if(image==choices[i])return i+1;return UINT32_MAX;
+}
+template<class Emit> inline bool VisitSignature(const Reanimation* r,int group,Emit emit,bool allowBlend,bool allowFlash,bool perTrack){
+ if(!r||(!Supported(r->mReanimationType)&&!(perTrack&&PlantType(r->mReanimationType)))||r->mDead||!r->mDefinition||!r->mTrackInstances||
     r->mDefinition->mTracks.count<=0||r->mDefinition->mTracks.count>256||
-    r->mColorOverride!=Sexy::Color::White||(r->mEnableExtraAdditiveDraw&&!allowFlash)||r->mEnableExtraOverlayDraw||
-    r->mFilterEffect!=FilterEffect::FILTER_EFFECT_NONE)return false;
- hash=14695981039346656037ull;Mix(hash,uint32_t(r->mReanimationType));Mix(hash,uint32_t(group));
+    (!perTrack&&r->mColorOverride!=Sexy::Color::White)||(r->mEnableExtraAdditiveDraw&&!allowFlash)||r->mEnableExtraOverlayDraw||
+    (!perTrack&&r->mFilterEffect!=FilterEffect::FILTER_EFFECT_NONE))return false;
+ emit(uint32_t(r->mReanimationType));emit(perTrack?0u:uint32_t(group));
+ if(perTrack){emit(uint32_t(r->mColorOverride.ToInt()));emit(uint32_t(r->mFilterEffect));}
  int base=r->mFrameBasePose;
  // Base poses affect attachment UPDATE matrices, not this actor's DrawTrack.
  // First blink permanently fills these fields; its pixels remain identical.
  if((r->mReanimationType==ReanimationType::REANIM_SUNFLOWER&&base==4)||
     (r->mReanimationType==ReanimationType::REANIM_PEASHOOTER&&base==29))base=-1;
- Mix(hash,uint32_t(r->mDefinition->mTracks.count));Mix(hash,uint32_t(base));
+ emit(uint32_t(r->mDefinition->mTracks.count));emit(perTrack?0u:uint32_t(base));
  for(float f:{r->mOverlayMatrix.m00,r->mOverlayMatrix.m01,r->mOverlayMatrix.m10,r->mOverlayMatrix.m11}){
-  const uint32_t bits=LinearBits(f);if((bits&0x7f800000u)==0x7f800000u)return false;Mix(hash,bits);
+  const uint32_t bits=LinearBits(f);if((bits&0x7f800000u)==0x7f800000u)return false;emit(bits);
  }
  if((std::bit_cast<uint32_t>(r->mOverlayMatrix.m20)&0x7fffffffu)||
     (std::bit_cast<uint32_t>(r->mOverlayMatrix.m21)&0x7fffffffu)||r->mOverlayMatrix.m22!=1)return false;
  for(int i=0;i<r->mDefinition->mTracks.count;++i){const auto& t=r->mTrackInstances[i];
   if((t.mBlendCounter&&!allowBlend)||t.mShakeX!=0||t.mShakeY!=0)return false;
-  if(t.mImageOverride&&(r->mReanimationType!=ReanimationType::REANIM_ZOMBIE||t.mImageOverride!=Sexy::IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2||std::strcmp(r->mDefinition->mTracks.tracks[i].mName,"Zombie_outerarm_upper")))return false;
+  unsigned overrideKey=0;if(perTrack){overrideKey=PlantImageOverrideKey(t.mImageOverride);if(overrideKey==UINT32_MAX)return false;}
+  else if(t.mImageOverride&&(r->mReanimationType!=ReanimationType::REANIM_ZOMBIE||t.mImageOverride!=Sexy::IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2||std::strcmp(r->mDefinition->mTracks.tracks[i].mName,"Zombie_outerarm_upper")))return false;
   // Zombie packets contain each authored track. Runtime visibility selects
   // cosmetic heads/arms and lost body parts without duplicating whole poses.
-  Mix(hash,r->mReanimationType==ReanimationType::REANIM_ZOMBIE&&ZombieVisibilityVaries(r->mDefinition->mTracks.tracks[i].mName)?0u:uint32_t(t.mRenderGroup));Mix(hash,t.mAttachmentID!=AttachmentID::ATTACHMENTID_NULL);
-  Mix(hash,uint32_t(t.mTrackColor.ToInt()));Mix(hash,std::bit_cast<uint32_t>(t.mShakeOverride));
-  Mix(hash,unsigned(t.mIgnoreClipRect)|(unsigned(t.mTruncateDisappearingFrames)<<1)|
+  emit(perTrack?0u:r->mReanimationType==ReanimationType::REANIM_ZOMBIE&&ZombieVisibilityVaries(r->mDefinition->mTracks.tracks[i].mName)?0u:uint32_t(t.mRenderGroup));emit(perTrack?0u:t.mAttachmentID!=AttachmentID::ATTACHMENTID_NULL);
+  if(perTrack)emit(overrideKey);
+  emit(uint32_t(t.mTrackColor.ToInt()));emit(std::bit_cast<uint32_t>(t.mShakeOverride));
+  emit(unsigned(t.mIgnoreClipRect)|(unsigned(t.mTruncateDisappearingFrames)<<1)|
       (unsigned(t.mIgnoreColorOverride)<<2)|(unsigned(t.mIgnoreExtraAdditiveColor)<<3));
  }
  return true;
+}
+constexpr unsigned SignatureWords=16+256*6;
+inline bool Signature(const Reanimation* r,int group,uint64_t& hash,bool allowBlend=false,bool allowFlash=false,bool perTrack=false){
+ hash=14695981039346656037ull;return VisitSignature(r,group,[&](uint32_t word){Mix(hash,word);},allowBlend,allowFlash,perTrack);
 }
 }

@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "source_sha256": "f898a823e720f9fb6a01006b9e8e4c4486aed6bf4073eb16d5d49dc88cb74aca",
+  "normal_sha256": "2f2b42f01997ac7c59023f5323a37db825e0b7c02953c54745e97dfcfaca207d",
+  "encoder_sha256": "29ed441430819863d6cf76aca75833fed20e5cb6ea56b82e6c909e321b6ceda5",
+  "removed_ordinary_duplicates": 211,
+  "complete_source_entry_coverage": 3837,
+  "packet_bytes_preserved": true,
+  "all_pixel_literals_preserved": true,
+  "lossy": false,
+  "files": [
+    {
+      "runtime_path": "pea-transitions.h1ap",
+      "type": 4,
+      "entries": 2940,
+      "bytes": 932818,
+      "sha256": "655687823b4ff1c19ce5d2f091f1b9ce2b8dde0afaa2a29dc565c1025927586d",
+      "decoded_bytes": 2525815,
+      "decoded_sha256": "0a599b768c8eab36ecf22fcbb8737ce72f59c72197b00a59c09b7529cbf4f99e",
+      "ordered_packet_sha256": "ee355ecd68bcba8815a8c4549725fabeaff00cabd7abb4a794b1d8208323afb9"
+    },
+    {
+      "runtime_path": "zombie-hit.h1ap",
+      "type": 21,
+      "entries": 500,
+      "bytes": 1805157,
+      "sha256": "821f4c97f6d8d4e689a213045108f65060c60549a587637e6eeec2955707fdf7",
+      "decoded_bytes": 2373234,
+      "decoded_sha256": "6c285707431da4595aa83003be3bc88790556b1ea7aed10199537f3787f89ca6",
+      "ordered_packet_sha256": "228317d59a0fc48aeba2addda346b3fcdc37c49d628258ff3bf0d566bf620037"
+    },
+    {
+      "runtime_path": "sod-roll.h1ap",
+      "type": 2,
+      "entries": 186,
+      "bytes": 578866,
+      "sha256": "be1e7899bb4a125c3a65a8a02f3639a39002c8889a773e89d2edccc3d06e19a2",
+      "decoded_bytes": 800096,
+      "decoded_sha256": "77369a148ba9ace7eed90aefa0bc27094278fd98a7816c3a0e4e4f26347341ea",
+      "ordered_packet_sha256": "f644d726a403d2dd9599b67fd5eda281e8a0ceead4803db240d01e09c0cfce7a"
+    }
+  ]
+}

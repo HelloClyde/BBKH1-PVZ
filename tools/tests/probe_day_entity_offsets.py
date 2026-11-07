@@ -6,6 +6,7 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--build-dir',type=Path,default=Path('build/mips'))
 parser.add_argument('--source',type=Path)
 parser.add_argument('--output',type=Path,default=Path('build/input-offsets'))
+parser.add_argument('--reanimations',action='store_true',help='Include read-only animation matrix layout')
 args=parser.parse_args()
 BUILD=(ROOT/args.build_dir).resolve()
 OUT=(ROOT/args.output).resolve()
@@ -68,7 +69,16 @@ entries=[
  ('coin.width','OFF(Coin,mWidth)'),('coin.height','OFF(Coin,mHeight)'),
  ('coin.collecting','OFF(Coin,mIsBeingCollected)'),
 ]
+if args.reanimations:
+ entries += [('app.effects','OFF(LawnApp,mEffectSystem)'),('effects.reanimations','OFF(EffectSystem,mReanimationHolder)'),
+  ('holder.array','OFF(ReanimationHolder,mReanimations)'),('reanim.stride','sizeof(DataArray<Reanimation>::DataArrayItem)'),
+  ('reanim.bytes','sizeof(Reanimation)'),('reanim.type','OFF(Reanimation,mReanimationType)'),
+  ('reanim.dead','OFF(Reanimation,mDead)'),('reanim.time','OFF(Reanimation,mAnimTime)'),('reanim.rate','OFF(Reanimation,mAnimRate)'),
+  ('reanim.start','OFF(Reanimation,mFrameStart)'),('reanim.count','OFF(Reanimation,mFrameCount)'),
+  ('reanim.base','OFF(Reanimation,mFrameBasePose)'),('reanim.matrix','OFF(Reanimation,mOverlayMatrix)')]
 cpp='''#include "DataArray.public.h"
+#include "PvzpLib/EffectSystem.h"
+#include "PvzpLib/Reanimator.h"
 #include "LawnApp.h"
 #include "Lawn/Board.h"
 #include "Lawn/Plant.h"

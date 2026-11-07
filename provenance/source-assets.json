@@ -3189,6 +3189,7 @@
     {
       "directory": "private/resource-build-inputs",
       "files": {
+        "actor-poses.h1ap": "5249246d9b555b9cd5fc8fe8c3d234c1b1bb1b4a95071c28fe3523b135cf6e58",
         "audio-index.json": "d77f47c9fa65944e46caed2c7244b58acf17f674c3124713238de60ff1f4e649",
         "data/_houseofterror16.h1i": "43c7453f65d78ded3c903bc3e782582e31b831590fbb0a357db07c3c9cfb5b27",
         "data/_pico129.h1i": "bc5ed7ca1ac64b2f8247d4a9df57d1bcb2d7f036d70655a46dfc69b1ceea58e0",
@@ -3230,6 +3231,7 @@
         "h1-scale-owner.json": "6b46894956e5eb8aac9a073b5615f5480efdbec0c2504f5dc5f05823fb23bd73",
         "h1menu/selector.h1mb": "589bb2aad6b8d06d1804b02a1ca5b8ba89f1efc45f4dfc33f499a0836dba8b1b",
         "image-metadata.h1x": "412570e0ed228f1cd3cd6520c2475e74c02886f3f4557458c464f6d53a94a30c",
+        "images-common.h1pk": "9987083a2f6ef1b3cd21d259e2bba66a71d3611ebf82b06fafe5a80d8025feca",
         "images/background1.h1i": "644c85c44a01a77c5abaec92d204941af149e67e7403a7e5eaf978f79bc829c3",
         "images/background1unsodded.h1i": "8c6e7799d4d1d22d2af69ae1ea450fcb400dd84a05d5981d87b24ddc947cca28",
         "images/credits_bigbrain.h1i": "fbdef138ca75beb001686de5a635ed784c3555d71cc2447a31a79cfcaade6c00",
@@ -3287,12 +3289,19 @@
         "images/zombienoteblack4.h1i": "546e68edcc0344b9fc1b251ee081188f8b9ada2c1cba94d8adceaf21e628df73",
         "images/zombienotehelp.h1i": "5a612704cea273f7281bcef6e3b010ad4301f2b69961d0df184597376583c3b8",
         "images/zombienotehelpblack.h1i": "858f64440f0e1e172f0eecd00735d2f99f25c821e8fad48ff2f0ec51c8fe9a31",
-        "images-common.h1pk": "9987083a2f6ef1b3cd21d259e2bba66a71d3611ebf82b06fafe5a80d8025feca",
         "module-index.json": "c5a97e1cd703ea54283fb44a6891003ff6e7ba65926be9a4e0ebc0296ab9cbd0",
+        "optimized/actor-normal-mode20.h1ap": "2f2b42f01997ac7c59023f5323a37db825e0b7c02953c54745e97dfcfaca207d",
+        "optimized/actor-poses.h1ap": "f898a823e720f9fb6a01006b9e8e4c4486aed6bf4073eb16d5d49dc88cb74aca",
         "optimized/data/houseofterror16.h1a": "62289acde17c87ff64535fc93e6c87cf1965fc3ecb888da6e2d5dfdad8a82eaf",
         "optimized/data/houseofterror16outline.h1i": "5d833265afecc19112bba1865a98d4c16b174e0d8146717db6a9dd2d3dfc8196",
         "optimized/images/pool_base.h1i": "f0168ce4c8bdb1a7b4513028d8ad8771131017504580758cec0081fa7ff88a4b",
         "optimized/images/pool_shading.h1i": "258ec25c2b79344a3aa146b7f9a73ac071fd5b236a8e87abc4a5b799cf5185e0",
+        "optimized/tiled-lawns/normal-lawn-1.h1lb": "c495627ad97a58478157affb35eeebc8e6bada113c80e09dc981eeac51f4276e",
+        "optimized/tiled-lawns/normal-lawn-2.h1lb": "1711b00ddcb540d2d2a4a3ea3222dd141bf7fe595178f431cc6dd59e5a42bbfa",
+        "optimized/tiled-lawns/normal-lawn-3.h1lb": "2c65aeda1339485d7ef92c68294126b2f9614d3fe3696d007ff225ecc1e607fa",
+        "optimized/tiled-lawns/normal-lawn-4.h1lb": "d6a26c8a716fd2f4c537e19b818cda0104853ca7afc4198e508a933f505d7dea",
+        "optimized/tiled-lawns/normal-lawn-5.h1lb": "6dcdd195daf987ef54c79d0ebcb6ea478baabf62adb8a7e36259a0cb33dd4395",
+        "optimized/tiled-lawns/normal-lawn-6.h1lb": "e5a0bdf47e061b7cbc7b302a743b50b36482eb5d76998f30e470d7f0b70b8423",
         "particles/artchallengeplant.xml": "4d46bf72de9b4d067d0be018d64f69041aac7d36e27d5fa98f630af4a2ae983d",
         "particles/award.xml": "ff7015958afecd62427087a083d202825b306a383cf519a838eb7b0685a38207",
         "particles/awardglow.h1i": "eac75d43bb61836cc0fcdcf204d4f36101dfa5c50e88f743bc188d4eb7d67e26",
@@ -3900,10 +3909,9 @@
         "wide-owner.json": "0a99d6e4158223765ec13069c04a343eb9a502fc994969bba05ea022406720ad",
         "widescreen-manifest.json": "d9d18f41b4fa516e5d3ed7f88429ac17856b649b915d95a6c14e662990e03384",
         "zh-cn-manifest.json": "1e44630f0e7dcd3bff1802e7b044f4aadd3e863d5f5f00799fa33cabdd735961",
-        "zh-cn-owner.json": "9d4678ca04c978b7f5ae058b08b70bbdfa3029cf6e3b0c4e0e815cf6d1f3fce1",
-        "actor-poses.h1ap": "5249246d9b555b9cd5fc8fe8c3d234c1b1bb1b4a95071c28fe3523b135cf6e58"
+        "zh-cn-owner.json": "9d4678ca04c978b7f5ae058b08b70bbdfa3029cf6e3b0c4e0e815cf6d1f3fce1"
       },
-      "bytes": 56691454,
+      "bytes": 63645194,
       "purpose": "Build-only originals and materialized packed images; excluded from H1 install"
     }
   ]

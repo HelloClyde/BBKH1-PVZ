@@ -18,7 +18,7 @@ namespace {void Check(bool v){if(!v)throw std::runtime_error("Reduced RGBA page 
 extern "C" void pvzh1_rgba_storage_pages_probe(){
  using namespace Sexy;unsigned cases=0;size_t compared=0;
  auto* target=H1GetPhysicalScreen(gLawnApp->mGLInterface->GetScreenImage())->Target();auto* pixels=target->GetBits();h1DirtyCanvas.enabled=false;
- for(const char* name:{"reanim/credits_circlefade","images/seedchooser_background"}){
+ for(const char* name:{"reanim/credits_circlefade","images/seedchooser_background","data/houseofterror16outline"}){
   std::unique_ptr<GLImage> dense(gLawnApp->GetImage(name,false)),paged(gLawnApp->GetImage(name,false));Check(dense&&paged);
   const uint32_t* original=nullptr;const uint32_t*const* pages=nullptr;uint32_t w=0,h=0,pw=0,ph=0;
   Check(H1ImageCachePrepareStorageTexture(dense.get(),&original,&w,&h));

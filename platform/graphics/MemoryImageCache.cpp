@@ -43,6 +43,7 @@ extern "C" { volatile uint32_t pvzh1_rgba_raster_page_diagnostic[8]; }
 /* Reduced dense bytes, source count, loads, physical bytes read, failures,
  * sampler views, logical materializations, maximum physical allocation. */
 extern "C" { volatile uint32_t pvzh1_storage_texture_diagnostic[8]; }
+extern "C" {char pvzh1_storage_loading_path[256];}
 /* Bounded reduced-font blits, streamed crop fallbacks, logical atlas requests,
  * last logical width/height, largest crop allocation, failed crops, reserved. */
 extern "C" { volatile uint32_t pvzh1_font_storage_diagnostic[8]; }
@@ -422,6 +423,8 @@ bool SandStorage(MemoryImage *image,Source& source)
 bool LoadStorage(MemoryImage *image,Source& source)
 {
     if(source.storageBits)return true;
+    const size_t pathBytes=std::min(source.path.size(),sizeof(pvzh1_storage_loading_path)-1);
+    std::memcpy(pvzh1_storage_loading_path,source.path.data(),pathBytes);pvzh1_storage_loading_path[pathBytes]=0;
     Cache& cache=State();H1Image input;
     if(!h1_image_open(&input,source.path.c_str(),source.autoAlpha,(uint32_t)source.alphaColor)){
         ++cache.stats.loadFailures;++pvzh1_storage_texture_diagnostic[4];return false;
@@ -831,7 +834,7 @@ bool H1ImageCachePrepareStorageRGBPages(MemoryImage *image,const uint32_t *const
     if(!pages||!width||!height||!image||!cacheInstance)return false;
     auto it=cacheInstance->sources.find(image);if(it==cacheInstance->sources.end())return false;
     auto& s=it->second;const size_t area=size_t(s.storageWidth)*s.storageHeight;
-    if(!s.Reduced()||(!s.rgbEligible&&!s.rgbaEligible)||area<16384||!s.alphaPath.empty()||image->mFilePath!=s.path||
+    if(!s.Reduced()||(!s.rgbEligible&&!s.rgbaEligible)||area<1024||!s.alphaPath.empty()||image->mFilePath!=s.path||
        image->mWidth!=int(s.width)||image->mHeight!=int(s.height)||image->mBits||image->mColorIndices||image->mColorTable||
        image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData||s.storageBits)return false;
     H1ImageCacheTouch(image);
@@ -911,7 +914,7 @@ bool H1ImageCachePrepareStorageAlphaPages(MemoryImage *image,const unsigned char
 #endif
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
     auto& source=found->second;const size_t area=size_t(source.storageWidth)*source.storageHeight;
-    if(area<65536||!source.Reduced()||!source.alphaPaletteEligible||
+    if(area<1024||!source.Reduced()||!source.alphaPaletteEligible||
        (uint32_t(source.alphaColor)&0xffffffu)!=0xffffffu||!source.alphaPath.empty()||
        image->mFilePath!=source.path||image->mWidth!=int(source.width)||image->mHeight!=int(source.height)||
        image->mBits||image->mColorIndices||image->mColorTable||source.storageBits||source.storageAlpha||
@@ -1078,7 +1081,7 @@ bool H1ImageCacheSandingStorage(MemoryImage *image,void (*sanding)(Image*),H1San
     if(source.rgbEligible&&!image->mHasTrans&&!image->mHasAlpha){source.sanded=true;++image->mBitsChangedCount;return true;}
     // Record the recipe before the sampler prepares bounded physical pages.
     // A previously materialized dense source still uses the original path.
-    if(source.rgbaEligible&&!source.storageBits&&size_t(source.storageWidth)*source.storageHeight>=16384){source.sanded=true;return true;}
+    if(source.rgbaEligible&&!source.storageBits&&size_t(source.storageWidth)*source.storageHeight>=1024){source.sanded=true;return true;}
     if(!LoadStorage(image,source)||!SandStorage(image,source))return false;
     source.sanded=true;++image->mBitsChangedCount;return true;
 }

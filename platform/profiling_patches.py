@@ -30,13 +30,13 @@ def apply(source_root):
         if marker in text:
             continue
         anchor = 'using namespace Sexy;'
-        if text.count(anchor) != 1:
-            raise RuntimeError('Pinned profiling namespace changed: ' + relative)
         entry = signature + '\n{'
         if text.count(entry) != 1:
             raise RuntimeError('Pinned profiling boundary changed: ' + signature)
         if INCLUDE not in text:
-            text = text.replace(anchor, INCLUDE + '\n' + anchor, 1)
+            if text.count(anchor)==1:text=text.replace(anchor,INCLUDE+'\n'+anchor,1)
+            elif text.count(anchor)==0:text=INCLUDE+'\n'+text
+            else:raise RuntimeError('Pinned profiling namespace changed: '+relative)
         text = text.replace(entry, entry + '\n' + GUARD + '\n'
                             '    // ' + marker + ': inclusive whole-call CPU count; no timer waits.\n'
                             '    PVZProfileScope pvzProfile' + label + 'Scope(' + category + ');\n'

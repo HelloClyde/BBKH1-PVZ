@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib,json,subprocess,os
 R=Path(__file__).resolve().parents[2];W=R/'build/native-write-test';W.mkdir(exist_ok=True)
-s=(R/'runtime/syscalls.c').read_text();body=s[s.index('ssize_t _write('):s.index('off_t _lseek(')]
+s=(R/'runtime/syscalls.c').read_text();body=s[s.index('volatile uint32_t pvz_runtime_log_diagnostic[3];'):s.index('off_t _lseek(')]
 code=r'''
 #include <stdint.h>
 #include <stddef.h>
@@ -37,6 +37,11 @@ int main(void){
  calls=used=0;behavior=2;assert(_write(5,data,1000)==-1&&errno==EIO&&calls==1);
  calls=used=0;behavior=0;assert(_write(4,data,1000)==-1&&errno==EBADF&&!calls);
  assert(_write(5,data,0)==0&&!calls);
+ assert(_write(1,data,sizeof(data))==sizeof(data)&&!calls);
+ assert(pvz_runtime_log_diagnostic[1]==sizeof(data));
+ for(unsigned i=0;i<256;++i)assert(pvz_runtime_log_tail[(pvz_runtime_log_diagnostic[2]+i)&255]==data[sizeof(data)-256+i]);
+ assert(_write(2,data,17)==17&&!calls);
+ assert(pvz_runtime_log_diagnostic[1]==sizeof(data)+17);
 }
 '''
 p=W/'probe.c';p.write_text(code);exe=W/'probe.exe'
@@ -44,5 +49,5 @@ env=os.environ.copy();env['PATH']='C:/msys64/ucrt64/bin;'+env.get('PATH','')
 result=subprocess.run(['C:/msys64/ucrt64/bin/gcc.exe','-std=c11','-O2',str(p),'-o',str(exe)],env=env,capture_output=True,text=True)
 assert not result.returncode,result.stdout+result.stderr
 subprocess.run([str(exe)],env=env,check=True)
-proof=dict(passed=True,production_source_sha256=hashlib.sha256((R/'runtime/syscalls.c').read_bytes()).hexdigest(),save_41909_bytes_native_calls=1,large_write_byte_exact=True,short_write_preserved=True,invalid_native_result_rejected=True,invalid_descriptor_and_empty_write=True)
+proof=dict(passed=True,production_source_sha256=hashlib.sha256((R/'runtime/syscalls.c').read_bytes()).hexdigest(),save_41909_bytes_native_calls=1,large_write_byte_exact=True,short_write_preserved=True,invalid_native_result_rejected=True,invalid_descriptor_and_empty_write=True,stdout_stderr_no_disk_IO=True,large_RAM_log_wrap_byte_exact=True)
 (W/'verification.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))

@@ -1,0 +1,271 @@
+{
+  "request": {
+    "actions": [
+      {
+        "kind": "resource_update"
+      }
+    ]
+  },
+  "started_utc": "2026-11-07T07:32:55.021630+00:00",
+  "actions": [
+    {
+      "action": {
+        "kind": "resource_update"
+      },
+      "result": {
+        "passed": true,
+        "original_attempt_evidence_retained": true,
+        "large_file_commit_not_repeated": true,
+        "files": [
+          {
+            "operation": "file_put",
+            "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\plant-poses.h1pp",
+            "target": "B:\\应用\\数据\\游戏\\PVZ\\plant-poses.h1pp",
+            "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c706c616e742d706f7365732e68317070",
+            "phase": "commit_requested",
+            "completed": true,
+            "size": 46789263,
+            "crc32": 4020713430,
+            "sha256": "c74a203f086235865084cbef82beb1d4bf5c66562c58862d43ea0f2e94d1bb4a",
+            "token": 385,
+            "received": 46789263,
+            "status": {
+              "version": 1,
+              "state": 5,
+              "token": 385,
+              "size": 46789263,
+              "received": 46789263,
+              "expected_crc": 4020713430,
+              "actual_crc": 4020713430,
+              "verify_offset": 46789263,
+              "error": 0,
+              "fs_errno": 0,
+              "flags": 9,
+              "old_size": 1888636,
+              "old_crc": 68805617,
+              "last_activity_tick": 8892315,
+              "step_count": 23319,
+              "reserved": 0,
+              "state_name": "done",
+              "error_name": "ok"
+            },
+            "paths": {
+              "target": "B:\\应用\\数据\\游戏\\PVZ\\plant-poses.h1pp",
+              "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000181.TMP",
+              "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000181.BAK"
+            },
+            "error": "File outcome is not confirmed; query file status and paths, do not repeat commit",
+            "outcome_unknown": true,
+            "elapsed_seconds": 3056.875,
+            "device_crc_verified": true,
+            "continued_existing_commit": true,
+            "additional_wait_seconds": 271.89099999994505
+          },
+          {
+            "operation": "file_put",
+            "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\normal-lawn-2.h1lb",
+            "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-2.h1lb",
+            "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c6e6f726d616c2d6c61776e2d322e68316c62",
+            "phase": "done",
+            "completed": true,
+            "size": 522304,
+            "crc32": 4192321275,
+            "sha256": "0c606a22a7d21607478bbe1733555fa80f071c0df817d5dfc95afbc15f77d08c",
+            "token": 386,
+            "received": 522304,
+            "status": {
+              "version": 1,
+              "state": 5,
+              "token": 386,
+              "size": 522304,
+              "received": 522304,
+              "expected_crc": 4192321275,
+              "actual_crc": 4192321275,
+              "verify_offset": 522304,
+              "error": 0,
+              "fs_errno": 0,
+              "flags": 8,
+              "old_size": 0,
+              "old_crc": 0,
+              "last_activity_tick": 8917099,
+              "step_count": 264,
+              "reserved": 0,
+              "state_name": "done",
+              "error_name": "ok"
+            },
+            "paths": {
+              "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-2.h1lb",
+              "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000182.TMP",
+              "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000182.BAK"
+            },
+            "device_crc_verified": true,
+            "elapsed_seconds": 42.76500000001397
+          },
+          {
+            "operation": "file_put",
+            "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\normal-lawn-3.h1lb",
+            "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-3.h1lb",
+            "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c6e6f726d616c2d6c61776e2d332e68316c62",
+            "phase": "done",
+            "completed": true,
+            "size": 522304,
+            "crc32": 2184757680,
+            "sha256": "dc40593aff65afb5a1cadf0b12f7727f9968492c8eb16b74886fcf8d1f0b8acd",
+            "token": 387,
+            "received": 522304,
+            "status": {
+              "version": 1,
+              "state": 5,
+              "token": 387,
+              "size": 522304,
+              "received": 522304,
+              "expected_crc": 2184757680,
+              "actual_crc": 2184757680,
+              "verify_offset": 522304,
+              "error": 0,
+              "fs_errno": 0,
+              "flags": 8,
+              "old_size": 0,
+              "old_crc": 0,
+              "last_activity_tick": 8918630,
+              "step_count": 264,
+              "reserved": 0,
+              "state_name": "done",
+              "error_name": "ok"
+            },
+            "paths": {
+              "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-3.h1lb",
+              "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000183.TMP",
+              "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000183.BAK"
+            },
+            "device_crc_verified": true,
+            "elapsed_seconds": 38.125
+          },
+          {
+            "operation": "file_put",
+            "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\normal-lawn-4.h1lb",
+            "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-4.h1lb",
+            "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c6e6f726d616c2d6c61776e2d342e68316c62",
+            "phase": "done",
+            "completed": true,
+            "size": 522304,
+            "crc32": 1534870360,
+            "sha256": "9998fceccbf2fa599052838ded96dee26fe6ae1700e92c28baf14f231989facd",
+            "token": 388,
+            "received": 522304,
+            "status": {
+              "version": 1,
+              "state": 5,
+              "token": 388,
+              "size": 522304,
+              "received": 522304,
+              "expected_crc": 1534870360,
+              "actual_crc": 1534870360,
+              "verify_offset": 522304,
+              "error": 0,
+              "fs_errno": 0,
+              "flags": 8,
+              "old_size": 0,
+              "old_crc": 0,
+              "last_activity_tick": 8920144,
+              "step_count": 264,
+              "reserved": 0,
+              "state_name": "done",
+              "error_name": "ok"
+            },
+            "paths": {
+              "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-4.h1lb",
+              "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000184.TMP",
+              "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000184.BAK"
+            },
+            "device_crc_verified": true,
+            "elapsed_seconds": 37.90700000000652
+          },
+          {
+            "operation": "file_put",
+            "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\normal-lawn-5.h1lb",
+            "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-5.h1lb",
+            "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c6e6f726d616c2d6c61776e2d352e68316c62",
+            "phase": "done",
+            "completed": true,
+            "size": 522304,
+            "crc32": 3869952742,
+            "sha256": "e20de0edd018e59c65a89f09c19f8dd26c412fddfb19df77bac5dcdf5303ae78",
+            "token": 389,
+            "received": 522304,
+            "status": {
+              "version": 1,
+              "state": 5,
+              "token": 389,
+              "size": 522304,
+              "received": 522304,
+              "expected_crc": 3869952742,
+              "actual_crc": 3869952742,
+              "verify_offset": 522304,
+              "error": 0,
+              "fs_errno": 0,
+              "flags": 8,
+              "old_size": 0,
+              "old_crc": 0,
+              "last_activity_tick": 8921763,
+              "step_count": 264,
+              "reserved": 0,
+              "state_name": "done",
+              "error_name": "ok"
+            },
+            "paths": {
+              "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-5.h1lb",
+              "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000185.TMP",
+              "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000185.BAK"
+            },
+            "device_crc_verified": true,
+            "elapsed_seconds": 40.45299999997951
+          },
+          {
+            "operation": "file_put",
+            "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\normal-lawn-6.h1lb",
+            "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-6.h1lb",
+            "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c6e6f726d616c2d6c61776e2d362e68316c62",
+            "phase": "done",
+            "completed": true,
+            "size": 522304,
+            "crc32": 3846185304,
+            "sha256": "f98a604fb1b806fde20a6386c0bf18bd27ca6fcd098cdaa3a2fa6261fcce5354",
+            "token": 390,
+            "received": 522304,
+            "status": {
+              "version": 1,
+              "state": 5,
+              "token": 390,
+              "size": 522304,
+              "received": 522304,
+              "expected_crc": 3846185304,
+              "actual_crc": 3846185304,
+              "verify_offset": 522304,
+              "error": 0,
+              "fs_errno": 0,
+              "flags": 8,
+              "old_size": 0,
+              "old_crc": 0,
+              "last_activity_tick": 8923302,
+              "step_count": 264,
+              "reserved": 0,
+              "state_name": "done",
+              "error_name": "ok"
+            },
+            "paths": {
+              "target": "B:\\应用\\数据\\游戏\\PVZ\\normal-lawn-6.h1lb",
+              "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000186.TMP",
+              "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000186.BAK"
+            },
+            "device_crc_verified": true,
+            "elapsed_seconds": 38.46900000004098
+          }
+        ]
+      },
+      "started_monotonic": 785360.375,
+      "finished_monotonic": 785830.046
+    }
+  ],
+  "ok": true
+}

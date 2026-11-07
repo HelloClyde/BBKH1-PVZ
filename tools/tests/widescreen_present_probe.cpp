@@ -47,6 +47,14 @@ int main(){
         dirty.failAfter=-1;assert(!dirty.Present(first.data()+4,pixels.data(),W,H,0,0,map));assert(dirty.allocationFailures==failures);
         dirty.Reset();assert(dirty.Present(first.data()+4,pixels.data(),W,H,0,0,map));++checks;
     }
+#ifdef PVZH1_WIDESCREEN
+    dirty.Reset();assert(dirty.Present(first.data()+4,pixels.data(),W,H,-1,-1,map));
+    const unsigned point=W*H-1;pixels[point]^=0x00123456u;
+    auto before=dirty.partialPixelStores;assert(dirty.Present(first.data()+4,pixels.data(),W,H,-1,-1,map));
+    assert(dirty.partialPixelStores==before+1);assert(H1PresentMapped(expected.data()+4,pixels.data(),W,H,-1,-1,reference));assert(first==expected);++checks;
+    pixels[point]^=0xff000000u;before=dirty.partialPixelStores;
+    assert(dirty.Present(first.data()+4,pixels.data(),W,H,-1,-1,map));assert(dirty.partialPixelStores==before&&first==expected);++checks;
+#endif
     dirty.Reset();assert(!dirty.ResidentBytes());
     std::printf("{\"passed\":true,\"width\":%u,\"height\":%u,\"exact_LCD_frames\":%u,\"damage_tiles\":true,\"cursor_all_edges\":true,\"allocation_failure_latched\":true,\"released_bytes\":0}\n",W,H,checks);
 }

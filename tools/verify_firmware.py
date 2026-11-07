@@ -1,8 +1,8 @@
 """Prepare/control only this project's private complete-firmware H1 guest.
 
 The emulator currently exposes NAND/A:, not an SD/B: block image. Firmware
-checks therefore install actual assets under A:\\PVZ and exercise the product's
-B-first/A-fallback resource selection. They do not verify physical B: access.
+checks install assets under A:\\应用\\数据\\游戏\\PVZ, matching the product's
+A/B resource selection. They do not verify physical B: access.
 GDB reads code/diagnostics only. Every game action uses native key/touch input.
 """
 from __future__ import annotations
@@ -25,6 +25,8 @@ ROOT=Path(__file__).resolve().parents[1]
 WORKSPACE=ROOT.parent
 BUILD=ROOT/'build'
 OWNER='h1-pvz-portable-private-firmware-v1'
+RESOURCE_PATH='应用/数据/游戏/PVZ'
+SAVE_PATH=RESOURCE_PATH+'/userdata'
 
 
 def digest(path):
@@ -194,15 +196,16 @@ def verify_resource_readback(work,sdk,expected):
         entries=volume_entries(volume)
         files={e.path.casefold():e for e in entries if not e.is_directory}
         for index,(name,meta) in enumerate(expected.items(),1):
-            entry=files.get(('/PVZ/'+name).casefold())
-            if entry is None:raise FileNotFoundError('FAT LFN missing: /PVZ/'+name)
+            entry=files.get(('/'+RESOURCE_PATH+'/'+name).casefold())
+            if entry is None:raise FileNotFoundError('FAT LFN missing: /'+RESOURCE_PATH+'/'+name)
             data=volume.read_file(entry)
             if len(data)!=meta['bytes'] or hashlib.sha256(data).hexdigest()!=meta['sha256']:
                 raise ValueError('NAND resource read-back mismatch: '+name)
             if index%500==0:print(f'Read-back verified {index}/{len(expected)} original resource files',flush=True)
         return dict(files=len(expected),bytes=sum(v['bytes'] for v in expected.values()),
                     all_sha256_match=True,resource_drive='A',physical_B_drive_verified=False,
-                    PVZSAVE_directory=any(e.is_directory and e.path.casefold()=='/pvzsave' for e in entries))
+                    native_resource_path='A:/'+RESOURCE_PATH,
+                    userdata_directory=any(e.is_directory and e.path.casefold()==('/'+SAVE_PATH).casefold() for e in entries))
 
 
 def prepare(args):
@@ -214,7 +217,13 @@ def prepare(args):
         if not path.exists():raise FileNotFoundError(path)
     reference.ensure_template_idle(args.template.resolve())
     free=shutil.disk_usage(BUILD.parent).free
-    if free<4*1024**3:raise OSError('At least 4 GiB free workspace space is required')
+    # The private image has a fixed raw size plus one staged file tree. Budget
+    # actual inputs without relying on optional NTFS compression savings.
+    staged_bytes=sum(p.stat().st_size for folder in (args.base_files,args.resources)
+                     for p in folder.rglob('*') if p.is_file())
+    required=4096*128*2112+staged_bytes+args.kernel.stat().st_size+512*1024**2
+    if args.bda:required+=args.bda.stat().st_size
+    if free<required:raise OSError(f'Private firmware preparation needs {required} free bytes; available {free}')
     work.mkdir(parents=True)
     if os.name=='nt':subprocess.run(['compact','/C','/I','/Q',str(work)],check=True,capture_output=True)
     write_json(work/'owner.json',dict(owner=OWNER,work=str(work),id=str(uuid.uuid4()),physical_device_used=False))
@@ -229,14 +238,14 @@ def prepare(args):
     stage=work/'files';shutil.copytree(args.base_files,stage)
     calibration=stage/'系统/数据/SysTp.cfg'
     if calibration.exists():calibration.unlink() # Only this newly owned stage.
-    if (stage/'PVZ').exists() or (stage/'PVZSAVE').exists():
+    if (stage/RESOURCE_PATH).exists():
         raise FileExistsError('Selected template already has PVZ data; refusing to overwrite it')
-    shutil.copytree(args.resources,stage/'PVZ');(stage/'PVZSAVE').mkdir()
+    shutil.copytree(args.resources,stage/RESOURCE_PATH);(stage/SAVE_PATH).mkdir()
     shutil.copyfile(args.kernel,work/'project.bin')
     if args.bda:
         shutil.copyfile(args.bda,stage/report['slot_alias']);report['bda_sha256']=digest(args.bda)
     else:report['bda_sha256']=None
-    report['resources']=tree_inventory(stage/'PVZ')
+    report['resources']=tree_inventory(stage/RESOURCE_PATH)
     write_json(work/'image-build.json',report)
     # Build once. Never transactionally rewrite an entire NAND per resource.
     logical,used_end=build_logical(stage)
@@ -280,7 +289,7 @@ def finish_prepare(args):
     reference=load_reference();reference.ensure_template_idle(work/'h1-system.raw')
     report=json.loads((work/'image-build.json').read_text(encoding='utf8'))
     if report.get('result')!='preparing':raise ValueError('Only an incomplete owned preparation may be resumed')
-    staged=tree_inventory(work/'files/PVZ')
+    staged=tree_inventory(work/'files'/RESOURCE_PATH)
     if 'resources' not in report:
         if staged!=tree_inventory(ROOT/'private/resources'):
             raise ValueError('Cannot recover the interrupted manifest: source and staged resource identities differ')
@@ -316,7 +325,7 @@ def add_metadata(args):
     work,owner=owned_work(args.work);reference=load_reference()
     reference.ensure_template_idle(work/'h1-system.raw')
     archive_current(work)
-    source=ROOT/'private/resources/image-metadata.h1x'
+    source=ROOT/'private/resources-h1-wide/image-metadata.h1x'
     evidence=json.loads((ROOT/'assets/image-metadata-verification.json').read_text(encoding='utf8'))
     if digest(source)!=evidence['index_sha256']:raise ValueError('Metadata index differs from its verified fixture')
     adapter,sdk,installer,provenance=load_volume(work)
@@ -330,27 +339,27 @@ def add_metadata(args):
     installer.one_lfn_entry=lambda name,short:b''.join(fat16.make_lfn_entries(name,fat16.lfn_checksum(short)))
     installer.free_directory_slots=lambda volume,directory,count:original_free(volume,directory,count+1)
     with sdk.H1Fat16(work/'h1-system.raw') as volume:
-        existing=[e for e in volume_entries(volume) if e.path.casefold()=='/pvz/image-metadata.h1x']
+        existing=[e for e in volume_entries(volume) if e.path.casefold()==('/'+RESOURCE_PATH+'/image-metadata.h1x').casefold()]
         if existing and volume.read_file(existing[0])!=source.read_bytes():
             raise ValueError('A different index already exists; prepare a reviewed replacement')
     changes=[]
     if not existing:
-        changes.append(installer.install(work/'h1-system.raw',source,'/','PVZ',source.name,'IMGMETA.H1X',Path(),reuse_directory=True))
+        changes.append(installer.install(work/'h1-system.raw',source,'/应用/数据/游戏','PVZ',source.name,'IMGMETA.H1X',Path(),reuse_directory=True))
     original_find=sdk.find_target
     def selected_receipt(volume,requested,required_size,*,allow_growth=False):
-        if requested.casefold()=='/pvz/resource-index.json':
+        if requested.casefold()==('/'+RESOURCE_PATH+'/resource-index.json').casefold():
             matches=[e for e in volume_entries(volume) if e.path.casefold()==requested.casefold() and not e.is_directory]
             if len(matches)!=1:raise ValueError('Resource receipt did not resolve uniquely')
             return matches[0]
         return original_find(volume,requested,required_size,allow_growth=allow_growth)
     sdk.find_target=selected_receipt
     try:
-        changes.append(sdk.deploy(work/'h1-system.raw',ROOT/'private/resources/resource-index.json','/PVZ/resource-index.json',Path(),allow_growth=True))
+        changes.append(sdk.deploy(work/'h1-system.raw',ROOT/'private/resources-h1-wide/resource-index.json','/'+RESOURCE_PATH+'/resource-index.json',Path(),allow_growth=True))
     finally:sdk.find_target=original_find
     image=json.loads((work/'image-build.json').read_text(encoding='utf8'))
     for name in ['image-metadata.h1x','resource-index.json']:
-        path=ROOT/'private/resources'/name
-        shutil.copyfile(path,work/'files/PVZ'/name)
+        path=ROOT/'private/resources-h1-wide'/name
+        shutil.copyfile(path,work/'files'/RESOURCE_PATH/name)
         image['resources'][name]=dict(bytes=path.stat().st_size,sha256=digest(path))
     image['metadata_deployment']=dict(changes=changes,index_sha256=digest(source),only_owned_idle_NAND_modified=True)
     image['readback']=verify_resource_readback(work,sdk,image['resources'])
@@ -428,6 +437,9 @@ def run(args):
                     music=dict(raw=fields,**dict(zip(names,fields)))
                 pressure={}
                 for symbol,names in [
+                    ('pvzh1_plant_pose_diagnostic',['loaded_banks','failed_banks','resident_entries','reserved','attempts','replays','signature_guards','missing_poses','signature_reuses','signature_changes','pressure_releases','released_bytes']),
+                    ('pvzh1_board_replay_retirement_diagnostic',['calls','last_before_bytes','last_after_bytes']),
+                    ('pvz_runtime_new_failure_caller',['last_throwing_caller']),
                     ('pvz_runtime_pressure_diagnostic',['callbacks','retries','successful_retries','freed_bytes','last_request','final_failures']),
                     ('pvzh1_cache_pressure_diagnostic',['calls','evictions','total_freed','last_freed']),
                     ('pvzh1_cache_diagnostic',['resident_bytes','peak_bytes','loads','evictions','frames','loaded_pixel_bytes_low32']),
@@ -511,7 +523,15 @@ def run(args):
                     expected=item['expect'];deadline=time.monotonic()+item.get('timeout',30)
                     while time.monotonic()<deadline:
                         state=self.snapshot()
-                        if all(state.get(k)==v for k,v in expected.items()):break
+                        if state.get('runtime',{}).get('stage')==255:
+                            raise RuntimeError('Native application aborted before expected state: '+str(state['runtime']))
+                        def value(key):
+                            result=state
+                            for part in key.split('.'):
+                                if not isinstance(result,dict):return None
+                                result=result.get(part)
+                            return result
+                        if all(value(k)==v for k,v in expected.items()):break
                         time.sleep(.25)
                     else:raise AssertionError(f'Observed {state}, expected {expected}')
                     report['states'].append(dict(name=item.get('name','expect-'+str(index)),**state));self.flush()
@@ -584,7 +604,7 @@ def run(args):
           with sdk.H1Fat16(work/'h1-system.raw') as volume:
             saves=[]
             for entry in volume_entries(volume):
-                if not entry.is_directory and entry.path.casefold().startswith('/pvzsave/'):
+                if not entry.is_directory and entry.path.casefold().startswith(('/'+SAVE_PATH+'/').casefold()):
                     data=volume.read_file(entry);saves.append(saved_file_evidence(entry.path,data))
                     if entry.path.casefold().endswith('/pvz.log'):(work/'application.log').write_bytes(data)
             report['observed_save_files']=saves
@@ -748,7 +768,7 @@ def main():
     p.add_argument('--template',type=Path,default=WORKSPACE/'build/h1-emulator-test/h1-system.raw')
     p.add_argument('--base-files',type=Path,default=WORKSPACE/'build/h1-emulator-test/files')
     p.add_argument('--kernel',type=Path,default=WORKSPACE/'build/h1-emulator-test/project.bin')
-    p.add_argument('--resources',type=Path,default=ROOT/'private/resources')
+    p.add_argument('--resources',type=Path,default=ROOT/'private/resources-h1-wide')
     p=sub.add_parser('finish-prepare');p.add_argument('--work',type=Path,required=True)
     p=sub.add_parser('run');p.add_argument('--work',type=Path,required=True);p.add_argument('--bda',type=Path,required=True);p.add_argument('--elf',type=Path,required=True)
     p.add_argument('--qemu',type=Path,default=Path('C:/temp/h1gba-qemu-build/qemu-system-mipsel.exe'))

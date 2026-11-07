@@ -59,6 +59,7 @@ Rect H1PhysicalScreen::MapRect(const Rect& logical)const
 {
     if(fullCanvas)return logical.Intersection(Rect(0,0,mWidth,mHeight));
     const Rect r=logical.Intersection(Rect(0,0,mWidth,mHeight));
+    if(r.mX==0&&r.mY==0&&r.mWidth==mWidth&&r.mHeight==mHeight)return Rect(0,0,physical.mWidth,physical.mHeight);
     const int left=CenterBoundary(r.mX,mWidth,physical.mWidth),top=CenterBoundary(r.mY,mHeight,physical.mHeight);
     const int right=CenterBoundary(r.mX+r.mWidth,mWidth,physical.mWidth),bottom=CenterBoundary(r.mY+r.mHeight,mHeight,physical.mHeight);
     return Rect(left,top,std::max(0,right-left),std::max(0,bottom-top));

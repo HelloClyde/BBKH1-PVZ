@@ -157,10 +157,12 @@
       "sha256": "9920b39c920d034052e3ff3ca010bcca8f2ba4368b2f673bb007a095de710938"
     },
     "image-metadata.h1x": {
-      "reason": "Metadata covers standalone images and packed/virtual font sources",
+      "reason": "Original standalone/virtual metadata plus 214 display-density offline preview keys",
       "before_bytes": 157348,
-      "bytes": 155256,
-      "sha256": "858d4103c39679a016c2bb1068c8a120e2132cb828f2e7872e04e3c5aa83bdee"
+      "bytes": 165800,
+      "sha256": "317db4a7f8905e9272c320078541a31568aebdbe98d65f00f7c24ec9ef3589fc",
+      "previous_sha256": "858d4103c39679a016c2bb1068c8a120e2132cb828f2e7872e04e3c5aa83bdee",
+      "extended_by": "provenance/offline-cached-frames.json"
     },
     "actor-poses.h1ap": {
       "reason": "Lossless independent pages of existing offline actor pixels; bounded decoded cache",
@@ -14726,12 +14728,26 @@
     "encoder_sha256": "0989afd9c49250ad4c38d08c012c1ff80618c0f9b2a9023d89efedefb2e1a674",
     "reader_source_sha256": {
       "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+      "platform/graphics/memory_patches.py": "a81b81aa7e21973b7e7f4454291bac235d02bbaca0e1f2deab42f40baf91ac1b",
+      "platform/graphics/MemoryImageCache.cpp": "65a4ef2938d549f399f5414f76c2e332606c6cdf6c43cf3ea94d27690d96e75a"
+    },
+    "observation_sha256": "c7f8033b7d9aeb1dbc786ee9d0e41bdcbc0cdd00be3fa52732838d99816e8853",
+    "scope": "Same preferred alpha pixels; remove never-selected RGB variant and pack shadows",
+    "previous_reader_source_sha256": {
+      "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
       "platform/graphics/memory_patches.py": "385fb3604c9119509cd666c1dceb63ae3126255ca4bc7f7070c85af920eaf987",
       "platform/graphics/MemoryImageCache.cpp": "772962490ef4fa6518603870afe153729112d8d0eaadec84d89a71c96f9e21b0"
     },
-    "observation_sha256": "c7f8033b7d9aeb1dbc786ee9d0e41bdcbc0cdd00be3fa52732838d99816e8853",
-    "scope": "Same preferred alpha pixels; remove never-selected RGB variant and pack shadows"
+    "reader_revision_validation": "docs/verification/exit-plants-host-verification.json"
   },
   "BDA_unchanged_scope": "Initial image adaptation/pruning used the existing image reader. The new lossless actor page envelope requires the matching tested program; distribute them together.",
-  "requires_actor_page_reader": true
+  "requires_actor_page_reader": true,
+  "unused_runtime_sources": [
+    {
+      "runtime_path": "actor-poses.h1ap",
+      "archive_path": "private/resource-build-inputs/optimized/actor-poses.h1ap",
+      "sha256": "f898a823e720f9fb6a01006b9e8e4c4486aed6bf4073eb16d5d49dc88cb74aca",
+      "reason": "Replaced by three lifetime banks and the complete ordinary-frame bank; exact original packets verified"
+    }
+  ]
 }

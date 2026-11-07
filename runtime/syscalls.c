@@ -69,6 +69,7 @@ extern volatile uint32_t pvz_runtime_hole_diagnostic[12];
 volatile uint32_t pvz_runtime_pressure_diagnostic[6];
 static int pressure_running;
 extern size_t pvzh1_cache_memory_pressure(size_t requested) __attribute__((weak));
+extern size_t pvzh1_actor_pose_release_pressure(size_t requested) __attribute__((weak));
 extern void *pvz_runtime_allocate_with_pressure(size_t,size_t,void *(*)(size_t,size_t,uintptr_t *),
     size_t (*)(size_t),volatile uint32_t [6],int *,uintptr_t *);
 extern void *pvz_runtime_native_allocate_span(size_t,size_t,size_t *);
@@ -332,6 +333,8 @@ static size_t reclaim_one(size_t requested){
            Return those pages before the very next real native allocation. */
         (void)trim_small_pool();
     }
+    if(!released&&pvzh1_actor_pose_release_pressure)
+        released=pvzh1_actor_pose_release_pressure(requested);
     return released;
 }
 static void *native_allocate(size_t requested,size_t size,uintptr_t *span){
@@ -437,11 +440,27 @@ static int io_native_seek(h1_file *file,int offset,int whence){
     if(result<0)pvz_runtime_io_diagnostic[10]++;
     return result;
 }
+/* Keep diagnostics in RAM during normal play. Flushing even tiny debug files
+   to this firmware can block exit for seconds. Diagnostic builds may opt in
+   to persistent logs explicitly; gameplay saves use their normal file FDs. */
+volatile uint32_t pvz_runtime_log_diagnostic[3];
+unsigned char pvz_runtime_log_tail[256];
+void pvz_runtime_log(const void *buffer,size_t size){
+    const unsigned char *data=(const unsigned char*)buffer;size_t n=size;
+    uint32_t at=pvz_runtime_log_diagnostic[2];
+    if(n>256){data+=n-256;n=256;at=(at+(uint32_t)(size-n))&255u;}
+    for(size_t i=0;i<n;i++){pvz_runtime_log_tail[at]=data[i];at=(at+1)&255u;}
+    ++pvz_runtime_log_diagnostic[0];pvz_runtime_log_diagnostic[1]+=(uint32_t)size;pvz_runtime_log_diagnostic[2]=at;
+}
 ssize_t _write(int fd,const void *buffer,size_t size){
     unsigned n;size_t done=0;h1_file *file;
     if(fd==1||fd==2){
+#ifndef PVZ_FILE_LOGS
+        pvz_runtime_log(buffer,size);return (ssize_t)size;
+#else
         if(!log_file){char native[NATIVE_PATH_MAX];if(!pvz_native_path("/PVZSAVE/PORT.LOG",native,sizeof(native)))log_file=io_native_open(native,"ab");}
         if(!log_file||(uintptr_t)log_file==0xffffffffu){log_file=0;return (ssize_t)size;}file=log_file;
+#endif
     }else{if(fd<3||fd>=FILE_COUNT+3||!files[fd-3]){errno=EBADF;return -1;}file=files[fd-3];}
     pvz_runtime_diagnostic[8]=22;pvz_runtime_diagnostic[9]=(uint32_t)fd;
     /* Native SD writes have substantial per-call overhead. A typical 40KB
