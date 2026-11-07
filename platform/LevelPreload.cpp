@@ -77,7 +77,7 @@ void H1PrewarmDefinitionImages(int type){
         for(int f=0;f<track.mTransforms.count;++f)WarmImage(track.mTransforms.mTransforms[f].mImage);
     }
 }
-void H1PreloadCurrentBoard(LawnApp* app){
+static void PreloadCurrentBoard(LawnApp* app,bool enteringPlay){
     if(!app||!app->mBoard)return;
     // Board's original constructor has already destroyed the menu's effect
     // instances. Retire its now-unreferenced definition before the synchronous
@@ -158,7 +158,10 @@ void H1PreloadCurrentBoard(LawnApp* app){
     // with replaceable source textures for the same native heap.
     Sexy::H1ImageCacheEndFrame();
     pvzh1_level_loading_step(65);
-    const bool earlySod=app->mGameScene!=SCENE_PLAYING&&app->IsFirstTimeAdventureMode()&&
+    // StartPlaying runs while the original scene still says INTRO. Its sod
+    // replay may already have retired naturally, so gameplay preparation must
+    // not require or reload that finished animation.
+    const bool earlySod=!enteringPlay&&app->mGameScene!=SCENE_PLAYING&&app->IsFirstTimeAdventureMode()&&
         (board->mLevel==1||board->mLevel==2||board->mLevel==4);
     if(prepareActors&&!H1ActorPosePrepare(keepTypes[REANIM_PEASHOOTER],true,earlySod))
         throw std::runtime_error("H1 offline actor bank preload failed");
@@ -177,3 +180,5 @@ void H1PreloadCurrentBoard(LawnApp* app){
     // only after that work and its pixel pins have completed.
     H1OptionsPrepare();
 }
+void H1PreloadCurrentBoard(LawnApp* app){PreloadCurrentBoard(app,false);}
+void H1PreloadCurrentBoardForPlay(LawnApp* app){PreloadCurrentBoard(app,true);}

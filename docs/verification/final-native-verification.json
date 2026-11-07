@@ -1,102 +1,90 @@
 {
   "passed": true,
-  "scope": "Physical H1: forty plants in level6, required offline frames/previews, options, native B-drive V4 write/readback, return, normal exit, original saves restored. 20 FPS and all visual states fully offline are not certified.",
+  "scope": "本版物理 H1：全新用户第一关原始开场、草坪滚动后正常进入游戏；普通触摸种植、收集阳光、清除四波僵尸并出现奖励卡；选项、回菜单、B盘原格式V4写入/读回、正常退出和原存档恢复。没有重新测速密集场景，也不认证整体20FPS。",
   "program": {
     "passed": true,
-    "bda_sha256": "90c65cdf0eb88f491ad53c0d53f890b2de5db63061ae51ccd05cebe19d83baf5",
-    "elf_sha256": "0addc4e9f24f1d2003c148a326055c3d535611a29ff78f3aff406565b2f3ec86",
-    "live_code_fingerprints": 4,
-    "bda_bytes": 3654076,
-    "build_receipt_sha256": "8f8e7ebfb0243f7e0cc94b81c40b883641f390acd7760582fcdcb84d318f008c",
+    "bda_sha256": "abb3d838128a6199f7364b49ae98f514b4ebeb3f05ae3c172a1a03c8ef18417e",
+    "elf_sha256": "b9a16ba2e0fb790b0f60f5c31716b0f370d85087658735d649c84c77140627a4",
+    "bda_bytes": 3654572,
+    "build_receipt_sha256": "c0317eb6c33b3c51a348d54f2d13df464c89cb8b7e19d7fd2e15ea7317b86e91",
     "source_identity_verified": true,
     "compiled_sources": 189,
-    "device_upload_crc_verified": true
+    "device_upload_crc_verified": true,
+    "live_code_fingerprints": 4
   },
-  "dense": {
-    "plants": 40,
-    "frames": 102,
-    "raw_ticks": 338,
-    "raw_tick_hz": 40,
-    "FPS": 12.071005917159763,
-    "original_main_counter_delta": 827,
-    "baseline_FPS": 5.269461077844311
+  "regression": {
+    "published_beta1_reproduced": true,
+    "published_bda_sha256": "90c65cdf0eb88f491ad53c0d53f890b2de5db63061ae51ccd05cebe19d83baf5",
+    "runtime_exit_code": 107,
+    "exception": "H1 offline actor bank preload failed",
+    "native_charge_fault_zero": true,
+    "fix": "Separate play resource preparation from intro-only sod replay dependencies",
+    "diagnostic_bda_sha256": "34e042d70e3a5674c3e1a4d004f787fee5a96e247994a02a799921b4443fd9fd"
   },
-  "entity_read_scope": "Stable board pointers, plant container headers and paused gameplay counter. The original widget/board update counter continues while paused; no atomic whole-board snapshot is claimed.",
-  "options": {
-    "first_complete_present_ms": 575,
-    "constructor_ms": 375,
-    "preclean_ms": 0,
-    "paused_canvas_prime_ms": 375
-  },
-  "memory": {
-    "first_failed_malloc_request_bytes": 4096,
-    "fatal_abort": 0,
-    "cached_preview_online_canvas_calls": 0,
-    "cached_preview_failures": 0,
-    "offline_banks_loaded": 6,
-    "offline_banks_failed": 0,
-    "menu_actor_replay_resident_bytes": 0,
-    "menu_preview_owners_released": 6,
-    "exit_heap_bytes": 0,
-    "exit_native_charge_bytes": 0
-  },
-  "ordinary_exit": {
-    "elapsed_ms": 1800,
-    "baseline_ms": 13050
+  "first_level": {
+    "natural_intro_and_sod_preserved": true,
+    "entered_scene_playing": true,
+    "wave": 4,
+    "total_waves": 4,
+    "reward_card_visible": true,
+    "max_live_plants": 3,
+    "max_live_zombies": 3,
+    "max_live_projectiles": 4,
+    "game_RAM_written": false,
+    "atomic_entity_snapshot_claimed": false,
+    "termination_diagnostic": [
+      0,
+      0,
+      0,
+      0
+    ]
   },
   "native_written_V4": {
-    "bytes": 198081,
-    "sha256": "cb000a343f63356fe7c5831abaedbe692e1c1b05416a44c75c985c3639b6a872",
-    "original_V4_header": true,
+    "passed": true,
+    "bytes": 42856,
+    "sha256": "21f514fb9b3cb0676405ba9119d3901f076b0f9ab93422db8346e18ddd930568",
+    "header": "PVZP_SAVE4",
+    "version": 1,
     "exact_payload_length": true,
-    "payload_crc32": 3778318860,
-    "device_write_and_PC_readback_valid": true
+    "payload_crc32": 1421628401,
+    "native_B_write_and_debug_readback_valid": true
+  },
+  "ordinary_exit": {
+    "passed": true,
+    "return_code": 0,
+    "heap_bytes": 0,
+    "native_charge_bytes": 0,
+    "gLawnApp": 0
   },
   "original_saves": {
-    "restored-user1.dat": {
-      "bytes": 886,
-      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
-      "exact_original_bytes": true
+    "passed": true,
+    "files": {
+      "users.dat": {
+        "bytes": 19,
+        "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+        "exact_original_bytes": true
+      },
+      "user1.dat": {
+        "bytes": 886,
+        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+        "exact_original_bytes": true
+      }
     },
-    "restored-users.dat": {
-      "bytes": 19,
-      "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
-      "exact_original_bytes": true
-    }
+    "test_V4_removed": true,
+    "restored_userdata_names": [
+      "user1.dat",
+      "users.dat"
+    ],
+    "debugger_left_running": true,
+    "normal_exit_heap_and_native_charge_zero": true
   },
   "resources": {
     "runtime_manifest_sha256": "5c9b58b3305dfd13d446d45cab28e070b670ad429e45c3e8cdf33edc2944d77f",
-    "full_plant_pack_bytes": 46789263,
-    "full_plant_pack_device_CRC_verified": true,
-    "large_transfer_attempt_timeout_preserved": true,
-    "continued_same_transaction_without_reupload": true,
-    "bytes": 139832497,
     "files": 2755,
-    "matching_program_required": true,
-    "full_firmware_inventory_readback_verified": true,
-    "obsolete_mixed_actor_pack_removed_after_replacement_verification": true
-  },
-  "evidence": {
-    "001-launch": {
-      "path": "build\\hardware-test-20261107-exit-plants-v33\\001-launch-result.json",
-      "sha256": "f3a3cf052ad57f759ef89c97942d3ba4e79532870db24fa03d5b7c3d1617494f"
-    },
-    "002-dense": {
-      "path": "build\\hardware-test-20261107-exit-plants-v33\\002-dense-result.json",
-      "sha256": "9f29029908c97e56310152cc5d196622cd957cb648e0853cdc3fdb350880b12c"
-    },
-    "003-cpu": {
-      "path": "build\\hardware-test-20261107-exit-plants-v33\\003-cpu-result.json",
-      "sha256": "923bce420e57b8360d9145eb3c13bdacfa97624e618a02d9678267aa60d827d9"
-    },
-    "004-return-exit": {
-      "path": "build\\hardware-test-20261107-exit-plants-v33\\004-return-exit-result.json",
-      "sha256": "784bb9ba1781b7b1c1cd988a7d5112a5ec4f393af9d236525c52231fbe45a5a2"
-    },
-    "005-restore-originals": {
-      "path": "build\\hardware-test-20261107-exit-plants-v33\\005-restore-originals-result.json",
-      "sha256": "059f9b6580f0a0ce948dc497f17bc06ecf630f7d7008659c933c703630b37262"
-    }
+    "bytes": 139832497,
+    "unchanged_from_previous_v33": true,
+    "this_test_resource_drive": "B",
+    "scope": "Same resource bytes as v33, reused prior transfer proof; current level packs validated and replayed by the physical game, not a fresh full-card readback"
   },
   "device": "Physical BBK H1 / Y100 V1.41",
   "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
@@ -106,18 +94,33 @@
     272
   ],
   "limitations": [
-    "Dense scene remains below20FPS.",
-    "Dense-scene options first complete presentation575ms, of which375ms is paused-canvas preparation.",
-    "A recoverable4096B allocation failure was recorded; no fatal abort, missing required bank or online preview canvas.",
-    "Dynamic affine visual states are not all offline.",
-    "Stable entity-container pointers and paused gameplay counter were checked; widget update ticks continued during the read."
+    "First new-player-only prologue remains about1-2FPS; not optimized or skipped here.",
+    "Dense40-plant FPS/options/exit timings in the previous-v33 proof were not remeasured for this exact BDA.",
+    "Recoverable allocation failure was observed; repaired game did not abort.",
+    "Dynamic affine states are not all offline."
   ],
-  "evidence_directory": "docs/verification/exit-plants-20261107",
-  "host_verification": "docs/verification/exit-plants-host-verification.json",
+  "previous_native_verification": "docs/verification/history/exit-plants-v33-20261107.json",
+  "evidence_directory": "docs/verification/first-level-20261107",
+  "host_verification": "docs/verification/first-level-20261107/host-regression.json",
   "debugger_left_running": true,
-  "original_V4_absent_and_test_V4_removed": true,
-  "restored_userdata_names": [
-    "user1.dat",
-    "users.dat"
-  ]
+  "evidence": {
+    "040-current-result.json": "54fc2694971b95f9c701e16c027efab349cb5b30647660f371d8266e007a93b5",
+    "067-diag-snapshot-5-result.json": "11381f2942785055143f407623d60e72290a67884e6994b1dce22d21a18a9f4d",
+    "074-diagnostic-exception-result.json": "d8f4a7b96804ecf8e13aecef5865de6f6ed0d986f0445c995cd47e559a70c1be",
+    "fixed-upload.json": "5e1c702d5d71fb95d52e8a6e4c94b88a5b5776c2c1b18ddcd2582f48123c9a10",
+    "fixed-entered-playing.json": "f451dd88ac92ad518be49543b92cb2eabd9d29715a362be2992b615d2833d2f4",
+    "first-battle-verification.json": "12add12e76a1ceec821b89802cdb42c4edfd16032cf80afdc06e2b745959f217",
+    "native-save-verification.json": "c828f83c3a3fd042cd9bf2f03cb2d5832e53cda391cd1baf52ef147b43e16791",
+    "165-normal-exit-state-result.json": "5eeeef88854d0fe77554e102a3894ee408505b0fde55f36f60067d0824ca74b6",
+    "originals-restored.json": "cd4841a5a8bc5c6b7b2dad2440026150e2925aa8ac47b2936a43fec91f060075",
+    "177-restored-userdata-list-result.json": "8426fae930b11a6e50215911c5e78ecff44dcd2e69685793fc549e2b23f4a26f",
+    "120-resident-header-result.json": "ab331c4b8c94ee9b1bc8a3f16bbe929e511633a49acb9204de67fef5d89a2d9f",
+    "device-fingerprints.json": "83402126552a9c103bcca26421e394f4ca72dc2795ca0c7863ee8768c50ab113",
+    "device-symbols.json": "819c711c2342698cf1a12204fb93a4cb842c595054067d22ee7a94f918cb0854",
+    "host-regression.json": "5710ba17a304c9cb290b8cabb077a203e6efa6d0654d69368f2848d3e448ba32",
+    "first-play.png": "892da3bf304fface5ab9cb5b3e541149910b77c6a0287fdf201a48a1aef91690",
+    "first-wave-complete.png": "81027855f09496d382173fd9c3d8fbad5d3aea2fdb21c7258602878eb7d9b104",
+    "options.png": "d793138dc1afa2c3049b960c0980e6c7695efebbf14617d20d13cdbbfc3f2cdd",
+    "native-desktop.png": "5d4da4dd699826e20ef168b219d5e88dbbb0b406073e343f65e076126ca25973"
+  }
 }

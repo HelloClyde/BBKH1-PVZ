@@ -58,7 +58,7 @@ def apply(source_root:Path):
     replace(source_root/'main.cpp','int main(int argc, char** argv)','int pvzp_upstream_main(int argc, char** argv)')
     lawn=source_root/'LawnApp.cpp'
     text=lawn.read_text(encoding='utf8')
-    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n#include "graphics/RewardEffects.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\nextern void H1RetireBoardReplay();\n'+text
+    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n#include "graphics/RewardEffects.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\nextern void H1PreloadCurrentBoardForPlay(LawnApp*);\nextern void H1RetireBoardReplay();\n'+text
     # These are the confirmed return-to-menu and app-quit saves. Replays are
     # no longer drawn, while all original simulation data is still available.
     if text.count('mBoard->TryToSaveGame();')!=2:raise ValueError('Confirmed board-exit save boundaries changed')
@@ -101,9 +101,9 @@ def apply(source_root:Path):
 ''',1)
     text=text.replace('\tmBoard->InitLevel();','\tmBoard->InitLevel();\n    H1PreloadCurrentBoard(this);',1)
     text=text.replace('\tmBoard->StartLevel();','''    if(mBoard->ChooseSeedsOnCurrentLevel()){
-        H1LevelLoadingScope selectedLoadingScope; H1PreloadCurrentBoard(this);
+        H1LevelLoadingScope selectedLoadingScope; H1PreloadCurrentBoardForPlay(this);
         H1RewardEffectsPrepare();
-    }else{H1PreloadCurrentBoard(this);H1RewardEffectsPrepare();}
+    }else{H1PreloadCurrentBoardForPlay(this);H1RewardEffectsPrepare();}
     H1ActorPoseFinishSod();
 \tmBoard->StartLevel();''',1)
     assert text.count('\t\t\tDoContinueDialog();')==2

@@ -68,22 +68,26 @@ CI 对主干、PR 和手动运行执行完整性校验、打包、制品上传�
 
 ## 验证
 
-当前成品 SHA-256：`90c65cdf0eb88f491ad53c0d53f890b2de5db63061ae51ccd05cebe19d83baf5`。
+当前成品 SHA-256：`abb3d838128a6199f7364b49ae98f514b4ebeb3f05ae3c172a1a03c8ef18417e`。
 
-第六关 40 株植物的 H1 真机计时为 **12.07 FPS**，相同固定输入最初为 5.27 FPS；主菜单正常退出由 13.05 秒降至 **1.80 秒**。使用 40 Hz 原始设备时钟，827 次原游戏更新正常推进，未向运行中的游戏写入帧数或成功状态。
+本版修复全新用户第一关草坪滚动结束后的异常退出。H1 真机完整播放新玩家开场和草坪滚动后正常进入游戏，通过普通触摸种下 3 株豌豆，清除四波僵尸并出现向日葵奖励卡；僵尸、子弹与原游戏计数正常推进，没有写入游戏 RAM 来设置进度或成功状态。
 
-必需动画和离线预览均加载成功，设备没有因内存不足退出。回菜单后角色帧缓存归零并释放六个预览所有者，正常退出后用户堆和原生分配记账均归零。设备写出的 198,081 字节原格式 V4 已读回核对长度和 CRC；原用户文件逐字节恢复，测试存档已移除，调试器保持运行。
+选项、回主菜单和正常退出通过；B 盘原生写出的 **42,856 字节 V4** 已读回核对头、长度和 CRC。退出后用户堆及原生分配记账归零，原用户文件逐字节恢复，测试存档和临时目录已移除，调试器保持运行。原因、回归用例和真机证据见[第一关修复记录](docs/H1-FIRST-LEVEL-CRASH-20261107.md)及[当前真机记录](docs/verification/final-native-verification.json)。
 
-密集场景的选项首个完整画面为 575 毫秒，其中暂停快照准备为 375 毫秒，仍有优化空间；另记录到一次可恢复的 4 KB 分配失败。本轮尚未达到整体 20 FPS，部分动态变换也未完全烘焙。完整固件测试通过，但不作为物理 B 盘或帧率证据。
+![H1 真机第一关正常进入种植界面](docs/verification/first-level-20261107/first-play.png)
+
+首次新玩家专属开场仍只有约 1～2 FPS，本次修复没有跳过它，也不声称达到整体 20 FPS；部分动态变换仍未完全烘焙，并记录到可恢复的分配失败。
+
+历史性能：上一版 `90c65cdf…d83baf5` 的第六关 40 株植物为 **12.07 FPS**，最初基线为 5.27 FPS；主菜单退出为 **1.80 秒**，最初为 13.05 秒；密集场景选项首次完整画面 575 毫秒，其中暂停快照准备 375 毫秒。这些计时对应[上一版成品记录](docs/verification/history/exit-plants-v33-20261107.json)，本次没有对新程序重新运行该密集场景矩阵。
 
 ![H1 真机四十株植物](docs/screenshots/h1-dense-plants-20261107.png)
 
-实现与边界见[离线动画和缓存生命周期](docs/H1-EXIT-PLANTS-20261107.md)、[主机专项记录](docs/verification/exit-plants-host-verification.json)和[最终真机记录](docs/verification/final-native-verification.json)。此前第四关、夜间泳池、Loading 文字居中和存档策略的验收保存在[上一版记录](docs/verification/previous-c90-resource-verification.json)；这些历史计时不冒充本轮重测。
+此前离线动画实现与边界见[缓存生命周期](docs/H1-EXIT-PLANTS-20261107.md)和[当时主机记录](docs/verification/exit-plants-host-verification.json)。第四关、夜间泳池、Loading 文字居中和存档策略的早期验收保存在[历史记录](docs/verification/previous-c90-resource-verification.json)；这些历史结果不冒充本轮重测。
 
 ## 资源与许可
 
 - `private/resources-h1-wide/`：完整中文运行资源，2,755 个文件、139,832,497 字节，含 253 份离线定义、20 份字体缓存、标题 PCM、紧凑日间音乐、完整植物离线帧、214 个离线预览、冒险/角色帧与草坪全景。
-- `private/resource-build-inputs/`：构建所需的原始定义、音频、字形输入及打包副本，不复制到 H1；本轮为减少运行时绘制增加完整植物帧，程序与运行资源合计 143,486,573 字节，按当前关卡选择加载。旧版精简记录见 [资源适配与真机记录](docs/H1-RESOURCE-OPTIMIZATION-20261106.md)。
+- `private/resource-build-inputs/`：构建所需的原始定义、音频、字形输入及打包副本，不复制到 H1；完整植物帧用于减少运行时绘制，当前程序与运行资源合计 143,487,069 字节，按当前关卡选择加载。旧版精简记录见 [资源适配与真机记录](docs/H1-RESOURCE-OPTIMIZATION-20261106.md)。
 - `private/source/`：原始资源输入；`private/widescreen/`：扩图源图与提示词；`private/zh-cn/`：中文图片和文本来源。
 - `localization/`：语言基线与文案补充；`assets/fonts/`：重新生成中文字形所需的 Noto 原字体，H1 安装不需要 OTF 文件。
 - `provenance/`：运行资源与源素材完整文件校验清单。

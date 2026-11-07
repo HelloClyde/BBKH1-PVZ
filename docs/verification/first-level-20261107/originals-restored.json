@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "files": {
+    "users.dat": {
+      "bytes": 19,
+      "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+      "exact_original_bytes": true
+    },
+    "user1.dat": {
+      "bytes": 886,
+      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+      "exact_original_bytes": true
+    }
+  },
+  "test_V4_removed": true,
+  "restored_userdata_names": [
+    "user1.dat",
+    "users.dat"
+  ],
+  "debugger_left_running": true,
+  "normal_exit_heap_and_native_charge_zero": true
+}

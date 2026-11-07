@@ -2,10 +2,10 @@
   "title": "植物僵尸",
   "target": "BBK H1/Y100 V1.41",
   "upstream_commit": "98b659380014c89c3553fbb2839f5e5a84d6df3d",
-  "bytes": 3654076,
-  "sha256": "90c65cdf0eb88f491ad53c0d53f890b2de5db63061ae51ccd05cebe19d83baf5",
-  "native_elf_sha256": "0addc4e9f24f1d2003c148a326055c3d535611a29ff78f3aff406565b2f3ec86",
-  "payload_bytes": 3623264,
+  "bytes": 3654572,
+  "sha256": "abb3d838128a6199f7364b49ae98f514b4ebeb3f05ae3c172a1a03c8ef18417e",
+  "native_elf_sha256": "b9a16ba2e0fb790b0f60f5c31716b0f370d85087658735d649c84c77140627a4",
+  "payload_bytes": 3623760,
   "compiled_sources": 189,
   "exception_handling": true,
   "private_stack_bytes": 131072,
@@ -81,13 +81,13 @@
     "libsupc++.a": "c592e375cc22cdb5c1f5403316e4487981789e5bbbf69afe6386e23976d59442"
   },
   "bda_validation": {
-    "path": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\native-exit-plants-v33\\H1PVZPortable.bda",
-    "size": 3654076,
+    "path": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\first-level-fixed-v1\\H1PVZPortable.bda",
+    "size": 3654572,
     "title": "植物僵尸",
     "description": "H1 Native BDA SDK",
     "category": 72,
     "version": 16777474,
-    "file_size_minus_4": 3654072,
+    "file_size_minus_4": 3654568,
     "payload_offset": 30812,
     "resource_offset": 136,
     "resource_sizes": [
@@ -146,16 +146,16 @@
         "draw_height": 60
       }
     ],
-    "checksum": 5712,
-    "expected_checksum": 5712,
+    "checksum": 5698,
+    "expected_checksum": 5698,
     "checksum_ok": true,
     "errors": [],
     "warnings": [],
     "ok": true
   },
-  "hardware_verified": false,
+  "hardware_verified": true,
   "source_inputs": {
-    "build/native-exit-plants/source/LawnApp.cpp": "8bda64760ea794862e94e30a06005f6d6865658fd4d85871367ef68942f0eb42",
+    "build/native-exit-plants/source/LawnApp.cpp": "848584b66162b8e06a2d67a493296d4067ae3dd6a12f9d4496e67e621ea09da1",
     "build/native-exit-plants/source/main.cpp": "04a711dd50772469485d59cac44df4a21c3aa6e2cbdd4c019eb4bffd407e4867",
     "build/native-exit-plants/source/Resources.cpp": "f177db465f5763b1d012d6b9388bfbd5281514dd4888fa9dce50a4fcfe7fd68d",
     "build/native-exit-plants/source/SexyAppFramework/Common.cpp": "dff1e39375ac8d3e54aab7a014d0423b5176ab3c867ee426d404cf7064ce1c6b",
@@ -285,7 +285,7 @@
     "platform/h1_pcm.cpp": "615767556ea4831c51b3ef0bf739960302fbd6021d53f2c6faa7b35f61ecb346",
     "platform/h1_sdl.cpp": "b67b10b89116d8f42c49dce20a6c92f834e5ca9e7e5d0cdb918b1a23c7113be5",
     "platform/Input.cpp": "ebcfc65f8e8a5d12810129b156c1e79b4249d1436e70a0e14072eab5f66c6cc6",
-    "platform/LevelPreload.cpp": "fdbe220548cf8db752829b7b4ea5351a85ee566005f291ab16388cb91a31a8bd",
+    "platform/LevelPreload.cpp": "32773ea9785807b999da2fd0f65ed015a6ca913ba3a396a6fec54eb3c898e36b",
     "platform/Loading.cpp": "4e49b0b82d719f1f66d0d91b335415f4fb1866beab751f44cacd84a1e0d09b82",
     "platform/Main.cpp": "ef3506717e8e513f6747a312d92c581fb72dd0c251ed6528ae3a0329afd8701d",
     "platform/OptionsFeedback.cpp": "f89e40de5bcfedcbc9301982a454ca0417d572d8dc8cc3573c6d442c87b5f40a",
@@ -303,7 +303,7 @@
     "runtime/startup.c": "5c95c54ee850090f3e23d3a6279f2babb5b0b1bbae317cb2b9e5db85ccc47e6e",
     "runtime/syscalls.c": "2ccb027b2994fcadc8b0c481347392dab54587888db68bf20846b17574e71ea5",
     "runtime/whole_hole.c": "aef1d766cfff98e435b64faa2b372739b27205811c034fd7ffb01c54350059d0",
-    "runtime/cxx_runtime.cpp": "5196bf96ca78bef739873ed1ce27d515ef974498c0c3392ea0430415c740d97b",
+    "runtime/cxx_runtime.cpp": "67c538a16ec1c6f77902f5c0e7aa366a0ab1e8d87997d59980d494c7e2f8ca46",
     "runtime/entry.S": "9b1b4b50eb8dd11a895bddbded9e9ae77dcd0c695efc4f7b473c20738d80582e",
     "third_party/zlib-1.3.1/adler32.c": "9cd1443a24ff2a3053961695bd432035c58347386a420d3388232376ebabe211",
     "third_party/zlib-1.3.1/compress.c": "86f802c16a965e7a28737e3730b4e576c5ba40981753967e3e30916f4dc1b4b1",
@@ -1615,7 +1615,7 @@
   "build_inputs": {
     "runtime/h1.ld": "b14e57c7d0ed709ee1fd396a825de40a26e86450da514c10891e6ad54b3b2016",
     "assets/icon.png": "1cb12c28f45330b1a43812f035be50aaf336b49ed642d811c77d298e46b7dff5",
-    "build/native-exit-plants/prepared.json": "7a8f551a1fd371a01b6deb84c42da9ff973d971d691ce9429d2f500402d3fc6e",
+    "build/native-exit-plants/prepared.json": "0a2986e9046505a0c88200b5081ea230a9ef5345900518152ba7842ca034c93f",
     "tools/build.py": "0d29cb20609304b8fa827ed1c39fa8de87b7a520cd2195b33f9b9cb1d959f538",
     "tools/prepare.py": "0b6dd4b10f69a225a8bfb59cc6ffd6d9e9dead31736ce151e974b9c8cdada680",
     "tools/bootstrap_cxx.py": "834fadd80ccf46b25bd97a87abfd82355370a0c2cc713c042a24ab6e20236d7c",
@@ -1623,7 +1623,7 @@
     "tools/build_widescreen.py": "3ddf673f9ca701519fed0da10f00d446c8729b538109465b71000671614057f0",
     "tools/bootstrap_deps.py": "f8bc7206a1fdecfed997d75dc9a73a93b58c8751f7681c2a5b668643a175dd0b",
     "tools/audit_gp.py": "4099cf03c65f9ae529ee1dd8c23c52a2e25ec3d9b3af4ef87b840ea496ed51a2",
-    "platform/source_patches.py": "fd003811057994d82ec09910110cea9dfeb9dd82dd90c98e19b408ad24d1087b",
+    "platform/source_patches.py": "d75cba9ef94ea18a6756d2287ebf1ff64173b45f571b7943c4cfbf78ec4a97a3",
     "tools/test_whole_hole.py": "3be3dd04b55af21929ad2c38d216fd69bcd1f5a5365e16d4d57a9e49d02daf59",
     "platform/graphics/memory_patches.py": "a81b81aa7e21973b7e7f4454291bac235d02bbaca0e1f2deab42f40baf91ac1b",
     "platform/music_sources.json": "2ebb28e2e14e8a1d18cdf11a1efaa30c90768aec2eb375b91fe307de4fdee0fe",
@@ -1650,5 +1650,6 @@
     "platform/selector/selector_offline_patches.py": "f3979b56eec7d3a6194d1892e4f7fca466c92d04663c564d587fa54c629f5e29",
     "platform/widescreen_patches.py": "f1a3028bd51a58fecb674ec9751acb831f93dbe2035a0cef634f98bbc42835e1"
   },
-  "icon_sha256": "1cb12c28f45330b1a43812f035be50aaf336b49ed642d811c77d298e46b7dff5"
+  "icon_sha256": "1cb12c28f45330b1a43812f035be50aaf336b49ed642d811c77d298e46b7dff5",
+  "hardware_verification": "docs/verification/first-level-20261107/verification.json"
 }

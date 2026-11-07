@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "result": {
+    "operation": "file_list",
+    "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata",
+    "entries": [
+      {
+        "name": "users.dat",
+        "size": 19,
+        "attributes": 32,
+        "is_directory": false
+      },
+      {
+        "name": "user1.dat",
+        "size": 886,
+        "attributes": 32,
+        "is_directory": false
+      }
+    ],
+    "completed": true,
+    "token": 412,
+    "count": 2
+  },
+  "seconds": 0.125
+}

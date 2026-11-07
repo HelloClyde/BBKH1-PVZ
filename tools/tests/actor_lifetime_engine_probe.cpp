@@ -30,7 +30,10 @@ extern "C" void pvzh1_actor_lifetime_probe(){
  const unsigned before=pvzh1_actor_pose_diagnostic[0];H1ActorPoseFinishSod();
  Check(!pvzh1_actor_lifetime_diagnostic[2]&&pvzh1_actor_pose_diagnostic[0]+sodBytes==before,"finished intro bank remained resident");
  for(auto& [r,state]:states)Check(!std::memcmp(r,state.data(),state.size()),"retirement changed live animation state");
- pvzh1_actor_pose_shutdown();H1PreloadCurrentBoard(gLawnApp);gLawnApp->StartPlaying();
+ // Exercise the real boundary: the intro retires its own bank, then the
+ // original StartPlaying callback runs without a global cache reset.
+ const auto failures=pvzh1_actor_lifetime_diagnostic[7];gLawnApp->StartPlaying();
+ Check(gLawnApp->mGameScene==SCENE_PLAYING&&pvzh1_actor_lifetime_diagnostic[7]==failures,"natural intro retirement prevented original StartPlaying");
  Check(!pvzh1_actor_lifetime_diagnostic[2],"original StartPlaying did not retire intro pixels");
  Check(pvzh1_actor_lifetime_diagnostic[0]&&pvzh1_actor_lifetime_diagnostic[1]&&pvzh1_actor_lifetime_diagnostic[3],"play bank was retired with intro");
  auto* plant=board->AddPlant(2,1,SEED_PEASHOOTER);auto* body=gLawnApp->ReanimationGet(plant->mBodyReanimID);body->mOverlayMatrix.LoadIdentity();body->mOverlayMatrix.m02=265;body->mOverlayMatrix.m12=300;

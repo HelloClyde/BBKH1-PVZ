@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\first-level-repro-20261107\\fixed.bda",
+  "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+  "target_gbk_hex": "413a5cd3a6d3c35cb3ccd0f25c483150565a506f727461626c652e626461",
+  "phase": "done",
+  "completed": true,
+  "size": 3654572,
+  "crc32": 4093523311,
+  "sha256": "abb3d838128a6199f7364b49ae98f514b4ebeb3f05ae3c172a1a03c8ef18417e",
+  "token": 406,
+  "received": 3654572,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 406,
+    "size": 3654572,
+    "received": 3654572,
+    "expected_crc": 4093523311,
+    "actual_crc": 4093523311,
+    "verify_offset": 3654572,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 9,
+    "old_size": 3654444,
+    "old_crc": 1533399742,
+    "last_activity_tick": 9877865,
+    "step_count": 2688,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+    "temporary": "A:\\应用\\程序\\H1D00000196.TMP",
+    "backup": "A:\\应用\\程序\\H1D00000196.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 270.844000000041
+}

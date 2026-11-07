@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "scope": "本版物理 H1：全新用户第一关原始开场、草坪滚动后正常进入游戏；普通触摸种植、收集阳光、清除四波僵尸并出现奖励卡；选项、回菜单、B盘原格式V4写入/读回、正常退出和原存档恢复。没有重新测速密集场景，也不认证整体20FPS。",
+  "program": {
+    "passed": true,
+    "bda_sha256": "abb3d838128a6199f7364b49ae98f514b4ebeb3f05ae3c172a1a03c8ef18417e",
+    "elf_sha256": "b9a16ba2e0fb790b0f60f5c31716b0f370d85087658735d649c84c77140627a4",
+    "bda_bytes": 3654572,
+    "build_receipt_sha256": "c0317eb6c33b3c51a348d54f2d13df464c89cb8b7e19d7fd2e15ea7317b86e91",
+    "source_identity_verified": true,
+    "compiled_sources": 189,
+    "device_upload_crc_verified": true,
+    "live_code_fingerprints": 4
+  },
+  "regression": {
+    "published_beta1_reproduced": true,
+    "published_bda_sha256": "90c65cdf0eb88f491ad53c0d53f890b2de5db63061ae51ccd05cebe19d83baf5",
+    "runtime_exit_code": 107,
+    "exception": "H1 offline actor bank preload failed",
+    "native_charge_fault_zero": true,
+    "fix": "Separate play resource preparation from intro-only sod replay dependencies",
+    "diagnostic_bda_sha256": "34e042d70e3a5674c3e1a4d004f787fee5a96e247994a02a799921b4443fd9fd"
+  },
+  "first_level": {
+    "natural_intro_and_sod_preserved": true,
+    "entered_scene_playing": true,
+    "wave": 4,
+    "total_waves": 4,
+    "reward_card_visible": true,
+    "max_live_plants": 3,
+    "max_live_zombies": 3,
+    "max_live_projectiles": 4,
+    "game_RAM_written": false,
+    "atomic_entity_snapshot_claimed": false,
+    "termination_diagnostic": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "native_written_V4": {
+    "passed": true,
+    "bytes": 42856,
+    "sha256": "21f514fb9b3cb0676405ba9119d3901f076b0f9ab93422db8346e18ddd930568",
+    "header": "PVZP_SAVE4",
+    "version": 1,
+    "exact_payload_length": true,
+    "payload_crc32": 1421628401,
+    "native_B_write_and_debug_readback_valid": true
+  },
+  "ordinary_exit": {
+    "passed": true,
+    "return_code": 0,
+    "heap_bytes": 0,
+    "native_charge_bytes": 0,
+    "gLawnApp": 0
+  },
+  "original_saves": {
+    "passed": true,
+    "files": {
+      "users.dat": {
+        "bytes": 19,
+        "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+        "exact_original_bytes": true
+      },
+      "user1.dat": {
+        "bytes": 886,
+        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+        "exact_original_bytes": true
+      }
+    },
+    "test_V4_removed": true,
+    "restored_userdata_names": [
+      "user1.dat",
+      "users.dat"
+    ],
+    "debugger_left_running": true,
+    "normal_exit_heap_and_native_charge_zero": true
+  },
+  "resources": {
+    "runtime_manifest_sha256": "5c9b58b3305dfd13d446d45cab28e070b670ad429e45c3e8cdf33edc2944d77f",
+    "files": 2755,
+    "bytes": 139832497,
+    "unchanged_from_previous_v33": true,
+    "this_test_resource_drive": "B",
+    "scope": "Same resource bytes as v33, reused prior transfer proof; current level packs validated and replayed by the physical game, not a fresh full-card readback"
+  },
+  "device": "Physical BBK H1 / Y100 V1.41",
+  "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
+  "resident_image_id": "71a0983b",
+  "physical": [
+    480,
+    272
+  ],
+  "limitations": [
+    "First new-player-only prologue remains about1-2FPS; not optimized or skipped here.",
+    "Dense40-plant FPS/options/exit timings in the previous-v33 proof were not remeasured for this exact BDA.",
+    "Recoverable allocation failure was observed; repaired game did not abort.",
+    "Dynamic affine states are not all offline."
+  ],
+  "previous_native_verification": "docs/verification/history/exit-plants-v33-20261107.json",
+  "evidence_directory": "docs/verification/first-level-20261107",
+  "host_verification": "docs/verification/first-level-20261107/host-regression.json",
+  "debugger_left_running": true,
+  "evidence": {
+    "040-current-result.json": "54fc2694971b95f9c701e16c027efab349cb5b30647660f371d8266e007a93b5",
+    "067-diag-snapshot-5-result.json": "11381f2942785055143f407623d60e72290a67884e6994b1dce22d21a18a9f4d",
+    "074-diagnostic-exception-result.json": "d8f4a7b96804ecf8e13aecef5865de6f6ed0d986f0445c995cd47e559a70c1be",
+    "fixed-upload.json": "5e1c702d5d71fb95d52e8a6e4c94b88a5b5776c2c1b18ddcd2582f48123c9a10",
+    "fixed-entered-playing.json": "f451dd88ac92ad518be49543b92cb2eabd9d29715a362be2992b615d2833d2f4",
+    "first-battle-verification.json": "12add12e76a1ceec821b89802cdb42c4edfd16032cf80afdc06e2b745959f217",
+    "native-save-verification.json": "c828f83c3a3fd042cd9bf2f03cb2d5832e53cda391cd1baf52ef147b43e16791",
+    "165-normal-exit-state-result.json": "5eeeef88854d0fe77554e102a3894ee408505b0fde55f36f60067d0824ca74b6",
+    "originals-restored.json": "cd4841a5a8bc5c6b7b2dad2440026150e2925aa8ac47b2936a43fec91f060075",
+    "177-restored-userdata-list-result.json": "8426fae930b11a6e50215911c5e78ecff44dcd2e69685793fc549e2b23f4a26f",
+    "120-resident-header-result.json": "ab331c4b8c94ee9b1bc8a3f16bbe929e511633a49acb9204de67fef5d89a2d9f",
+    "device-fingerprints.json": "83402126552a9c103bcca26421e394f4ca72dc2795ca0c7863ee8768c50ab113",
+    "device-symbols.json": "819c711c2342698cf1a12204fb93a4cb842c595054067d22ee7a94f918cb0854",
+    "host-regression.json": "5710ba17a304c9cb290b8cabb077a203e6efa6d0654d69368f2848d3e448ba32",
+    "first-play.png": "892da3bf304fface5ab9cb5b3e541149910b77c6a0287fdf201a48a1aef91690",
+    "first-wave-complete.png": "81027855f09496d382173fd9c3d8fbad5d3aea2fdb21c7258602878eb7d9b104",
+    "options.png": "d793138dc1afa2c3049b960c0980e6c7695efebbf14617d20d13cdbbfc3f2cdd",
+    "native-desktop.png": "5d4da4dd699826e20ef168b219d5e88dbbb0b406073e343f65e076126ca25973"
+  }
+}

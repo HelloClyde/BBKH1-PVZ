@@ -1,0 +1,383 @@
+{
+  "schema": "h1-pvz-hardware-opt-offline-menu-read-only-symbols-1",
+  "bda_sha256": "abb3d838128a6199f7364b49ae98f514b4ebeb3f05ae3c172a1a03c8ef18417e",
+  "elf_sha256": "b9a16ba2e0fb790b0f60f5c31716b0f370d85087658735d649c84c77140627a4",
+  "build_receipt_sha256": "c0317eb6c33b3c51a348d54f2d13df464c89cb8b7e19d7fd2e15ea7317b86e91",
+  "symbols": {
+    "pvzp_diagnostic": {
+      "address": "0x83f9f1a4",
+      "size": 128
+    },
+    "pvz_runtime_diagnostic": {
+      "address": "0x83fa0670",
+      "size": 64
+    },
+    "pvzh1_cache_diagnostic": {
+      "address": "0x83f87e58",
+      "size": 24
+    },
+    "pvzh1_cache_pressure_diagnostic": {
+      "address": "0x83f87e70",
+      "size": 16
+    },
+    "pvzh1_storage_texture_diagnostic": {
+      "address": "0x83f87d98",
+      "size": 32
+    },
+    "pvzh1_physical_screen_diagnostic": {
+      "address": "0x83f880e0",
+      "size": 32
+    },
+    "pvz_runtime_pressure_diagnostic": {
+      "address": "0x83fa1e74",
+      "size": 24
+    },
+    "pvz_runtime_native_charge": {
+      "address": "0x83fa1ea0",
+      "size": 8
+    },
+    "pvzh1_render_plan_diagnostic": {
+      "address": "0x83f8d39c",
+      "size": 96
+    },
+    "pvz_runtime_profile_diagnostic": {
+      "address": "0x83fa056c",
+      "size": 208
+    },
+    "pvz_runtime_profile_clock": {
+      "address": "0x83fa0554",
+      "size": 24
+    },
+    "pvz_runtime_hole_diagnostic": {
+      "address": "0x83fa241c",
+      "size": 48
+    },
+    "pvz_runtime_small_pool_diagnostic": {
+      "address": "0x83fa1ea8",
+      "size": 64
+    },
+    "pvz_runtime_io_diagnostic": {
+      "address": "0x83fa1c30",
+      "size": 64
+    },
+    "pvz_runtime_asset_layout_diagnostic": {
+      "address": "0x83fa1bf8",
+      "size": 16
+    },
+    "pvzh1_xmp_load_diagnostic": {
+      "address": "0x83fa0490",
+      "size": 48
+    },
+    "pvzh1_axis_span_diagnostic": {
+      "address": "0x83f8e108",
+      "size": 32
+    },
+    "pvzh1_selector_offline_diagnostic": {
+      "address": "0x83fa03a0",
+      "size": 64
+    },
+    "pvzh1_selector_cull_diagnostic": {
+      "address": "0x83fa0390",
+      "size": 16
+    },
+    "pvzh1_dirty_present_diagnostic": {
+      "address": "0x83f9f184",
+      "size": 32
+    },
+    "pvzh1_dirty_canvas_diagnostic": {
+      "address": "0x83f764b8",
+      "size": 32
+    },
+    "pvzh1_text_replay_diagnostic": {
+      "address": "0x83f9e4b0",
+      "size": 32
+    },
+    "pvzh1_font_metric_diagnostic": {
+      "address": "0x83f9e4a0",
+      "size": 16
+    },
+    "pvzh1_selector_retained_diagnostic": {
+      "address": "0x83fa0360",
+      "size": 16
+    },
+    "pvzh1_definition_diagnostic": {
+      "address": "0x83f87998",
+      "size": 32
+    },
+    "pvzh1_startup_diagnostic": {
+      "address": "0x83fa0410",
+      "size": 128
+    },
+    "pvzh1_font_cache_diagnostic": {
+      "address": "0x83f76d14",
+      "size": 32
+    },
+    "pvzh1_sound_index_diagnostic": {
+      "address": "0x83f774c8",
+      "size": 16
+    },
+    "pvzh1_audio_diagnostic": {
+      "address": "0x83f9f298",
+      "size": 64
+    },
+    "pvzh1_adventure_diagnostic": {
+      "address": "0x83fa03e0",
+      "size": 48
+    },
+    "pvzh1_adventure_raster_diagnostic": {
+      "address": "0x83fa0370",
+      "size": 32
+    },
+    "pvzp_music_diagnostic": {
+      "address": "0x83f9f224",
+      "size": 32
+    },
+    "pvz_runtime_asset_index_diagnostic": {
+      "address": "0x83fa1bbc",
+      "size": 32
+    },
+    "pvzh1_sound_bank_diagnostic": {
+      "address": "0x83f774f8",
+      "size": 16
+    },
+    "pvzh1_level_preload_diagnostic": {
+      "address": "0x83f9f354",
+      "size": 16
+    },
+    "gLawnApp": {
+      "address": "0x83f74b84",
+      "size": 4
+    },
+    "pvzh1_paused_board_diagnostic": {
+      "address": "0x83f880d0",
+      "size": 16
+    },
+    "pvzh1_additive_diagnostic": {
+      "address": "0x83f8e0f4",
+      "size": 16
+    },
+    "pvzh1_additive_lut": {
+      "address": "0x83f8e0f0",
+      "size": 4
+    },
+    "pvzh1_image_pack_diagnostic": {
+      "address": "0x83f9f3a4",
+      "size": 16
+    },
+    "pvz_runtime_native_charge_fault": {
+      "address": "0x83fa1e8c",
+      "size": 16
+    },
+    "pvzh1_actor_pose_diagnostic": {
+      "address": "0x83f87848",
+      "size": 64
+    },
+    "pvzh1_sod_offline_diagnostic": {
+      "address": "0x83f87828",
+      "size": 32
+    },
+    "pvzh1_early_lawn_diagnostic": {
+      "address": "0x83f87a1c",
+      "size": 32
+    },
+    "pvz_runtime_last_path": {
+      "address": "0x83fa1c70",
+      "size": 512
+    },
+    "pvz_runtime_heap_failure": {
+      "address": "0x83fa04c4",
+      "size": 80
+    },
+    "pvz_runtime_native_charge_failure": {
+      "address": "0x83fa1e9c",
+      "size": 4
+    },
+    "pvzh1_camera_lawn_diagnostic": {
+      "address": "0x83f879fc",
+      "size": 32
+    },
+    "pvzh1_reward_effect_diagnostic": {
+      "address": "0x83f8d460",
+      "size": 48
+    },
+    "pvzh1_level_loading_diagnostic": {
+      "address": "0x83f87944",
+      "size": 48
+    },
+    "pvzh1_font_storage_diagnostic": {
+      "address": "0x83f87c78",
+      "size": 32
+    },
+    "pvzh1_options_diagnostic": {
+      "address": "0x83f9f370",
+      "size": 52
+    },
+    "pvzh1_font_tile_diagnostic": {
+      "address": "0x83f87c44",
+      "size": 32
+    },
+    "pvz_runtime_write_diagnostic": {
+      "address": "0x83fa1c08",
+      "size": 40
+    },
+    "pvzh1_options_preclean_test": {
+      "address": "0x83f9f36c",
+      "size": 4
+    },
+    "pvzh1_white_repeat_diagnostic": {
+      "address": "0x83f8e0e4",
+      "size": 12
+    },
+    "pvzh1_save_file_diagnostic": {
+      "address": "0x83f9f414",
+      "size": 32
+    },
+    "pvz_runtime_new_failure_caller": {
+      "address": "0x83fa3564",
+      "size": 4
+    },
+    "pvzh1_actor_page_diagnostic": {
+      "address": "0x83f87808",
+      "size": 32
+    },
+    "pvzh1_save_compare_diagnostic": {
+      "address": "0x83f9f400",
+      "size": 20
+    },
+    "pvzh1_save_compare_bypass": {
+      "address": "0x83f9f3fc",
+      "size": 4
+    },
+    "pvz_runtime_log_diagnostic": {
+      "address": "0x83fa07b0",
+      "size": 12
+    },
+    "pvz_runtime_log_tail": {
+      "address": "0x83fa06b0",
+      "size": 256
+    },
+    "pvzh1_plant_pose_diagnostic": {
+      "address": "0x83f877d8",
+      "size": 48
+    },
+    "pvzh1_base_inverse_diagnostic": {
+      "address": "0x83f877c8",
+      "size": 16
+    },
+    "pvzh1_actor_fallback_diagnostic": {
+      "address": "0x83f876c8",
+      "size": 256
+    },
+    "pvzh1_definition_retirement_diagnostic": {
+      "address": "0x83f8dca8",
+      "size": 16
+    },
+    "pvzh1_shadow_pose_diagnostic": {
+      "address": "0x83f876b8",
+      "size": 16
+    },
+    "pvzh1_normal_actor_diagnostic": {
+      "address": "0x83f876a8",
+      "size": 16
+    },
+    "pvzh1_board_replay_retirement_diagnostic": {
+      "address": "0x83f9f348",
+      "size": 12
+    },
+    "pvzh1_actor_lifetime_diagnostic": {
+      "address": "0x83f87688",
+      "size": 32
+    },
+    "pvzh1_selector_definition_diagnostic": {
+      "address": "0x83f8dcb8",
+      "size": 40
+    },
+    "pvzh1_frame_time_diagnostic": {
+      "address": "0x83f87678",
+      "size": 16
+    },
+    "pvzh1_linear_actor_diagnostic": {
+      "address": "0x83f87668",
+      "size": 16
+    },
+    "pvzh1_storage_loading_path": {
+      "address": "0x83f87c98",
+      "size": 256
+    },
+    "pvzh1_active_track_diagnostic": {
+      "address": "0x83f87658",
+      "size": 16
+    },
+    "pvzh1_cached_frame_diagnostic": {
+      "address": "0x83f87888",
+      "size": 32
+    },
+    "pvz_runtime_termination_diagnostic": {
+      "address": "0x83fa3554",
+      "size": 16
+    },
+    "pvz_runtime_termination_message": {
+      "address": "0x83fa3454",
+      "size": 256
+    }
+  },
+  "encoding": "aligned little-endian uint32",
+  "allowed_RAM": [
+    "0x80000000",
+    "0x84000000"
+  ],
+  "application_bound": [
+    "0x83c00020",
+    "0x83ff0000"
+  ],
+  "optional_native_path": {
+    "address": "0x83fca810",
+    "size": 512,
+    "decode": "NUL terminated; UTF-8 strict, otherwise GBK strict"
+  },
+  "scene_values": {
+    "loading": 0,
+    "menu": 1,
+    "intro": 2,
+    "playing": 3,
+    "zombies_won": 4,
+    "award": 5,
+    "credit": 6,
+    "challenge": 7
+  },
+  "state_values": {
+    "runtime": {
+      "constructors": 1,
+      "main": 2,
+      "normal_exit": 9,
+      "abort": 255
+    },
+    "window": {
+      "open": 1,
+      "closed": 9
+    }
+  },
+  "device_access_performed_by_this_preparation": false,
+  "calibrated_raw_tick_hz": 40,
+  "profiling_timer": {
+    "unit": "raw_tick",
+    "backend": "pvz_runtime_ticks",
+    "hz": 40
+  },
+  "profiling_contract": "Native raw ticks at calibrated 40Hz (25ms granularity), no CP0 Count reads. Totals low/high uint64; elapsed modulo32. Same-category nesting counts outermost. MUSIC subset AUDIO; REPEAT and SW_DRAW_SHAPE subset DRAW; DRAW/PRESENT/AUDIO subset FRAME. Clock sequence must match and be even; use steady deltas, not startup maxima.",
+  "native_charge_contract": "Actual direct native spans plus complete pool page reserves, charged once per page; slot free does not deduct a still-resident page.",
+  "render_plan_contract": "Optional original scanline replay; allocated_capacity_bytes plus static_metadata_bytes <=512KiB. Capacity is requested plan pages, not native heap charge. Normal explicit shutdown clears ready_entries and allocated_capacity_bytes; static metadata and cumulative counters remain.",
+  "offline_selector_asset": {
+    "runtime_path": "/PVZ/h1menu/selector-wide.h1mb",
+    "source_path": "private/resources-h1-wide/h1menu/selector-wide.h1mb",
+    "sha256": "b7b75f330144218de855f235346a07b8a1cc0bb4333dd9042fd3fb44ddf86e99",
+    "bytes": 1626524,
+    "entries": 103
+  },
+  "offline_selector_contract": "H1 offline fragments: detach releases hand/transient captures, retains base for reuse; pressure can evict idle base; explicit shutdown releases all requested bytes.",
+  "native_text_range": {
+    "address": "0x83c00020",
+    "size": 2925600,
+    "end_exclusive": "0x83eca440"
+  }
+}

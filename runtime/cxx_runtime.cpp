@@ -5,6 +5,21 @@
 static_assert(__STDCPP_DEFAULT_NEW_ALIGNMENT__==8,"Review native default new alignment");
 
 volatile uint32_t pvz_runtime_new_failure_caller;
+extern "C" {
+volatile uint32_t pvz_runtime_termination_diagnostic[4];
+char pvz_runtime_termination_message[256];
+}
+static void record_termination(const char* message,unsigned kind) noexcept{
+    unsigned n=0;
+    if(message)while(n<sizeof(pvz_runtime_termination_message)-1&&message[n]){
+        pvz_runtime_termination_message[n]=message[n];++n;
+    }
+    pvz_runtime_termination_message[n]=0;
+    pvz_runtime_termination_diagnostic[0]=0x48314558u;
+    pvz_runtime_termination_diagnostic[1]=kind;
+    pvz_runtime_termination_diagnostic[2]=n;
+    if(n)pvz_runtime_log(pvz_runtime_termination_message,n);
+}
 void *operator new(std::size_t size){
     void *p=malloc(size?size:1);
     if(!p){pvz_runtime_new_failure_caller=(uint32_t)(uintptr_t)__builtin_return_address(0);throw std::bad_alloc();}
@@ -33,8 +48,10 @@ static void terminate_native() noexcept{
     try {
         auto current=std::current_exception();
         if(current)std::rethrow_exception(current);
-    }catch(const std::bad_alloc&){status=12;}
-    catch(...){status=107;}
+    }catch(const std::bad_alloc& error){status=12;record_termination(error.what(),1);}
+    catch(const std::exception& error){status=107;record_termination(error.what(),2);}
+    catch(...){status=107;record_termination("Unknown non-standard exception",3);}
+    pvz_runtime_termination_diagnostic[3]=status;
     pvz_runtime_abort(status);
 }
 extern "C" void pvz_cxx_initialize(){std::set_terminate(terminate_native);}
