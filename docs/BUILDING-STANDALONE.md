@@ -45,4 +45,23 @@ python tools/build_widescreen.py --toolchain 'D:/toolchain/bin' --prefix 'D:/pvz
 
 `python tools/package_install.py` 生成包含预验证 BDA 与全部 B 盘运行资源的安装 ZIP；指定 `--bda dist/H1PVZPortable.bda` 可使用本次编译结果。生成物不会覆盖已有同名 ZIP，且每个成员都读回核验 SHA-256。
 
-CI 仅做快照完整性与成品格式校验，使用固定 SDK、固定官方 Actions 提交及只读权限。本次只建立私有仓库、推送 main，不创建 tag 或 Release。
+## CI 与 Release
+
+`.github/workflows/validate.yml` 在 main push、PR 和手动运行时校验固定 SDK、原始源码、完整运行资源、编译输入和真机验证过的 BDA，生成完整安装包并上传制品，再按本次上传的唯一制品 ID 下载，核验每个交付文件及 ZIP 内每个成员的 SHA-256。校验脚本的损坏文件、错误提交、错误标签和路径检查也在 CI 中运行。
+
+CI 使用 `prebuilt/H1PVZPortable.bda`，不在 runner 上重新编译 C/C++，也不执行模拟器或真机测试。修改原生代码或资源后，必须先编译、完成必要验证并更新成品、清单与证据；不匹配时 CI 会拒绝打包。已有真机结论的范围见 `docs/verification/final-native-verification.json`。
+
+成功运行的 `H1PVZ-install-提交号` 制品包含独立 BDA、`H1PVZ-full-install.zip`、两份校验清单、编译回执、真机记录、发布说明和源码/SDK 提交清单。完整安装 ZIP 使用 A 盘程序与 B 盘资源目录，不含个人存档。制品保留 14 天，正式下载归档使用 Release。
+
+版本格式为 `vMAJOR.MINOR.PATCH`；可附加 `-alpha.N`、`-beta.N` 或 `-rc.N`（N 从 1 开始），这些标签自动标为预发布。选定实际版本号，并确认目标 main 提交已通过 CI 后执行：
+
+```powershell
+git switch main
+git pull --ff-only
+git tag -a v0.1.0-beta.1 -m 'H1 植物僵尸 v0.1.0-beta.1'
+git push origin v0.1.0-beta.1
+```
+
+上述版本号仅作示例。标签触发同一套校验和打包；发布 job 只在其成功后运行，使用同一次 CI 的制品，不另行构建。它验证标签已存在、上传 Release 资产，并重新下载已发布资产核对 SHA-256。已有同名 Release 会报错，不自动覆盖。普通 main、PR 和手动 main 运行只生成制品；也可对已有版本标签手动运行以重试尚未创建的 Release。
+
+默认权限为 `contents: read`，只有标签发布 job 获得 `contents: write`。官方 Actions 按提交固定，SDK 维持现有 gitlink，仓库可见性不变。

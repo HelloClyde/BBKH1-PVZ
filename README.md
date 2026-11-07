@@ -16,7 +16,9 @@
 
 桌面图标已按 H1 的圆角高光底板和立体边框重新设计，见 [图标及生成提示词](assets/icon.provenance.json)。动画、粒子和轨迹也已在电脑上预编译，H1 优先读取 `.h1d` 数据，避免每次启动重新解析 XML。菜单直接使用展开后的画面，云与草叶作为静态装饰；新用户、按钮和存档流程沿用原逻辑。
 
-可生成完整 A/B 安装包：
+完整安装包也可从 [Actions](https://github.com/HelloClyde/BBKH1-PVZ/actions/workflows/validate.yml) 的成功运行中下载 `H1PVZ-install-提交号` 制品；版本标签对应的安装包会发布到 [Releases](https://github.com/HelloClyde/BBKH1-PVZ/releases)。下载后解开外层制品，再解压 `H1PVZ-full-install.zip`，按其中 `A/`、`B/` 目录复制。`SHA256SUMS.txt` 用于校验下载文件，安装包不含个人存档。
+
+也可在本机生成完整 A/B 安装包：
 
 ```powershell
 git submodule update --init sdk
@@ -40,6 +42,8 @@ python tools/package_install.py --bda dist/H1PVZPortable.bda
 ```
 
 构建前需安装 MSYS2 UCRT64 的 `base-devel` 与 `mingw-w64-ucrt-x86_64-gcc`，详见 [构建说明](docs/BUILDING-STANDALONE.md)。可通过 `--toolchain` 和 `--prefix` 复用已有编译器与已验证 C/C++ 运行库，不依赖旁边的开发工作区。
+
+CI 对主干、PR 和手动运行执行完整性校验、打包、制品上传及下载复验；推送 `vMAJOR.MINOR.PATCH` 标签时自动发布 Release，`-alpha.N`、`-beta.N`、`-rc.N` 后缀会标记为预发布。CI 分发与真机记录匹配的预编译 BDA，不在 runner 上重新编译 C/C++。发布方法见[构建说明](docs/BUILDING-STANDALONE.md#ci-与-release)。
 
 ## 截图
 
