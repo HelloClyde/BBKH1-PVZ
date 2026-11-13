@@ -1,0 +1,20 @@
+{
+  "original_directory_restored": true,
+  "files_sha256": {
+    "users.dat": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+    "user1.dat": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+  },
+  "test_directories_preserved": true,
+  "desktop": {
+    "job_id": 24,
+    "kind": 2,
+    "state": 4,
+    "error": 0,
+    "menu_idle": 1,
+    "app_index": 105,
+    "entry_count": 15,
+    "return_code": 0,
+    "state_name": "done"
+  },
+  "debugger_remains_running": true
+}

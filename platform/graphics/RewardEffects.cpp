@@ -1,3 +1,4 @@
+#include "TrustedResources.h"
 /* The asset contains finished shader contributions, not source textures.
  * Only a clock, LCD translation and bounded pixel blending run on H1.
  * SPDX-License-Identifier: LGPL-3.0-or-later */
@@ -41,43 +42,30 @@ bool Frame(unsigned index){
  for(unsigned i=0;i<colors;++i){unsigned id=header.Short();if(id>=cache.colors||(!i&&id))return false;cache.local[kind][i]=cache.palette[id];}
  cache.localCount[kind]=colors;cache.frameStart[kind]=header.at;cache.passes[kind]=passes;cache.current[kind]=index;cache.frameBytes[kind]=written;++pvzh1_reward_effect_diagnostic[9];return true;
 }
-bool Valid(){
+bool InitializeMetadata(){
  Reader r{0};unsigned h[16];for(auto& n:h)n=r.Word();
- if(h[0]!=0x45523148||h[1]!=4||h[2]!=960||h[3]!=544||!h[4]||h[4]>=16384||h[5]!=212||h[6]!=64||h[7]!=64+h[4]*4||h[15]!=h[7]+h[5]*16||h[8]!=h[15]+h[5]*8||h[8]>cache.bytes||h[9]!=cache.bytes||h[11]!=30||h[12]!=480||h[13]!=272||h[14]!=1)return false;
  cache.count=h[5];cache.colors=h[4];cache.table=h[7];cache.bounds=h[15];cache.palette=new(std::nothrow) uint32_t[h[4]];if(!cache.palette)return false;
- r.at=64;for(unsigned i=0;i<h[4];++i)cache.palette[i]=r.Word();if(cache.palette[0])return false;
- for(unsigned i=0;i<cache.count;++i){Reader e{cache.table+i*16};unsigned kind=e.Word();e.Word();unsigned start=e.Word(),bytes=e.Word();if(kind>1||start<h[8]||start>cache.bytes||bytes<5||bytes>cache.bytes-start)return false;Reader n{start};unsigned size=n.Word();if(size<4||size>512*1024)return false;cache.capacity[kind]=std::max(cache.capacity[kind],size);}
+ r.at=64;for(unsigned i=0;i<h[4];++i)cache.palette[i]=r.Word();
+ for(unsigned i=0;i<cache.count;++i){Reader e{cache.table+i*16};unsigned kind=e.Word();e.Word();unsigned start=e.Word();e.Word();Reader n{start};cache.capacity[kind]=std::max(cache.capacity[kind],n.Word());}
  for(unsigned k=0;k<2;++k){cache.frame[k]=new(std::nothrow) uint8_t[cache.capacity[k]];if(!cache.frame[k])return false;}
- for(unsigned i=0;i<cache.count;++i){r={cache.table+i*16};unsigned kind=r.Word(),age=r.Word(),start=r.Word(),bytes=r.Word();
-  Reader bounds{cache.bounds+i*8};unsigned minx=bounds.Short(),maxx=bounds.Short(),miny=bounds.Short(),maxy=bounds.Short();
-  if(minx>maxx||maxx>480||miny>maxy||maxy>272||kind>1||age>(kind?100:600)||start<h[8]||start>=cache.bytes||bytes<4||bytes>cache.bytes-start)return false;
-  if(!Frame(i))return false;unsigned kindFrame=kind;unsigned end=cache.frameBytes[kindFrame];r={cache.frameStart[kind],cache.frame[kindFrame]};unsigned passes=cache.passes[kind];
-  for(unsigned pass=0;pass<passes;++pass){if(r.at+8>end)return false;unsigned mode=r.Word(),length=r.Word(),base=r.at;if(mode>1||length<1088||length>end-base)return false;
-   Reader offsets{base,r.plain};unsigned previous=1088;
-   for(unsigned row=0;row<544;++row){unsigned next=previous+offsets.Short();if(next<=previous||next>length)return false;Reader data{base+previous,r.plain};unsigned tokens=data.Short(),x=0;
-    for(unsigned t=0;t<tokens;++t){if(data.at+3>base+next)return false;unsigned run=data.Short(),n=run&32767;if(!n||n>960-x)return false;x+=n;
-     unsigned values=run&32768?1:n;for(unsigned v=0;v<values;++v){if(data.at>=base+next||data.Byte()>=cache.localCount[kind])return false;}}
-    if(x!=960||data.at!=base+next)return false;previous=next;
-   }if(previous!=length)return false;r.at=base+length;
-  }if(r.at!=end)return false;
- }return Frame(0)&&Frame(181);
+ return true;
 }
+
 bool Load(const char* alternate=nullptr){
  auto path=Sexy::GetResourcePath("reward-effects.h1re");FILE* f=fopen(alternate?alternate:path.c_str(),"rb");if(!f)return false;
  unsigned char header[16];bool ok=fread(header,1,16,f)==16&&U32(header)==0x5a523148&&U32(header+4)==1;
  unsigned bytes=ok?U32(header+8):0,expected=ok?U32(header+12):0;
  if(bytes<64||bytes>12*1024*1024)ok=false;
  if(ok){cache.bytes=bytes;cache.pages=new(std::nothrow) uint8_t*[(bytes+4095)/4096]{};if(!cache.pages)ok=false;}
- z_stream stream{};bool initialized=ok&&inflateInit(&stream)==Z_OK;ok=ok&&initialized;unsigned char input[4096];unsigned crc=crc32(0,nullptr,0);int state=Z_OK;
+ z_stream stream{};bool initialized=ok&&H1ResourceInflateInit(&stream)==Z_OK;ok=ok&&initialized;unsigned char input[4096];int state=Z_OK;
  for(unsigned page=0;ok&&page<(bytes+4095)/4096;++page){unsigned n=std::min(4096u,bytes-page*4096);cache.pages[page]=new(std::nothrow) uint8_t[n];if(!cache.pages[page]){ok=false;break;}
   stream.next_out=cache.pages[page];stream.avail_out=n;
   while(ok&&stream.avail_out){if(!stream.avail_in){stream.avail_in=fread(input,1,sizeof(input),f);stream.next_in=input;if(!stream.avail_in){ok=false;break;}}
    state=inflate(&stream,Z_NO_FLUSH);if(state!=Z_OK&&state!=Z_STREAM_END)ok=false;if(state==Z_STREAM_END&&stream.avail_out)ok=false;}
-  if(ok)crc=crc32(crc,cache.pages[page],n);
  }
  if(ok&&state!=Z_STREAM_END){unsigned char extra;stream.next_out=&extra;stream.avail_out=1;state=inflate(&stream,Z_FINISH);}
- if(ok&&(state!=Z_STREAM_END||stream.total_out!=bytes||stream.avail_in||fgetc(f)!=EOF||crc!=expected))ok=false;
- if(initialized)inflateEnd(&stream);fclose(f);if(ok)ok=Valid();if(!ok){Drop();return false;}
+ if(ok&&(state!=Z_STREAM_END||stream.total_out!=bytes||stream.avail_in||fgetc(f)!=EOF))ok=false;
+ if(initialized)inflateEnd(&stream);fclose(f);if(ok)ok=InitializeMetadata();if(!ok){Drop();return false;}
  pvzh1_reward_effect_diagnostic[0]=cache.bytes+cache.colors*4+((cache.bytes+4095)/4096)*sizeof(void*)+cache.capacity[0]+cache.capacity[1];pvzh1_reward_effect_diagnostic[10]=cache.capacity[0]+cache.capacity[1];++pvzh1_reward_effect_diagnostic[1];return true;
 }
 Live* Find(PvzpParticleSystem* s){for(auto& l:live)if(l.system==s)return &l;return nullptr;}

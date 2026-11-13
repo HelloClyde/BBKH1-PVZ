@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "scope": "Rebuilt original definitions and font/sound metadata with current host; compared every emitted file to the installed asset inventory. No runtime assets changed.",
+  "definitions": {
+    "files": 253,
+    "bytes": 1226524,
+    "byte_identical_to_installed_resources": true,
+    "previous_source_sha256": "4dd0ab9b196ac38561ec279c82f560e96061fc3baa881ef09eef82c0488e0ac8",
+    "current_source_sha256": "4dd0ab9b196ac38561ec279c82f560e96061fc3baa881ef09eef82c0488e0ac8",
+    "host_sha256": "757c807606b4e6cb4eb8cdd83e257791d329b4e5cd2b43eaf928d647d7492ac8"
+  },
+  "startup_sound_index": "Original installed sound index retained; font comparison excludes regenerated sound index, which also discovers a later dedicated music PCM.",
+  "startup": {
+    "files": 20,
+    "bytes": 271189,
+    "byte_identical_to_installed_resources": true,
+    "previous_source_sha256": "4d1610cbe2cb06078ae466b4d15a849c3049cb01509025a5723b230853fc5bad",
+    "current_source_sha256": "4d1610cbe2cb06078ae466b4d15a849c3049cb01509025a5723b230853fc5bad",
+    "host_sha256": "757c807606b4e6cb4eb8cdd83e257791d329b4e5cd2b43eaf928d647d7492ac8"
+  }
+}

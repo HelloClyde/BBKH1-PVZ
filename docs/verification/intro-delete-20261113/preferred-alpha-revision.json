@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "scope": "Source comparison for unchanged preferred-alpha forwarding; C loader byte test recorded separately.",
+  "baseline_commit": "5fe0aa410df7d2f3543292db837515761b368b11",
+  "previous_reader_source_sha256": {
+    "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+    "platform/graphics/memory_patches.py": "a81b81aa7e21973b7e7f4454291bac235d02bbaca0e1f2deab42f40baf91ac1b",
+    "platform/graphics/MemoryImageCache.cpp": "65a4ef2938d549f399f5414f76c2e332606c6cdf6c43cf3ea94d27690d96e75a"
+  },
+  "preferred_alpha_reader_source_sha256": {
+    "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+    "platform/graphics/memory_patches.py": "136a40817a5b4453b23db0f3ff73e3cd006163af6460a0c4c12bc86d3f88d76d",
+    "platform/graphics/MemoryImageCache.cpp": "4aa7e162264272ce1179564aa64341f504d47271f7b7bfa5201bf5f1d3a1dab9"
+  },
+  "checks": {
+    "ImageLib_unchanged": true,
+    "patch_app_unchanged": true,
+    "H1ImageCacheDescribe_only_accounting_change": true
+  }
+}

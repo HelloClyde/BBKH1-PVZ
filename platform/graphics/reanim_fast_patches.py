@@ -123,6 +123,23 @@ extern "C" bool pvzh1_fast3_test_enabled;
             'strncasecmp(mDefinition->mTracks.tracks[aTrackIndex].mName, "attacher__", 10) == 0',
             'H1IsAttacherTrack(mDefinition->mTracks.tracks[aTrackIndex].mName) /* PVZH1_FIXED_ATTACHER_TAG */',
             'fixed attacher tag')
+    if 'PVZH1_EXACT_TRIG_MEMO' not in text:
+        text='#include "graphics/ReanimTrig.h"\n'+text
+        old='''\ttheMatrix.m00 = cos(aSkewX) * theTransform.mScaleX;
+\ttheMatrix.m10 = -sin(aSkewX) * theTransform.mScaleX;
+\ttheMatrix.m20 = 0.0f;
+\ttheMatrix.m01 = sin(aSkewY) * theTransform.mScaleY;
+\ttheMatrix.m11 = cos(aSkewY) * theTransform.mScaleY;'''
+        new='''    // PVZH1_EXACT_TRIG_MEMO: cache only exact angle bits/libm results.
+    // Scales, translations, interpolation and multiplication order stay original.
+    float cosineX,sineX,cosineY,sineY;
+    H1ReanimTrig(aSkewX,cosineX,sineX);H1ReanimTrig(aSkewY,cosineY,sineY);
+\ttheMatrix.m00 = cosineX * theTransform.mScaleX;
+\ttheMatrix.m10 = -sineX * theTransform.mScaleX;
+\ttheMatrix.m20 = 0.0f;
+\ttheMatrix.m01 = sineY * theTransform.mScaleY;
+\ttheMatrix.m11 = cosineY * theTransform.mScaleY;'''
+        text=replace_one(text,old,new,'exact repeated-angle libm results')
     path.write_text(text, encoding='utf8', newline='\n')
     target=Path(source_root)/'PvzpLib/Reanimator.cpp'
     source=target.read_text(encoding='utf8')
@@ -149,7 +166,7 @@ extern "C" bool pvzh1_fast3_test_enabled;
         target.write_text(source,encoding='utf8',newline='\n')
         target=Path(source_root)/'PvzpLib/Attachment.cpp';source=target.read_text(encoding='utf8')
         entry='AttachEffect* CreateEffectAttachment(AttachmentID& theAttachmentID, EffectType theEffectType, unsigned int theDataID, float theOffsetX, float theOffsetY)\n{'
-        source='#include "actors/ActorPose.h"\n'+replace_one(source,entry,entry+'\n    H1ActorAttachmentsChanged(); // Adding an effect can activate its parent track.','active attachment mutation')
+        source='#include "actors/ActorPose.h"\n'+replace_one(source,entry,entry+'\n    H1ActorAttachmentsChanged(&theAttachmentID); // Only this referenced track can become active.','active attachment mutation')
         target.write_text(source,encoding='utf8',newline='\n')
     for relative,entry,body in (
         ('PvzpLib/PvzpCommon.cpp',
@@ -164,12 +181,6 @@ extern "C" bool pvzh1_fast3_test_enabled;
         if 'PVZH1_EXACT_AFFINE_PRODUCT' not in source:
             source='#include "graphics/AffineMatrix.h"\n'+replace_one(source,entry,entry+'\n    // PVZH1_EXACT_AFFINE_PRODUCT: original non-affine/nonfinite path below.\n'+body,'affine matrix product')
             target.write_text(source,encoding='utf8',newline='\n')
-    target=Path(source_root)/'PvzpLib/PvzpCommon.cpp'
-    source=target.read_text(encoding='utf8')
-    if 'PVZH1_OFFLINE_GRID_SHADOW' not in source:
-        entry='void PvzpDrawImageCelCenterScaledF(Graphics* g, Image* theImageStrip, float thePosX, float thePosY, int theCelCol, float theScaleX, float theScaleY)\n{'
-        source='#include "actors/ActorPose.h"\n'+replace_one(source,entry,entry+'\n    // PVZH1_OFFLINE_GRID_SHADOW: matching ordinary LCD shadows are pre-rendered.\n    if(H1PlantShadowDraw(g,theImageStrip,thePosX,thePosY,theCelCol,theScaleX,theScaleY))return;','offline ordinary shadow')
-        target.write_text(source,encoding='utf8',newline='\n')
     target=Path(source_root)/'PvzpLib/PvzpCommon.h'
     source=target.read_text(encoding='utf8')
     if 'PVZH1_EQUAL_LERP_ENDPOINTS' not in source:
@@ -184,4 +195,48 @@ extern "C" bool pvzh1_fast3_test_enabled;
     return theStart+theFactor*(theEnd-theStart);
 }'''
         source=replace_one(source,old,new,'equal FloatLerp endpoints')
+        target.write_text(source,encoding='utf8',newline='\n')
+
+    target=Path(source_root)/'PvzpLib/Reanimator.cpp'
+    source=target.read_text(encoding='utf8')
+    if 'PVZH1_DEFERRED_OVERLAYS' not in source:
+        source='#include "actors/DeferredOverlay.h"\n// PVZH1_DEFERRED_OVERLAYS\n'+source
+        old='\t\t\tGetAttachmentOverlayMatrix(aTrackIndex, aOverlayMatrix);\n\t\t\tAttachmentUpdateAndSetMatrix(aTrack->mAttachmentID, aOverlayMatrix);'
+        new='\t\t\tif(!H1DeferredAttachmentUpdate(this,aTrackIndex)){\n'+old+'\n\t\t\t}'
+        source=replace_one(source,old,new,'deferred leaf attachment update')
+        for entry in [
+            'void Reanimation::GetTrackMatrix(int theTrackIndex, SexyTransform2D& theMatrix)\n{',
+            'void Reanimation::GetAttachmentOverlayMatrix(int theTrackIndex, SexyTransform2D& theOverlayMatrix)\n{',
+            'bool Reanimation::DrawTrack(Graphics* g, int theTrackIndex, [[maybe_unused]] int theRenderGroup, PvzpTriangleGroup* theTriangleGroup, ReanimatorFrameTime* theFrameTime)\n{',
+            'void Reanimation::SetPosition(float theX, float theY)\n{',
+            'void Reanimation::OverrideScale(float theScaleX, float theScaleY)\n{',
+        ]:
+            source=replace_one(source,entry,entry+'\n    H1ResolveActorOverlay(this);','materialize observed overlay')
+        target.write_text(source,encoding='utf8',newline='\n')
+        target=Path(source_root)/'PvzpLib/Attachment.cpp';source=target.read_text(encoding='utf8')
+        source='#include "actors/DeferredOverlay.h"\n'+replace_one(source,'\t\t\t\taReanimation->mOverlayMatrix = aPosition;','\t\t\t\tH1DropActorOverlay(aReanimation);\n\t\t\t\taReanimation->mOverlayMatrix = aPosition;','replace complete attachment matrix')
+        target.write_text(source,encoding='utf8',newline='\n')
+        target=Path(source_root)/'Lawn/System/SaveGame.cpp';source=target.read_text(encoding='utf8')
+        entry='static void SyncReanimationPortable(Board* theBoard, Reanimation* theReanimation, PortableSaveContext& theContext)\n{'
+        source='#include "actors/ActorPose.h"\n#include "actors/DeferredOverlay.h"\n'+replace_one(source,entry,entry+'\n    if(theContext.mReading)H1ActorTrackStateChanged(theReanimation);else H1ResolveActorOverlay(theReanimation);','materialize portable save matrix')
+        target.write_text(source,encoding='utf8',newline='\n')
+
+    target=Path(source_root)/'PvzpLib/Reanimator.cpp';source=target.read_text(encoding='utf8')
+    if 'PVZH1_EMPTY_ATTACHMENT_PROPAGATION' not in source:
+        entry='void Reanimation::PropogateColorToAttachments()\n{'
+        source=replace_one(source,entry,entry+'\n    if(!H1ActorHasAttachments(this))return; // PVZH1_EMPTY_ATTACHMENT_PROPAGATION','skip empty attachment propagation')
+    if 'PVZH1_UNCHANGED_ATTACHMENT_COLOR' not in source:
+        entry='    if(!H1ActorHasAttachments(this))return; // PVZH1_EMPTY_ATTACHMENT_PROPAGATION'
+        source=replace_one(source,entry,entry+'\n    if(H1ActorColorPropagationUnchanged(this))return; // PVZH1_UNCHANGED_ATTACHMENT_COLOR','skip unchanged attachment colors')
+        target.write_text(source,encoding='utf8',newline='\n')
+        target=Path(source_root)/'PvzpLib/Attachment.cpp';source=target.read_text(encoding='utf8')
+        entry='void AttachmentDie(AttachmentID& theAttachmentID)\n{'
+        source=replace_one(source,entry,entry+'\n    if(theAttachmentID!=ATTACHMENTID_NULL)H1ActorAttachmentsChanged(&theAttachmentID);','invalidate attachment presence on removal')
+        target.write_text(source,encoding='utf8',newline='\n')
+
+    target=Path(source_root)/'PvzpLib/PvzpCommon.cpp';source=target.read_text(encoding='utf8')
+    if 'PVZH1_DIRECT_PLANT_SHADOW' not in source:
+        entry='void PvzpDrawImageCelCenterScaledF(Graphics* g, Image* theImageStrip, float thePosX, float thePosY, int theCelCol, float theScaleX, float theScaleY)\n{'
+        source=replace_one(source,entry,entry+'\n    if(H1PlantShadowDraw(g,theImageStrip,thePosX,thePosY,theCelCol,theScaleX,theScaleY))return; // PVZH1_DIRECT_PLANT_SHADOW','known shadow sprite without matrix setup')
+        if '#include "actors/ActorPose.h"' not in source:source='#include "actors/ActorPose.h"\n'+source
         target.write_text(source,encoding='utf8',newline='\n')

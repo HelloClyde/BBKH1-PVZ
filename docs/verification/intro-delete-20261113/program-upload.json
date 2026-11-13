@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\intro-delete-v78-hardware\\candidate.bda",
+  "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+  "target_gbk_hex": "413a5cd3a6d3c35cb3ccd0f25c483150565a506f727461626c652e626461",
+  "phase": "done",
+  "completed": true,
+  "size": 3756444,
+  "crc32": 2723316951,
+  "sha256": "0dee97150a73efff343b67a519c5ff9160ebbc269b0522d30552755f7707b5d5",
+  "token": 40,
+  "received": 3756444,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 40,
+    "size": 3756444,
+    "received": 3756444,
+    "expected_crc": 2723316951,
+    "actual_crc": 2723316951,
+    "verify_offset": 3756444,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 9,
+    "old_size": 3752692,
+    "old_crc": 2794627903,
+    "last_activity_tick": 1338363,
+    "step_count": 2762,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+    "temporary": "A:\\应用\\程序\\H1D00000028.TMP",
+    "backup": "A:\\应用\\程序\\H1D00000028.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 273.6720000000205
+}

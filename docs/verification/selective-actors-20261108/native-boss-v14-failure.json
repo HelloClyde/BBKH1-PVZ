@@ -1,0 +1,145 @@
+{
+  "candidate": "v14",
+  "identity": {
+    "bda_sha256": "9328f62afc908be63074ed8f31f4959d537b77c124aadb3d22b73837cac16b82",
+    "elf_sha256": "6712f41480762f65b352b1e23cd2a421dba574cb758d8cc11bc395864cdebb49",
+    "build_receipt_sha256": "a995e5b6ac8591fc9c3d002a7b0b095f0ca184de8ac658b9eb139e07b8053b24",
+    "fingerprints": [
+      {
+        "symbol": "h1_bda_main",
+        "address": "0x83c00020",
+        "size": 48,
+        "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3c30afbd27e0ffbd271800a8affcf8f80c000000001800bd8f1800bc8f",
+        "sha256": "67c19b06646a66cf733b7fd09adb463107c52be78e5427442f969322202c1dcf"
+      },
+      {
+        "symbol": "_open",
+        "address": "0x83e40558",
+        "size": 64,
+        "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+        "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+      },
+      {
+        "symbol": "pvzp_present_argb",
+        "address": "0x83e2d168",
+        "size": 64,
+        "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a00038f6f80c2580c00025984000",
+        "sha256": "cf54412438a66e94675aac5ffb4e4af013b0b3b5855cec9921b7b96eb09dbd40"
+      },
+      {
+        "symbol": "detect_resource_drive",
+        "address": "0x83e3ec58",
+        "size": 64,
+        "expected_hex": "fa83023ce078438c4200601400000000d8ffbd27010003241800b1af1400b0afef83113cfa83103c2400bfaf2000beaf1c00b2af25f0a003e07e24263c5e1026",
+        "sha256": "a512eccd22e477b61a0d230e8204aeec22742461dad6ccb4c3bceb090e0b1ad8"
+      }
+    ]
+  },
+  "passed": false,
+  "scope": "Boss battle after dropping unused future definitions; not a pure-compute benchmark",
+  "observe_seconds": 5.6,
+  "fps": 9.464285714285715,
+  "io_delta": [
+    1,
+    1,
+    0,
+    428,
+    6275072,
+    6275072,
+    73,
+    0,
+    386,
+    1,
+    0,
+    48,
+    0,
+    380,
+    0,
+    0
+  ],
+  "definition_retirement": [
+    65,
+    7042157,
+    10,
+    5
+  ],
+  "runtime": [
+    1347836496,
+    2,
+    0,
+    18719021,
+    19969448,
+    971,
+    1,
+    66,
+    21,
+    16384,
+    25,
+    2210579332,
+    2052,
+    2212758528,
+    0,
+    65536
+  ],
+  "heap_failure": [
+    1211189331,
+    1,
+    19573180,
+    19969448,
+    2052,
+    2083,
+    2176843776,
+    2210398208,
+    2210320408,
+    2210375152,
+    2882,
+    100828,
+    54744,
+    54736,
+    33430548,
+    141,
+    54744,
+    23056,
+    46084,
+    2882
+  ],
+  "final_desktop": {
+    "job_id": 41,
+    "kind": 2,
+    "state": 4,
+    "error": 0,
+    "menu_idle": 1,
+    "app_index": 101,
+    "entry_count": 23,
+    "return_code": 12,
+    "state_name": "done"
+  },
+  "final_runtime": [
+    1347836496,
+    255,
+    12,
+    0,
+    19969448,
+    985,
+    1,
+    66,
+    1,
+    16384,
+    25,
+    2210579332,
+    2052,
+    2212758528,
+    0,
+    65536
+  ],
+  "last_resource": "/PVZ/reanim/zombie_boss_upperbody.h1i",
+  "local_upperbody_logical": [
+    522,
+    479
+  ],
+  "local_upperbody_storage": [
+    235,
+    216
+  ],
+  "limitation": "Battle below20 FPS and eventual return12 with allocation failures; unpublished."
+}

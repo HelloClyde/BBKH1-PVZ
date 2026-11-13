@@ -21,6 +21,7 @@ extern void __register_frame(const void *);
 extern void __deregister_frame(const void *);
 extern void pvz_cxx_finalize(void);
 extern void pvz_cxx_initialize(void);
+extern void pvzp_window_close(void) __attribute__((weak));
 
 void pvz_runtime_abort(int status){
     exit_status=status;pvz_runtime_diagnostic[1]=0xffu;
@@ -52,7 +53,12 @@ int pvz_runtime_main(void){
         for(p=__fini_array_end;p>__fini_array_start;)(*--p)();
         for(p=__dtors_start;p<__dtors_end;p++){initializer fn=*p;if(fn&&(uintptr_t)fn!=0xffffffffu)fn();}
     }
-    status=exit_status;exit_ready=0;
+    status=exit_status;
+    if(status)pvz_runtime_report_failure(status);
+    /* A terminate/longjmp bypasses the ordinary platform-main cleanup. Close
+       the native window and audio before their remaining allocations vanish. */
+    if(pvzp_window_close)pvzp_window_close();
+    exit_ready=0;
     __deregister_frame(__eh_frame_start);
     pvz_runtime_shutdown();pvz_runtime_diagnostic[1]=status?0xffu:9;
     return status;

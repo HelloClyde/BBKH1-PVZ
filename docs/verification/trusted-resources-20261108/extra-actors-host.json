@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "types": 90,
+  "whole_frame_comparisons": 11088,
+  "all_reader_calls_used_baked_path": true,
+  "visibility_and_screen_edge_clipping": true,
+  "probe_sha256": "9501922013b5f2c6834b4fbbd7861e65938d0afee48c914fbbeddcc38444127e",
+  "executable_sha256": "2b70673cab42d9e7e345aae0c84e0b356aad031019dbbf6de7fd429da8289458",
+  "compile_report_sha256": "2c73946140052417937ae244554aa2c1e45ac2b9ec002ae8affc74f6c9f0be17",
+  "scope": "Original host game callbacks and real offline resources; not physical H1 timing"
+}

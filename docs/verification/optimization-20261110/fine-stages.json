@@ -1,0 +1,293 @@
+{
+  "draws": 98,
+  "stages": [
+    {
+      "stage": "UPDATE",
+      "calls": 1764,
+      "ms": 4675,
+      "ms_per_draw": 47.704
+    },
+    {
+      "stage": "DRAW",
+      "calls": 98,
+      "ms": 9750,
+      "ms_per_draw": 99.49
+    },
+    {
+      "stage": "PRESENT",
+      "calls": 98,
+      "ms": 850,
+      "ms_per_draw": 8.673
+    },
+    {
+      "stage": "AUDIO",
+      "calls": 430,
+      "ms": 900,
+      "ms_per_draw": 9.184
+    },
+    {
+      "stage": "MUSIC",
+      "calls": 1002,
+      "ms": 525,
+      "ms_per_draw": 5.357
+    },
+    {
+      "stage": "FRAME",
+      "calls": 98,
+      "ms": 10850,
+      "ms_per_draw": 110.714
+    },
+    {
+      "stage": "REPEAT_TRIANGLE",
+      "calls": 0,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "SW_DRAW_SHAPE",
+      "calls": 418,
+      "ms": 150,
+      "ms_per_draw": 1.531
+    },
+    {
+      "stage": "SAVE_COMPARE",
+      "calls": 0,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "SAVE_WRITE",
+      "calls": 0,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "SAVE_CLOSE",
+      "calls": 0,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "SAVE_COMMIT",
+      "calls": 0,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "SHUTDOWN",
+      "calls": 0,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "PLANT_UPDATE",
+      "calls": 39638,
+      "ms": 2175,
+      "ms_per_draw": 22.194
+    },
+    {
+      "stage": "ZOMBIE_UPDATE",
+      "calls": 4410,
+      "ms": 1300,
+      "ms_per_draw": 13.265
+    },
+    {
+      "stage": "PROJECTILE_UPDATE",
+      "calls": 14703,
+      "ms": 550,
+      "ms_per_draw": 5.612
+    },
+    {
+      "stage": "COIN_UPDATE",
+      "calls": 2282,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "PARTICLE_UPDATE",
+      "calls": 2725,
+      "ms": 500,
+      "ms_per_draw": 5.102
+    },
+    {
+      "stage": "BOARD_UPDATE",
+      "calls": 882,
+      "ms": 4425,
+      "ms_per_draw": 45.153
+    },
+    {
+      "stage": "PLANT_DRAW",
+      "calls": 4449,
+      "ms": 3875,
+      "ms_per_draw": 39.541
+    },
+    {
+      "stage": "ZOMBIE_DRAW",
+      "calls": 495,
+      "ms": 3200,
+      "ms_per_draw": 32.653
+    },
+    {
+      "stage": "PROJECTILE_DRAW",
+      "calls": 1634,
+      "ms": 250,
+      "ms_per_draw": 2.551
+    },
+    {
+      "stage": "COIN_DRAW",
+      "calls": 254,
+      "ms": 525,
+      "ms_per_draw": 5.357
+    },
+    {
+      "stage": "OBJECTS_DRAW",
+      "calls": 98,
+      "ms": 9700,
+      "ms_per_draw": 98.98
+    },
+    {
+      "stage": "WIDGET_UPDATE",
+      "calls": 882,
+      "ms": 4450,
+      "ms_per_draw": 45.408
+    },
+    {
+      "stage": "PARTICLE_DRAW",
+      "calls": 42,
+      "ms": 325,
+      "ms_per_draw": 3.316
+    },
+    {
+      "stage": "BACKDROP_DRAW",
+      "calls": 98,
+      "ms": 525,
+      "ms_per_draw": 5.357
+    },
+    {
+      "stage": "UITOP_DRAW",
+      "calls": 98,
+      "ms": 0,
+      "ms_per_draw": 0.0
+    },
+    {
+      "stage": "PROJECTILE_SHADOW",
+      "calls": 1634,
+      "ms": 50,
+      "ms_per_draw": 0.51
+    },
+    {
+      "stage": "ZOMBIE_SHADOW",
+      "calls": 495,
+      "ms": 75,
+      "ms_per_draw": 0.765
+    },
+    {
+      "stage": "PLANT_SHADOW",
+      "calls": 4449,
+      "ms": 500,
+      "ms_per_draw": 5.102
+    },
+    {
+      "stage": "BOARD_DRAW",
+      "calls": 98,
+      "ms": 9700,
+      "ms_per_draw": 98.98
+    },
+    {
+      "stage": "BOARDGAME_UPDATE",
+      "calls": 882,
+      "ms": 4250,
+      "ms_per_draw": 43.367
+    },
+    {
+      "stage": "GAMEOBJECTS_UPDATE",
+      "calls": 882,
+      "ms": 4250,
+      "ms_per_draw": 43.367
+    },
+    {
+      "stage": "ACTOR_GUARD",
+      "calls": 10482,
+      "ms": 225,
+      "ms_per_draw": 2.296
+    },
+    {
+      "stage": "ACTOR_SIGNATURE",
+      "calls": 9995,
+      "ms": 575,
+      "ms_per_draw": 5.867
+    },
+    {
+      "stage": "ACTOR_PACKET",
+      "calls": 9991,
+      "ms": 2625,
+      "ms_per_draw": 26.786
+    },
+    {
+      "stage": "ACTOR_PAGE",
+      "calls": 1658,
+      "ms": 3075,
+      "ms_per_draw": 31.378
+    },
+    {
+      "stage": "ACTOR_PIXELS",
+      "calls": 24862,
+      "ms": 2750,
+      "ms_per_draw": 28.061
+    },
+    {
+      "stage": "ACTOR_ATTACHMENTS",
+      "calls": 3498,
+      "ms": 1750,
+      "ms_per_draw": 17.857
+    },
+    {
+      "stage": "ACTOR_COMMIT",
+      "calls": 9173,
+      "ms": 25,
+      "ms_per_draw": 0.255
+    },
+    {
+      "stage": "ACTOR_DISPATCH",
+      "calls": 5198,
+      "ms": 6725,
+      "ms_per_draw": 68.622
+    },
+    {
+      "stage": "ACTOR_LOOP",
+      "calls": 5614,
+      "ms": 4050,
+      "ms_per_draw": 41.327
+    },
+    {
+      "stage": "PLANT_ABILITIES",
+      "calls": 39638,
+      "ms": 300,
+      "ms_per_draw": 3.061
+    },
+    {
+      "stage": "PLANT_ANIMATE",
+      "calls": 39638,
+      "ms": 125,
+      "ms_per_draw": 1.276
+    },
+    {
+      "stage": "PLANT_REANIM",
+      "calls": 39638,
+      "ms": 1575,
+      "ms_per_draw": 16.071
+    },
+    {
+      "stage": "PLANT_COLOR",
+      "calls": 39638,
+      "ms": 375,
+      "ms_per_draw": 3.827
+    },
+    {
+      "stage": "REANIM_UPDATE",
+      "calls": 46330,
+      "ms": 900,
+      "ms_per_draw": 9.184
+    }
+  ]
+}

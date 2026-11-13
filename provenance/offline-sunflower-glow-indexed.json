@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "source_sha256": "e7905085c7cfb00e8f5877ff5e50557f5de3ee3edc7d9a20a48ff7a280b3d98a",
+  "sha256": "c51fed487fe815eab9aa1956c0628f4609a85a414f2a3a0d2b87d6099b686d5d",
+  "bytes": 363834,
+  "decoded_sha256": "d9f460f5bee336117a4e7efb6ad26a19e3baa91cdf9951846ffe1e7a79d3e25b",
+  "decoded_bytes": 488048,
+  "color_values": 123176,
+  "unique_colors": 21345,
+  "color_bytes_before": 492704,
+  "color_bytes_after": 331732,
+  "color_values_byte_exact": true,
+  "geometry_byte_exact": true,
+  "entry_relocations_checked": 57,
+  "lossy": false,
+  "encoder_sha256": "292673c75eb4b52acdba7441d4aec88030c62d1da0eb5b3d47b145eccb50b25c"
+}

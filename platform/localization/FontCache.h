@@ -65,7 +65,7 @@ bool H1FontCacheLoad(Sexy::FontData& target){
     uint8_t header[16];bool valid=fread(header,1,16,file)==16&&!memcmp(header,"H1FC",4);
     auto u32=[](const uint8_t* p){return uint32_t(p[0])|uint32_t(p[1])<<8|uint32_t(p[2])<<16|uint32_t(p[3])<<24;};
     uint32_t size=valid?u32(header+8):0;valid=valid&&u32(header+4)==1&&size&&size<=2097152;
-    H1FontBytes r;if(valid){r.b.resize(size);valid=fread(r.b.data(),1,size,file)==size&&fgetc(file)==EOF&&crc32(0,r.b.data(),size)==u32(header+12);}fclose(file);
+    H1FontBytes r;if(valid){r.b.resize(size);valid=fread(r.b.data(),1,size,file)==size;}fclose(file);
     if(!valid){++pvzh1_font_cache_diagnostic[2];return false;}
     Sexy::FontData decoded;decoded.mApp=target.mApp;if(!H1FontDecode(r,decoded)){++pvzh1_font_cache_diagnostic[2];return false;}
     target.mDefaultPointSize=decoded.mDefaultPointSize;target.mCharMap.swap(decoded.mCharMap);target.mDefineMap.swap(decoded.mDefineMap);

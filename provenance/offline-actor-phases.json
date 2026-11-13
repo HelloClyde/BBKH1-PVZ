@@ -17,7 +17,9 @@
       "sha256": "655687823b4ff1c19ce5d2f091f1b9ce2b8dde0afaa2a29dc565c1025927586d",
       "decoded_bytes": 2525815,
       "decoded_sha256": "0a599b768c8eab36ecf22fcbb8737ce72f59c72197b00a59c09b7529cbf4f99e",
-      "ordered_packet_sha256": "ee355ecd68bcba8815a8c4549725fabeaff00cabd7abb4a794b1d8208323afb9"
+      "ordered_packet_sha256": "ee355ecd68bcba8815a8c4549725fabeaff00cabd7abb4a794b1d8208323afb9",
+      "original_archive_path": "private/resource-build-inputs/retired/pea-transitions.h1ap",
+      "replacement_provenance": "provenance/offline-combat-sprites.json"
     },
     {
       "runtime_path": "zombie-hit.h1ap",

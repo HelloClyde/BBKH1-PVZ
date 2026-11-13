@@ -1,0 +1,29 @@
+{
+  "original_userdata_restored": true,
+  "files": [
+    {
+      "file": "users.dat",
+      "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+      "bytes": 19
+    },
+    {
+      "file": "user1.dat",
+      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+      "bytes": 886
+    }
+  ],
+  "final_desktop": {
+    "job_id": 27,
+    "kind": 1,
+    "state": 4,
+    "error": 0,
+    "menu_idle": 1,
+    "app_index": 4294967295,
+    "entry_count": 16,
+    "return_code": 0,
+    "state_name": "done"
+  },
+  "debugger_remains_running": true,
+  "test_userdata_archive": "B:\\\u5e94\u7528\\\u6570\u636e\\\u6e38\u620f\\PVZ\\userdata.compact-test-20261108",
+  "test_only_bank_replaced_with_final_legacy": true
+}

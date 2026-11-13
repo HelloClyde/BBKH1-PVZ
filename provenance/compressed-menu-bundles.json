@@ -1,0 +1,31 @@
+{
+  "codec": "Existing H1MB v1 compressed-entry flag; no renderer or pixels changed",
+  "encoder_sha256": "867141cc4b3ada2f92e353654c75c2064a4ed934d7d8df1a1fcfc1fb1f896611",
+  "bundles": [
+    {
+      "path": "h1menu/selector-wide.h1mb",
+      "input_sha256": "6d3da6105caec3ffd666d3ef00e12a19c8000cdcb63503c16cc9bc50e56d8c1a",
+      "output_sha256": "6d3da6105caec3ffd666d3ef00e12a19c8000cdcb63503c16cc9bc50e56d8c1a",
+      "input_bytes": 762016,
+      "bytes": 762016,
+      "uncompressed_payload_bytes": 1622340,
+      "uncompressed_bundle_bytes": 1626524,
+      "uncompressed_sha256": "b7b75f330144218de855f235346a07b8a1cc0bb4333dd9042fd3fb44ddf86e99",
+      "entries": 103,
+      "all_decompressed_payloads_byte_exact": true
+    },
+    {
+      "path": "h1menu/adventure.h1mb",
+      "input_sha256": "f210a7383d2f489ea628e8efe08af3d850ee58dfbe131f7a5f1b0e3ecd9723b4",
+      "output_sha256": "f210a7383d2f489ea628e8efe08af3d850ee58dfbe131f7a5f1b0e3ecd9723b4",
+      "input_bytes": 2893827,
+      "bytes": 2893827,
+      "uncompressed_payload_bytes": 5232900,
+      "uncompressed_bundle_bytes": 5237764,
+      "uncompressed_sha256": "6bfce8616b8c2f8fb220bdea6457a6a299b74ea1f2e1d79fd975ab3c516927f2",
+      "entries": 120,
+      "all_decompressed_payloads_byte_exact": true
+    }
+  ],
+  "total_saved_bytes": 3208445
+}

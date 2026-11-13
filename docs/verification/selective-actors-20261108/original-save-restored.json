@@ -1,0 +1,47 @@
+{
+  "restored": true,
+  "whole_original_directory_renamed_back": true,
+  "files": {
+    "users.dat": {
+      "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+      "match": true
+    },
+    "user1.dat": {
+      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+      "match": true
+    }
+  },
+  "listing": {
+    "operation": "file_list",
+    "path": "B:\\应用\\数据\\游戏\\PVZ\\userdata",
+    "entries": [
+      {
+        "name": "users.dat",
+        "size": 19,
+        "attributes": 32,
+        "is_directory": false
+      },
+      {
+        "name": "user1.dat",
+        "size": 886,
+        "attributes": 32,
+        "is_directory": false
+      }
+    ],
+    "completed": true,
+    "token": 125,
+    "count": 2
+  },
+  "normal_exit": {
+    "job_id": 42,
+    "kind": 2,
+    "state": 4,
+    "error": 0,
+    "menu_idle": 1,
+    "app_index": 101,
+    "entry_count": 24,
+    "return_code": 0,
+    "state_name": "done"
+  },
+  "debugger_remains_running": true
+}

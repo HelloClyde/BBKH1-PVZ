@@ -1,0 +1,18 @@
+[
+  {
+    "symbol": "h1_bda_main",
+    "match": true
+  },
+  {
+    "symbol": "_open",
+    "match": true
+  },
+  {
+    "symbol": "pvzp_present_argb",
+    "match": true
+  },
+  {
+    "symbol": "pvz_runtime_heap_snapshot_into",
+    "match": true
+  }
+]

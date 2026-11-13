@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "types": 90,
+  "whole_frame_comparisons": 11088,
+  "all_reader_calls_used_baked_path": true,
+  "visibility_and_screen_edge_clipping": true,
+  "probe_sha256": "de2492f013aea8f982757597cd1e458217a4c7231e6a5634ea3682cb5e4a9820",
+  "executable_sha256": "55889e19c2642b5052f7e394597ef329f52a8523b381e9485df36c075d5f2b96",
+  "compile_report_sha256": "71f9fd8c76b0d0a6baa420aad24a12ed94e9d32ffda1c33bbf9e24949b0da991",
+  "resources": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\extra-actor-compact-resources",
+  "page_slots": 128,
+  "scope": "Original host game callbacks and real offline resources; not physical H1 timing"
+}

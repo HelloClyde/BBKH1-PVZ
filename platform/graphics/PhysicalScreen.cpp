@@ -11,14 +11,24 @@
 /* active, physical W/H, logical W/H, permanent raw fallback count, presents,
  * logical drawing calls routed to the physical target. No diagnostics allocate. */
 extern "C" {volatile uint32_t pvzh1_physical_screen_diagnostic[8];}
+extern "C" {volatile uint32_t pvzh1_clip_map_diagnostic[4];}
 
 namespace Sexy {
 namespace {
 int64_t CeilDivide(int64_t a,int64_t b){return a>=0?(a+b-1)/b:a/b;}
 int CenterBoundary(int value,int logical,int physical){
+    // Clipped H1 coordinates fit signed 32-bit arithmetic. Its hardware
+    // division gives the exact same center/ceil boundary as the 64-bit helper.
+    if(value>=0&&value<=logical&&logical>0&&logical<=32768&&physical>0&&physical<=8192){
+        ++pvzh1_clip_map_diagnostic[2];
+        return (value*physical*2+logical-1)/(logical*2);
+    }
+    ++pvzh1_clip_map_diagnostic[3];
     return (int)CeilDivide((int64_t)value*physical*2-logical,(int64_t)logical*2);
 }
 int LogicalCenter(int pixel,int logical,int physical){
+    if(pixel>=0&&pixel<physical&&logical>0&&logical<=32768&&physical>0&&physical<=8192)
+        return ((pixel*2+1)*logical)/(physical*2);
     return (int)(((int64_t)pixel*2+1)*logical/((int64_t)physical*2));
 }
 }
@@ -58,11 +68,20 @@ void H1PhysicalScreen::NoteDraw(){
 Rect H1PhysicalScreen::MapRect(const Rect& logical)const
 {
     if(fullCanvas)return logical.Intersection(Rect(0,0,mWidth,mHeight));
+    if(clipCached&&clipInput==logical&&clipLogicalWidth==mWidth&&clipLogicalHeight==mHeight&&clipPhysicalWidth==physical.mWidth&&clipPhysicalHeight==physical.mHeight){
+        ++pvzh1_clip_map_diagnostic[0];return clipOutput;
+    }
+    ++pvzh1_clip_map_diagnostic[1];
     const Rect r=logical.Intersection(Rect(0,0,mWidth,mHeight));
-    if(r.mX==0&&r.mY==0&&r.mWidth==mWidth&&r.mHeight==mHeight)return Rect(0,0,physical.mWidth,physical.mHeight);
-    const int left=CenterBoundary(r.mX,mWidth,physical.mWidth),top=CenterBoundary(r.mY,mHeight,physical.mHeight);
-    const int right=CenterBoundary(r.mX+r.mWidth,mWidth,physical.mWidth),bottom=CenterBoundary(r.mY+r.mHeight,mHeight,physical.mHeight);
-    return Rect(left,top,std::max(0,right-left),std::max(0,bottom-top));
+    Rect result;
+    if(r.mX==0&&r.mY==0&&r.mWidth==mWidth&&r.mHeight==mHeight)result=Rect(0,0,physical.mWidth,physical.mHeight);
+    else{
+        const int left=CenterBoundary(r.mX,mWidth,physical.mWidth),top=CenterBoundary(r.mY,mHeight,physical.mHeight);
+        const int right=CenterBoundary(r.mX+r.mWidth,mWidth,physical.mWidth),bottom=CenterBoundary(r.mY+r.mHeight,mHeight,physical.mHeight);
+        result=Rect(left,top,std::max(0,right-left),std::max(0,bottom-top));
+    }
+    clipCached=true;clipInput=logical;clipOutput=result;clipLogicalWidth=mWidth;clipLogicalHeight=mHeight;clipPhysicalWidth=physical.mWidth;clipPhysicalHeight=physical.mHeight;
+    return result;
 }
 void H1PhysicalScreen::Clear(){if(fullCanvas){MemoryImage::Clear();return;}physical.Clear();NoteDraw();}
 void H1PhysicalScreen::ClearRect(const Rect& rect){

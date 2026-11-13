@@ -1,0 +1,139 @@
+{
+  "physical_source_BDA": "ffdbf133720a3b2c2f114632bb12f23aad5b552a846daa51e063940535d261ab",
+  "physical_snapshot_span_seconds": 17.75,
+  "scope": "Snapshot interval is wider than the 15.25-second quiet FPS window. Timings are elapsed wall time, not exclusive CPU time.",
+  "native_live_requests": 133,
+  "native_live_types": {
+    "pea": 68,
+    "sunflower": 31,
+    "sun": 22,
+    "other": 12
+  },
+  "native_nonidentity_live": 121,
+  "native_IO": {
+    "open_calls": 18,
+    "read_calls": 933,
+    "read_bytes": 1876682,
+    "open_read_seek_elapsed_ms": 2675,
+    "zombie_bank_read_calls": 410,
+    "zombie_bank_read_bytes": 1203121,
+    "page_misses": 1599
+  },
+  "native_cache": {
+    "render_plan_pressure_drops": 30,
+    "render_plan_bytes_released": 116736,
+    "allocation_retry_steps": 48,
+    "allocations_recovered": 9,
+    "source_image_pressure_evictions": 0,
+    "render_plan_ready_completions": 32,
+    "interpretation": "30 pressure drops and 32 completed plans do not establish repeated eviction/rebuild of the same hot keys; some entries may be old menu plans or first-use plans."
+  },
+  "host_state_trace": {
+    "not_a_hardware_speed_measurement": true,
+    "fixture_sha256": "1eb0afa9d36751bbcb0a76d3b6f855a9d3305ec013e877452daf46e09fee0bab",
+    "updates": 927,
+    "draws": 103,
+    "live_requests": 127,
+    "types": {
+      "4": 68,
+      "7": 25,
+      "21": 12,
+      "22": 22
+    },
+    "software_shape_calls": 1320,
+    "software_shape_calls_by_actor": {
+      "-1": 376,
+      "21": 744,
+      "4": 136,
+      "7": 64
+    }
+  },
+  "older_fine_sample": {
+    "BDA": "524f5d80e7c9a95125c914fef283edfc9a995fa346092b345081c7a8c079d5ca",
+    "draws": 133,
+    "inclusive": true,
+    "note": "Different BDA and evolved scene; use for attribution only. Do not add nested categories or transfer their means directly into the latest 97 ms total.",
+    "stages": {
+      "whole_draw": {
+        "calls": 133,
+        "elapsed_ms": 8850,
+        "ms_per_draw": 66.54135338345864
+      },
+      "plant_update": {
+        "calls": 50372,
+        "elapsed_ms": 2225,
+        "ms_per_draw": 16.729323308270676
+      },
+      "plant_abilities": {
+        "calls": 50372,
+        "elapsed_ms": 125,
+        "ms_per_draw": 0.9398496240601504
+      },
+      "plant_animate": {
+        "calls": 50372,
+        "elapsed_ms": 75,
+        "ms_per_draw": 0.5639097744360902
+      },
+      "plant_reanim": {
+        "calls": 50372,
+        "elapsed_ms": 1900,
+        "ms_per_draw": 14.285714285714286
+      },
+      "plant_color": {
+        "calls": 50372,
+        "elapsed_ms": 625,
+        "ms_per_draw": 4.6992481203007515
+      },
+      "all_reanim_updates": {
+        "calls": 61378,
+        "elapsed_ms": 1375,
+        "ms_per_draw": 10.338345864661655
+      },
+      "plant_draw": {
+        "calls": 5565,
+        "elapsed_ms": 3900,
+        "ms_per_draw": 29.32330827067669
+      },
+      "zombie_draw": {
+        "calls": 263,
+        "elapsed_ms": 1025,
+        "ms_per_draw": 7.706766917293233
+      },
+      "coin_draw": {
+        "calls": 965,
+        "elapsed_ms": 775,
+        "ms_per_draw": 5.827067669172933
+      },
+      "backdrop": {
+        "calls": 133,
+        "elapsed_ms": 800,
+        "ms_per_draw": 6.015037593984962
+      },
+      "top_UI": {
+        "calls": 133,
+        "elapsed_ms": 475,
+        "ms_per_draw": 3.5714285714285716
+      },
+      "actor_dispatch": {
+        "calls": 6804,
+        "elapsed_ms": 4225,
+        "ms_per_draw": 31.76691729323308
+      },
+      "baked_actor_pixels": {
+        "calls": 17723,
+        "elapsed_ms": 1475,
+        "ms_per_draw": 11.090225563909774
+      },
+      "actor_page_prepare": {
+        "calls": 399,
+        "elapsed_ms": 700,
+        "ms_per_draw": 5.2631578947368425
+      },
+      "software_shape": {
+        "calls": 1824,
+        "elapsed_ms": 1000,
+        "ms_per_draw": 7.518796992481203
+      }
+    }
+  }
+}

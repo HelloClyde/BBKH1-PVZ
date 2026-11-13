@@ -1,0 +1,206 @@
+{
+  "date": "2026-11-13",
+  "scope": "Physical H1 zombie motion repair: resume existing first-level save and create new user Zzz through actual native UI, then play first level.",
+  "program": {
+    "passed": true,
+    "bda_sha256": "dedbe8f8807ced1cd68eba1e6ec7cf4a96294054f72d6e38c1fae716fd27345b",
+    "elf_sha256": "9d91f19c94fc15d71d9e1dba3e245cab5d52c5935919ba23826758b11f041782",
+    "bda_bytes": 3752692,
+    "build_receipt_sha256": "4881f1ada105007a5f560b73b074ee4fcab21cd204cf1737380338dc89a0325e",
+    "device_upload_crc_verified": true,
+    "gp_tls_audit": true,
+    "source_identity": {
+      "passed": true,
+      "count": 142,
+      "failed": [],
+      "bda_sha256": "dedbe8f8807ced1cd68eba1e6ec7cf4a96294054f72d6e38c1fae716fd27345b"
+    }
+  },
+  "new_user": {
+    "name": "Zzz",
+    "created_via_native_UI": true,
+    "accepted_key_requests": [
+      "084-actual-type-z-0-result.json",
+      "085-actual-type-z-1-result.json",
+      "086-actual-type-z-2-result.json"
+    ],
+    "menu_screenshot": "created-Zzz.png",
+    "no_host_profile_fixture_used": true,
+    "natural_intro_end_ms": 13890,
+    "movie_error_count": 0,
+    "movie_cache_bytes_after_intro": 0
+  },
+  "existing_save": {
+    "passed": true,
+    "level": 1,
+    "old_saved_zombies": 4,
+    "matched_zombies": [
+      {
+        "id": 66125825,
+        "x": [
+          794.0,
+          660.5697631835938
+        ],
+        "time": [
+          0.0,
+          0.9449958205223083
+        ],
+        "age": [
+          132870,
+          133906
+        ],
+        "rate_on_load": 11.001669883728027
+      },
+      {
+        "id": 66060290,
+        "x": [
+          790.0,
+          670.0590209960938
+        ],
+        "time": [
+          0.0,
+          0.7955522537231445
+        ],
+        "age": [
+          135613,
+          136649
+        ],
+        "rate_on_load": 12.374505043029785
+      },
+      {
+        "id": 65994755,
+        "x": [
+          791.0,
+          674.87255859375
+        ],
+        "time": [
+          0.0,
+          0.9853118658065796
+        ],
+        "age": [
+          138527,
+          139563
+        ],
+        "rate_on_load": 13.264338493347168
+      }
+    ],
+    "remaining_zombies_after_combat": 0,
+    "read_only_motion_observations": true,
+    "game_RAM_written_by_test": false,
+    "resume_input": "touch Continue button; keyboard command was rejected BUSY before any accepted key",
+    "clock_hz": 40,
+    "ticks": [
+      359426,
+      363119,
+      363230
+    ]
+  },
+  "fresh_zombie": {
+    "passed": true,
+    "level": 1,
+    "zombie_id": 65929220,
+    "new_native_spawn": true,
+    "clock_hz": 40,
+    "ticks": [
+      438523,
+      438572
+    ],
+    "age": [
+      16,
+      138
+    ],
+    "x": [
+      777.0934448242188,
+      758.8297119140625
+    ],
+    "animation_time": [
+      0.07692525535821915,
+      0.5015520453453064
+    ],
+    "animation_rate": [
+      14.461949348449707,
+      14.461949348449707
+    ],
+    "plants": 2,
+    "game_RAM_written_by_test": false
+  },
+  "exit": {
+    "return_code": 0,
+    "async_jobs_completed": 3,
+    "write_errors": 0,
+    "worker_payload_bytes": 0,
+    "worker_task_removed": true,
+    "original_irq_callback_restored": true
+  },
+  "originals_restored": {
+    "passed": true,
+    "whole_original_directory_restored": true,
+    "files": {
+      "users.dat": {
+        "size": 45,
+        "sha256": "94aa334b2236950e668a607763af35df34fd4ce2a748e2eeb54bb685dc0285a5"
+      },
+      "user1.dat": {
+        "size": 886,
+        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+      },
+      "game1_0.v4": {
+        "size": 39480,
+        "sha256": "5540c956e3a0988440a2bf33310b3e80d5683f0873a2dcc53a6ed1b3b6fed97c"
+      },
+      "game3_0.v4": {
+        "size": 85353,
+        "sha256": "afd9d598ea149e0838b09b0aa9c4fcce3588986302776057cbdc9605960698c5"
+      },
+      "user3.dat": {
+        "size": 886,
+        "sha256": "a57d54daa985e6bbd2400d95185e6d50d75441b1ef037adbd9bf91e77191f69d"
+      },
+      "h1-audio.dat": {
+        "size": 6,
+        "sha256": "ef848f85e0de2a2de770cf263b6ff76f5ee680ac29b0a743e4305af67fe25084"
+      }
+    },
+    "test_archive": "B:\\应用\\数据\\游戏\\PVZ\\userdata.test-newspawn-zm77-1794507516"
+  },
+  "device": {
+    "identity": "H1DEBUG/1 V1.41 RESIDENT",
+    "screen": [
+      480,
+      272
+    ],
+    "debugger_remains_running": true,
+    "serial_closed": true
+  },
+  "resources": {
+    "changed": false,
+    "bytes": 166473603,
+    "files": 2674
+  },
+  "validation": {
+    "host": {
+      "passed": true,
+      "steps": 600,
+      "start_x": 805,
+      "end_x": 717.067,
+      "distinct_animation_times": 601,
+      "distinct_rendered_zombie_regions": 121,
+      "zero_rate_first_update_recovered": true,
+      "pause_and_resume": true,
+      "save_and_continue_200_steps": true,
+      "zero_rate_save_recovered": true,
+      "legitimate_butter_preserved_on_load": true,
+      "resumed_end_x": 690.612,
+      "scope": "Original full game logic on host, not physical H1 performance",
+      "executable_sha256": "d578115bbc6460026d74a3bf01ee4fa3ef97c43fac54250ff0969fb4568acd38",
+      "compile_report_sha256": "584f42a9f4784b37f22078763f0e434ae38dabefc4db50c02276e235d7ce4d83",
+      "probe_sha256": "03820d0b3b3cde91fd93aa6862758e9caea5e5e9ce291944ee10552ade09ce14"
+    },
+    "full_repository_verifier": "Not rerun: known existing preferred-alpha provenance mismatch."
+  },
+  "limitations": [
+    "The original site that first set zombie animation rates to zero remains unproven. The observed stopping mechanism is fixed by reconciling derived zero rates at first active update and after full save restoration.",
+    "At reconnection a retained native job had returned107 with Not enough memory for opening read-ahead page. The exact preceding user interaction was not observed while USB was disconnected. The later actual new-user Zzz flow completed its opening and first level. Intermittent opening allocation failure is not claimed fixed by this motion patch.",
+    "No dense-gameplay performance or universal20FPS claim in this test."
+  ]
+}

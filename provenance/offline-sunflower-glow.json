@@ -1,13 +1,13 @@
 {
   "passed": true,
   "runtime_path": "sunflower-glow.h1ap",
-  "bytes": 649024,
-  "sha256": "b3217bd20b6c00f617fbc8cc032e94117829555ee18ca970ade72a51c08682f9",
-  "decoded_bytes": 649024,
-  "decoded_sha256": "b3217bd20b6c00f617fbc8cc032e94117829555ee18ca970ade72a51c08682f9",
-  "storage": "raw_pages",
+  "bytes": 363834,
+  "sha256": "c51fed487fe815eab9aa1956c0628f4609a85a414f2a3a0d2b87d6099b686d5d",
+  "decoded_bytes": 488048,
+  "decoded_sha256": "d9f460f5bee336117a4e7efb6ad26a19e3baa91cdf9951846ffe1e7a79d3e25b",
+  "storage": "compressed_pages_indexed16_shade_major",
   "compressed_comparison_bytes": 321875,
-  "no_runtime_inflate": true,
+  "no_runtime_inflate": false,
   "frames": 57,
   "intensities": 89,
   "palette_tuples": 1384,
@@ -15,5 +15,12 @@
   "lossy": false,
   "roundtrip_byte_exact": true,
   "encoder_sha256": "715db78ee45d4c745f53981c138b53ecc4a9ae7a1b18d64f33746b0572d1bbc2",
-  "exporter_sha256": "71c298b21e6cd0305c00f138849fcec29266eb1787065ee42fa6ce4ae0d7a0a2"
+  "exporter_sha256": "71c298b21e6cd0305c00f138849fcec29266eb1787065ee42fa6ce4ae0d7a0a2",
+  "palette_layout": "shade_major_indexed16",
+  "layout_encoder_sha256": "5cc14113cb5a656732e466f0f472a0a508b2c5f211f719d26a73aa643ce64690",
+  "layout_source_sha256": "b3217bd20b6c00f617fbc8cc032e94117829555ee18ca970ade72a51c08682f9",
+  "layout_verification": "provenance/offline-sunflower-glow-layout.json",
+  "layout_source": "private/resource-build-inputs/optimized/sunflower-glow-rows.h1ap",
+  "index_encoder_sha256": "292673c75eb4b52acdba7441d4aec88030c62d1da0eb5b3d47b145eccb50b25c",
+  "index_verification": "provenance/offline-sunflower-glow-indexed.json"
 }

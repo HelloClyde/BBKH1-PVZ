@@ -1,4 +1,4 @@
-"""Build actual XM helper and verify buffered FILE ownership/fallback/PCM."""
+"""Build actual XM helper and verify buffered FILE ownership/reuse/PCM."""
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import argparse,hashlib,json,os,subprocess
@@ -23,7 +23,7 @@ def main():
     with ThreadPoolExecutor(max_workers=4) as pool:objects=list(pool.map(compile,sources))
     wrapped=['malloc','free','setvbuf','fopen','fclose','fread','fseek','fgetc','libxmp_scan_sequences']
     exe=out/'probe.exe';run([args.cc,*objects,*['-Wl,--wrap='+n for n in wrapped],'-lm','-o',exe])
-    module=ROOT/'private/resources-h1-full/sounds/mainmusic.xm'
+    module=ROOT/'private/resources-h1-wide/sounds/mainmusic.xm'
     result=json.loads(run([exe,module,ROOT/'tools/test_xmp_shared.py']))
     result['scope']='Host-only actual loader/FILE lifecycle; call counts are stdio API calls, not native SDK reads or a native speed claim'
     result['implementation_sha256']=hashlib.sha256((ROOT/'platform/xmp_shared.c').read_bytes()).hexdigest()

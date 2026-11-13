@@ -1,0 +1,114 @@
+{
+  "candidate": "v11",
+  "identity": {
+    "bda_sha256": "7de7de48b1dea922db509954e44bfe7efdd6c718b2ab08d56ed35cf34000990f",
+    "elf_sha256": "8d857b0f04ae6bf11946d8c536a03314846a09f260378f20cd5f8934afbc2b4d",
+    "build_receipt_sha256": "b7d6a5af0b53fc3fce5ca13753fb8554fa3587fa27b1436232a03ba6159dfbe1",
+    "fingerprints": [
+      {
+        "symbol": "h1_bda_main",
+        "address": "0x83c00020",
+        "size": 48,
+        "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3c70acbd27e0ffbd271800a8af6af8f80c000000001800bd8f1800bc8f",
+        "sha256": "6bc5e660bdaa254181d30ce8e16fb97541c9a7e6920aee8b67b010f045083323"
+      },
+      {
+        "symbol": "_open",
+        "address": "0x83e40310",
+        "size": 64,
+        "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+        "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+      },
+      {
+        "symbol": "pvzp_present_argb",
+        "address": "0x83e2d168",
+        "size": 64,
+        "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a000a6f5f80c2580c00025984000",
+        "sha256": "ddb04754d695b1bbeb972191eff26c35971977aec18216955f995b0160afd3d5"
+      },
+      {
+        "symbol": "detect_resource_drive",
+        "address": "0x83e3ea10",
+        "size": 64,
+        "expected_hex": "fa83023c2076438c4200601400000000d8ffbd27010003241800b1af1400b0afef83113cfa83103c2400bfaf2000beaf1c00b2af25f0a003987c24267c5b1026",
+        "sha256": "c752ce3df5a387b4ca1f5456a0e6c4bf44e1c228b5dd2204e423f84cfbe75c98"
+      }
+    ]
+  },
+  "classification": "resource preloading ran out of memory; no realtime-animation FPS conclusion",
+  "desktop": {
+    "job_id": 36,
+    "kind": 2,
+    "state": 4,
+    "error": 0,
+    "menu_idle": 1,
+    "app_index": 101,
+    "entry_count": 21,
+    "return_code": 12,
+    "state_name": "done"
+  },
+  "runtime": [
+    1347836496,
+    255,
+    12,
+    0,
+    19983572,
+    930,
+    1,
+    66,
+    21,
+    40,
+    25,
+    2210579332,
+    2052,
+    2212757944,
+    0,
+    65536
+  ],
+  "heap_failure": [
+    1211189331,
+    1,
+    19277544,
+    19983572,
+    2052,
+    2083,
+    2176843776,
+    2210398208,
+    2210320124,
+    2210374528,
+    2960,
+    139848,
+    54404,
+    54396,
+    33390904,
+    161,
+    54404,
+    23680,
+    85444,
+    2960
+  ],
+  "preload": [
+    2,
+    7,
+    19,
+    461
+  ],
+  "io": [
+    939,
+    5867,
+    7,
+    29874,
+    72758874,
+    70101677,
+    607,
+    32768,
+    5701,
+    18,
+    0,
+    27132,
+    0,
+    2738,
+    4,
+    0
+  ]
+}

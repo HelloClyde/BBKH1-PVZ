@@ -1,0 +1,36 @@
+{
+  "contract": "Immutable installed resources are trusted. No runtime payload CRC/Adler checks or validation-only resource walks. Parsing, decoding and IO failures remain operational errors.",
+  "runtime_sources": {
+    "platform/TrustedResources.h": "a5c20181566a80998304d71d9e7ee6fa7c4e0b7629c6b49fbc50d5adff877727",
+    "platform/actors/ActorPose.cpp": "d63f25c818b41bcec8689d2298b8dd06f3f43fd44a4fb8ff2f82c9e32304b39e",
+    "platform/definition/H1Definition.cpp": "bbf333c63ca9446eb04e37d5b6ce2add61e786eb098adfce6eb289240ad027fa",
+    "platform/localization/FontCache.h": "4d1610cbe2cb06078ae466b4d15a849c3049cb01509025a5723b230853fc5bad",
+    "platform/graphics/FontTileStorage.cpp": "284977beecd7a378352a976787a6fb3dfeb459a68b6b862ada686852054f88a1",
+    "platform/graphics/FontTileStorage.h": "d23362c5badd1dd3824de0f969f9c2255e5b4fbb708c7bd80f2936f930540b2d",
+    "platform/BoardLoading.cpp": "0c1bba6a82169061fd6dc383ef5c34f9f2807c581d4674d7bcc591e9124d5e28",
+    "platform/selector/SelectorOffline.cpp": "19f9a3c597471d97b0855bf399ddb3cc8cd7309d4bfcb3573b3304324d5f2c3d",
+    "platform/video/IntroMovie.cpp": "2e6a055cc966f9da67d1b396a71c670c67f166a81118d1b0b0e731944d5b1a06",
+    "platform/graphics/RewardEffects.cpp": "a75196a737792ad096b13dd0b1a1e2a0cffeef68521b6c4b860d2f478f20e114",
+    "platform/graphics/EarlyLawn.cpp": "862f9765ee9522d2b32ac7d6f840bac8f51eb9fd6e4f92fd9461b575f447b30b",
+    "platform/h1_sound.cpp": "72cea412bdf0d48b767b16e27f0a4de7255e00daa0c18e8fe0114d69a2ebaca2",
+    "platform/graphics/SoftwareRaster.cpp": "b1936651c780b8298e12245892aa4b069ee177ce3a61b1cd8368f09b3d6aa232",
+    "platform/LevelPreload.cpp": "883b09b5276d2293c96cf74ac322c4dadfc58101a903c3f710edc5b65e224f8e",
+    "platform/source_patches.py": "f21236754b44ad998dd9fb593281639ec7395661c07958e35af3b3593a25c1de",
+    "platform/resources/h1_resources.c": "236a2a6ee19935f13110d5a403b57b413a802f2ff4be3a4fcdcb3a5f8d79417a",
+    "runtime/asset_index.c": "18e6dcda965280da97f2a6e5e6cfbdaaa549dc5f17ea558298761f86c4c86c14"
+  },
+  "checksum_test": {
+    "passed": true,
+    "source": "tools/tests/trusted_resources_probe.cpp",
+    "source_sha256": "17963e24f047c773f2551cfd7e4d6e38e259fb8697c1dfec77662afc4d686ba3",
+    "observed": "Standard decoder rejected altered Adler trailer; trusted one-shot, streaming and reset decoders produced the original 65536 bytes."
+  },
+  "native_candidate": {
+    "bda_sha256": "c726c44a80a07ab364afded4b1b22e07ecca148023949f5f97be379deff355a1",
+    "elf_sha256": "9fbf5d2f0d9c2d0bef58e7e076f7eb0a98133247e06711fa24485b15aad137c7",
+    "build_receipt_sha256": "8586286a4dff5b7b403d0263273811c79ac5946faa1fbd589bae1a9e8af1bc84"
+  },
+  "native_status": "targeted_native_passed_full_resource_install_pending",
+  "scope": "Host functional evidence is not physical H1 performance evidence.",
+  "native_verification": "docs/verification/trusted-resources-20261108/native-final.json"
+}

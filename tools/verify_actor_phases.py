@@ -51,7 +51,10 @@ def verify(resources):
     covered = {struct.unpack_from('<Q4I', data, 64 + i * 24)[:2] for i in range(count)}
     assert len(covered) == proof['removed_ordinary_duplicates'] == 211
     for record in proof['files']:
-        encoded = (resources / record['runtime_path']).read_bytes()
+        # Retain the exact old packet audit even when a layer-preserving
+        # export supersedes its whole-head renderer. Check the new bank too.
+        encoded = ((ROOT / record['original_archive_path']) if record.get('original_archive_path') else
+                   (resources / record['runtime_path'])).read_bytes()
         assert len(encoded) == record['bytes'] and digest(encoded) == record['sha256']
         raw = decode(encoded)
         assert len(raw) == record['decoded_bytes'] and digest(raw) == record['decoded_sha256']
@@ -64,6 +67,9 @@ def verify(resources):
         assert joined.hexdigest() == record['ordered_packet_sha256']
         covered.update(actual)
     assert covered == original.keys() and len(covered) == proof['complete_source_entry_coverage']
+    if any(r.get('replacement_provenance') for r in proof['files']):
+        from verify_combat_sprites import verify as verify_combat
+        verify_combat(resources)
     return dict(passed=True, original_entries=len(covered), phase_banks=len(proof['files']), duplicate_frames_removed=211, all_pixel_packets_identical=True)
 
 

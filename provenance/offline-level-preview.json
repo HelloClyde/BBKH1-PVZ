@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "resolution": [
+    480,
+    272
+  ],
+  "frames": 26,
+  "pixel_operations": 47891,
+  "original_shader_comparisons": 78,
+  "all_authored_idle_half_frames": true,
+  "per_track_visibility_preserved": true,
+  "files": {
+    "camera-lawn-day.h1cp": {
+      "bytes": 689856,
+      "sha256": "d0686ed0087360852ab2ebf7135da448efeb454a0355729598e547f43b3c820e"
+    },
+    "zombie-poses.h1pp": {
+      "bytes": 199742,
+      "sha256": "0102ab2a5eed6ef434c8e4a1554cd699576cf05599b3c1b3fe8cb28bb901a895"
+    }
+  },
+  "decoded_pose_bytes": 229645,
+  "decoded_pose_sha256": "56898868e8671b52f801fbc3e1a71f89b25bf80bfeb43b9bb387fcf712b5ffed",
+  "exporter_sha256": "361eebbb2dc9351895985c9e707da303de991c576cfc7a1067926e8acd10e348",
+  "encoder_sha256": "79a43cc6340ef3e3c5dd51510908d4df3a3ff8cae80565e09857aa8ca42eeb3c",
+  "lossless_page_roundtrip": true
+}

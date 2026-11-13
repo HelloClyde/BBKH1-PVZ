@@ -1,3 +1,4 @@
+#include "actors/DeferredOverlay.h"
 /* Original full track traversal versus the production active-track traversal. */
 #include "LawnApp.h"
 #include "Lawn/Board.h"
@@ -17,6 +18,7 @@
 extern void H1ActorActiveTracksTestEnable(bool);
 extern "C" volatile uint32_t pvzh1_active_track_diagnostic[4];
 namespace {
+unsigned observationBatch=1;
 std::vector<uint32_t>* debugWords=nullptr;std::ostream* debugLabels=nullptr;
 void Check(bool b,const char* why){if(!b){std::fprintf(stderr,"ACTIVE TRACKS: %s\n",why);throw std::runtime_error(why);}}
 uint64_t Snapshot(){
@@ -24,6 +26,7 @@ uint64_t Snapshot(){
  std::map<unsigned,unsigned> ids;unsigned ordinal=0;
  for(auto* r:gLawnApp->mEffectSystem->mReanimationHolder->mReanimations)ids[unsigned(gLawnApp->ReanimationGetID(r))]=++ordinal;
  for(auto* r:gLawnApp->mEffectSystem->mReanimationHolder->mReanimations){
+  H1ResolveActorOverlay(r);
   if(debugLabels)*debugLabels<<"actor type="<<int(r->mReanimationType)<<" word="<<debugWords->size()<<"\n";
   word(r->mReanimationType);word(r->mDead);word(r->mIsAttachment);number(r->mAnimTime);number(r->mLastFrameTime);number(r->mAnimRate);word(r->mLoopCount);word(r->mLoopType);word(r->mFrameStart);word(r->mFrameCount);word(r->mFrameBasePose);
   for(unsigned i=0;i<9;++i)number(r->mOverlayMatrix.m[i/3][i%3]);word(r->mColorOverride.ToInt());word(r->mExtraAdditiveColor.ToInt());word(r->mExtraOverlayColor.ToInt());word(r->mEnableExtraAdditiveDraw);word(r->mEnableExtraOverlayDraw);
@@ -38,7 +41,7 @@ uint64_t Snapshot(){
 void Dump(const char* tag,bool active){std::vector<uint32_t> values;const auto base=std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/(std::string(active?"optimized-":"original-")+tag);std::ofstream labels(base.string()+".txt");debugWords=&values;debugLabels=&labels;Snapshot();debugWords=nullptr;debugLabels=nullptr;std::ofstream data(base.string()+".bin",std::ios::binary);data.write(reinterpret_cast<const char*>(values.data()),values.size()*4);}
 std::vector<uint64_t> Run(bool active){
  H1ActorActiveTracksTestEnable(active);PlayerInfo profile;profile.mName="ACTIVE_TRACK_ORACLE";profile.mId=1;profile.mLevel=6;auto* old=gLawnApp->mPlayerInfo;gLawnApp->mPlayerInfo=&profile;
- gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);auto* board=gLawnApp->mBoard;
+ gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);auto* board=gLawnApp->mBoard;Check(H1DeferredOverlayPrepare(),"deferred table allocation");
  // Finish cold definition loads before fixing the inputs to the update trial.
  for(int seed=0;seed<int(NUM_SEED_TYPES);++seed)Plant::PreloadPlantResources(SeedType(seed));
  std::vector<Plant*> plants;for(int seed=0;seed<int(NUM_SEED_TYPES);++seed){SRand(140326+seed);plants.push_back(board->AddPlant(4,2,SeedType(seed)));}
@@ -58,14 +61,42 @@ std::vector<uint64_t> Run(bool active){
    r->mEnableExtraOverlayDraw=tick>=100&&tick<109;r->mExtraOverlayColor=Sexy::Color(62,191,223,113);
    r->PropogateColorToAttachments();r->Update();
   }
-  gLawnApp->mEffectSystem->ProcessDeleteQueue();if(tick==0)Dump("tick0",active);states.push_back(Snapshot());states.push_back(unsigned(Rand()));
+  gLawnApp->mEffectSystem->ProcessDeleteQueue();if(tick==0&&observationBatch==1)Dump("tick0",active);const bool observe=(tick+1)%observationBatch==0||tick==149;uint64_t state=observe?Snapshot():0;unsigned random=Rand();if(observe){states.push_back(state);states.push_back(random);}
  }
  gLawnApp->KillBoard();gLawnApp->mPlayerInfo=old;return states;
 }
+}
+void CheckAttachmentSlots(){
+ PlayerInfo profile;profile.mName="ATTACHMENT_SLOT_ORACLE";profile.mLevel=6;
+ auto* old=gLawnApp->mPlayerInfo;gLawnApp->mPlayerInfo=&profile;
+ gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);
+ auto* plant=gLawnApp->mBoard->AddPlant(3,2,SEED_PEASHOOTER);
+ auto* body=gLawnApp->ReanimationGet(plant->mBodyReanimID);
+ std::vector<bool> active(body->mDefinition->mTracks.count);
+ for(int i=H1ActorNextActiveTrack(body,-1);i>=0;i=H1ActorNextActiveTrack(body,i))active[i]=true;
+ unsigned track=0;while(track<active.size()&&active[track])++track;
+ Check(track<active.size(),"test plant has no inactive track");
+ const auto before=pvzh1_active_track_diagnostic[1];
+ AttachmentID detached=ATTACHMENTID_NULL;
+ AttachReanim(detached,gLawnApp->AddReanimation(0,0,0,REANIM_SUN),0,0);
+ H1ActorNextActiveTrack(body,-1);
+ Check(pvzh1_active_track_diagnostic[1]==before,"unrelated attachment invalidated plant tracks");
+ AttachmentDie(detached);
+ auto& slot=body->mTrackInstances[track].mAttachmentID;
+ AttachReanim(slot,gLawnApp->AddReanimation(0,0,0,REANIM_SUN),0,0);
+ bool found=false;for(int i=H1ActorNextActiveTrack(body,-1);i>=0;i=H1ActorNextActiveTrack(body,i))found|=unsigned(i)==track;
+ Check(found&&pvzh1_active_track_diagnostic[1]==before+1,"changed parent slot was not refreshed once");
+ AttachmentDie(slot);found=false;
+ for(int i=H1ActorNextActiveTrack(body,-1);i>=0;i=H1ActorNextActiveTrack(body,i))found|=unsigned(i)==track;
+ Check(!found,"retired attachment left an active track");
+ gLawnApp->KillBoard();gLawnApp->mPlayerInfo=old;
+ std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"attachment-slot-invalidation-verification.json");
+ out<<"{\"passed\":true,\"unrelated_effect_keeps_plant_memo\":true,\"changed_track_refreshes_once\":true,\"retired_track_becomes_inactive\":true}\n";
 }
 extern "C" void pvzh1_active_track_probe(){
  const auto original=Run(false),optimized=Run(true);Check(original.size()==optimized.size(),"trace length differs");
  for(unsigned i=0;i<original.size();++i)if(original[i]!=optimized[i]){std::fprintf(stderr,"ACTIVE TRACK MISMATCH tick=%u field=%u original=%llx actual=%llx\n",i/2,i%2,(unsigned long long)original[i],(unsigned long long)optimized[i]);Check(false,"live animation state or random stream differs");}
  Check(pvzh1_active_track_diagnostic[3]>10000,"inactive tracks were not omitted");
+ CheckAttachmentSlots();
  std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"active-tracks-verification.json");out<<"{\"passed\":true,\"all_seed_types\":"<<int(NUM_SEED_TYPES)<<",\"simulation_steps_per_path\":150,\"animation_state_and_random_snapshots\":"<<optimized.size()<<",\"original_clock_blend_shake_blink_color_and_attachment_updates_preserved\":true,\"inactive_track_visits_omitted\":"<<pvzh1_active_track_diagnostic[3]<<"}\n";
 }

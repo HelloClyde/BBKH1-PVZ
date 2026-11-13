@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "bytes": 680712,
+  "sha256": "56aed6d87283b64acdf60dafd903ffb6e0aa65ebbfa75880f8707af03d5c431f",
+  "decoded_bytes": 1784376,
+  "decoded_sha256": "15c3423af9ac80c50a5811d6cf0b356152beadbcd13e21231aa01aba871dcde7",
+  "source_sha256": "8c618c0c645ecf180ad55805da5e4a04c3b1bdf2c1edce087e3699f16c7a6cba",
+  "entries": 2940,
+  "segments_before": 52920,
+  "segments_after": 14700,
+  "empty_tracks": 44100,
+  "empty_ranges": 5880,
+  "expanded_track_order_exact": true,
+  "all_pixel_streams_byte_exact": true,
+  "encoder_sha256": "2b0ca777ad319029d7bff7f8687fbe780a32c508445f104df4095d18cce95893",
+  "lossy": false
+}

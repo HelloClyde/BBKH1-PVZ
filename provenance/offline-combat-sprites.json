@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "dimensions": [
+    480,
+    272
+  ],
+  "frames_are_full_original_shading": true,
+  "visual_translation": "Round LCD translation; simulation coordinates unchanged",
+  "splat_variants": 4,
+  "original_particle_physics_and_rng": true,
+  "original_blend_updates": 20,
+  "files": {
+    "combat-sprites.h1ap": {
+      "bytes": 240854,
+      "sha256": "a42a673301d97c54b96dc05aa67462a4c33b482f1ed6ddbcc5211894a70ac15e",
+      "decoded_bytes": 240854,
+      "decoded_sha256": "a42a673301d97c54b96dc05aa67462a4c33b482f1ed6ddbcc5211894a70ac15e"
+    },
+    "zombie-hats.h1ap": {
+      "bytes": 996908,
+      "sha256": "375e3473b33e48581df873395cd0b33560a66bcc2344d99b2f8629203a0362c1",
+      "decoded_bytes": 1979847,
+      "decoded_sha256": "bf19e18122c90e1175e3319b008bb57547f475800ef5662559ff9c928fbcd38b"
+    },
+    "pea-transitions.h1ap": {
+      "bytes": 680712,
+      "sha256": "56aed6d87283b64acdf60dafd903ffb6e0aa65ebbfa75880f8707af03d5c431f",
+      "decoded_bytes": 1784376,
+      "decoded_sha256": "15c3423af9ac80c50a5811d6cf0b356152beadbcd13e21231aa01aba871dcde7"
+    }
+  },
+  "source_files": {
+    "tools/tests/combat_sprite_export.cpp": "0508d8f33480a5b56bbfb29cd5df0829443b07dca3cef542d9cef97a6585a4a8",
+    "tools/tests/pea_layered_export.cpp": "193ed6049824b9632358d4c6930fe349e5a222ffee5e4d5d3be414e3059b933c",
+    "tools/pack_extra_actor.cpp": "ed5e3c96ff5bf15b732139c61e7a72d64ca32ef69653152a6282d0821b381ece",
+    "tools/pack_actor_poses.py": "5a3c35b2c9d0e9cdd1b4178b6640dd36c62c1c0a36632458bb385becab02e0a6",
+    "tools/pack_actor_pages.py": "a841229dddbd89620399948aea0c5ce60162738bff4f77d9116237b2b5032441",
+    "tools/bake_combat_sprites.py": "a09ee5c4687848470adcffbd01ad85dbb3e51be034db424e3f5673dfabc43674",
+    "tools/compact_actor_empty_segments.py": "2b0ca777ad319029d7bff7f8687fbe780a32c508445f104df4095d18cce95893"
+  },
+  "export_proofs": {
+    "combat-sprite-export-verification.json": {
+      "passed": true,
+      "flat_and_hit_frames": 816,
+      "hat_frames": 3000,
+      "shader_comparisons": 1992,
+      "hit_variants": 4,
+      "hit_last_age": 96,
+      "first_observed_dead_age": 20,
+      "gameplay_rng_unchanged_by_replay": true
+    },
+    "pea-layered-export-verification.json": {
+      "passed": true,
+      "blended_poses": 2940,
+      "whole_frame_comparisons": 8820,
+      "ordered_pixel_operations": 952635,
+      "original_blend_updates": 20,
+      "blend_updates_omitted": 0
+    }
+  },
+  "pixel_validation": {
+    "combat-sprites-oracle-v47-r2": {
+      "passed": true,
+      "direct_bitmap_full_frame_oracles": 1920,
+      "particle_full_frame_oracles": 1552,
+      "raster_translation_snaps_only_display_coordinates": true,
+      "clips_crop_without_resampling": true,
+      "particle_variants": 4,
+      "normal_and_extra_additive": true,
+      "menu_combat_bytes": 0,
+      "evidence_sha256": "2e1657551307e1b53b37ad27347dec5e5ae57f4d12bd0c3ac41d075586b8be56"
+    },
+    "layered-head-oracle-v47-r2": {
+      "passed": true,
+      "head_blend_frame_comparisons": 336,
+      "head_blend_replays": 336,
+      "original_blend_updates": 20,
+      "shutdown_bytes": 0,
+      "evidence_sha256": "906119413922e16006b32d61014509d6a31f6c9eaf1f81360a430b97b9ea2e85"
+    },
+    "hat-baked-oracle-v47": {
+      "passed": true,
+      "whole_frame_comparisons": 608,
+      "hat_types": 2,
+      "damage_or_hidden_states": 4,
+      "hit_shades": 3,
+      "quantized_fraction_cases": 32,
+      "separate_hat_bank": true,
+      "evidence_sha256": "c06599e4e72d2a3fab9504c99d350d5e59e8e712a8969e81f88e80397857ece6"
+    },
+    "culling-oracle-v47": {
+      "passed": true,
+      "original_shader_comparisons": 256,
+      "exact_and_fractional_clip_boundaries": true,
+      "reversed_triangles": true,
+      "vertex_alpha": true,
+      "evidence_sha256": "e8273044e94c62d1f91d36d933005baa60a36aaf522b25c4c1a08acd40adb4fc"
+    }
+  },
+  "cache_path_validation": {
+    "shared-inflater-plants-v49-r2": {
+      "passed": true,
+      "types": 50,
+      "banks_loaded": 200,
+      "whole_frame_comparisons": 9744,
+      "own_actor_pixels_only": true,
+      "replays": 9744,
+      "generic_replays": 9744,
+      "visibility_states": 1624,
+      "decoded_slots_per_bank": 2,
+      "pressure_releases": 232,
+      "shutdown_bytes": 0,
+      "evidence_sha256": "9908d36cba24cc387f56bcc1a903929e72f152ca8f68d3c2fa5495fc420ee179"
+    },
+    "shared-inflater-head-v49": {
+      "passed": true,
+      "head_blend_frame_comparisons": 336,
+      "head_blend_replays": 336,
+      "original_blend_updates": 20,
+      "shutdown_bytes": 0,
+      "evidence_sha256": "906119413922e16006b32d61014509d6a31f6c9eaf1f81360a430b97b9ea2e85"
+    },
+    "shared-inflater-hats-v49": {
+      "passed": true,
+      "whole_frame_comparisons": 608,
+      "hat_types": 2,
+      "damage_or_hidden_states": 4,
+      "hit_shades": 3,
+      "quantized_fraction_cases": 32,
+      "separate_hat_bank": true,
+      "evidence_sha256": "c06599e4e72d2a3fab9504c99d350d5e59e8e712a8969e81f88e80397857ece6"
+    },
+    "shared-inflater-combat-v49": {
+      "passed": true,
+      "direct_bitmap_full_frame_oracles": 1920,
+      "particle_full_frame_oracles": 1552,
+      "raster_translation_snaps_only_display_coordinates": true,
+      "clips_crop_without_resampling": true,
+      "particle_variants": 4,
+      "normal_and_extra_additive": true,
+      "menu_combat_bytes": 0,
+      "evidence_sha256": "2e1657551307e1b53b37ad27347dec5e5ae57f4d12bd0c3ac41d075586b8be56"
+    }
+  },
+  "empty_range_verification": "provenance/offline-pea-empty-ranges.json"
+}

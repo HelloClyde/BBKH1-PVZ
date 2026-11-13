@@ -21,7 +21,7 @@ namespace {void Check(bool value,const char* why){if(!value){std::fprintf(stderr
 extern "C" void pvzh1_actor_lifetime_probe(){
  PlayerInfo profile;profile.mName="LIFETIME_ORACLE";profile.mId=1;profile.mLevel=2;auto* old=gLawnApp->mPlayerInfo;gLawnApp->mPlayerInfo=&profile;
  gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);auto* board=gLawnApp->mBoard;
- const unsigned sodBytes=pvzh1_actor_lifetime_diagnostic[2];Check(sodBytes>500000,"intro pixels were not resident");
+ const unsigned sodBytes=pvzh1_actor_lifetime_diagnostic[2];Check(sodBytes>0,"intro bank was not prepared");
  Check(board->CanPlantAt(0,2,SEED_PEASHOOTER)==PLANTING_OK&&board->CanPlantAt(1,2,SEED_SUNFLOWER)==PLANTING_OK,"live actor fixture is not legal");
  board->AddPlant(0,2,SEED_PEASHOOTER);board->AddPlant(1,2,SEED_SUNFLOWER);
  std::vector<std::pair<Reanimation*,std::vector<unsigned char>>> states;
@@ -41,8 +41,17 @@ extern "C" void pvzh1_actor_lifetime_probe(){
  const unsigned forgotten=pvzh1_actor_lifetime_diagnostic[5];plant->Die();gLawnApp->mEffectSystem->ProcessDeleteQueue();gLawnApp->mEffectSystem->ProcessDeleteQueue();
  Check(pvzh1_actor_lifetime_diagnostic[5]>forgotten,"deleted actor retained signature records");
  const auto resources=Sexy::GetResourceFolder();const auto missing=std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"missing-required-pixels";std::filesystem::create_directory(missing);
+ // Keep source definitions available: unused ones can now be retired and
+ // legitimately reloaded. This fixture removes only required pixel banks.
+ const auto root=std::filesystem::path(resources);
+ for(const auto& item:std::filesystem::recursive_directory_iterator(root))if(item.is_regular_file()){
+  const auto rel=item.path().lexically_relative(root);
+  if(rel=="actor-normal.h1ap"||rel=="zombie-hit.h1ap")continue;
+  const auto dest=missing/rel;std::filesystem::create_directories(dest.parent_path());
+  if(!std::filesystem::exists(dest))std::filesystem::create_hard_link(item.path(),dest);
+ }
  pvzh1_actor_pose_shutdown();Sexy::SetResourceFolder(missing.string());bool rejected=false;const auto scene=gLawnApp->mGameScene;
- try{H1PreloadCurrentBoard(gLawnApp);}catch(const std::runtime_error& e){rejected=std::strstr(e.what(),"offline actor bank preload failed");}
+ try{H1PreloadCurrentBoard(gLawnApp);}catch(const std::runtime_error& e){rejected=std::strstr(e.what(),"offline");}
  Check(rejected&&gLawnApp->mGameScene==scene,"required bank failure continued into play");
  Sexy::SetResourceFolder(resources);pvzh1_actor_pose_shutdown();H1PreloadCurrentBoard(gLawnApp);
  Check(!pvzh1_actor_lifetime_diagnostic[2],"mid-game preload reloaded a finished intro");

@@ -9,6 +9,7 @@
 #include "LawnApp.h"
 #include "Lawn/Board.h"
 #include "Lawn/System/PlayerInfo.h"
+#include "OptionsFeedback.h"
 
 int pvzp_upstream_main(int,char**);
 extern "C" void pvzp_music_shutdown(void);
@@ -19,6 +20,7 @@ extern "C" void pvzh1_text_scratch_shutdown();
 extern "C" void pvzh1_reanim_atlas_end_frame(void*);
 extern "C" void pvzh1_render_plan_shutdown(void) __attribute__((weak));
 extern "C" void pvzh1_selector_shutdown(void);
+extern "C" void pvzh1_save_service(void) __attribute__((weak));
 static int present(const uint32_t *pixels,int w,int h,void*){
     if(gLawnApp){
         pvzp_diagnostic[7]=static_cast<uint32_t>(gLawnApp->mGameScene);
@@ -29,7 +31,7 @@ static int present(const uint32_t *pixels,int w,int h,void*){
         }
         pvzp_diagnostic[13]=gLawnApp->mPlayerInfo?gLawnApp->mPlayerInfo->mLevel:0;
     }
-    pvzp_present_argb(pixels,w,h);return pvzp_diagnostic[3]==2?0:1;
+    pvzp_present_argb(pixels,w,h);H1UIFlowPresented();return pvzp_diagnostic[3]==2?0:1;
 }
 static void frame_complete(void* context){
     pvzh1_reanim_atlas_end_frame(context);
@@ -39,6 +41,9 @@ static void frame_complete(void* context){
     pvzp_diagnostic[20]=(uint32_t)cache.residentBytes;
     pvzp_diagnostic[21]=(uint32_t)cache.peakBytes;
     pvzp_diagnostic[22]=(uint32_t)cache.loadFailures;
+    // The menu has been presented before granting the SDK-only save task a
+    // bounded slice. This never enables the firmware's dormant OS timer.
+    if(pvzh1_save_service)pvzh1_save_service();
 }
 extern "C" int pvz_portable_main(void){
     const char *root=getenv("PVZ_RESOURCE_DIR");h1_resources_set_root(root?root:"/PVZ/");

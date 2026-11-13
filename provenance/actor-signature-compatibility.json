@@ -1,16 +1,17 @@
 {
   "legacy_format_sha256": "59210d0fe6a2fc4cf743b9c54dd5ba6d0dfd5aaeefae3691e613c5e6a8fbd90d",
-  "current_format_sha256": "fcce2e96afc1de3b59bd0a4dc21a33101337722463cb1d063560aa7a632ac3b4",
+  "current_format_sha256": "6aae6474e4df5fc8f2b1c3c8c387fdce7cd81e5a7c5dba15aabb024e29892902",
   "oracle_source": "tools/tests/fixtures/ActorPoseFormat-legacy.h",
-  "test_source": "tools/tests/actor_signature_compatibility_probe.cpp",
-  "test_source_sha256": "605aaafadb48943d6985e0294d40dacb20e1f750f0306f59de00e17e4d6f5f96",
-  "verification": "docs/verification/actor-signature-compatibility-verification.json",
-  "verification_sha256": "bca1b2f7d03bd92e1dfd443c4faab16a0b4108940283f93c232efa6a4ba5ef17",
+  "test_source": "tools/tests/actor_legacy_body_compatibility_probe.cpp",
+  "test_source_sha256": "2849ed6be1693a314d8229bd7ef6cb35ac8d0b58f0a178516a2b792996966f16",
+  "verification": "docs/verification/intro-delete-20261113/actor-legacy-body-compatibility.json",
+  "verification_sha256": "2d855c5ccf3c8d5314cc06ebec828694d5231ef9c021f1eb762fb28a6c8b4741",
   "probe_identity": {
-    "host_report": "d9c159ec619575456d3b05cf00fbaddcb551b06554903413c8ff81fff1f76921",
-    "probe": "605aaafadb48943d6985e0294d40dacb20e1f750f0306f59de00e17e4d6f5f96",
-    "executable": "87c030c72d3feca7a49a58bd1c62f2844014977d4fea6169165093de465b303b",
+    "host_report": "49c7a725863b43b439adedc682a0f94b212d1da1d6aad6ef7149acfd2338a782",
+    "probe": "2849ed6be1693a314d8229bd7ef6cb35ac8d0b58f0a178516a2b792996966f16",
+    "executable": "db12fd6e9ddc45bb57376beef7391cdb4bbde2b4fcb75d91cb7026fc4c86e760",
     "test_linker_wrappers": []
   },
-  "scope": "Legacy acceptance decisions and FNV keys compared with the exact header used by existing actor/sun assets; resources were not rebaked."
+  "scope": "Existing actor/sun bank body keys, visible draw groups, hidden unmodified zombie hats. Visible/damaged hat layers are outside the old bank and have their own pixel replay tests.",
+  "previous_current_format_sha256": "2095b3f37334908e9d8550b2653cbae459fe8d58cd1a9441e7cf1234a3229ab2"
 }

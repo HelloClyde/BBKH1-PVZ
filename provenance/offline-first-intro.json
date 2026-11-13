@@ -32,10 +32,12 @@
   "lz4_version": "4.4.5",
   "scope": "All original opening motion and timing; quantized once to native RGB565 offline, then lossless motion deltas; no runtime motion search, IDCT or YUV conversion",
   "source_commit": "98b659380014c89c3553fbb2839f5e5a84d6df3d",
-  "host_verification": "docs/verification/intro-offline-20261107/host-playback.json",
-  "runtime_source_sha256": "297da5bd8a476f72a659485206f5f98ce805750dd6c42e01f927b08f01897f18",
-  "source_patch_sha256": "239e6d66fdd74da56171cdcd97f9cd8bb7b49187b776b43d63389a22163dd0cb",
+  "host_verification": "docs/verification/trusted-resources-20261108/intro-host.json",
+  "runtime_source_sha256": "886f39402290675204cb62db34abe47a3e41e25a1c940de0117aece1004d9af5",
+  "source_patch_sha256": "f21236754b44ad998dd9fb593281639ec7395661c07958e35af3b3593a25c1de",
   "colour_table_sha256": "b08300c9d0048920b82c52a98cf58a3285100e3b27db47611ace8af234917c4e",
   "native_presentation_source_sha256": "894d1e227b22e0db880da188b2d46ed9b62d7bad0bc36139a09b2cea42ebe9d6",
-  "byte_equivalent_decoder_rebuild": "docs/verification/intro-offline-20261107/byte-equivalent-rebuild.json"
+  "byte_equivalent_decoder_rebuild": "docs/verification/intro-offline-20261107/byte-equivalent-rebuild.json",
+  "previous_runtime_source_sha256": "2e6a055cc966f9da67d1b396a71c670c67f166a81118d1b0b0e731944d5b1a06",
+  "runtime_revision_validation": "docs/verification/intro-delete-20261113/results.json"
 }

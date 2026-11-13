@@ -1,0 +1,34 @@
+{
+  "chilled": 0,
+  "butter": 0,
+  "ice": 0,
+  "yucky": false,
+  "yucky_counter": 0,
+  "scale": 1.0,
+  "original_rate": 0.0,
+  "speed": 0.24855533242225647,
+  "from_wave": 3,
+  "ground_track": {
+    "index": 11,
+    "address": "0x83367ff8",
+    "count": 504,
+    "start": 44,
+    "frames": 47
+  },
+  "ground": [
+    {
+      "frame": 44,
+      "x": -9.800000190734863
+    },
+    {
+      "frame": 45,
+      "x": -8.399999618530273
+    },
+    {
+      "frame": 90,
+      "x": 40.0
+    }
+  ],
+  "definition": "0x8282cae8",
+  "tracks": 42
+}

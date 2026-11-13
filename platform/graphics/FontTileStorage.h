@@ -8,9 +8,8 @@ namespace Sexy {
 /* Existing A8 glyph pixels, already scaled offline. Loading copies only the
  * tiles intersecting a glyph. No rasterization, rescaling or decompression. */
 class H1FontTileStorage {
-    struct Record {uint32_t offset,crc;};
     FILE* file=nullptr;
-    std::unique_ptr<Record[]> records;
+    std::unique_ptr<uint32_t[]> records;
     std::unique_ptr<unsigned char*[]> tiles;
     uint32_t count=0,columns=0,rows=0,dataStart=0,fileBytes=0,allocated=0;
 public:
@@ -19,8 +18,8 @@ public:
     bool Prepare(int left,int top,int right,int bottom,uint32_t& readBytes);
     const unsigned char* const* View()const{return tiles.get();}
     uint32_t Columns()const{return columns;}
-    size_t Bytes()const{return count*(sizeof(Record)+sizeof(unsigned char*))+allocated*256u;}
-    size_t Largest()const{return count?count*(sizeof(Record)>sizeof(unsigned char*)?sizeof(Record):sizeof(unsigned char*)):0;}
+    size_t Bytes()const{return count*(sizeof(uint32_t)+sizeof(unsigned char*))+allocated*256u;}
+    size_t Largest()const{return count?count*(sizeof(uint32_t)>sizeof(unsigned char*)?sizeof(uint32_t):sizeof(unsigned char*)):0;}
 };
 }
 #endif

@@ -1,0 +1,18 @@
+{
+  "after_abnormal_program_exit": 107,
+  "original_directory_restored": true,
+  "test_archive": "B:\\\u5e94\u7528\\\u6570\u636e\\\u6e38\u620f\\PVZ\\userdata.failed-boss-v62-1794214895647899400",
+  "files": {
+    "users.dat": {
+      "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+      "expected_sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+      "match": true
+    },
+    "user1.dat": {
+      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+      "expected_sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+      "match": true
+    }
+  },
+  "passed": true
+}

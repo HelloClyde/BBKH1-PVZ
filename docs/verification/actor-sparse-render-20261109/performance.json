@@ -1,0 +1,1002 @@
+{
+  "scope": "Physical H1/Y100 V1.41; original gameplay after legal level-50 input fixture. Complete animation and game logic. No game RAM writes.",
+  "clock_hz": 40,
+  "granularity_ms": 25,
+  "limitations": "Each candidate uses the same level fixture and entry actions. The early battle runs naturally; random enemy/animation timing can vary. FPS samples exclude the large screenshot transfer; snapshot counters cover a slightly wider interval. Do not claim small differences are a proven speed gain.",
+  "runtime_resource_bytes_added": 0,
+  "records": [
+    {
+      "candidate": "cache-v19",
+      "source": "build\\cache-v19-hardware\\battle-performance.json",
+      "source_sha256": "e40f98c3bc8c6fa47610398d3105d2a6f3d98a5c58f00a29fe7e9debecace557",
+      "fps": 9.0625,
+      "observe_device_seconds": 9.6,
+      "observe_frames": 87,
+      "snapshot_frame_delta": 100,
+      "profile_draw_calls": 99,
+      "profile_draw_ms": 8800,
+      "profile_update_ms": 1400,
+      "profile_present_ms": 800,
+      "profile_shape_ms": 2175,
+      "io_delta": [
+        3,
+        5,
+        0,
+        686,
+        9380864,
+        9360904,
+        109,
+        0,
+        577,
+        1,
+        0,
+        121,
+        0,
+        565,
+        0,
+        0
+      ],
+      "image_cache_before": [
+        2552200,
+        3658848,
+        1013,
+        635,
+        3052,
+        8664340
+      ],
+      "image_cache_after": [
+        2552200,
+        3658848,
+        1013,
+        635,
+        3151,
+        8664340
+      ],
+      "heap_failure": [
+        1211189331,
+        1,
+        18668328,
+        20466160,
+        67839,
+        67870,
+        2176843776,
+        2210398208,
+        2210321124,
+        2210387440,
+        1346,
+        1143856,
+        66316,
+        66308,
+        32399808,
+        106,
+        66316,
+        10768,
+        1077540,
+        1346
+      ],
+      "font_logical_requests": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "music": [
+        1,
+        469956,
+        204240,
+        1783700,
+        0,
+        1,
+        2,
+        0
+      ],
+      "xm_load": [
+        5,
+        2,
+        174650,
+        2700,
+        25,
+        65536,
+        1858952,
+        2775,
+        1,
+        2,
+        0,
+        0
+      ],
+      "code_fingerprints": [
+        {
+          "symbol": "h1_bda_main",
+          "match": true
+        },
+        {
+          "symbol": "_open",
+          "match": true
+        },
+        {
+          "symbol": "pvzp_present_argb",
+          "match": true
+        },
+        {
+          "symbol": "detect_resource_drive",
+          "match": true
+        }
+      ],
+      "desktop": {
+        "job_id": 47,
+        "kind": 2,
+        "state": 3,
+        "error": 0,
+        "menu_idle": 0,
+        "app_index": 101,
+        "entry_count": 27,
+        "return_code": 0,
+        "state_name": "running"
+      },
+      "live_actor_ms": {
+        "74": 2075
+      },
+      "options": {
+        "pvzh1_options_diagnostic": [
+          1,
+          0,
+          271375,
+          450,
+          525,
+          14,
+          2,
+          7,
+          0,
+          279860,
+          725,
+          0,
+          450
+        ],
+        "pvz_runtime_heap_failure": [
+          1211189331,
+          1,
+          18668328,
+          20466160,
+          67839,
+          67870,
+          2176843776,
+          2210398208,
+          2210321124,
+          2210387440,
+          1346,
+          1143856,
+          66316,
+          66308,
+          32399808,
+          106,
+          66316,
+          10768,
+          1077540,
+          1346
+        ],
+        "pvzh1_font_logical_request_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "code_fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "match": true
+          },
+          {
+            "symbol": "_open",
+            "match": true
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "match": true
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "match": true
+          }
+        ]
+      },
+      "binary": {
+        "bda_sha256": "bf3daef4d764e19a8824ccce3ecbce2f46745e7584eb15b741b787eead8eaac7",
+        "elf_sha256": "448c7bc17d4fc3d2ca734a0deb1701fac17a43892b75d60578bd0192534d6b59",
+        "build_receipt_sha256": "fed4c6b9e21d3edf1ff268b941367c65205be4c990beb15a5f29c6be151ca677",
+        "fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "address": "0x83c00020",
+            "size": 48,
+            "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3c50b6bd27e0ffbd271800a8af52faf80c000000001800bd8f1800bc8f",
+            "sha256": "727a5a0488ee8b5e0a226259c035560e9b416203b3283121da7a74907ae84bda"
+          },
+          {
+            "symbol": "_open",
+            "address": "0x83e40ab0",
+            "size": 64,
+            "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+            "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "address": "0x83e2d608",
+            "size": 64,
+            "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a0008ef7f80c2580c00025984000",
+            "sha256": "0dad733c5b27fbf972b3e79a1e98c003b5c5b38be3d5961063324f6f535a5c4a"
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "address": "0x83e3f1b0",
+            "size": 64,
+            "expected_hex": "fb83023c0080438c4200601400000000d8ffbd27010003241800b1af1400b0aff083113cfa83103c2400bfaf2000beaf1c00b2af25f0a003408424265c651026",
+            "sha256": "7d0d9d3063310ec960487ebb0da7e9881ed244830e7feda0688e4b955e2bf542"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "actor-sparse-v20",
+      "source": "build\\actor-sparse-v20-hardware\\battle-performance.json",
+      "source_sha256": "99364d4384b65492afdf594908cd9b19d7221e54b04f0e0a05f264f15692490c",
+      "fps": 11.636363636363637,
+      "observe_device_seconds": 9.625,
+      "observe_frames": 112,
+      "snapshot_frame_delta": 135,
+      "profile_draw_calls": 134,
+      "profile_draw_ms": 7500,
+      "profile_update_ms": 2225,
+      "profile_present_ms": 850,
+      "profile_shape_ms": 3075,
+      "io_delta": [
+        3,
+        12,
+        0,
+        429,
+        907877,
+        904188,
+        13,
+        0,
+        226,
+        0,
+        0,
+        221,
+        208,
+        0,
+        0,
+        0
+      ],
+      "image_cache_before": [
+        2900352,
+        3658848,
+        1011,
+        577,
+        2560,
+        8653724
+      ],
+      "image_cache_after": [
+        2133464,
+        3658848,
+        1011,
+        669,
+        2694,
+        8653724
+      ],
+      "heap_failure": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "font_logical_requests": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "music": [
+        1,
+        469956,
+        204240,
+        1783700,
+        1,
+        1,
+        2,
+        0
+      ],
+      "xm_load": [
+        5,
+        1,
+        154825,
+        3000,
+        25,
+        65536,
+        1858952,
+        3050,
+        0,
+        1,
+        0,
+        0
+      ],
+      "code_fingerprints": [
+        {
+          "symbol": "h1_bda_main",
+          "match": true
+        },
+        {
+          "symbol": "_open",
+          "match": true
+        },
+        {
+          "symbol": "pvzp_present_argb",
+          "match": true
+        },
+        {
+          "symbol": "detect_resource_drive",
+          "match": true
+        }
+      ],
+      "desktop": {
+        "job_id": 54,
+        "kind": 2,
+        "state": 3,
+        "error": 0,
+        "menu_idle": 0,
+        "app_index": 101,
+        "entry_count": 31,
+        "return_code": 0,
+        "state_name": "running"
+      },
+      "live_actor_ms": {
+        "74": 3075
+      },
+      "pvzh1_bank_read_bytes": {
+        "21": 701409
+      },
+      "pvzh1_bank_read_calls": {
+        "21": 214
+      },
+      "pvzh1_bank_page_misses": {
+        "21": 214
+      },
+      "options": {
+        "pvzh1_options_diagnostic": [
+          1,
+          0,
+          241450,
+          25,
+          125,
+          29,
+          2,
+          7,
+          0,
+          279860,
+          800,
+          0,
+          25
+        ],
+        "pvz_runtime_heap_failure": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_font_logical_request_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "code_fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "match": true
+          },
+          {
+            "symbol": "_open",
+            "match": true
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "match": true
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "match": true
+          }
+        ]
+      },
+      "binary": {
+        "bda_sha256": "701cb3f8a89f0dbc2899046dcca735ca46678f0fa6b08c8f0e71bcee0d8d08a3",
+        "elf_sha256": "ebeddc092fd5a4e0f5819671e8937d2746876fb02d2123d2f94823fdc1c92c98",
+        "build_receipt_sha256": "bf71f87a2be3cc7d131ff163bac6acd5b602a7676c123db58ff0873ef591502a",
+        "fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "address": "0x83c00020",
+            "size": 48,
+            "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3cd0c1bd27e0ffbd271800a8afc7faf80c000000001800bd8f1800bc8f",
+            "sha256": "19d18bf6858785a887f053e1da348ee245e3d77339c12d49c36642b22d6fc8f6"
+          },
+          {
+            "symbol": "_open",
+            "address": "0x83e40c84",
+            "size": 64,
+            "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+            "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "address": "0x83e2d7dc",
+            "size": 64,
+            "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a00003f8f80c2580c00025984000",
+            "sha256": "d1233922bce680afbebbe66b307dfd453241db1bc93b05dc168eab2d663c9a2a"
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "address": "0x83e3f384",
+            "size": 64,
+            "expected_hex": "fb83023c808b438c4200601400000000d8ffbd27010003241800b1af1400b0aff083113cfa83103c2400bfaf2000beaf1c00b2af25f0a00390862426dc701026",
+            "sha256": "58243884ba62444ef52fa9d74d470afcc96600519588e707f2f689a22489675d"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "rotated-span-v21",
+      "source": "build\\rotated-span-v21-hardware\\battle-performance.json",
+      "source_sha256": "f75196a0e354ad614c95916217ec50aff0b5a6eae4405bb85fd0f8da0691c097",
+      "fps": 11.472868217054264,
+      "observe_device_seconds": 9.675,
+      "observe_frames": 111,
+      "snapshot_frame_delta": 132,
+      "profile_draw_calls": 132,
+      "profile_draw_ms": 7525,
+      "profile_update_ms": 2425,
+      "profile_present_ms": 950,
+      "profile_shape_ms": 2775,
+      "io_delta": [
+        2,
+        10,
+        0,
+        470,
+        1063975,
+        1060286,
+        13,
+        0,
+        271,
+        0,
+        0,
+        211,
+        259,
+        0,
+        0,
+        0
+      ],
+      "image_cache_before": [
+        2900352,
+        3658848,
+        1005,
+        571,
+        2609,
+        8595956
+      ],
+      "image_cache_after": [
+        2133464,
+        3658848,
+        1005,
+        663,
+        2741,
+        8595956
+      ],
+      "heap_failure": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "font_logical_requests": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "music": [
+        1,
+        469956,
+        204240,
+        1783700,
+        1,
+        1,
+        2,
+        0
+      ],
+      "xm_load": [
+        5,
+        1,
+        154550,
+        2975,
+        50,
+        65536,
+        1858952,
+        3075,
+        0,
+        1,
+        0,
+        0
+      ],
+      "code_fingerprints": [
+        {
+          "symbol": "h1_bda_main",
+          "match": true
+        },
+        {
+          "symbol": "_open",
+          "match": true
+        },
+        {
+          "symbol": "pvzp_present_argb",
+          "match": true
+        },
+        {
+          "symbol": "detect_resource_drive",
+          "match": true
+        }
+      ],
+      "desktop": {
+        "job_id": 56,
+        "kind": 2,
+        "state": 3,
+        "error": 0,
+        "menu_idle": 0,
+        "app_index": 101,
+        "entry_count": 32,
+        "return_code": 0,
+        "state_name": "running"
+      },
+      "live_actor_ms": {
+        "74": 2550
+      },
+      "pvzh1_bank_draw_milliseconds": {
+        "21": 900,
+        "49": 1000
+      },
+      "pvzh1_bank_read_bytes": {
+        "21": 864402
+      },
+      "pvzh1_bank_read_calls": {
+        "21": 264
+      },
+      "pvzh1_bank_page_misses": {
+        "21": 264
+      },
+      "options": {
+        "pvzh1_options_diagnostic": [
+          1,
+          0,
+          242600,
+          50,
+          125,
+          30,
+          2,
+          7,
+          0,
+          279860,
+          800,
+          0,
+          50
+        ],
+        "pvz_runtime_heap_failure": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_font_logical_request_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "code_fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "match": true
+          },
+          {
+            "symbol": "_open",
+            "match": true
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "match": true
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "match": true
+          }
+        ]
+      },
+      "binary": {
+        "bda_sha256": "601a92f6a099947a441862ac601930164db62aee447ae0e8bf19ee818b6c89f0",
+        "elf_sha256": "9e548b9d1f28f710eb0d559c6c89f0d09fc4fdaf46d31b6146d6b11ec45b58d3",
+        "build_receipt_sha256": "0982bae2a9552f622d042920c6afa1f89d20bdd2553c92a785f789cfd63123ca",
+        "fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "address": "0x83c00020",
+            "size": 48,
+            "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3cf0c8bd27e0ffbd271800a8affafbf80c000000001800bd8f1800bc8f",
+            "sha256": "468d6d15fb4736f15c58a17228726d21d9734295c28aca642004c6c03e1ad92f"
+          },
+          {
+            "symbol": "_open",
+            "address": "0x83e41150",
+            "size": 64,
+            "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+            "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "address": "0x83e2dca8",
+            "size": 64,
+            "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a00036f9f80c2580c00025984000",
+            "sha256": "f7691b70d06d50e54a0414e6d476e7e49c5f243ed89a6a49e5c6632e8af041ce"
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "address": "0x83e3f850",
+            "size": 64,
+            "expected_hex": "fb83023ca092438c4200601400000000d8ffbd27010003241800b1af1400b0aff083113cfa83103c2400bfaf2000beaf1c00b2af25f0a003588b2426fc771026",
+            "sha256": "cdc61cd6ff28c89d28ccb6817601299e259a1ea994ae40245f05199cb0a6e857"
+          }
+        ]
+      }
+    },
+    {
+      "candidate": "rotated-trig-v22",
+      "source": "build\\rotated-trig-v22-hardware\\battle-performance.json",
+      "source_sha256": "8e16bd7a2bf03d7698d430041d47dcc6c462883f2128c2c0ca8a6f5561523d28",
+      "fps": 11.369509043927648,
+      "observe_device_seconds": 9.675,
+      "observe_frames": 110,
+      "snapshot_frame_delta": 135,
+      "profile_draw_calls": 134,
+      "profile_draw_ms": 7700,
+      "profile_update_ms": 2425,
+      "profile_present_ms": 725,
+      "profile_shape_ms": 2975,
+      "io_delta": [
+        3,
+        13,
+        0,
+        456,
+        996510,
+        992821,
+        16,
+        0,
+        253,
+        1,
+        0,
+        221,
+        235,
+        0,
+        0,
+        0
+      ],
+      "image_cache_before": [
+        2900352,
+        3658848,
+        1011,
+        577,
+        2647,
+        8653724
+      ],
+      "image_cache_after": [
+        2133464,
+        3658848,
+        1011,
+        669,
+        2781,
+        8653724
+      ],
+      "heap_failure": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "font_logical_requests": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "music": [
+        1,
+        469956,
+        204240,
+        1783700,
+        1,
+        1,
+        2,
+        0
+      ],
+      "xm_load": [
+        5,
+        1,
+        157250,
+        2975,
+        50,
+        65536,
+        1858952,
+        3050,
+        0,
+        1,
+        0,
+        0
+      ],
+      "code_fingerprints": [
+        {
+          "symbol": "h1_bda_main",
+          "match": true
+        },
+        {
+          "symbol": "_open",
+          "match": true
+        },
+        {
+          "symbol": "pvzp_present_argb",
+          "match": true
+        },
+        {
+          "symbol": "detect_resource_drive",
+          "match": true
+        }
+      ],
+      "desktop": {
+        "job_id": 58,
+        "kind": 2,
+        "state": 3,
+        "error": 0,
+        "menu_idle": 0,
+        "app_index": 101,
+        "entry_count": 33,
+        "return_code": 0,
+        "state_name": "running"
+      },
+      "live_actor_ms": {
+        "74": 2800
+      },
+      "pvzh1_bank_draw_milliseconds": {
+        "21": 950,
+        "49": 900
+      },
+      "pvzh1_bank_read_bytes": {
+        "21": 793285
+      },
+      "pvzh1_bank_read_calls": {
+        "21": 242
+      },
+      "pvzh1_bank_page_misses": {
+        "21": 242
+      },
+      "pvzh1_trig_diagnostic": {
+        "0": 3328,
+        "1": 1814,
+        "2": 1514,
+        "3": 1514
+      },
+      "options": {
+        "pvzh1_options_diagnostic": [
+          1,
+          0,
+          245275,
+          25,
+          125,
+          34,
+          2,
+          7,
+          0,
+          279860,
+          775,
+          0,
+          25
+        ],
+        "pvz_runtime_heap_failure": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "pvzh1_font_logical_request_diagnostic": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "code_fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "match": true
+          },
+          {
+            "symbol": "_open",
+            "match": true
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "match": true
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "match": true
+          }
+        ]
+      },
+      "binary": {
+        "bda_sha256": "713e5f23d92df124708b2e470b63e175b71b14fdc8d73bfdea40e1d973e7bd34",
+        "elf_sha256": "d7a9526b43e352a42c3e57ddfa06abf95c92423267413cd1e0cdcdb5f7ca58d4",
+        "build_receipt_sha256": "6c1c324d7d2942117f103101abeb23f4a83e5ca45c3910578a4d758feee95670",
+        "fingerprints": [
+          {
+            "symbol": "h1_bda_main",
+            "address": "0x83c00020",
+            "size": 48,
+            "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3c90d1bd27e0ffbd271800a8af16fcf80c000000001800bd8f1800bc8f",
+            "sha256": "7c9cafed82a1548088669b730e547f3e493177283ed3e2311e8a7416425fa738"
+          },
+          {
+            "symbol": "_open",
+            "address": "0x83e411c0",
+            "size": 64,
+            "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+            "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+          },
+          {
+            "symbol": "pvzp_present_argb",
+            "address": "0x83e2dd18",
+            "size": 64,
+            "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a00052f9f80c2580c00025984000",
+            "sha256": "2d27dd72537ae51c0fc06bc95c86cea2b8644462435114a6db58fc75493de620"
+          },
+          {
+            "symbol": "detect_resource_drive",
+            "address": "0x83e3f8c0",
+            "size": 64,
+            "expected_hex": "fb83023c409b438c4200601400000000d8ffbd27010003241800b1af1400b0aff083113cfb83103c2400bfaf2000beaf1c00b2af25f0a003c88b24269c801026",
+            "sha256": "4a1d2a251e35c3020d704a959901122b2b9ef1422029768c2722f3f889468799"
+          }
+        ]
+      }
+    }
+  ]
+}

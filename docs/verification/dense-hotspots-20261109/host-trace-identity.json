@@ -1,0 +1,11 @@
+{
+  "host_report": "2f4426bfa0379010723b44e00be6421874b640150b378ecdf3811ff98000d13a",
+  "probe": "fcd27e88b5e2a79ea0027d0300468c63bd98d6dbd570cbf80b3971034fbdb330",
+  "executable": "dbead71543ab225430fa71ad024b8e2fb69e1ae6295aef6dcf7b1a193e89dcdd",
+  "test_linker_wrappers": [
+    "_Z15H1ActorPoseDrawP11ReanimationPN4Sexy8GraphicsEi",
+    "_ZN11Reanimation4DrawEPN4Sexy8GraphicsE",
+    "_ZN11Reanimation15DrawRenderGroupEPN4Sexy8GraphicsEi",
+    "_ZN4Sexy8SWHelper11SWDrawShapeEPNS0_9XYZStructEiPNS_11MemoryImageERKNS_5ColorEiRKNS_5TRectIiEEPviibb"
+  ]
+}

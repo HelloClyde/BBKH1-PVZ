@@ -1,0 +1,53 @@
+{
+  "passed": false,
+  "candidate": "e07bb2508ce5dca8b05b8e667ddddf613a9e62c7f054f6094716d3d9fbc053a1",
+  "runtime": [
+    1347836496,
+    255,
+    12,
+    0,
+    19983544,
+    526,
+    1,
+    66,
+    41,
+    7,
+    25,
+    2210579332,
+    4096,
+    2212591856,
+    0,
+    65536
+  ],
+  "heap": [
+    1211189331,
+    1,
+    19865390,
+    19983544,
+    4096,
+    4127,
+    2176843776,
+    2210398208,
+    2210321768,
+    2210379792,
+    2302,
+    213712,
+    58024,
+    58016,
+    33322304,
+    118,
+    58024,
+    18416,
+    155688,
+    2302
+  ],
+  "definition_retirement": [
+    3,
+    46353,
+    2,
+    41
+  ],
+  "normal_bank_resident": 468496,
+  "boss_draws": 0,
+  "reason": "Unused startup definitions alone insufficient; normal pea/sunflower bank still unconditionally resident on Boss level. Rendering timing remains unmeasured."
+}

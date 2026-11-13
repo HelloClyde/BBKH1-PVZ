@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "sdk_commit": "067fe072477861dfc8949d7b1a55279fb92d2548",
+  "upstream_files": 753,
+  "runtime_files": 2674,
+  "runtime_bytes": 166473603,
+  "prebuilt_sha256": "0dee97150a73efff343b67a519c5ff9160ebbc269b0522d30552755f7707b5d5",
+  "BDA_validation": true,
+  "desktop_title": "植物僵尸",
+  "offline_definitions": 253,
+  "native_repository_inputs_verified": 282,
+  "scope": "Source, resource bytes and tested BDA envelope; not a new hardware test"
+}

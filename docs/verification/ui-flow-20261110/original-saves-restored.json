@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "whole_original_directory_restored": true,
+  "test_archive": "B:\\应用\\数据\\游戏\\PVZ\\userdata.test-ui-v76-1794255927",
+  "files": {
+    "users.dat": {
+      "size": 33,
+      "sha256": "eba5c5d5ebe82f96d9685a5b6c99bb9f8cf8117a486f7d417b5cbc5edb53eca1"
+    },
+    "user1.dat": {
+      "size": 886,
+      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+    },
+    "game1_0.v4": {
+      "size": 39480,
+      "sha256": "5540c956e3a0988440a2bf33310b3e80d5683f0873a2dcc53a6ed1b3b6fed97c"
+    }
+  }
+}

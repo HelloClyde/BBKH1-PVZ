@@ -21,10 +21,10 @@ def actor(data, expected_type, expected_frames, modes):
     assert h[4] == expected_frames and h[5] == 64
     assert h[7] == 64 + h[4] * 24 and h[9] == len(data)
     assert h[10] == zlib.crc32(data[64:]) and h[14] == 0x314d4352
-    assert h[15] in (2, 6, 10)
+    assert h[15] in (2, 6, 10, 258, 770)
     if h[12]:
         assert h[13] == (4 if h[15] == 10 else 89) and h[11] == h[7] + h[6] * 4
-        assert h[8] == h[11] + h[12] * h[13] * 4
+        assert h[8] == h[11] + h[12] * h[13] * (2 if h[15]&512 else 4)
     else:
         assert h[11:14] == (0, 0, 0) and h[8] == h[7] + h[6] * 4
     previous = None
@@ -142,8 +142,33 @@ def verify(resources):
     assert len(raw) == glow['decoded_bytes'] and sha(raw) == glow['decoded_sha256']
     h = actor(raw, 7, glow['frames'], (3,))
     assert h[12] == glow['palette_tuples'] and h[13] == glow['intensities']
+    if glow.get('palette_layout') == 'shade_major_indexed16':
+        from transpose_sunflower_glow import transpose
+        from index_sunflower_glow import compact
+        original = (ROOT / glow['layout_source']).read_bytes()
+        assert sha(original) == glow['layout_source_sha256'] and h[15] == 770
+        expected, verification = compact(transpose(original)[0])
+        assert expected == encoded and verification['color_values_byte_exact'] and verification['geometry_byte_exact']
+        assert sha((ROOT/'tools/index_sunflower_glow.py').read_bytes()) == glow['index_encoder_sha256']
+    elif glow.get('palette_layout') == 'shade_major':
+        encoder = ROOT / 'tools/transpose_sunflower_glow.py'
+        assert sha(encoder.read_bytes()) == glow['layout_encoder_sha256']
+        original = (ROOT / glow['layout_source']).read_bytes()
+        assert sha(original) == glow['layout_source_sha256'] and h[15] == 258
+        start, colors, shades = h[11:14]
+        count = colors*shades
+        before = struct.unpack_from('<'+str(count)+'I', original, start)
+        after = struct.unpack_from('<'+str(count)+'I', raw, start)
+        assert all(after[s*colors+i] == before[i*shades+s]
+                   for i in range(colors) for s in range(shades))
+        assert raw[64:start] == original[64:start]
+        assert raw[start+count*4:] == original[start+count*4:]
     shadow = json.loads((ROOT / 'provenance/offline-plant-shadows.json').read_text())
-    data = (resources / shadow['runtime_path']).read_bytes()
+    if shadow.get('retired'):
+        assert not (resources / shadow['runtime_path']).exists()
+        data = (ROOT / shadow['archive_path']).read_bytes()
+    else:
+        data = (resources / shadow['runtime_path']).read_bytes()
     assert len(data) == shadow['bytes'] and sha(data) == shadow['sha256']
     assert sha((ROOT / 'tools/pack_plant_shadows.py').read_bytes()) == shadow['encoder_sha256']
     assert sha((ROOT / 'tools/pack_plant_poses.py').read_bytes()) == shadow['span_encoder_sha256']
@@ -209,7 +234,7 @@ def verify(resources):
         assert lh[:11] == (0x424c3148, 2, 480, 272, 16, 8, 1, 480 * 272, 64, 64, len(data))
         assert lh[12:] == (0, 0, 0, 0) and zlib.crc32(data[64:]) == lh[11]
         assert sha(data[64:]) == row['source_frame_sha256'] == linear_row['pixels_sha256']
-    return dict(passed=True, plant_banks=len(records), plant_types=50, sunflower_glow_intensities=h[13], ordinary_shadow_poses=shadow['poses'], aligned_ordinary_poses=normal['entries'], ordinary_backgrounds=len(lawns['files']))
+    return dict(passed=True, plant_banks=len(records), plant_types=50, sunflower_glow_intensities=h[13], ordinary_shadow_poses=0 if shadow.get('retired') else shadow['poses'], archived_shadow_poses=shadow['poses'] if shadow.get('retired') else 0, aligned_ordinary_poses=normal['entries'], ordinary_backgrounds=len(lawns['files']))
 
 
 if __name__ == '__main__':

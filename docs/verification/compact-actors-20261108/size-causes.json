@@ -1,0 +1,34 @@
+{
+  "extra_animation_types": 90,
+  "sampled_frames": 18000,
+  "bytes": 337471394,
+  "groups": {
+    "boss": {
+      "bytes": 128427284,
+      "types": 1,
+      "frames": 1583
+    },
+    "credits": {
+      "bytes": 113696013,
+      "types": 19,
+      "frames": 4313
+    },
+    "dave": {
+      "bytes": 22116879,
+      "types": 1,
+      "frames": 531
+    }
+  },
+  "generator": "tools/tests/extra_actor_export.cpp",
+  "confirmed_causes": [
+    "All remaining reanimation definitions included",
+    "Whole definition timeline sampled at authored frames and half frames",
+    "Every track assigned render group zero for capture; independently controllable layers retained",
+    "Generic capture preserves overscan; scene-specific viewport constraints are not applied"
+  ],
+  "not_yet_proven": [
+    "Which playback ranges can be omitted without losing behavior",
+    "Which independently controlled layers can be safely merged for actual scene factories"
+  ],
+  "reader_copy_on_hold": true
+}

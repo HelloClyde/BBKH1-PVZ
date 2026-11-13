@@ -61,6 +61,9 @@ static std::string module_path(const Mix_Music *music){
        order>=0x5e&&order<0x7a&&music->path.size()>=suffix.size()&&
        music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
         return music->path.substr(0,music->path.size()-3)+"-intro.xm";
+    if(order>=0x9e&&order<0xa6&&music->path.size()>=suffix.size()&&
+       music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
+        return music->path.substr(0,music->path.size()-3)+"-boss.xm";
     if(order>=0xdd&&order<0xec&&music->path.size()>=suffix.size()&&
        music->path.compare(music->path.size()-suffix.size(),suffix.size(),suffix)==0)
         return music->path.substr(0,music->path.size()-3)+"-award.xm";
@@ -153,7 +156,7 @@ extern "C" int Mix_VolumeMusicStream(Mix_Music *music,int volume){if(!music)retu
 extern "C" int Mix_VolumeMusic(int volume){int old=global_volume;if(volume>=0)global_volume=std::clamp(volume,0,128);return old;}
 extern "C" int Mix_VolumeMusicGeneral(int volume){return Mix_VolumeMusic(volume);}
 extern "C" int Mix_ModMusicStreamJumpToOrder(Mix_Music *music,int order){
-    if(!music)return -1;int position=order&65535,row=(unsigned)order>>16;
+    if(!music||!music->tracker)return -1;int position=order&65535,row=(unsigned)order>>16;
     music->requested_order=order;
     if(music->tracker&&position==0x98&&row==0){
         close_player(music);
@@ -190,6 +193,13 @@ extern "C" int Mix_ModMusicStreamGetOrder(Mix_Music *music,int *order){
     if(music->title_pcm){*order=0x98;return 0;}if(!music->module)return -1;
     if(music->pending_order){*order=music->requested_order;return 0;}
     xmp_frame_info frame{};xmp_get_frame_info(music->module,&frame);*order=(frame.pos&65535)|((frame.row&65535)<<16);return 0;
+}
+extern "C" int pvzh1_music_seek_pcm_ms(Mix_Music *music,uint32_t milliseconds){
+    if(!music||music->tracker)return -1;
+    if(!music->pcm&&!start_player(music))return -1;
+    const unsigned sample=unsigned(std::min(uint64_t(music->pcm_samples),uint64_t(milliseconds)*16));
+    if(fseek(music->pcm,16+sample*2,SEEK_SET))return -1;
+    music->pcm_position=sample;music->playing=sample<music->pcm_samples;return 0;
 }
 extern "C" int Mix_ModMusicStreamSetChannelVolume(Mix_Music *music,int channel,int volume){
     if(!music||channel<0||channel>=64)return -1;int old=music->channels[channel];music->channels[channel]=std::clamp(volume,0,128);
@@ -234,6 +244,9 @@ static void warm_music_order(int order){
     // The title PCM and in-game XM share the same descriptor in the game.
     // Acquiring its module also works while title PCM is still playing; it
     // does not replace the player or change its current order.
+    // Music uses several descriptors for the same file. The live title player
+    // is not necessarily the first descriptor; retire every menu-only cache
+    // before warming the shared game module.
     for(auto* music:streams)if(music->tracker){
         if(music->title_pcm&&!music->title_streaming&&!music->title_samples.empty()){
             auto path=music->path;auto dot=path.rfind('.');if(dot!=std::string::npos)path.resize(dot);path+="-title.h1pcm";
@@ -244,18 +257,21 @@ static void warm_music_order(int order){
                 music->pcm=file;music->title_streaming=true;music->title_samples.Clear();
             }else if(file)fclose(file);
         }
+        if(!music->title_pcm&&!music->title_samples.busy())music->title_samples.Clear();
+    }
+    for(auto* music:streams)if(music->tracker){
         const int previous=music->requested_order;music->requested_order=order;
         acquire_module(music);music->requested_order=previous;return;
     }
 }
-extern "C" void pvzh1_music_warm_game(){warm_music_order(0);}
+extern "C" void pvzh1_music_warm_game(){warm_music_order(gLawnApp&&gLawnApp->IsFinalBossLevel()?0x9e:0);}
 // Original CutScene uses Pool / Watery Graves at XM order 0x5e.
 // Warm its actual module, rather than loading the unused daytime module too.
 extern "C" void pvzh1_music_warm_intro(){warm_music_order(0x5e);}
 /* Idle title PCM is a useful return-to-menu cache, but less valuable than
  * active game textures if an actual heap allocation needs its span. */
 extern "C" size_t pvzh1_music_release_idle(size_t){
-    for(auto* music:streams)if(!music->playing&&!music->title_pcm&&!music->title_samples.busy()&&!music->title_samples.empty()){
+    for(auto* music:streams)if(!music->title_pcm&&!music->title_samples.busy()&&!music->title_samples.empty()){
         const size_t bytes=music->title_samples.capacity_bytes();
         music->title_samples.Clear();return bytes;
     }

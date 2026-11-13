@@ -34,11 +34,14 @@ volatile uint32_t pvzh1_xmp_load_diagnostic[12];
 extern uint32_t pvzp_ticks_ms(void) __attribute__((weak));
 extern void pvzp_audio_service(void) __attribute__((weak));
 static uint32_t load_ticks(void) { return pvzp_ticks_ms ? pvzp_ticks_ms() : 0; }
+/* Module loading/rendering is serialized on the foreground thread. Reuse a
+ * small, non-owning FILE buffer without occupying the heap's large sample
+ * holes. fclose finishes using it before another module can be loaded. */
+static char module_read_buffer[16384];
 
 static int load_buffered_module(struct context_data *ctx, const char *path)
 {
     FILE *input;
-    char *buffer;
     int result;
     uint32_t started;
     pvzh1_xmp_load_diagnostic[0] = 1;
@@ -48,15 +51,9 @@ static int load_buffered_module(struct context_data *ctx, const char *path)
         return -XMP_ERROR_SYSTEM;
     }
     pvzh1_xmp_load_diagnostic[0] = 2;
-    /* The FILE owns no part of this user-supplied buffer. Keep it alive until
-     * fclose, after libxmp's documented non-owning FILE wrapper is destroyed.
-     * At most 64KiB extra RAM; no second whole-XM copy or decoding changes. */
-    buffer = (char *)malloc(65536u);
-    if (buffer && setvbuf(input, buffer, _IOFBF, 65536u) != 0) {
-        free(buffer);
-        buffer = NULL;
-    }
-    pvzh1_xmp_load_diagnostic[5] = buffer ? 65536u : 0;
+    pvzh1_xmp_load_diagnostic[5] =
+        setvbuf(input, module_read_buffer, _IOFBF, sizeof(module_read_buffer)) == 0
+        ? (uint32_t)sizeof(module_read_buffer) : 0;
     pvzh1_xmp_load_diagnostic[0] = 3;
     started = load_ticks();
     result = xmp_load_module_from_file((xmp_context)ctx, input, 0);
@@ -64,7 +61,6 @@ static int load_buffered_module(struct context_data *ctx, const char *path)
     pvzh1_xmp_load_diagnostic[6] = ctx->m.size > 0 ? (uint32_t)ctx->m.size : 0;
     fclose(input);
     pvzh1_xmp_load_diagnostic[9] = pvzh1_xmp_load_diagnostic[9] + 1;
-    free(buffer);
     pvzh1_xmp_load_diagnostic[10] = (uint32_t)result;
     return result;
 }

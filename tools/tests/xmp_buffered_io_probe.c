@@ -1,4 +1,4 @@
-/* Actual shared-XM loader: FILE ownership, fallback and original-player PCM. */
+/* Actual shared-XM loader: reused static FILE buffer ownership and original-player PCM. */
 #include "xmp_shared.h"
 #include "../../vendor/libxmp/src/common.h"
 #include <stdio.h>
@@ -9,8 +9,8 @@
 extern volatile uint32_t pvzh1_xmp_load_diagnostic[12];
 static FILE *tracked;
 static void *tracked_buffer;
-static int observing,fail_buffer,fail_setvbuf,installed;
-static unsigned opens,closes,buffer_requests,buffer_frees,setvbuf_calls;
+static int observing,fail_setvbuf,installed;
+static unsigned opens,closes,buffer_frees,setvbuf_calls;
 static unsigned reads,seeks,zero_cur_seeks,byte_reads,scan_calls;
 static unsigned long long read_bytes;
 static uint32_t scan_ms;
@@ -20,21 +20,15 @@ int __real_setvbuf(FILE *,char *,int,size_t);
 FILE *__real_fopen(const char *,const char *);int __real_fclose(FILE *);
 size_t __real_fread(void *,size_t,size_t,FILE *);int __real_fseek(FILE *,long,int);int __real_fgetc(FILE *);
 int __real_libxmp_scan_sequences(struct context_data *);
-void *__wrap_malloc(size_t n){
-    void *p;
-    if(observing&&n==65536u&&!buffer_requests){
-        ++buffer_requests;if(fail_buffer)return NULL;
-        p=__real_malloc(n);tracked_buffer=p;return p;
-    }
-    return __real_malloc(n);
-}
+void *__wrap_malloc(size_t n){return __real_malloc(n);}
 void __wrap_free(void *p){
-    if(p&&p==tracked_buffer){CHECK(!installed||!tracked);++buffer_frees;tracked_buffer=NULL;}
+    if(p&&p==tracked_buffer){++buffer_frees;CHECK(0);}
     __real_free(p);
 }
 int __wrap_setvbuf(FILE *f,char *p,int mode,size_t n){
     if(observing&&f==tracked){
-        ++setvbuf_calls;CHECK(p==tracked_buffer&&mode==_IOFBF&&n==65536u);
+        ++setvbuf_calls;CHECK(p&&mode==_IOFBF&&n==16384u);
+        if(tracked_buffer)CHECK(p==tracked_buffer);else tracked_buffer=p;
         if(fail_setvbuf)return -1;
         {int result=__real_setvbuf(f,p,mode,n);if(!result)installed=1;return result;}
     }
@@ -65,8 +59,8 @@ int __wrap_libxmp_scan_sequences(struct context_data *ctx){
     return result;
 }
 static void begin(int mode){
-    CHECK(!tracked&&!tracked_buffer);observing=1;fail_buffer=mode==1;fail_setvbuf=mode==2;installed=0;
-    opens=closes=buffer_requests=buffer_frees=setvbuf_calls=0;
+    CHECK(!tracked);observing=1;fail_setvbuf=mode==1;installed=0;
+    opens=closes=buffer_frees=setvbuf_calls=0;
     reads=seeks=zero_cur_seeks=byte_reads=scan_calls=scan_ms=0;read_bytes=0;
 }
 static void compare(xmp_context reference,xmp_context candidate){
@@ -97,20 +91,20 @@ int main(int argc,char **argv){
         pvzh1_xmp_module *module;xmp_context player;uint32_t payload;unsigned prior_close;
         begin((int)mode);prior_close=pvzh1_xmp_load_diagnostic[9];
         module=pvzh1_xmp_module_load(argv[1]);observing=0;CHECK(module);
-        CHECK(opens==1&&closes==1&&!tracked&&!tracked_buffer&&buffer_requests==1);
-        CHECK(buffer_frees==(mode==1?0u:1u)&&setvbuf_calls==(mode==1?0u:1u));
+        CHECK(opens==1&&closes==1&&!tracked&&tracked_buffer);
+        CHECK(buffer_frees==0&&setvbuf_calls==1);
         CHECK(pvzh1_xmp_load_diagnostic[0]==5&&pvzh1_xmp_load_diagnostic[9]==prior_close+1);
-        CHECK(pvzh1_xmp_load_diagnostic[5]==(mode?0u:65536u));
+        CHECK(pvzh1_xmp_load_diagnostic[5]==(mode==1?0u:16384u));
         CHECK(pvzh1_xmp_load_diagnostic[6]>0&&!pvzh1_xmp_load_diagnostic[10]);
         payload=pvzh1_xmp_module_payload_hash(module);if(!mode)expected=payload;CHECK(payload==expected);
         player=pvzh1_xmp_module_create_player(module);CHECK(player);compare(reference,player);
         printf("%s{\"mode\":%u,\"buffer_bytes\":%u,\"file_bytes\":%u,\"fread_calls\":%u,\"fread_payload_bytes\":%llu,\"fgetc_calls\":%u,\"fseek_calls\":%u,\"zero_current_seeks\":%u,\"scan_calls\":%u,\"host_scan_ms\":%u,\"pcm_order_blocks_equal\":800}",
-            mode?",":"",mode,mode?0u:65536u,(unsigned)pvzh1_xmp_load_diagnostic[6],reads,read_bytes,byte_reads,seeks,zero_cur_seeks,scan_calls,scan_ms);
+            mode?",":"",mode,mode==1?0u:16384u,(unsigned)pvzh1_xmp_load_diagnostic[6],reads,read_bytes,byte_reads,seeks,zero_cur_seeks,scan_calls,scan_ms);
         pvzh1_xmp_module_free_player(player);pvzh1_xmp_module_free(module);
     }
     begin(0);CHECK(!pvzh1_xmp_module_load("build/xmp-buffered-io-test/nonexistent.xm"));observing=0;
-    CHECK(!opens&&!closes&&!tracked&&!tracked_buffer&&pvzh1_xmp_load_diagnostic[0]==6);
+    CHECK(!opens&&!closes&&!tracked&&buffer_frees==0&&pvzh1_xmp_load_diagnostic[0]==6);
     begin(0);CHECK(!pvzh1_xmp_module_load(argv[2]));observing=0;
-    CHECK(opens==1&&closes==1&&buffer_frees==1&&!tracked&&!tracked_buffer&&pvzh1_xmp_load_diagnostic[0]==6);
-    xmp_free_context(reference);puts("],\"missing_and_invalid_file_closed\":true,\"all_passed\":true}");return 0;
+    CHECK(opens==1&&closes==1&&buffer_frees==0&&!tracked&&tracked_buffer&&pvzh1_xmp_load_diagnostic[0]==6);
+    xmp_free_context(reference);puts("],\"static_buffer_reused_and_never_freed\":true,\"missing_and_invalid_file_closed\":true,\"all_passed\":true}");return 0;
 }

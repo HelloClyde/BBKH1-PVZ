@@ -1,6 +1,6 @@
 {
-  "bytes": 5237764,
-  "sha256": "6bfce8616b8c2f8fb220bdea6457a6a299b74ea1f2e1d79fd975ab3c516927f2",
+  "bytes": 2893827,
+  "sha256": "f210a7383d2f489ea628e8efe08af3d850ee58dfbe131f7a5f1b0e3ecd9723b4",
   "entry_count": 120,
   "runs": 162753,
   "pixels": 819966,
@@ -1725,5 +1725,12 @@
     "all_payloads_byte_exact": true
   },
   "offline_expander_sha256": "a1c31f70091948bba97680ad6b7cb03079df438601136945b7b97c94653ca22c",
-  "runtime_codec": "uncompressed original fragments"
+  "runtime_codec": "uncompressed original fragments",
+  "runtime_packaging": {
+    "encoder": "tools/compress_menu_bundles.py",
+    "encoder_sha256": "867141cc4b3ada2f92e353654c75c2064a4ed934d7d8df1a1fcfc1fb1f896611",
+    "uncompressed_sha256": "6bfce8616b8c2f8fb220bdea6457a6a299b74ea1f2e1d79fd975ab3c516927f2",
+    "all_payloads_byte_exact": true,
+    "hand_frames": "Compressed in RAM; expand only the displayed frame"
+  }
 }

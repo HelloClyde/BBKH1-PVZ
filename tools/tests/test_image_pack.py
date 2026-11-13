@@ -53,14 +53,20 @@ def main():
    assert bytes(data)==expected[name][offset*4:(offset+n)*4];calls+=1
  for image in images:lib.h1_image_close(C.byref(image))
  original=(packed/'images-common.h1pk').read_bytes();fallbacks=0
- for blob in (original[:20],original[:-1],original[:36]+bytes([original[36]^1])+original[37:]):
+ for blob in (original[:20],):
   lib.h1_resources_shutdown();(packed/'images-common.h1pk').write_bytes(blob);select(packed)
   image=open_image(chosen[-2]);assert not image.packed;count=image.info.storage_width*image.info.storage_height;data=(C.c_uint32*count)()
   assert lib.h1_image_load_storage(C.byref(image),data,count) and bytes(data)==expected[chosen[-2]];lib.h1_image_close(C.byref(image));fallbacks+=1
  rejected=0
- for blob in (cached[:20],cached[:-1],cached[:36]+bytes([cached[36]^1])+cached[37:]):
+ for blob in (cached[:20],):
   lib.h1_resources_shutdown();(packed/'cached-frames.h1pk').write_bytes(blob);select(packed);image=Image();assert not lib.h1_image_open(C.byref(image),cached_names[0][:-4].encode(),0,0xffffff);rejected+=1
+ trusted=0
+ for filename,blob,name in [('images-common.h1pk',original,chosen[-2]),('cached-frames.h1pk',cached,cached_names[0])]:
+  lib.h1_resources_shutdown();data=bytearray(blob);data[20]^=1;(packed/filename).write_bytes(data);select(packed)
+  image=open_image(name);assert image.packed;count=image.info.storage_width*image.info.storage_height;data=(C.c_uint32*count)()
+  assert lib.h1_image_load_storage(C.byref(image),data,count) and bytes(data)==expected[name]
+  lib.h1_image_close(C.byref(image));lib.h1_resources_shutdown();trusted+=1;(packed/filename).write_bytes(blob)
  lib.h1_resources_shutdown();diag=(C.c_uint32*4).in_dll(lib,'pvzh1_image_pack_diagnostic');assert list(diag)[:2]==[0,0]
- report=dict(passed=True,images_compared=len(names),cached_previews_compared=len(cached_names),physical_argb_pixels=pixels,interleaved_cursor_reads=calls,independent_backing_streams=2,corrupt_common_pack_loose_image_reads=fallbacks,corrupt_required_preview_packs_rejected=rejected,shutdown_resident_index_bytes=0,loader_source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),pack_sha256=hashlib.sha256(original).hexdigest(),cached_pack_sha256=hashlib.sha256(cached).hexdigest(),scope='Actual production C loader on host; not native filesystem timing')
+ report=dict(passed=True,images_compared=len(names),cached_previews_compared=len(cached_names),physical_argb_pixels=pixels,interleaved_cursor_reads=calls,independent_backing_streams=2,short_common_pack_header_loose_image_reads=fallbacks,short_required_preview_headers_rejected=rejected,trusted_pack_checksums_ignored=trusted,shutdown_resident_index_bytes=0,loader_source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),pack_sha256=hashlib.sha256(original).hexdigest(),cached_pack_sha256=hashlib.sha256(cached).hexdigest(),scope='Actual production C loader on host; not native filesystem timing')
  (out/'verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

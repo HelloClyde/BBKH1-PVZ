@@ -22,7 +22,7 @@ extern "C" void pvzh1_regular_lawn_probe(){
  auto* screen=gLawnApp->mGLInterface->GetScreenImage();auto* target=H1GetPhysicalScreen(screen)->Target();auto* pixels=target->GetBits();
  unsigned comparisons=0,retained=0,replays=0,guards=0;
  for(int level:{6,11,21,31,41,50}){
-  profile.mLevel=level;H1EarlyLawnTestEnable(true);gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);auto* board=gLawnApp->mBoard;board->mX=130;board->mY=0;board->mSodPosition=1000;H1EarlyLawnPrepare(board);
+  profile.mLevel=level;H1EarlyLawnTestEnable(true);gLawnApp->PreNewGame(GAMEMODE_ADVENTURE,false);auto* board=gLawnApp->mBoard;board->mX=130;board->mY=0;board->mSodPosition=1000;H1EarlyLawnPrepare(board,true);
   Check(pvzh1_early_lawn_diagnostic[0],"regular background did not preload");
   auto draw=[&](){Graphics g(screen);g.Translate(130,0);board->DrawBackdrop(&g);};
   std::vector<uint32_t> base;
@@ -41,7 +41,7 @@ extern "C" void pvzh1_regular_lawn_probe(){
   for(unsigned kind=0;kind<3;++kind){Graphics g(screen);g.Translate(130,0);if(kind==0)g.mLinearBlend=false;if(kind==1)g.mColorizeImages=true;if(kind==2)g.ClipRect(1,1,700,500);Check(!H1EarlyLawnDraw(board,&g),"unsupported background state was replayed");++guards;}
  }
  const auto originalFolder=GetResourceFolder();const auto bad=std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"missing-lawn";std::filesystem::create_directory(bad);
- pvzh1_early_lawn_shutdown();SetResourceFolder(bad.string());Check(!H1EarlyLawnPrepare(gLawnApp->mBoard),"missing required lawn accepted");Check(!pvzh1_early_lawn_diagnostic[0],"failed lawn retained memory");SetResourceFolder(originalFolder);
+ pvzh1_early_lawn_shutdown();SetResourceFolder(bad.string());Check(!H1EarlyLawnPrepare(gLawnApp->mBoard,true),"missing required lawn accepted");Check(!pvzh1_early_lawn_diagnostic[0],"failed lawn retained memory");SetResourceFolder(originalFolder);
  gLawnApp->KillBoard();pvzh1_early_lawn_shutdown();Check(!pvzh1_early_lawn_diagnostic[0],"background shutdown leaked");gLawnApp->mPlayerInfo=old;
  std::ofstream out(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"regular-lawn-reader-verification.json");out<<"{\"passed\":true,\"backgrounds\":6,\"whole_frame_comparisons\":"<<comparisons<<",\"offline_replays\":"<<replays<<",\"retained_damage_frames\":"<<retained<<",\"state_guards\":"<<guards<<",\"pool_water_and_other_overlays_match\":true,\"shutdown_bytes\":0}\n";
 }

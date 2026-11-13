@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "level": 1,
+  "zombie_id": 65929220,
+  "new_native_spawn": true,
+  "clock_hz": 40,
+  "ticks": [
+    438523,
+    438572
+  ],
+  "age": [
+    16,
+    138
+  ],
+  "x": [
+    777.0934448242188,
+    758.8297119140625
+  ],
+  "animation_time": [
+    0.07692525535821915,
+    0.5015520453453064
+  ],
+  "animation_rate": [
+    14.461949348449707,
+    14.461949348449707
+  ],
+  "plants": 2,
+  "game_RAM_written_by_test": false
+}

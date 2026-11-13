@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "comparisons": 589188,
+  "accepted": 344808,
+  "rejected": 244380,
+  "outside_legacy_body_domain": 708,
+  "scope": "Existing actor/sun bank body keys, visible draw groups, hidden unmodified zombie hats. Visible/damaged hat layers are outside the old bank and have their own pixel replay tests.",
+  "identity": {
+    "host_report": "49c7a725863b43b439adedc682a0f94b212d1da1d6aad6ef7149acfd2338a782",
+    "probe": "2849ed6be1693a314d8229bd7ef6cb35ac8d0b58f0a178516a2b792996966f16",
+    "executable": "db12fd6e9ddc45bb57376beef7391cdb4bbde2b4fcb75d91cb7026fc4c86e760",
+    "test_linker_wrappers": []
+  },
+  "historical_harness_attempt": "The older board-creating harness exited with host access violation before producing results in main-v78-actor-signatures. This direct-animation-object harness avoids that unrelated board setup and checks the authored legacy body domain."
+}

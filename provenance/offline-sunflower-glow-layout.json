@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "original_bytes": 649024,
+  "bytes": 382469,
+  "source_sha256": "b3217bd20b6c00f617fbc8cc032e94117829555ee18ca970ade72a51c08682f9",
+  "sha256": "e7905085c7cfb00e8f5877ff5e50557f5de3ee3edc7d9a20a48ff7a280b3d98a",
+  "decoded_sha256": "8488e4276f4096d5ddcb62b42bccb443e86188e0623e4891bdd9755a36d31774",
+  "decoded_bytes": 649024,
+  "colors": 1384,
+  "shades": 89,
+  "palette_values": 123176,
+  "reverse_layout_byte_exact": true,
+  "pixel_streams_unchanged": true,
+  "encoder_sha256": "5cc14113cb5a656732e466f0f472a0a508b2c5f211f719d26a73aa643ce64690"
+}

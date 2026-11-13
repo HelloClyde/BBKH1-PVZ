@@ -1,0 +1,13 @@
+{
+  "policy": "Only physically measured slow animations are pre-rendered; unmeasured extra actors use source renderer",
+  "enabled_generic_extra_banks": [],
+  "shipped_bytes": 0,
+  "excluded_experimental_types": 90,
+  "excluded_experimental_bytes": 337471394,
+  "pole_preview": {
+    "resource": "zombie-poses.h1pp",
+    "scope": "Measured slow level-6 idle preview only; other actions remain live"
+  },
+  "native_realtime_validation": "Partial: level6 and first Boss Dave greeting passed; Boss battle failed memory/performance. No generic banks enabled.",
+  "evidence": "docs/H1-SELECTIVE-ANIMATIONS-20261108.md"
+}

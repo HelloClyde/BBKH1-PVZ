@@ -1,158 +1,192 @@
 {
-  "passed": true,
-  "scope": "本版物理 H1：完整新玩家开场全段约23FPS、滚动段25.05FPS，保留原时轴与音乐音效；第一关触摸种植、僵尸及子弹、选项、回菜单、B盘V4存档读回、正常退出和原存档恢复均通过。未重测密集植物场景，不认证所有游戏场景20FPS。",
+  "date": "2026-11-13",
+  "scope": "Opening cache allocation and Choose Player -> Delete Player responsiveness on physical H1.",
   "program": {
-    "passed": true,
-    "bda_sha256": "f74f2f0a902b8267c82e759d80c94e29cb88143a4248a9618fab7c78d01dc1cc",
-    "elf_sha256": "a4b0ff7debde424abc15fb481e6229bf2d8edf98a405863eef919a86cf50dafa",
-    "bda_bytes": 3667588,
-    "build_receipt_sha256": "f10d04b13556633c4ec260b7ade5de51f49ec1ee626e5e1d018ab4e4540e4271",
-    "source_identity_verified": true,
-    "compiled_sources": 191,
+    "bda_sha256": "0dee97150a73efff343b67a519c5ff9160ebbc269b0522d30552755f7707b5d5",
+    "elf_sha256": "03cf7e0149abba980c2b14e8c407bd138356283f7e6d65d5df74b44cee395a81",
+    "bytes": 3756444,
+    "compiled_sources": 193,
     "device_upload_crc_verified": true,
-    "live_code_fingerprints": 4,
-    "tested_build_receipt_sha256": "8dd49cab45bf42a978d3970b4e918383c2c7a0f8ab48928a7b7d8a8f76090bb9",
-    "byte_equivalent_rebuild": "docs/verification/intro-offline-20261107/byte-equivalent-rebuild.json"
-  },
-  "intro_playback": {
+    "gp_tls_audit": true,
+    "source_identity": {
+      "passed": true,
+      "count": 145,
+      "bda_sha256": "0dee97150a73efff343b67a519c5ff9160ebbc269b0522d30552755f7707b5d5"
+    },
     "passed": true,
-    "whole_unique_output_frames": 322,
-    "whole_wall_ms": 14000,
-    "whole_fps": 23.0,
-    "pan_distinct_output_frames": 114,
-    "pan_elapsed_ticks": 182,
-    "pan_fps": 25.054945054945055,
-    "raw_clock_hz": 40,
-    "original_natural_end_ms": 13890,
-    "pan_audio_underruns": 0,
-    "original_music_player_active": true,
-    "warmed_effects": 2,
-    "warmed_effect_bytes": 325116,
-    "peak_movie_bytes": 10290256,
-    "movie_bytes_after_handoff": 0,
-    "intermediate_ARGB_expansions": 0,
-    "native_LCD_pixels_equal_baked_frame": 265,
-    "game_RAM_written": false,
-    "scope": "Output frames counted after native LCD writes, distinct baked frame indices; pan sampled at cutscene 6000..10600ms before screenshot download. Whole duration from device callbacks. No all-scene FPS claim."
+    "build_receipt_sha256": "586ddf1d6960aed125d28e1547f55f2b0012ffa3f84e98912c0345faade5fa72"
   },
-  "first_level": {
-    "passed": true,
-    "max_live_zombies": 1,
-    "max_live_projectiles": 1,
-    "max_live_plants": 2,
-    "host_seconds": 16.015999999945052,
-    "game_RAM_written": false,
-    "scope": "Physical H1 original first-level logic, live entity reads and ordinary touches; no atomic snapshot or FPS claim",
-    "natural_intro_and_sod_preserved": true,
-    "entered_scene_playing": true,
-    "options_opened": true,
-    "wave_clearance_retested": false,
-    "atomic_entity_snapshot_claimed": false,
-    "termination_diagnostic": [
-      0,
-      0,
-      0,
-      0
+  "opening": {
+    "change": "Retire reconstructible image pixels before movie allocation; 16 KiB read-ahead pages, unchanged 9 MiB cache capacity and 348-frame movie.",
+    "root_cause_evidence": "Retained V77 allocation failure: 2,726,820 bytes aggregate free; largest 102,492 bytes was the heap tail. A 65,567-byte raw request plus the 65,536-byte SDK tail reserve could not fit; other holes were too small.",
+    "actual_native_UI_players": [
+      "Hhh",
+      "Jjj"
+    ],
+    "same_process": true,
+    "first_path": "Resume level 6, return to menu, create Hhh and start Adventure.",
+    "second_path": "Return from Hhh first level, create Jjj and start Adventure.",
+    "tests": [
+      {
+        "passed": true,
+        "page_bytes": 16384,
+        "cache_capacity_bytes": 9437184,
+        "resident_image_bytes_before": 1467215,
+        "resident_image_bytes_after": 0,
+        "allocated_pages": 576,
+        "allocation_failures": 0,
+        "natural_intro_end_ms": 13890,
+        "cache_bytes_after": 0
+      },
+      {
+        "passed": true,
+        "page_bytes": 16384,
+        "cache_capacity_bytes": 9437184,
+        "resident_image_bytes_before": 1700351,
+        "resident_image_bytes_after": 0,
+        "allocated_pages": 576,
+        "allocation_failures": 0,
+        "natural_intro_end_ms": 13890,
+        "cache_bytes_after": 0
+      }
+    ],
+    "evidence": [
+      "warm-first-opening.json",
+      "warm-second-opening.json"
     ]
   },
-  "native_written_V4": {
-    "passed": true,
-    "bytes": 47752,
-    "sha256": "04309c226c654b7d1a450d6e2add2393ab00c3ec10ca7581f6807a71cdda90cd",
-    "header": "PVZP_SAVE4",
-    "version": 1,
-    "exact_payload_length": true,
-    "payload_crc32": 1094585814,
-    "native_B_write_and_debug_readback_valid": true
+  "delete": {
+    "change": "Enumerate actual owned files, close directory cursor, queue deletion and roster write in FIFO order; start deletion after the updated screen is presented.",
+    "old_per_mode_attempts": 147,
+    "baseline_seconds_to_observed_new_profile": 7.875,
+    "candidate_callback_ms": 125,
+    "candidate_first_presented_ms": 325,
+    "measurement_note": "Baseline is PC sampling after confirmation ACK; candidate uses device ticks from confirmation callback to first presented changed list (25 ms tick granularity). Comparison is approximate.",
+    "entries_scanned": 6,
+    "files_removed": 2,
+    "file_errors": 0,
+    "unrelated_user_files_preserved": true,
+    "audio_counter_delta": [
+      0,
+      0
+    ],
+    "evidence": "candidate-delete.json"
   },
-  "ordinary_exit": {
-    "passed": true,
+  "validation": {
+    "host_engine": {
+      "passed": true,
+      "opening_frames": 348,
+      "movie_page_bytes": 16384,
+      "movie_page_allocations": 576,
+      "forbidden_later_64k_allocations": 0,
+      "idle_image_bytes_before": 262148,
+      "idle_image_bytes_after": 0,
+      "profile_and_legacy_temp_files_removed": true,
+      "other_profile_preserved": true,
+      "scope": "Host original engine; native timing and scheduling tested separately",
+      "executable_sha256": "cb980cd9c70c47ccf0d6f9011ae3d9d70c413014d1e40b0271a336ee55da7318",
+      "probe_sha256": "f1cb56df1dc8596739b77f9508d8b6f7fa89f7379fb56b2e8a9f57e2cd39e5e7",
+      "compile_report_sha256": "49c7a725863b43b439adedc682a0f94b212d1da1d6aad6ef7149acfd2338a782"
+    },
+    "old_64k_reference": {
+      "passed": true,
+      "reference_64k_page_allocation_failed_as_expected": true,
+      "message": "read-ahead page",
+      "executable_sha256": "31ff3a762668ba8ddb6389be1f800e25b68755aa2c40289c2fad2f102ecc3fcc",
+      "probe_sha256": "f1cb56df1dc8596739b77f9508d8b6f7fa89f7379fb56b2e8a9f57e2cd39e5e7",
+      "compile_report_sha256": "49c7a725863b43b439adedc682a0f94b212d1da1d6aad6ef7149acfd2338a782"
+    },
+    "delete_worker": {
+      "passed": true,
+      "stdout": "PASS: pending save -> exact-profile delete -> latest roster; no resurrection; uppercase/legacy/temp files removed; other IDs preserved\n",
+      "stderr": "",
+      "source_sha256": "fc268d8cac3f375474b975f63e288b0318212ffe13545043597869cc5451f0b4",
+      "scope": "Host real files and production SDK-worker functions; no RTOS performance claim"
+    },
+    "atomic_save_failures": {
+      "passed": true,
+      "source_sha256": "fc268d8cac3f375474b975f63e288b0318212ffe13545043597869cc5451f0b4",
+      "stdout": "PASS: short write, open/close/install failure preserve original; interrupted backup recovered; replacement and identical skip\n",
+      "stderr": "",
+      "scope": "Host real files; mocked SDK boundary. Native task separately tested."
+    },
+    "full_repository_verifier": {
+      "passed": true,
+      "evidence": "docs/verification/intro-delete-20261113/repository-check.json",
+      "native_repository_inputs_verified": 282
+    },
+    "ci_unit_tests": {
+      "passed": true,
+      "release_bundle_tests": 10,
+      "intro_frame_tests": 5,
+      "commands": [
+        "python -m unittest discover -s tools/tests -p test_release_bundle.py -v",
+        "python -m unittest discover -s tools/tests -p test_intro_frames.py -v"
+      ]
+    },
+    "offline_metadata_rebuild": "docs/verification/intro-delete-20261113/offline-metadata-rebuild.json",
+    "legacy_body_signature": "docs/verification/intro-delete-20261113/actor-legacy-body-compatibility.json"
+  },
+  "exit": {
     "return_code": 0,
-    "heap_bytes": 0,
-    "native_charge_bytes": 0,
-    "gLawnApp": 0
+    "async_jobs_completed": 10,
+    "write_errors": 0,
+    "pending_jobs": 0,
+    "worker_payload_bytes": 0,
+    "worker_task_removed": true,
+    "original_irq_callback_restored": true
   },
-  "original_saves": {
+  "originals_restored": {
     "passed": true,
+    "whole_original_directory_restored": true,
     "files": {
       "users.dat": {
-        "bytes": 19,
-        "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
-        "exact_original_bytes": true
+        "size": 45,
+        "sha256": "94aa334b2236950e668a607763af35df34fd4ce2a748e2eeb54bb685dc0285a5"
       },
       "user1.dat": {
-        "bytes": 886,
-        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
-        "exact_original_bytes": true
+        "size": 886,
+        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+      },
+      "game1_0.v4": {
+        "size": 39480,
+        "sha256": "5540c956e3a0988440a2bf33310b3e80d5683f0873a2dcc53a6ed1b3b6fed97c"
+      },
+      "game3_0.v4": {
+        "size": 85353,
+        "sha256": "afd9d598ea149e0838b09b0aa9c4fcce3588986302776057cbdc9605960698c5"
+      },
+      "user3.dat": {
+        "size": 886,
+        "sha256": "a57d54daa985e6bbd2400d95185e6d50d75441b1ef037adbd9bf91e77191f69d"
+      },
+      "h1-audio.dat": {
+        "size": 6,
+        "sha256": "ef848f85e0de2a2de770cf263b6ff76f5ee680ac29b0a743e4305af67fe25084"
       }
     },
-    "test_V4_removed": true,
-    "restored_userdata_names": [
-      "user1.dat",
-      "users.dat"
+    "test_archive": "B:\\应用\\数据\\游戏\\PVZ\\userdata.test-id78-1794530808"
+  },
+  "device": {
+    "identity": "H1DEBUG/1 V1.41 RESIDENT",
+    "screen": [
+      480,
+      272
     ],
-    "temporary_directories_removed": true,
-    "obsolete_h264_and_benchmark_removed": true,
-    "debugger_left_running": true,
-    "normal_exit_heap_and_native_charge_zero": true
+    "debugger_remains_running": true,
+    "serial_closed": true
   },
   "resources": {
-    "runtime_manifest_sha256": "66f5f9876676e4998a1757d20f9f86ec4b2a8aaf193e27eb2c0d251b3d01a7e0",
-    "files": 2757,
-    "bytes": 155445398,
-    "this_test_resource_drive": "B",
-    "scope": "New opening and compact intro music uploaded with device CRC receipts; new immutable file index verified. Unchanged resource transfers reused, not a new full-card readback."
+    "changed": false,
+    "bytes": 166473603,
+    "files": 2674
   },
-  "device": "Physical BBK H1 / Y100 V1.41",
-  "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
-  "resident_image_id": "71a0983b",
-  "resident_identity_scope": "Previously verified resident image; no H1Debug update in this task. Current handshake/caps and USB diagnostics recorded.",
-  "physical": [
-    480,
-    272
-  ],
   "limitations": [
-    "Pan FPS is a fixed moving 4.55-second interval; whole-opening average is separately recorded.",
-    "Audio underrun comparison covers the moving interval.",
-    "Current first-level smoke test exercised two plants, a live zombie and a projectile; full four-wave clearance is preserved as beta.2 history.",
-    "Dense40-plant timings from v33 were not repeated for this BDA.",
-    "Some interactive dynamic affine states still use existing rendering."
+    "The exact user interaction preceding the retained V77 failure was not observed; the allocation mechanism was reproduced by a host block-allocation constraint and two warm native new-player openings passed. This is a bounded regression test, not proof of every possible long-session allocation pattern.",
+    "No new dense-gameplay FPS or general startup-time claim."
   ],
-  "previous_native_verification": "docs/verification/history/first-level-beta2-20261107.json",
-  "evidence_directory": "docs/verification/intro-offline-20261107",
-  "host_verification": "docs/verification/intro-offline-20261107/host-playback.json",
-  "debugger_left_running": true,
-  "evidence": {
-    "baseline.json": "10c2d3850e64087d067a649a6728b801f728374c864130ce6a391f6fb948dca2",
-    "device-final.json": "fb60da70b8d20e2377435d55ba9d6a5f018d166faa6b44638c8e1f2c6bc1c297",
-    "device-fingerprints.json": "373a9e6efe081bf6ff1b47f4349fb2c89e7a3a594a87acff865534f31122b798",
-    "device-symbols.json": "f90904147ae1c6955e278746b424f1f0193dd6b891fb93c937454cd5089933be",
-    "entered-playing.json": "eb713ae7d88379e8bd442d65a0899e154d90ad8836e33f5c474a26ef2021ca1d",
-    "first-battle.json": "89d0ce2a49d64c45f3a44761d065a6858dbfa69dcc900961d3bd849d06319e84",
-    "first-battle.png": "a0f7eb16bb5f69cf61259dc8530bd5def178f830f78492637c82d5bc5b699ad6",
-    "first-level.png": "91b5e8e506c4a9f7324258261ed45338688cd515bff682d04a15846c4cff9dad",
-    "frame-core-before-word-copy.json": "67dc1a9d23db574c51e2030a84e82737b062d6f0a3a1eacccb92a2c28bfb9300",
-    "frames-upload.json": "b2488a14a85328b239cd704ab9f2887b54c3178e1eb8c707edc97a597ef12ad4",
-    "h264-pure-c-o2.json": "94f60a57270ebb41ccaf61f60c5bf2f788c4e82a727033039410165d85322988",
-    "h264-pure-c.json": "8dec1f34895b220e906e2fe6f76290aba8f3e7b2ea8507def1b0ae3312c383a3",
-    "host-playback.json": "b8fe1baec260afb79bbbddc83e0f6cbcab582349394351836915d3c448e7d442",
-    "intro-music-upload.json": "2fc10574a31d71b6da751e9b92788f0d517c262d3a01fc51c390f369bec7892b",
-    "intro-music.json": "76f953827ae38cf296bbf60d2c88b8f3232af3caab0b8223dea2a0058c85882d",
-    "intro-pan.png": "01c9d54ca56f40ddde088ebf75c427e18706f06341f8dae9203e6502dc2f7640",
-    "native-desktop.png": "cf02ca062e4d5d8161a5f5e2fabfbd154a9949d768e27407e38fcca58cc03261",
-    "native-intro-events.json": "fd20305277eb900d642125e5ffe1cb496041b2d5457fdbc7efaedc13d1afd868",
-    "native-intro.json": "282a4f2e267945de51e28e8eabee95c7cc13b2993a29df53a7b167ef34167a86",
-    "native-pixel-comparison.json": "bdbfbe69499cbf40d276bc376c4c3e1483b6b1e6f8c7da61ca2e56a3c0db467d",
-    "native-save.json": "62a844964c01bd309e9645029b1051e56822c01c229a28bc5e773293e4d35082",
-    "normal-exit.json": "c92f9c0dc00c817cb39adcd19484381f31fa511f658270dec0044f8bbfb2863b",
-    "offline-export.json": "c370c4f4bfc5c65cb413b0839c34c83625bd02030be486a7586a76987807612c",
-    "options-state.json": "d1b2bc6161980ec715e0e127bde9eae516fde64a99b043bbc353a195fee7fb70",
-    "options.png": "f3b74201a92afe200eba0969defeff8f1ff5f622ba1cde01bbdfdb3c50a2ba70",
-    "originals-restored.json": "cabe5646a63f741d5d8311cb2a599aade075997551ad9b93d7c7550a3fa10703",
-    "program-upload.json": "6476f4750f106f6451224223567a114982fae485c622ad438108725c53758352",
-    "read-throughput.json": "08aaf31adf6eeaa18e06341539481217837e685f20abb97f59ac04285112cd72",
-    "restored-file-list.json": "48c98b6432d37b3dc2f335c6a2b46fba40a0223bca96dcb23bb90f146a728f8b",
-    "tested-build-receipt.json": "8dd49cab45bf42a978d3970b4e918383c2c7a0f8ab48928a7b7d8a8f76090bb9",
-    "byte-equivalent-rebuild.json": "81f264a0d0516e154de298dc621c6040f9a5ae06f96d5b66ee1beea3352841b2"
-  }
+  "test_process_notes": [
+    "After both successful opening tests, the PC C: volume filled while saving a read-only menu-state result. The owner exited; the complete raw wire trace was losslessly gzip compressed and a duplicate upload copy removed. Reconnection verified all four candidate code fingerprints and the menu before normal exit and original-directory restoration. No unknown mutation was replayed."
+  ],
+  "passed": true
 }

@@ -1,0 +1,192 @@
+{
+  "date": "2026-11-13",
+  "scope": "Opening cache allocation and Choose Player -> Delete Player responsiveness on physical H1.",
+  "program": {
+    "bda_sha256": "0dee97150a73efff343b67a519c5ff9160ebbc269b0522d30552755f7707b5d5",
+    "elf_sha256": "03cf7e0149abba980c2b14e8c407bd138356283f7e6d65d5df74b44cee395a81",
+    "bytes": 3756444,
+    "compiled_sources": 193,
+    "device_upload_crc_verified": true,
+    "gp_tls_audit": true,
+    "source_identity": {
+      "passed": true,
+      "count": 145,
+      "bda_sha256": "0dee97150a73efff343b67a519c5ff9160ebbc269b0522d30552755f7707b5d5"
+    },
+    "passed": true,
+    "build_receipt_sha256": "586ddf1d6960aed125d28e1547f55f2b0012ffa3f84e98912c0345faade5fa72"
+  },
+  "opening": {
+    "change": "Retire reconstructible image pixels before movie allocation; 16 KiB read-ahead pages, unchanged 9 MiB cache capacity and 348-frame movie.",
+    "root_cause_evidence": "Retained V77 allocation failure: 2,726,820 bytes aggregate free; largest 102,492 bytes was the heap tail. A 65,567-byte raw request plus the 65,536-byte SDK tail reserve could not fit; other holes were too small.",
+    "actual_native_UI_players": [
+      "Hhh",
+      "Jjj"
+    ],
+    "same_process": true,
+    "first_path": "Resume level 6, return to menu, create Hhh and start Adventure.",
+    "second_path": "Return from Hhh first level, create Jjj and start Adventure.",
+    "tests": [
+      {
+        "passed": true,
+        "page_bytes": 16384,
+        "cache_capacity_bytes": 9437184,
+        "resident_image_bytes_before": 1467215,
+        "resident_image_bytes_after": 0,
+        "allocated_pages": 576,
+        "allocation_failures": 0,
+        "natural_intro_end_ms": 13890,
+        "cache_bytes_after": 0
+      },
+      {
+        "passed": true,
+        "page_bytes": 16384,
+        "cache_capacity_bytes": 9437184,
+        "resident_image_bytes_before": 1700351,
+        "resident_image_bytes_after": 0,
+        "allocated_pages": 576,
+        "allocation_failures": 0,
+        "natural_intro_end_ms": 13890,
+        "cache_bytes_after": 0
+      }
+    ],
+    "evidence": [
+      "warm-first-opening.json",
+      "warm-second-opening.json"
+    ]
+  },
+  "delete": {
+    "change": "Enumerate actual owned files, close directory cursor, queue deletion and roster write in FIFO order; start deletion after the updated screen is presented.",
+    "old_per_mode_attempts": 147,
+    "baseline_seconds_to_observed_new_profile": 7.875,
+    "candidate_callback_ms": 125,
+    "candidate_first_presented_ms": 325,
+    "measurement_note": "Baseline is PC sampling after confirmation ACK; candidate uses device ticks from confirmation callback to first presented changed list (25 ms tick granularity). Comparison is approximate.",
+    "entries_scanned": 6,
+    "files_removed": 2,
+    "file_errors": 0,
+    "unrelated_user_files_preserved": true,
+    "audio_counter_delta": [
+      0,
+      0
+    ],
+    "evidence": "candidate-delete.json"
+  },
+  "validation": {
+    "host_engine": {
+      "passed": true,
+      "opening_frames": 348,
+      "movie_page_bytes": 16384,
+      "movie_page_allocations": 576,
+      "forbidden_later_64k_allocations": 0,
+      "idle_image_bytes_before": 262148,
+      "idle_image_bytes_after": 0,
+      "profile_and_legacy_temp_files_removed": true,
+      "other_profile_preserved": true,
+      "scope": "Host original engine; native timing and scheduling tested separately",
+      "executable_sha256": "cb980cd9c70c47ccf0d6f9011ae3d9d70c413014d1e40b0271a336ee55da7318",
+      "probe_sha256": "f1cb56df1dc8596739b77f9508d8b6f7fa89f7379fb56b2e8a9f57e2cd39e5e7",
+      "compile_report_sha256": "49c7a725863b43b439adedc682a0f94b212d1da1d6aad6ef7149acfd2338a782"
+    },
+    "old_64k_reference": {
+      "passed": true,
+      "reference_64k_page_allocation_failed_as_expected": true,
+      "message": "read-ahead page",
+      "executable_sha256": "31ff3a762668ba8ddb6389be1f800e25b68755aa2c40289c2fad2f102ecc3fcc",
+      "probe_sha256": "f1cb56df1dc8596739b77f9508d8b6f7fa89f7379fb56b2e8a9f57e2cd39e5e7",
+      "compile_report_sha256": "49c7a725863b43b439adedc682a0f94b212d1da1d6aad6ef7149acfd2338a782"
+    },
+    "delete_worker": {
+      "passed": true,
+      "stdout": "PASS: pending save -> exact-profile delete -> latest roster; no resurrection; uppercase/legacy/temp files removed; other IDs preserved\n",
+      "stderr": "",
+      "source_sha256": "fc268d8cac3f375474b975f63e288b0318212ffe13545043597869cc5451f0b4",
+      "scope": "Host real files and production SDK-worker functions; no RTOS performance claim"
+    },
+    "atomic_save_failures": {
+      "passed": true,
+      "source_sha256": "fc268d8cac3f375474b975f63e288b0318212ffe13545043597869cc5451f0b4",
+      "stdout": "PASS: short write, open/close/install failure preserve original; interrupted backup recovered; replacement and identical skip\n",
+      "stderr": "",
+      "scope": "Host real files; mocked SDK boundary. Native task separately tested."
+    },
+    "full_repository_verifier": {
+      "passed": true,
+      "evidence": "docs/verification/intro-delete-20261113/repository-check.json",
+      "native_repository_inputs_verified": 282
+    },
+    "ci_unit_tests": {
+      "passed": true,
+      "release_bundle_tests": 10,
+      "intro_frame_tests": 5,
+      "commands": [
+        "python -m unittest discover -s tools/tests -p test_release_bundle.py -v",
+        "python -m unittest discover -s tools/tests -p test_intro_frames.py -v"
+      ]
+    },
+    "offline_metadata_rebuild": "docs/verification/intro-delete-20261113/offline-metadata-rebuild.json",
+    "legacy_body_signature": "docs/verification/intro-delete-20261113/actor-legacy-body-compatibility.json"
+  },
+  "exit": {
+    "return_code": 0,
+    "async_jobs_completed": 10,
+    "write_errors": 0,
+    "pending_jobs": 0,
+    "worker_payload_bytes": 0,
+    "worker_task_removed": true,
+    "original_irq_callback_restored": true
+  },
+  "originals_restored": {
+    "passed": true,
+    "whole_original_directory_restored": true,
+    "files": {
+      "users.dat": {
+        "size": 45,
+        "sha256": "94aa334b2236950e668a607763af35df34fd4ce2a748e2eeb54bb685dc0285a5"
+      },
+      "user1.dat": {
+        "size": 886,
+        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+      },
+      "game1_0.v4": {
+        "size": 39480,
+        "sha256": "5540c956e3a0988440a2bf33310b3e80d5683f0873a2dcc53a6ed1b3b6fed97c"
+      },
+      "game3_0.v4": {
+        "size": 85353,
+        "sha256": "afd9d598ea149e0838b09b0aa9c4fcce3588986302776057cbdc9605960698c5"
+      },
+      "user3.dat": {
+        "size": 886,
+        "sha256": "a57d54daa985e6bbd2400d95185e6d50d75441b1ef037adbd9bf91e77191f69d"
+      },
+      "h1-audio.dat": {
+        "size": 6,
+        "sha256": "ef848f85e0de2a2de770cf263b6ff76f5ee680ac29b0a743e4305af67fe25084"
+      }
+    },
+    "test_archive": "B:\\应用\\数据\\游戏\\PVZ\\userdata.test-id78-1794530808"
+  },
+  "device": {
+    "identity": "H1DEBUG/1 V1.41 RESIDENT",
+    "screen": [
+      480,
+      272
+    ],
+    "debugger_remains_running": true,
+    "serial_closed": true
+  },
+  "resources": {
+    "changed": false,
+    "bytes": 166473603,
+    "files": 2674
+  },
+  "limitations": [
+    "The exact user interaction preceding the retained V77 failure was not observed; the allocation mechanism was reproduced by a host block-allocation constraint and two warm native new-player openings passed. This is a bounded regression test, not proof of every possible long-session allocation pattern.",
+    "No new dense-gameplay FPS or general startup-time claim."
+  ],
+  "test_process_notes": [
+    "After both successful opening tests, the PC C: volume filled while saving a read-only menu-state result. The owner exited; the complete raw wire trace was losslessly gzip compressed and a duplicate upload copy removed. Reconnection verified all four candidate code fingerprints and the menu before normal exit and original-directory restoration. No unknown mutation was replayed."
+  ],
+  "passed": true
+}

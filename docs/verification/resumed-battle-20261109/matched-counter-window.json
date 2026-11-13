@@ -1,0 +1,12 @@
+{
+  "scope": "Physical H1, same unchanged saved board at counter5522; sampled pairs wholly within5540..5950. Natural RNG/particle timing varies. Original common image pack in both runs.",
+  "clock_hz": 40,
+  "counter_bounds": [
+    5540,
+    5950
+  ],
+  "v28_fps": 6.040268456375839,
+  "v34_fps": 6.523605150214593,
+  "target20_passed": false,
+  "v34_first_fresh_spawn_failure": "After Retry and full intro, required Zombie definition open failed, BDA return107; exact errno trace pending v35. No heap failure or large GetBits observed."
+}

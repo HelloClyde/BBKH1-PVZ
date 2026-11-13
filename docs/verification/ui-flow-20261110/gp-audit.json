@@ -1,0 +1,27 @@
+{
+  "firmware_evidence": "pinned-contract-not-rechecked",
+  "kernel_sha256": null,
+  "expected_kernel_sha256": "d05786e442f9aad62a8d0a0cb4f6d786bdc7c2fa353a7a2b152c9ed9f01b40ef",
+  "heap_compatibility": {
+    "evidence": "pinned-contract-not-rechecked",
+    "expected_sha256": "d05786e442f9aad62a8d0a0cb4f6d786bdc7c2fa353a7a2b152c9ed9f01b40ef",
+    "expected_words": 26
+  },
+  "expected_irq_instructions": {
+    "0x800db264": "0x3c1c8058",
+    "0x800db268": "0x279c2d58"
+  },
+  "irq_sets_gp": "0x80582d58",
+  "irq_normal_return_restores_gp": false,
+  "firmware_gp_data_accesses_first_1_5_mib": null,
+  "native_link_inputs": 197,
+  "forbidden_relocation_families": [
+    "GPREL*",
+    "GOT*",
+    "CALL*",
+    "LITERAL"
+  ],
+  "gp_relative_relocations": [],
+  "native_tls_sections": [],
+  "ok": true
+}

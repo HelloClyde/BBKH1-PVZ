@@ -1,0 +1,60 @@
+{
+  "policy": "Measure first; retain real-time drawing unless it is a demonstrated hotspot",
+  "new_generic_offline_types": [],
+  "default_for_unmeasured": "original renderer, performance pending",
+  "partial_offline": [
+    {
+      "type": "REANIM_POLEVAULTER",
+      "scope": "entry idle preview",
+      "evidence": "docs/verification/trusted-resources-20261108/native-final.json"
+    }
+  ],
+  "existing_plant_family_individual_rebenchmark": "Only the fifteen Boss-intro flowerpots were individually investigated this round; other49 plant types not individually rebenchmarked.",
+  "resource_bytes": 156857391,
+  "removed_generic_bytes": 337471394,
+  "hardware_validation": {
+    "status": "partial; not approved for release",
+    "level6": "docs/verification/selective-actors-20261108/native-level6-v14.json",
+    "boss_greeting": "docs/verification/selective-actors-20261108/native-dave-v14.json",
+    "boss_battle_failure": "docs/verification/selective-actors-20261108/native-boss-v14-failure.json",
+    "original_saves_restored": true,
+    "camera_20fps_verified": false,
+    "release_ready": false
+  },
+  "static_background_candidate": {
+    "runtime_path": "boss-intro.h1lb",
+    "bytes": 522304,
+    "animation_frames": 0,
+    "native_ab_test": "12.12 to13.98 FPS alone; retained small static view, no Dave frames"
+  },
+  "measured_existing_plant_hotspots": [
+    {
+      "type": "REANIM_FLOWER_POT",
+      "scope": "15 pots in the original Boss intro",
+      "baseline_total_ms_per_presented_frame": 27.835051546391753,
+      "baseline_candidate": "v11",
+      "fix": "Preload the existing bank before StartLevelIntro creates the pots",
+      "new_animation_bytes": 0
+    }
+  ],
+  "realtime_observations": [
+    {
+      "type": "REANIM_CRAZY_DAVE",
+      "status": "measured_partial",
+      "scope": "First Boss greeting only",
+      "evidence": "docs/verification/selective-actors-20261108/native-dave-v14.json"
+    },
+    {
+      "type": "REANIM_READYSETPLANT",
+      "status": "measured_partial",
+      "scope": "Natural level6 intro; 38 calls/200 ms on v8, coarse25-ms clock",
+      "evidence": "docs/verification/selective-actors-20261108/native-level6.json"
+    },
+    {
+      "type": "REANIM_BOSS",
+      "status": "memory_io_failure",
+      "scope": "Do not infer pure computation cost from cache reloads and allocation failures",
+      "evidence": "docs/verification/selective-actors-20261108/native-boss-v14-failure.json"
+    }
+  ]
+}

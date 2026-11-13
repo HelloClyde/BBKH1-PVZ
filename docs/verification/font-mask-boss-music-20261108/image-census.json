@@ -1,0 +1,79 @@
+{
+  "header": [
+    1211189581,
+    1006,
+    576556,
+    5,
+    0,
+    0,
+    0,
+    5
+  ],
+  "records": [
+    {
+      "image": 2187818980,
+      "width": 480,
+      "height": 272,
+      "bytes": 522244,
+      "bits": 2187835192,
+      "palette": 0,
+      "mask": 0,
+      "native": 0,
+      "rl": 0,
+      "add": 0,
+      "path": ""
+    },
+    {
+      "image": 2193921272,
+      "width": 128,
+      "height": 64,
+      "bytes": 32772,
+      "bits": 2194931112,
+      "palette": 0,
+      "mask": 0,
+      "native": 0,
+      "rl": 0,
+      "add": 0,
+      "path": ""
+    },
+    {
+      "image": 2193530616,
+      "width": 46,
+      "height": 46,
+      "bytes": 8468,
+      "bits": 2202633208,
+      "palette": 0,
+      "mask": 0,
+      "native": 0,
+      "rl": 0,
+      "add": 0,
+      "path": "images/button_down_middle"
+    },
+    {
+      "image": 2193530456,
+      "width": 36,
+      "height": 46,
+      "bytes": 6628,
+      "bits": 2198970688,
+      "palette": 0,
+      "mask": 0,
+      "native": 0,
+      "rl": 0,
+      "add": 0,
+      "path": "images/button_down_left"
+    },
+    {
+      "image": 2193530776,
+      "width": 35,
+      "height": 46,
+      "bytes": 6444,
+      "bits": 2209322688,
+      "palette": 0,
+      "mask": 0,
+      "native": 0,
+      "rl": 0,
+      "add": 0,
+      "path": "images/button_down_right"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "images_compared": 392,
+  "cached_previews_compared": 214,
+  "physical_argb_pixels": 1569387,
+  "interleaved_cursor_reads": 16,
+  "independent_backing_streams": 2,
+  "short_common_pack_header_loose_image_reads": 1,
+  "short_required_preview_headers_rejected": 1,
+  "trusted_pack_checksums_ignored": 2,
+  "shutdown_resident_index_bytes": 0,
+  "loader_source_sha256": "236a2a6ee19935f13110d5a403b57b413a802f2ff4be3a4fcdcb3a5f8d79417a",
+  "pack_sha256": "9920b39c920d034052e3ff3ca010bcca8f2ba4368b2f673bb007a095de710938",
+  "cached_pack_sha256": "90e9775bb1092ecd76109b8906a223043229bb75db373292510d371b060c69cf",
+  "scope": "Actual production C loader on host; not native filesystem timing"
+}

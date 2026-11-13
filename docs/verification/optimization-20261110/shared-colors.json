@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "tuples": 3216,
+  "bytes": 6432,
+  "sha256": "dacb9a3b6b54742bde6c8e356adf820d694385227548a7cc953324d71f2ccce6",
+  "all_26_colors_byte_exact": true,
+  "net_heap_saving": 328032,
+  "provider_sha256": {
+    "zombie-hit.h1ap": "821f4c97f6d8d4e689a213045108f65060c60549a587637e6eeec2955707fdf7",
+    "zombie-hats.h1ap": "375e3473b33e48581df873395cd0b33560a66bcc2344d99b2f8629203a0362c1"
+  }
+}

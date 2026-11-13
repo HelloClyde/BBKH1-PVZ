@@ -24,6 +24,7 @@ int Mix_VolumeMusicGeneral(int volume);
 int Mix_ModMusicStreamJumpToOrder(Mix_Music *,int order);
 int Mix_ModMusicStreamGetOrder(Mix_Music *,int *order);
 int Mix_ModMusicStreamSetChannelVolume(Mix_Music *,int channel,int volume);
+int pvzh1_music_seek_pcm_ms(Mix_Music *,uint32_t milliseconds);
 #ifdef __cplusplus
 }
 #endif

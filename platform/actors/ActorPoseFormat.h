@@ -13,6 +13,8 @@ inline bool Supported(ReanimationType type){
  return type==ReanimationType::REANIM_PEASHOOTER||type==ReanimationType::REANIM_SUNFLOWER||
         type==ReanimationType::REANIM_ZOMBIE||type==ReanimationType::REANIM_SODROLL||type==ReanimationType::REANIM_SUN;
 }
+inline bool PerTrackType(ReanimationType type){return int(type)>=0&&int(type)<NUM_REANIMS;}
+inline bool ExtraType(ReanimationType type){return PerTrackType(type)&&!PlantType(type)&&!Supported(type)&&type!=REANIM_SELECTOR_SCREEN;}
 inline void Mix(uint64_t& hash,uint32_t word){for(unsigned i=0;i<4;++i){hash^=(word>>(i*8))&255;hash*=1099511628211ull;}}
 inline uint32_t LinearBits(float f){
  uint32_t bits=std::bit_cast<uint32_t>(f),absolute=bits&0x7fffffffu;
@@ -27,6 +29,9 @@ inline bool ZombieVisibilityVaries(const char* name){
         !std::strcmp(name,"anim_hair")||!std::strcmp(name,"anim_tongue")||
         !std::strcmp(name,"Zombie_outerarm_upper")||!std::strcmp(name,"Zombie_outerarm_lower")||!std::strcmp(name,"Zombie_outerarm_hand");
 }
+inline bool ZombieHatTrack(const char* name){
+ return !std::strcmp(name,"anim_cone")||!std::strcmp(name,"anim_bucket");
+}
 inline unsigned PlantImageOverrideKey(Sexy::Image* image){
  if(!image)return 0;
  const Sexy::Image* choices[]={Sexy::IMAGE_REANIM_WALLNUT_CRACKED1,Sexy::IMAGE_REANIM_WALLNUT_CRACKED2,
@@ -36,7 +41,7 @@ inline unsigned PlantImageOverrideKey(Sexy::Image* image){
  for(unsigned i=0;i<8;++i)if(image==choices[i])return i+1;return UINT32_MAX;
 }
 template<class Emit> inline bool VisitSignature(const Reanimation* r,int group,Emit emit,bool allowBlend,bool allowFlash,bool perTrack){
- if(!r||(!Supported(r->mReanimationType)&&!(perTrack&&PlantType(r->mReanimationType)))||r->mDead||!r->mDefinition||!r->mTrackInstances||
+ if(!r||(!Supported(r->mReanimationType)&&!(perTrack&&PerTrackType(r->mReanimationType)))||r->mDead||!r->mDefinition||!r->mTrackInstances||
     r->mDefinition->mTracks.count<=0||r->mDefinition->mTracks.count>256||
     (!perTrack&&r->mColorOverride!=Sexy::Color::White)||(r->mEnableExtraAdditiveDraw&&!allowFlash)||r->mEnableExtraOverlayDraw||
     (!perTrack&&r->mFilterEffect!=FilterEffect::FILTER_EFFECT_NONE))return false;
@@ -54,12 +59,17 @@ template<class Emit> inline bool VisitSignature(const Reanimation* r,int group,E
  if((std::bit_cast<uint32_t>(r->mOverlayMatrix.m20)&0x7fffffffu)||
     (std::bit_cast<uint32_t>(r->mOverlayMatrix.m21)&0x7fffffffu)||r->mOverlayMatrix.m22!=1)return false;
  for(int i=0;i<r->mDefinition->mTracks.count;++i){const auto& t=r->mTrackInstances[i];
+  const bool hat=!perTrack&&r->mReanimationType==ReanimationType::REANIM_ZOMBIE&&ZombieHatTrack(r->mDefinition->mTracks.tracks[i].mName);
+  // The ordinary bank has no hat pixels. Reuse its exact body signature only
+  // for hats drawn after every visible body track, preserving paint order.
+  if(hat&&t.mRenderGroup==group)for(int j=i+1;j<r->mDefinition->mTracks.count;++j)
+   if(r->mTrackInstances[j].mRenderGroup==group&&!ZombieHatTrack(r->mDefinition->mTracks.tracks[j].mName))return false;
   if((t.mBlendCounter&&!allowBlend)||t.mShakeX!=0||t.mShakeY!=0)return false;
   unsigned overrideKey=0;if(perTrack){overrideKey=PlantImageOverrideKey(t.mImageOverride);if(overrideKey==UINT32_MAX)return false;}
-  else if(t.mImageOverride&&(r->mReanimationType!=ReanimationType::REANIM_ZOMBIE||t.mImageOverride!=Sexy::IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2||std::strcmp(r->mDefinition->mTracks.tracks[i].mName,"Zombie_outerarm_upper")))return false;
+  else if(t.mImageOverride&&!hat&&(r->mReanimationType!=ReanimationType::REANIM_ZOMBIE||t.mImageOverride!=Sexy::IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2||std::strcmp(r->mDefinition->mTracks.tracks[i].mName,"Zombie_outerarm_upper")))return false;
   // Zombie packets contain each authored track. Runtime visibility selects
   // cosmetic heads/arms and lost body parts without duplicating whole poses.
-  emit(perTrack?0u:r->mReanimationType==ReanimationType::REANIM_ZOMBIE&&ZombieVisibilityVaries(r->mDefinition->mTracks.tracks[i].mName)?0u:uint32_t(t.mRenderGroup));emit(perTrack?0u:t.mAttachmentID!=AttachmentID::ATTACHMENTID_NULL);
+  emit(perTrack?0u:hat?uint32_t(RENDER_GROUP_HIDDEN):r->mReanimationType==ReanimationType::REANIM_ZOMBIE&&ZombieVisibilityVaries(r->mDefinition->mTracks.tracks[i].mName)?0u:uint32_t(t.mRenderGroup));emit(perTrack?0u:t.mAttachmentID!=AttachmentID::ATTACHMENTID_NULL);
   if(perTrack)emit(overrideKey);
   emit(uint32_t(t.mTrackColor.ToInt()));emit(std::bit_cast<uint32_t>(t.mShakeOverride));
   emit(unsigned(t.mIgnoreClipRect)|(unsigned(t.mTruncateDisappearingFrames)<<1)|

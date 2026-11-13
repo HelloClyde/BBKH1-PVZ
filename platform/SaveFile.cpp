@@ -20,6 +20,10 @@ extern "C" {volatile uint32_t pvzh1_save_compare_diagnostic[5];}
 extern "C" {volatile uint32_t pvzh1_save_compare_bypass;}
 #endif
 extern "C" void pvzh1_cache_complete_draw_batch();
+#if defined(H1_PVZ_PORTABLE) && !defined(PVZ_HOST_RUNNER)
+extern "C" int pvzh1_save_enqueue(const char*,const void*,size_t);
+extern "C" void pvzh1_save_wait(const char*);
+#endif
 namespace {
 bool Exists(const std::string& path,std::size_t* size=nullptr){
     struct stat info{};if(::stat(path.c_str(),&info))return false;
@@ -55,10 +59,16 @@ bool SameBytes(const std::string& path,const void* data,std::size_t size){
 }
 }
 void H1RecoverSaveFile(const std::string& path){
+#if defined(H1_PVZ_PORTABLE) && !defined(PVZ_HOST_RUNNER)
+    pvzh1_save_wait(path.c_str());
+#endif
     const auto backup=path+".h1bak";
     if(Exists(backup)&&!Exists(path))::rename(backup.c_str(),path.c_str());
 }
 bool H1WriteSaveFile(const std::string& path,const void* data,std::size_t size){
+#if defined(H1_PVZ_PORTABLE) && !defined(PVZ_HOST_RUNNER)
+    if(pvzh1_save_enqueue(path.c_str(),data,size))return true;
+#endif
     // Engine lifecycle writes run after the synchronous widget draw returned.
     // End its pixel pins so genuine allocation pressure may reclaim images;
     // this boundary itself neither allocates nor evicts any data.

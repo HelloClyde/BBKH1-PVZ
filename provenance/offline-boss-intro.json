@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "runtime_path": "boss-intro.h1lb",
+  "bytes": 522304,
+  "sha256": "32082a85873491e6b7aff236c2055275f0269cad7bd950952915fd78fb9ca4ac",
+  "static_background_only": true,
+  "view_x": 220,
+  "dave_animation_baked": false,
+  "exporter_sha256": "734d3b62f27bbf74cb78abeeaadf048c78e441bc9e33767ef996ede0b42ff3f3",
+  "encoder_sha256": "40d24fdf0cf8da74bf0e2fe1fa405c947698b31026054b5f912d702f9e675501",
+  "original_renderer_opaque_checks": 3
+}

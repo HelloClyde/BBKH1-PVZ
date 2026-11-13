@@ -1,0 +1,41 @@
+{
+  "physical_H1": true,
+  "middle_window_no_debug_RPC": true,
+  "frames": 99,
+  "raw_ticks": 610,
+  "raw_tick_hz": 40,
+  "seconds": 15.25,
+  "FPS": 6.491803278688525,
+  "clock_before": [
+    2650,
+    6946800,
+    6946800,
+    0,
+    40,
+    2650
+  ],
+  "clock_after": [
+    2848,
+    6947410,
+    6947410,
+    0,
+    40,
+    2848
+  ],
+  "bda_sha256": "ae6b44d12720d061ad37139aba72600cac6c9139a32f3a39f5c0c39e1cd283d8",
+  "counter_after": 1153,
+  "combat": [
+    641682,
+    9204,
+    275,
+    435,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ]
+}

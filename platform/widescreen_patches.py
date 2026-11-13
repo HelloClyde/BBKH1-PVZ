@@ -70,6 +70,17 @@ def apply(root):
     assert s.count(old)==1
     s=s.replace(old,'mApp->AddReanimation(int(Sexy::H1BoardOffset)-mBoard->mX,-mBoard->mY,aRenderPosition,ReanimationType::REANIM_ZOMBIES_WON);')
     p.write_text(s,encoding='utf8')
+    # Fullscreen tracks are viewport overlays, independent of board/camera
+    # placement. Keep their original alpha; don't stretch the other tracks.
+    reanim='PvzpLib/Reanimator.cpp'
+    p=Path(root)/reanim;p.write_text('#include "graphics/ScreenLayout.h"\n'+p.read_text(encoding='utf8'),encoding='utf8')
+    patch(reanim,'\t\tColor aOldColor = g->GetColor();\n\t\tg->SetColor(aColor);\n\t\tg->FillRect(-g->mTransX, -g->mTransY, BOARD_WIDTH, BOARD_HEIGHT);\n\t\tg->SetColor(aOldColor);',
+        '''        Graphics viewport(*g);
+        viewport.mTransX=viewport.mTransY=0;
+        viewport.SetColor(aColor);
+        viewport.FillRect(0,0,Sexy::H1LogicalWidth,Sexy::H1LogicalHeight);''')
+    patch(reanim,'aClipRect = Rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);',
+        'aClipRect = Rect(0,0,Sexy::H1LogicalWidth,Sexy::H1LogicalHeight);')
     # Ghost seed and grid highlight consume board-local coordinates.
     p=Path(root)/'Lawn/CursorObject.cpp';s=p.read_text(encoding='utf8')
     s=s.replace('mApp->mWidgetManager->mLastMouseX','(mApp->mWidgetManager->mLastMouseX - mBoard->mX)')

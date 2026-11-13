@@ -1,0 +1,49 @@
+{
+  "channels": 30,
+  "total_patterns": 200,
+  "retained_patterns": [
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    199
+  ],
+  "total_instruments": 82,
+  "retained_instruments": [
+    1,
+    5,
+    7,
+    8,
+    9,
+    24,
+    25,
+    27,
+    28,
+    32,
+    33,
+    61,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75
+  ],
+  "source_sample_bytes": 5014597,
+  "retained_sample_bytes": 1783700,
+  "order_ranges": [
+    [
+      158,
+      165
+    ]
+  ],
+  "pattern_and_instrument_ids_preserved": true,
+  "source_sha256": "d0b20106d60abf6bf873db6fa5aca2749dacf27345115becca383f3197d02ef8",
+  "output_sha256": "5c2629b639839d05f5f1af040ab7f2de43311ec9d61baf46e51b21e5cca93754",
+  "bytes": 1858952,
+  "exporter_sha256": "76ad7db17192b88de4ebdf00757e7b48b121e753aa683ef939118e68b2ff5fe5",
+  "runtime_path": "sounds/mainmusic-boss.xm"
+}

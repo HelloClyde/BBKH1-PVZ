@@ -1,0 +1,24 @@
+{
+  "candidate_sha256": "ae6b44d12720d061ad37139aba72600cac6c9139a32f3a39f5c0c39e1cd283d8",
+  "fixture_sha256": "1eb0afa9d36751bbcb0a76d3b6f855a9d3305ec013e877452daf46e09fee0bab",
+  "coarse_FPS": 6.491803278688525,
+  "original_v62_FPS": 6.491803278688525,
+  "rejected_v64_FPS": 6.291390728476821,
+  "performance_target_FPS": 20,
+  "target_met": false,
+  "requested_optimizations": {
+    "color_propagation_unchanged_skips": 26002,
+    "inactive_track_omissions": 1930465,
+    "shared_color_table_net_bytes_saved": 328032
+  },
+  "pressure_trace_failures": {
+    "v64": 275,
+    "v66": 112
+  },
+  "final_allocation_failures": 0,
+  "resource_bytes": 169682048,
+  "resource_files": 2674,
+  "save_restoration_pending": false,
+  "original_saves_restored": true,
+  "debugger_resident_left_running": true
+}

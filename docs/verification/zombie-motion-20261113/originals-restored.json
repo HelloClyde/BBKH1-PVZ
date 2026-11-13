@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "whole_original_directory_restored": true,
+  "files": {
+    "users.dat": {
+      "size": 45,
+      "sha256": "94aa334b2236950e668a607763af35df34fd4ce2a748e2eeb54bb685dc0285a5"
+    },
+    "user1.dat": {
+      "size": 886,
+      "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+    },
+    "game1_0.v4": {
+      "size": 39480,
+      "sha256": "5540c956e3a0988440a2bf33310b3e80d5683f0873a2dcc53a6ed1b3b6fed97c"
+    },
+    "game3_0.v4": {
+      "size": 85353,
+      "sha256": "afd9d598ea149e0838b09b0aa9c4fcce3588986302776057cbdc9605960698c5"
+    },
+    "user3.dat": {
+      "size": 886,
+      "sha256": "a57d54daa985e6bbd2400d95185e6d50d75441b1ef037adbd9bf91e77191f69d"
+    },
+    "h1-audio.dat": {
+      "size": 6,
+      "sha256": "ef848f85e0de2a2de770cf263b6ff76f5ee680ac29b0a743e4305af67fe25084"
+    }
+  },
+  "test_archive": "B:\\应用\\数据\\游戏\\PVZ\\userdata.test-newspawn-zm77-1794507516"
+}

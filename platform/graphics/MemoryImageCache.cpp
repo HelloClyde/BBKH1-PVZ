@@ -47,6 +47,8 @@ extern "C" {char pvzh1_storage_loading_path[256];}
 /* Bounded reduced-font blits, streamed crop fallbacks, logical atlas requests,
  * last logical width/height, largest crop allocation, failed crops, reserved. */
 extern "C" { volatile uint32_t pvzh1_font_storage_diagnostic[8]; }
+extern "C" { volatile uint32_t pvzh1_font_logical_request_diagnostic[8]; char pvzh1_font_logical_request_path[128]; }
+extern "C" { volatile uint32_t pvzh1_large_logical_request_diagnostic[8]; char pvzh1_large_logical_request_path[128]; }
 
 namespace Sexy {
 namespace {
@@ -96,7 +98,7 @@ struct Source {
     std::unique_ptr<unsigned char*[]> alphaPages;
     std::size_t alphaPageCount=0,alphaPageBytes=0;
     std::unique_ptr<H1FontTileStorage> fontTiles;
-    bool cjkFont=false;
+    bool cjkFont=false,fontData=false;
     bool uiReserved=false;
     std::unique_ptr<uint32_t*[]> storagePages;
     std::size_t storagePageCount=0,storagePageBytes=0;
@@ -118,7 +120,7 @@ struct Source {
          storageHeight(info.storage_height?info.storage_height:info.height),rgbEligible(info.channels==3&&info.flags==0),
          alphaPaletteEligible(info.channels==1&&info.flags==H1_IMAGE_MASK_ONLY),
          rgbaFontEligible(info.channels==4&&info.flags==0&&IsFontDataPath(file)),
-         rgbaEligible(info.channels==4&&info.flags==0){cjkFont=alphaPaletteEligible&&IsCJKDataPath(file);}
+         rgbaEligible(info.channels==4&&info.flags==0){fontData=IsFontDataPath(file);cjkFont=alphaPaletteEligible&&fontData&&IsCJKDataPath(file);}
     Source(Source&&)=default;
     Source(const Source&)=delete;
     ~Source(){ClearRGB();ClearFontPages();ClearStorage();}
@@ -568,6 +570,27 @@ void H1ImageCacheTouch(MemoryImage *image)
 }
 void H1ImageCacheForget(MemoryImage *image)
 {if(State().sources.erase(image))Recount(true);}
+void H1ImageCacheNoteLogicalRequest(MemoryImage* image,uintptr_t caller){
+    if(!cacheInstance||!image||image->mBits)return;
+    auto it=cacheInstance->sources.find(image);
+    if(uint64_t(image->mWidth)*image->mHeight>480u*272u){
+        ++pvzh1_large_logical_request_diagnostic[0];pvzh1_large_logical_request_diagnostic[1]=uint32_t(caller);
+        pvzh1_large_logical_request_diagnostic[2]=image->mWidth;pvzh1_large_logical_request_diagnostic[3]=image->mHeight;
+        const bool registered=it!=cacheInstance->sources.end();
+        pvzh1_large_logical_request_diagnostic[4]=registered?(1u|(it->second.Reduced()?2u:0u)|(it->second.fontData?4u:0u)):0u;
+        pvzh1_large_logical_request_diagnostic[5]=bool(image->mColorIndices)|(bool(image->mNativeAlphaData)<<1)|(bool(image->mRLAlphaData)<<2);
+        pvzh1_large_logical_request_diagnostic[6]=uint32_t(uintptr_t(image));
+        pvzh1_large_logical_request_diagnostic[7]=uint32_t(uint64_t(caller)>>32);
+        const auto& path=registered?it->second.path:image->mFilePath;
+        auto n=std::min(path.size(),sizeof(pvzh1_large_logical_request_path)-1);std::memcpy(pvzh1_large_logical_request_path,path.data(),n);pvzh1_large_logical_request_path[n]=0;
+    }
+    if(it==cacheInstance->sources.end())return;
+    const auto& source=it->second;if(!source.Reduced()||!source.fontData)return;
+    ++pvzh1_font_logical_request_diagnostic[0];pvzh1_font_logical_request_diagnostic[1]=uint32_t(caller);
+    pvzh1_font_logical_request_diagnostic[2]=image->mWidth;pvzh1_font_logical_request_diagnostic[3]=image->mHeight;
+    pvzh1_font_logical_request_diagnostic[4]=bool(image->mColorIndices)|(bool(image->mNativeAlphaData)<<1)|(bool(image->mRLAlphaData)<<2);
+    auto n=std::min(source.path.size(),sizeof(pvzh1_font_logical_request_path)-1);std::memcpy(pvzh1_font_logical_request_path,source.path.data(),n);pvzh1_font_logical_request_path[n]=0;
+}
 bool H1ImageCacheLoad(MemoryImage *image)
 {
     Cache& cache=State();auto found=cache.sources.find(image);
@@ -690,21 +713,20 @@ bool H1ImageCachePrepareAlphaPalette(MemoryImage *image)
     cache.loadedPixelBytes+=readBytes;pvzh1_alpha_palette_diagnostic[3]+=readBytes;
     Recount(true);return true;
 }
-bool H1ImageCacheBltFontGlyph(MemoryImage *image,MemoryImage *destination,int x,int y,
-    const Rect& rect,const Color& color,int mode)
-{
-    if(!image||!destination||image==destination||!cacheInstance||rect.mWidth<=0||rect.mHeight<=0||
-       rect.mWidth>256||rect.mHeight>256||(std::size_t)rect.mWidth*rect.mHeight>16384||
-       (mode!=Graphics::DRAWMODE_NORMAL&&mode!=Graphics::DRAWMODE_ADDITIVE))return false;
+bool H1ImageCacheIsReducedFont(MemoryImage* image){
+    if(!cacheInstance||!image)return false;
+    auto it=cacheInstance->sources.find(image);
+    return it!=cacheInstance->sources.end()&&it->second.Reduced()&&it->second.alphaPaletteEligible&&it->second.fontData;
+}
+bool H1ImageCachePrepareFontGlyph(MemoryImage* image,const Rect& rect,MemoryImage& glyph){
+    if(!image||!cacheInstance||rect.mWidth<=0||rect.mHeight<=0||rect.mWidth>256||rect.mHeight>256||size_t(rect.mWidth)*rect.mHeight>16384)return false;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
-    Source& source=found->second;
-    if(source.Reduced()&&source.alphaPaletteEligible&&IsFontDataPath(source.path)&&
-       (uint32_t(source.alphaColor)&0xffffffu)==0xffffffu&&source.alphaPath.empty()&&
-       image->mFilePath==source.path&&image->mWidth==int(source.width)&&image->mHeight==int(source.height)&&
-       !image->mBits&&!image->mColorIndices&&!image->mColorTable&&!image->mNativeAlphaData&&
-       !image->mRLAlphaData&&!image->mRLAdditiveData&&rect.mX>=0&&rect.mY>=0&&x>=0&&y>=0&&
-       int64_t(rect.mX)+rect.mWidth<=source.width&&int64_t(rect.mY)+rect.mHeight<=source.height&&
-       int64_t(x)+rect.mWidth<=destination->mWidth&&int64_t(y)+rect.mHeight<=destination->mHeight){
+    auto& source=found->second;
+    if(!source.Reduced()||!source.alphaPaletteEligible||!source.fontData||
+       (uint32_t(source.alphaColor)&0xffffffu)!=0xffffffu||!source.alphaPath.empty()||
+       image->mFilePath!=source.path||image->mWidth!=int(source.width)||image->mHeight!=int(source.height)||
+       image->mBits||image->mColorIndices||image->mColorTable||image->mNativeAlphaData||image->mRLAlphaData||image->mRLAdditiveData||
+       rect.mX<0||rect.mY<0||int64_t(rect.mX)+rect.mWidth>source.width||int64_t(rect.mY)+rect.mHeight>source.height)return false;
         // Normal/AdditiveBlt also draw unscaled glyphs into small UI images.
         // Their old fallback called GetBits on the complete logical CJK atlas.
         // Materialize only this clipped glyph, with the same nearest logical
@@ -742,20 +764,40 @@ bool H1ImageCacheBltFontGlyph(MemoryImage *image,MemoryImage *destination,int x,
 #ifndef PVZ_HOST_RUNNER
             if(source.cjkFont)throw std::logic_error("H1 CJK glyph did not use its offline tiles");
 #endif
-            // Latin A8 descriptors use their offline image directly. Read
-            // this glyph only; they do not have a CJK tile-pack directory.
-            H1Image input{};ok=h1_image_open(&input,source.path.c_str(),source.autoAlpha,source.alphaColor);
-            for(int row=0;ok&&row<rect.mHeight;++row)
-                ok=h1_image_read_span(&input,rect.mX,rect.mY+row,rect.mWidth,pixels.get()+size_t(row)*rect.mWidth);
-            if(input.file)h1_image_close(&input);
+            // Latin glyphs share their small offline A8 storage. Do not reopen
+            // and seek the same file for every row of every glyph.
+            const unsigned char* alpha=nullptr;const unsigned char*const* pages=nullptr;
+            ok=H1ImageCachePrepareStorageAlphaPages(image,&pages,&w,&h)||H1ImageCachePrepareStorageAlpha(image,&alpha,&w,&h);
+            if(!ok){++pvzh1_font_storage_diagnostic[6];throw std::runtime_error("Cannot load H1 Latin glyph storage");}
+            for(int row=0;row<rect.mHeight;++row){
+                const size_t sy=uint64_t(rect.mY+row)*h/source.height;
+                for(int col=0;col<rect.mWidth;++col){
+                    const size_t at=sy*w+uint64_t(rect.mX+col)*w/source.width;
+                    const unsigned a=pages?pages[at>>10][at&1023]:alpha[at];
+                    pixels[size_t(row)*rect.mWidth+col]=0xffffffu|(a<<24);
+                }
+            }
             ++pvzh1_font_storage_diagnostic[1];
-            if(!ok){++pvzh1_font_storage_diagnostic[6];throw std::runtime_error("Failed to read bounded H1 font glyph");}
         }
         pixels[area]=MEMORYCHECK_ID;
-        MemoryImage glyph(image->mApp);glyph.mWidth=rect.mWidth;glyph.mHeight=rect.mHeight;glyph.mBits=std::move(pixels);
+        glyph.mWidth=rect.mWidth;glyph.mHeight=rect.mHeight;glyph.mBits=std::move(pixels);
         glyph.SetImageMode(image->mHasTrans,image->mHasAlpha);glyph.mBitsChanged=false;
-        destination->MemoryImage::Blt(&glyph,x,y,Rect(0,0,rect.mWidth,rect.mHeight),color,mode,false);
-        image->mDrawn=true;++pvzh1_font_storage_diagnostic[0];return true;
+        return true;
+}
+bool H1ImageCacheBltFontGlyph(MemoryImage *image,MemoryImage *destination,int x,int y,
+    const Rect& rect,const Color& color,int mode)
+{
+    if(!image||!destination||image==destination||!cacheInstance||rect.mWidth<=0||rect.mHeight<=0||
+       rect.mWidth>256||rect.mHeight>256||(std::size_t)rect.mWidth*rect.mHeight>16384||
+       (mode!=Graphics::DRAWMODE_NORMAL&&mode!=Graphics::DRAWMODE_ADDITIVE))return false;
+    auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
+    Source& source=found->second;
+    if(source.Reduced()&&source.alphaPaletteEligible&&source.fontData&&x>=0&&y>=0&&int64_t(x)+rect.mWidth<=destination->mWidth&&int64_t(y)+rect.mHeight<=destination->mHeight){
+        MemoryImage glyph(image->mApp);
+        if(H1ImageCachePrepareFontGlyph(image,rect,glyph)){
+            destination->MemoryImage::Blt(&glyph,x,y,Rect(0,0,rect.mWidth,rect.mHeight),color,mode,false);
+            image->mDrawn=true;++pvzh1_font_storage_diagnostic[0];return true;
+        }
     }
     if(!source.rgbaFontEligible||!source.rgbaFontRejected||!source.alphaPath.empty()||source.sanded||
        image->mFilePath!=source.path||image->mWidth!=(int)source.width||image->mHeight!=(int)source.height||

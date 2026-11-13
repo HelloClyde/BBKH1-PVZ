@@ -1,3 +1,4 @@
+#include "TrustedResources.h"
 /* Replay pixels sampled by the original renderer at asset-build time.
  * No runtime matrix/UV calculation or sampling is used by this path.
  * SPDX-License-Identifier: LGPL-3.0-or-later */
@@ -20,6 +21,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <new>
+#include <stdexcept>
 #include <limits>
 #include <vector>
 #include <zlib.h>
@@ -44,6 +46,7 @@ static_assert(sizeof(Run)==12);
 struct Entry {
     uint32_t kind=0,id=0,variant=0,color=0,runs=0,pixels=0,bytes=0,position=0,dimensions=0;
     unsigned char* data=nullptr;
+    bool compressedHand=false;
 };
 struct WelcomePixel {uint32_t index,before,after;};
 constexpr uint32_t WelcomePagePixels=1024,WelcomePages=(Pixels+WelcomePagePixels-1)/WelcomePagePixels;
@@ -72,6 +75,9 @@ struct State {
     uint32_t baseCount=0,entrySlots=0;
     bool preculled=false;
     bool attempted=false,loaded=false;
+    unsigned char* handScratch=nullptr;
+    uint32_t handScratchBytes=0;
+    const Entry* decodedHand=nullptr;
     Welcome welcome;
     VisibleGroup background,foreground;
     unsigned char* foregroundOpaque=nullptr;
@@ -126,6 +132,7 @@ void Clear(){
     if(state.foregroundOpaque){delete[] state.foregroundOpaque;state.resident-=Pixels;}
     for(uint32_t i=0;i<state.count;++i)delete[] state.entries[i].data;
     delete[] state.entries;
+    delete[] state.handScratch;
     state=State{};Count();
 }
 void Detach(){
@@ -134,27 +141,15 @@ void Detach(){
     state.retainedScene=false;state.foregroundPrefix=0;state.menuPixels=nullptr;
 #endif
     ClearWelcome();ClearVisible(state.background);ClearVisible(state.foreground);
+    delete[] state.handScratch;state.handScratch=nullptr;state.resident-=state.handScratchBytes;
+    state.handScratchBytes=0;state.decodedHand=nullptr;
     if(state.foregroundOpaque){delete[] state.foregroundOpaque;state.foregroundOpaque=nullptr;state.resident-=Pixels;}
     for(uint32_t i=state.baseCount;i<state.count;++i){state.resident-=state.entries[i].bytes;delete[] state.entries[i].data;state.entries[i].data=nullptr;}
     state.count=state.baseCount;state.owner=nullptr;state.attempted=false;state.presentationScene=false;state.foregroundRevision=0;Count();
 }
 bool Read(FILE* file,void* buffer,size_t bytes){return !bytes||std::fread(buffer,1,bytes,file)==bytes;}
 bool Range(uint32_t offset,uint32_t bytes,uint32_t end){return offset<=end&&bytes<=end-offset;}
-bool Validate(Entry& e){
-    if(e.kind<1||e.kind>3||e.runs>Pixels*4u||e.pixels>Pixels*4u)return false;
-    if((uint64_t)e.runs*12u+(uint64_t)e.pixels*4u!=e.bytes)return false;
-    const unsigned char* run=e.data;
-    for(uint32_t i=0;i<e.runs;++i,run+=12){
-        const uint32_t destination=Word(run),word=Word(run+8);
-        const uint16_t count=Half(run+4),kind=Half(run+6);
-        if(!count||kind>1||destination>=Pixels||count>Width-destination%Width||
-           count>Pixels-destination||word>e.pixels||count>e.pixels-word)return false;
-        if(kind==0){const unsigned char* p=e.data+(size_t)e.runs*12+(size_t)word*4;
-            for(unsigned j=0;j<count;++j,p+=4)if(p[3]!=255)return false;
-        }
-    }
-    return true;
-}
+
 bool Load(const char* filename,bool merge=false){
     FILE* file=std::fopen(filename,"rb");
     if(!file){Add(8);return false;}
@@ -182,18 +177,21 @@ bool Load(const char* filename,bool merge=false){
         okay=offset>=HeaderBytes+h[8]*EntryBytes&&Range(offset,e.bytes,h[3])&&
             e.bytes<=(uint64_t)Pixels*4u*16u;
         if(!okay)break;
-        for(uint32_t j=0;j<i;++j)if(entries[j].kind==e.kind&&entries[j].id==e.id&&entries[j].variant==e.variant&&entries[j].color==e.color){okay=false;break;}
         if(!okay)break;
         const uint32_t packedBytes=e.bytes;
         if(h[13]){uint64_t raw=uint64_t(e.runs)*12+uint64_t(e.pixels)*4;
             if(raw>uint64_t(Pixels)*64){okay=false;break;}e.bytes=uint32_t(raw);}
+        // Keep unused baked hand frames compressed. Only the frame actually
+        // displayed is expanded into the small reusable scratch buffer.
+        e.compressedHand=h[13]&&e.kind==3;
+        if(e.compressedHand)e.bytes=packedBytes;
         if(e.bytes){e.data=new(std::nothrow) unsigned char[e.bytes];if(!e.data){Add(10);okay=false;break;}resident+=e.bytes;}
         // The packer emits entries in offset order. Read that common case
         // sequentially: no directory/payload seeks or per-frame file I/O.
         okay=offset==position||std::fseek(file,offset,SEEK_SET)==0;
-        if(okay&&h[13]){std::vector<unsigned char> packed(packedBytes);uLongf raw=e.bytes;
-            okay=Read(file,packed.data(),packedBytes)&&uncompress(e.data,&raw,packed.data(),packedBytes)==Z_OK&&raw==e.bytes&&Validate(e);
-        }else if(okay)okay=Read(file,e.data,e.bytes)&&Validate(e);
+        if(okay&&h[13]&&!e.compressedHand){std::vector<unsigned char> packed(packedBytes);uLongf raw=e.bytes;
+            okay=Read(file,packed.data(),packedBytes)&&H1ResourceUncompress(e.data,&raw,packed.data(),packedBytes)==Z_OK&&raw==e.bytes;
+        }else if(okay)okay=Read(file,e.data,e.bytes);
         position=offset+packedBytes;
     }
     delete[] directory;
@@ -207,6 +205,14 @@ bool Load(const char* filename,bool merge=false){
         delete[] state.entries;delete[] entries;state.entries=combined;state.count+=h[8];state.entrySlots=state.count;
     }else{state.entries=entries;state.count=h[8];state.baseCount=h[8];state.entrySlots=h[8];state.preculled=h[14]==0x31434c56u;state.pose=h[11];state.tracks=h[12];state.loaded=true;}
     state.resident+=resident;
+    uint32_t handBytes=0;
+    for(unsigned i=0;i<state.count;++i)if(state.entries[i].compressedHand)
+        handBytes=std::max(handBytes,state.entries[i].runs*12+state.entries[i].pixels*4);
+    if(handBytes>state.handScratchBytes){
+        auto* scratch=new(std::nothrow) unsigned char[handBytes];if(!scratch)throw std::bad_alloc();
+        delete[] state.handScratch;state.resident-=state.handScratchBytes;
+        state.handScratch=scratch;state.handScratchBytes=handBytes;state.resident+=handBytes;state.decodedHand=nullptr;
+    }
     Add(11);Count();return true;
 }
 #ifndef PVZH1_SELECTOR_OFFLINE_STANDALONE
@@ -591,7 +597,16 @@ bool H1SelectorOfflineDrawHand(GameSelector* selector,Sexy::Graphics* g,Reanimat
     Sexy::Graphics full(*g);full.ClearClipRect();auto* screen=Screen(&full);if(!screen)return reject();
     const unsigned counter=std::min(450,std::max(0,selector->mStartingGameCounter));
     auto* entry=Find(3,counter==450?450:counter/4*4,0,0xffffffff);if(!entry)return reject();
-    H1CanvasProtectedPixels protect(screen->Target());Replay(*entry,screen->Target()->GetBits());
+    Entry display=*entry;
+    if(entry->compressedHand&&entry->runs){
+        if(state.decodedHand!=entry){
+            uLongf bytes=state.handScratchBytes;
+            if(H1ResourceUncompress(state.handScratch,&bytes,entry->data,entry->bytes)!=Z_OK||bytes!=entry->runs*12+entry->pixels*4)throw std::runtime_error("Unable to expand baked adventure frame");
+            state.decodedHand=entry;
+        }
+        display.data=state.handScratch;
+    }
+    H1CanvasProtectedPixels protect(screen->Target());Replay(display,screen->Target()->GetBits());
     screen->Target()->BitsChanged();screen->NoteDraw();
     auto& d=pvzh1_adventure_raster_diagnostic;uint32_t now=pvzp_ticks_ms()+1;
     if(!counter||counter<d[5]){for(unsigned i=0;i<8;i++)d[i]=0;}

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "retired_intro_bytes": 107828,
+  "unchanged_live_actor_states": 3,
+  "original_start_playing_retires_intro": true,
+  "deleted_actor_memo_released": true,
+  "required_bank_failure_rejected_before_play": true,
+  "midgame_intro_reload": false,
+  "shutdown_bytes": 0,
+  "probe_sha256": "b7f2b6f8a2e7fb82a6501570a48aa3c041d4d71e3ffc78cf0cf152812af5a8c5",
+  "executable_sha256": "7b66a48344b52436b34e8a45bfa49a93b49e85e8e39134b0de4342d7dfd621cf",
+  "compile_report_sha256": "3a3e4518f9f253d7472e1c0b5a45c4d7a7388839dfe5d91dfc219f02b290f45d",
+  "natural_retirement_before_start_playing": true,
+  "scope": "Original host game callbacks and real offline resources; not physical H1 timing"
+}

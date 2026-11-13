@@ -1,0 +1,44 @@
+{
+  "result": {
+    "state": 5,
+    "image_size": 240,
+    "memory_size": 240,
+    "entry_offset": 0,
+    "upload_crc": 3229038039,
+    "written": 240,
+    "runs": 1,
+    "flags": 0,
+    "start_tick": 100555,
+    "end_tick": 100555,
+    "budget_ticks": 80,
+    "opcode": 0,
+    "arg_size": 24,
+    "output_size": 28,
+    "return_value": 0,
+    "flag_names": [],
+    "elapsed_ticks": 0,
+    "tick_units": "raw uncalibrated device ticks",
+    "host_elapsed_seconds": 0.049112899927422404,
+    "host_elapsed_includes_usb_and_polling": true,
+    "execution_returned": true,
+    "output_sha256": "33a7985c66540cac7640f8fbb0c56414bf88e17d6caa8fe9cf6e61bb4fc3e918"
+  },
+  "words": [
+    1111962419,
+    1,
+    1111228416,
+    1064409919,
+    1047541204,
+    1093691272,
+    1093691272
+  ],
+  "floats": [
+    49.79999923706055,
+    1.401298464324817e-45,
+    47.0,
+    0.9437751173973083,
+    0.23458033800125122,
+    11.025276184082031,
+    11.025276184082031
+  ]
+}

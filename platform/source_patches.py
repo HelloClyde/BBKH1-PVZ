@@ -107,7 +107,9 @@ def apply(source_root:Path):
     H1ActorPoseFinishSod();
 \tmBoard->StartLevel();''',1)
     assert text.count('\t\t\tDoContinueDialog();')==2
-    text=text.replace('\t\t\tDoContinueDialog();','            H1PreloadCurrentBoard(this);\n            H1RewardEffectsPrepare();\n\t\t\tDoContinueDialog();')
+    # A restored board has already passed its intro/selection. Use the same
+    # dependency lifetime and music warmup as StartPlaying, before Continue.
+    text=text.replace('\t\t\tDoContinueDialog();','            H1PreloadCurrentBoardForPlay(this);\n            H1RewardEffectsPrepare();\n\t\t\tDoContinueDialog();')
     # A restarted board briefly overlaps its replacement and camera panorama.
     # Reward frames are needed only once the intro has completed (or a saved
     # board is ready); release them before building either replacement.
@@ -397,13 +399,23 @@ bool PvzpLoadNextResource()
     text='#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n'+text[:first]+'    if(!H1EarlyLawnDraw(this,g)){\n'+text[first:last]+'\n    }\n'+text[last:]
     board.write_text(text,encoding='utf8',newline='\n')
 
+    credits=source_root/'Lawn/Widget/CreditScreen.cpp';text=credits.read_text(encoding='utf8')
+    text='extern void H1ReanimationDefinitionsTrimForMenu();\n'+text
+    boundary='mApp->mEffectSystem->EffectSystemFreeAll();\n\tmApp->mMusic->StopAllMusic();'
+    assert text.count(boundary)==1
+    text=text.replace(boundary,'mApp->mEffectSystem->EffectSystemFreeAll();\n\tH1ReanimationDefinitionsTrimForMenu();\n\tmApp->mMusic->StopAllMusic();',1)
+    needle='mApp->mMusic->PlayFromOffset(MusicFile::MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN, aMusicOffset - 900, 1.0f);'
+    assert text.count(needle)==1
+    text=text.replace(needle,'mApp->mMusic->MakeSureMusicIsPlaying(MusicTune::MUSIC_TUNE_CREDITS_ZOMBIES_ON_YOUR_LAWN);\n\tpvzh1_music_seek_pcm_ms(mApp->mMusic->GetMusicHandle(MusicFile::MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN), aJumpMilliseconds);')
+    credits.write_text(text,encoding='utf8',newline='\n')
+
     reanim=source_root/'PvzpLib/Reanimator.cpp';text=reanim.read_text(encoding='utf8')
     needle='void ReanimatorEnsureDefinitionLoaded(ReanimationType theReanimType, bool theIsPreloading)\n{'
     assert text.count(needle)==1
-    text='#include "actors/ActorPose.h"\nextern void H1PrewarmDefinitionImages(int);\n'+text.replace(needle,needle+'\n    struct H1WarmScope {int type;~H1WarmScope(){H1PrewarmDefinitionImages(type);}} warmScope{int(theReanimType)};')
+    text='#include "actors/ActorPose.h"\n#include <exception>\nextern void H1PrewarmDefinitionImages(int,bool);\n'+text.replace(needle,needle+'\n    struct H1WarmScope {int type;bool preloading;~H1WarmScope() noexcept(false){if(!std::uncaught_exceptions())H1PrewarmDefinitionImages(type,preloading);}} warmScope{int(theReanimType),theIsPreloading};')
     needle='void Reanimation::DrawRenderGroup(Graphics* g, int theRenderGroup)\n{'
     assert text.count(needle)==1
-    text=text.replace(needle,needle+'\n    if(H1ActorPoseDraw(this,g,theRenderGroup))return;')
+    text=text.replace(needle,needle+'\n    if(H1ActorPoseDraw(this,g,theRenderGroup))return;\n#ifdef PVZH1_ACTOR_DETAIL_PROFILE\n    H1ActorLiveDrawScope h1LiveDraw(this);\n#endif')
     needle='void Reanimation::StartBlend(int theBlendTime)\n{';assert text.count(needle)==1
     text=text.replace(needle,needle+'\n    H1ActorPoseNoteBlend(this,theBlendTime);')
     needle='void Reanimation::ReanimationDelete()\n{';assert text.count(needle)==1
@@ -411,6 +423,38 @@ bool PvzpLoadNextResource()
     needle='void ReanimationFreeDefinition(ReanimatorDefinition* theDefinition)\n{';assert text.count(needle)==1
     text=text.replace(needle,needle+'\n    H1ActorPoseForgetDefinition(theDefinition);')
     reanim.write_text(text,encoding='utf8',newline='\n')
+
+    zombie=source_root/'Lawn/Zombie.cpp';text=zombie.read_text(encoding='utf8')
+    needle='\t\tfor (size_t i = 0; i < LENGTH(gBossZombieList); i++)'
+    assert text.count(needle)==1
+    # The current-board pass already enumerates its required enemy types.
+    # Keep the upstream broad preload for callers outside this targeted scope.
+    text='extern bool H1TargetedBoardPreloadActive();\n'+text.replace(
+        needle,'        if(!H1TargetedBoardPreloadActive())\n'+needle,1)
+    # A zombie walk rate is derived from its selected clip and gameplay state.
+    # Refresh it at the first actual update, after initialization/preloading.
+    # This does not advance animation time or change movement speed/RNG.
+    needle='\tmZombieAge++;\n\tbool doUpdate = false;'
+    assert text.count(needle)==1
+    text=text.replace(needle,'''    if(mZombieAge==0){ // PVZH1_ZOMBIE_INITIAL_MOTION
+        auto* body=mApp->ReanimationTryToGet(mBodyReanimID);
+        if(body&&body->mAnimRate==0.0f)UpdateAnimSpeed();
+    }
+'''+needle,1)
+    zombie.write_text(text,encoding='utf8',newline='\n')
+
+    save=source_root/'Lawn/System/SaveGame.cpp';text=save.read_text(encoding='utf8')
+    needle='\t\t\taZombie->mApp = theBoard->mApp;\n\t\t\taZombie->mBoard = theBoard;'
+    assert text.count(needle)==1
+    # FixBoardAfterLoad runs after all entity/effect chunks have been restored.
+    # Reconcile the derived rate once here rather than trusting a saved zero.
+    # Original UpdateAnimSpeed preserves ice/butter, eating and death phases.
+    text=text.replace(needle,needle+'''
+            if(!aZombie->mDead){ // PVZH1_ZOMBIE_RESTORE_MOTION
+                auto* body=theBoard->mApp->ReanimationTryToGet(aZombie->mBodyReanimID);
+                if(body&&body->mAnimRate==0.0f)aZombie->UpdateAnimSpeed();
+            }''',1)
+    save.write_text(text,encoding='utf8',newline='\n')
 
     cut=source_root/'Lawn/CutScene.cpp';text=cut.read_text(encoding='utf8')
     start=text.index('// Sod rolling on early adventure levels')
@@ -459,12 +503,12 @@ bool PvzpLoadNextResource()
 
     particles=source_root/'PvzpLib/PvzpParticle.cpp'
     text=particles.read_text(encoding='utf8')
-    text='#include "graphics/RewardEffects.h"\n'+text
+    text='#include "graphics/RewardEffects.h"\n#include "graphics/CombatSprites.h"\n'+text
     start=text.index('void PvzpParticleSystem::PvzpParticleInitializeFromDef(')
     end=text.index('void PvzpParticleEmitter::PvzpEmitterInitialize(',start)
     close=text.rfind('\n}',start,end)
-    text=text[:close]+'\n    H1RewardEffectsBegin(this);'+text[close:]
-    for signature,statement in (('void PvzpParticleSystem::Update()','if(H1RewardEffectsUpdate(this))return;'),('void PvzpParticleSystem::Draw(Graphics* g)','if(H1RewardEffectsDraw(this,g))return;'),('void PvzpParticleSystem::ParticleSystemDie()','H1RewardEffectsForget(this);')):
+    text=text[:close]+'\n    H1RewardEffectsBegin(this); H1CombatHitBegin(this);'+text[close:]
+    for signature,statement in (('void PvzpParticleSystem::Update()','H1CombatHitUpdate(this); if(H1RewardEffectsUpdate(this))return;'),('void PvzpParticleSystem::Draw(Graphics* g)','if(H1CombatHitDraw(this,g))return; if(H1RewardEffectsDraw(this,g))return;'),('void PvzpParticleSystem::ParticleSystemDie()','H1CombatHitForget(this); H1RewardEffectsForget(this);')):
         anchor=signature+'\n{'
         assert text.count(anchor)==1
         text=text.replace(anchor,anchor+'\n    '+statement)
@@ -473,7 +517,7 @@ bool PvzpLoadNextResource()
     text=coin.read_text(encoding='utf8')
     anchor='mApp->AddPvzpParticle(mPosX + 30.0f, mPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_STARBURST);'
     assert text.count(anchor)==1
-    text='#include "graphics/RewardEffects.h"\n'+text.replace(anchor,'H1RewardStarburst(mApp,mPosX + 30.0f,mPosY + 30.0f,mRenderOrder + 1);')
+    text='#include "graphics/RewardEffects.h"\n#include "graphics/CombatSprites.h"\n'+text.replace(anchor,'H1RewardStarburst(mApp,mPosX + 30.0f,mPosY + 30.0f,mRenderOrder + 1);')
     coin.write_text(text,encoding='utf8',newline='\n')
     board=source_root/'Lawn/Board.cpp';text='#include "BoardLookup.h"\n'+board.read_text(encoding='utf8')
     for signature,statement in (('Board::Board(LawnApp* theApp)','H1BoardSupportChanged();'),('Plant* Board::GetFlowerPotAt(int theGridX, int theGridY)','if(!H1BoardMayHaveSupport(this,SEED_FLOWERPOT))return nullptr;'),('Plant* Board::GetPumpkinAt(int theGridX, int theGridY)','if(!H1BoardMayHaveSupport(this,SEED_PUMPKINSHELL))return nullptr;')):
@@ -505,3 +549,8 @@ bool PvzpLoadNextResource()
     anchor='void LawnApp::MakeNewBoard()\n{\n\tKillBoard();';assert text.count(anchor)==1;text=text.replace(anchor,anchor+'\n    H1CachedFramesRelease();')
     anchor='void LawnApp::ShowGameSelector()\n{\n\tKillBoard();';assert text.count(anchor)==1;text=text.replace(anchor,anchor+'\n    H1CachedFramesRelease();')
     lawn.write_text(text,encoding='utf8',newline='\n')
+
+    # Apply last, after the original lifecycle boundaries have been installed.
+    spec=importlib.util.spec_from_file_location('pvzh1_ui_flow',ROOT/'platform/ui_flow_patches.py')
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    module.apply(source_root)

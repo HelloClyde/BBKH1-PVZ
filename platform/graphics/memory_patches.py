@@ -84,7 +84,7 @@ def patch_memory(path):
     text=_replace(text,'void MemoryImage::PurgeBits()\n{',
         'void MemoryImage::PurgeBits()\n{\n\tif (H1ImageCacheContains(this)) { mPurgeBits = true; return; }','MemoryImage purge')
     text=_replace(text,'uint32_t* MemoryImage::GetBits()\n{',
-        'uint32_t* MemoryImage::GetBits()\n{\n\tH1ImageCacheTouch(this);\n\tH1ImageCacheLoad(this);','MemoryImage pixels')
+        'uint32_t* MemoryImage::GetBits()\n{\n\tH1ImageCacheTouch(this);\n\tH1ImageCacheNoteLogicalRequest(this,reinterpret_cast<uintptr_t>(__builtin_return_address(0)));\n\tH1ImageCacheLoad(this);','MemoryImage pixels')
     text=_replace(text,'bool MemoryImage::Palletize()\n{',
         'bool MemoryImage::Palletize()\n{\n'
         '\t// A palette is an optional lossless optimization; keep unopened file sources lazy.\n'
@@ -149,6 +149,15 @@ def patch_font_glyph_pages(path):
             '\t\t\tif (H1ImageCacheBltFontGlyph(aSrcMemoryImage,this,theX,theY,theSrcRect,theColor,Graphics::DRAWMODE_'+mode+')) return;\n\t\t}'
         body=_replace(body,needle,replacement,name+' bounded paged-font glyph')
         text=text[:begin]+body+text[end:]
+    # Fractional glyph draws enter the original rotated blitter even at angle
+    # zero. Give that blitter only the glyph's logical pixels, never its atlas.
+    text=_pin_entry(text,'void MemoryImage::BltRotated(',
+        '    if(H1ImageCacheIsReducedFont(dynamic_cast<MemoryImage*>(theImage))){\n'
+        '    MemoryImage h1Glyph(mApp);\n'
+        '    if(H1ImageCachePrepareFontGlyph(dynamic_cast<MemoryImage*>(theImage),theSrcRect,h1Glyph)){\n'
+        '        theImage->mDrawn=true;\n'
+        '        BltRotated(&h1Glyph,theX,theY,Rect(0,0,theSrcRect.mWidth,theSrcRect.mHeight),theClipRect,theColor,theDrawMode,theRot,theRotCenterX,theRotCenterY);return;\n'
+        '    }}')
     path.write_text(text,encoding='utf8',newline='\n')
 
 def patch_app_pressure(path):

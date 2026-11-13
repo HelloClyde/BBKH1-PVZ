@@ -1,0 +1,351 @@
+{
+  "bda_sha256": "5e4bee604588dc651c5f6477c87be3ed895833d4706f787699d514950489a7bf",
+  "elf_sha256": "5e9d0b0220f134394f58bbd9e670478a193b57716a0c1c9ea195d5858c571a54",
+  "build_receipt_sha256": "343683a7d3fd57ae9080941a4ca75e2e44d6a7eb64b77e2e215301593c9d4a33",
+  "symbols": {
+    "_GLOBAL__sub_I_pvzh1_font_cache_diagnostic": {
+      "address": "0x83c4c014",
+      "size": 52
+    },
+    "_GLOBAL__sub_I_pvzh1_sound_bank_diagnostic": {
+      "address": "0x83cd0ba4",
+      "size": 316
+    },
+    "_GLOBAL__sub_I_pvzh1_definition_diagnostic": {
+      "address": "0x83e0b7a8",
+      "size": 80
+    },
+    "_GLOBAL__sub_I_pvzp_music_diagnostic": {
+      "address": "0x83e30304",
+      "size": 92
+    },
+    "update_small_pool_diagnostic": {
+      "address": "0x83e3e864",
+      "size": 184
+    },
+    "pvzh1_actor_fallback_diagnostic": {
+      "address": "0x83f93738",
+      "size": 256
+    },
+    "pvzh1_adventure_diagnostic": {
+      "address": "0x83fac460",
+      "size": 48
+    },
+    "pvz_runtime_pressure_diagnostic": {
+      "address": "0x83fae040",
+      "size": 24
+    },
+    "pvzh1_cache_pressure_diagnostic": {
+      "address": "0x83f93ee0",
+      "size": 16
+    },
+    "pvzh1_axis_span_diagnostic": {
+      "address": "0x83f9a178",
+      "size": 32
+    },
+    "pvzh1_shadow_pose_diagnostic": {
+      "address": "0x83f93728",
+      "size": 16
+    },
+    "pvzh1_dirty_present_diagnostic": {
+      "address": "0x83fab1fc",
+      "size": 32
+    },
+    "pvz_runtime_asset_index_diagnostic": {
+      "address": "0x83fadd88",
+      "size": 32
+    },
+    "pvzh1_startup_diagnostic": {
+      "address": "0x83fac490",
+      "size": 128
+    },
+    "pvzh1_frame_time_diagnostic": {
+      "address": "0x83f936e8",
+      "size": 16
+    },
+    "pvzh1_white_repeat_diagnostic": {
+      "address": "0x83f9a154",
+      "size": 12
+    },
+    "pvzh1_adventure_raster_diagnostic": {
+      "address": "0x83fac3f0",
+      "size": 32
+    },
+    "pvzh1_paused_board_diagnostic": {
+      "address": "0x83f94140",
+      "size": 16
+    },
+    "gLawnApp": {
+      "address": "0x83f80724",
+      "size": 4
+    },
+    "pvzh1_dense_actor_diagnostic": {
+      "address": "0x83f931f8",
+      "size": 48
+    },
+    "pvzh1_camera_lawn_diagnostic": {
+      "address": "0x83f93a6c",
+      "size": 32
+    },
+    "pvzh1_alpha_palette_diagnostic": {
+      "address": "0x83f93e88",
+      "size": 32
+    },
+    "pvzh1_font_tile_diagnostic": {
+      "address": "0x83f93cb4",
+      "size": 32
+    },
+    "pvzh1_xmp_load_diagnostic": {
+      "address": "0x83fac65c",
+      "size": 48
+    },
+    "pvzh1_allocator_cache_diagnostic": {
+      "address": "0x83f93a2c",
+      "size": 32
+    },
+    "pvzh1_sod_offline_diagnostic": {
+      "address": "0x83f93898",
+      "size": 32
+    },
+    "pvzp_diagnostic": {
+      "address": "0x83fab21c",
+      "size": 128
+    },
+    "pvzh1_paged_rgb_diagnostic": {
+      "address": "0x83f93ea8",
+      "size": 32
+    },
+    "pvzh1_cached_frame_diagnostic": {
+      "address": "0x83f938f8",
+      "size": 32
+    },
+    "pvzh1_definition_retirement_diagnostic": {
+      "address": "0x83f99d18",
+      "size": 16
+    },
+    "pvzh1_font_metric_diagnostic": {
+      "address": "0x83faa510",
+      "size": 16
+    },
+    "pvzh1_font_cache_diagnostic": {
+      "address": "0x83f828b4",
+      "size": 32
+    },
+    "pvzp_music_diagnostic": {
+      "address": "0x83fab29c",
+      "size": 32
+    },
+    "pvzh1_selector_definition_diagnostic": {
+      "address": "0x83f99d28",
+      "size": 40
+    },
+    "pvz_runtime_write_diagnostic": {
+      "address": "0x83faddd4",
+      "size": 40
+    },
+    "pvzh1_sound_index_diagnostic": {
+      "address": "0x83f83068",
+      "size": 16
+    },
+    "pvzh1_cache_diagnostic": {
+      "address": "0x83f93ec8",
+      "size": 24
+    },
+    "pvzh1_base_inverse_diagnostic": {
+      "address": "0x83f93838",
+      "size": 16
+    },
+    "pvz_runtime_hole_diagnostic": {
+      "address": "0x83fae5e8",
+      "size": 48
+    },
+    "pvzh1_actor_pose_diagnostic": {
+      "address": "0x83f938b8",
+      "size": 64
+    },
+    "pvzh1_intro_movie_diagnostic": {
+      "address": "0x83fac61c",
+      "size": 64
+    },
+    "pvzh1_selector_cull_diagnostic": {
+      "address": "0x83fac410",
+      "size": 16
+    },
+    "pvzh1_audio_diagnostic": {
+      "address": "0x83fab310",
+      "size": 64
+    },
+    "pvzh1_linear_actor_diagnostic": {
+      "address": "0x83f936d8",
+      "size": 16
+    },
+    "pvzh1_baked_actor_diagnostic": {
+      "address": "0x83f93228",
+      "size": 576
+    },
+    "pvzh1_rgba_raster_page_diagnostic": {
+      "address": "0x83f93e28",
+      "size": 32
+    },
+    "pvzh1_physical_screen_diagnostic": {
+      "address": "0x83f94150",
+      "size": 32
+    },
+    "pvzh1_extra_actor_diagnostic": {
+      "address": "0x83f936a8",
+      "size": 32
+    },
+    "pvzh1_normal_actor_diagnostic": {
+      "address": "0x83f93718",
+      "size": 16
+    },
+    "pvzh1_intro_cost_diagnostic": {
+      "address": "0x83fac5dc",
+      "size": 64
+    },
+    "pvzh1_definition_diagnostic": {
+      "address": "0x83f93a08",
+      "size": 32
+    },
+    "pvzh1_selector_retained_diagnostic": {
+      "address": "0x83fac3e0",
+      "size": 16
+    },
+    "pvz_runtime_profile_diagnostic": {
+      "address": "0x83fac738",
+      "size": 208
+    },
+    "pvz_runtime_log_diagnostic": {
+      "address": "0x83fac97c",
+      "size": 12
+    },
+    "pvzh1_render_plan_diagnostic": {
+      "address": "0x83f9940c",
+      "size": 96
+    },
+    "pvzh1_text_replay_diagnostic": {
+      "address": "0x83faa520",
+      "size": 32
+    },
+    "pvz_runtime_native_charge": {
+      "address": "0x83fae06c",
+      "size": 8
+    },
+    "pvzh1_active_track_diagnostic": {
+      "address": "0x83f936c8",
+      "size": 16
+    },
+    "pvz_runtime_termination_diagnostic": {
+      "address": "0x83faf720",
+      "size": 16
+    },
+    "pvzh1_reward_effect_diagnostic": {
+      "address": "0x83f994d0",
+      "size": 48
+    },
+    "pvzh1_options_diagnostic": {
+      "address": "0x83fab3f4",
+      "size": 52
+    },
+    "pvzh1_image_pack_diagnostic": {
+      "address": "0x83fab428",
+      "size": 16
+    },
+    "pvzh1_definition_compaction_diagnostic": {
+      "address": "0x83f93a4c",
+      "size": 32
+    },
+    "pvzh1_early_lawn_diagnostic": {
+      "address": "0x83f93a8c",
+      "size": 32
+    },
+    "pvzh1_font_storage_diagnostic": {
+      "address": "0x83f93ce8",
+      "size": 32
+    },
+    "pvz_runtime_small_pool_diagnostic": {
+      "address": "0x83fae074",
+      "size": 64
+    },
+    "pvz_runtime_asset_layout_diagnostic": {
+      "address": "0x83faddc4",
+      "size": 16
+    },
+    "pvzh1_level_preload_diagnostic": {
+      "address": "0x83fab3d8",
+      "size": 16
+    },
+    "pvzh1_actor_lifetime_diagnostic": {
+      "address": "0x83f936f8",
+      "size": 32
+    },
+    "pvz_runtime_io_diagnostic": {
+      "address": "0x83faddfc",
+      "size": 64
+    },
+    "pvzh1_additive_diagnostic": {
+      "address": "0x83f9a164",
+      "size": 16
+    },
+    "pvzh1_dirty_canvas_diagnostic": {
+      "address": "0x83f82058",
+      "size": 32
+    },
+    "pvzh1_board_replay_retirement_diagnostic": {
+      "address": "0x83fab3cc",
+      "size": 12
+    },
+    "pvzh1_storage_texture_diagnostic": {
+      "address": "0x83f93e08",
+      "size": 32
+    },
+    "pvzh1_actor_page_diagnostic": {
+      "address": "0x83f93878",
+      "size": 32
+    },
+    "pvzh1_selector_offline_diagnostic": {
+      "address": "0x83fac420",
+      "size": 64
+    },
+    "pvzh1_sound_bank_diagnostic": {
+      "address": "0x83f83098",
+      "size": 16
+    },
+    "pvz_runtime_last_path": {
+      "address": "0x83fade3c",
+      "size": 512
+    },
+    "pvzh1_live_actor_diagnostic": {
+      "address": "0x83f93468",
+      "size": 576
+    },
+    "pvzh1_rgba_font_palette_diagnostic": {
+      "address": "0x83f93e68",
+      "size": 32
+    },
+    "pvzh1_save_file_diagnostic": {
+      "address": "0x83fab498",
+      "size": 32
+    },
+    "pvzh1_save_compare_diagnostic": {
+      "address": "0x83fab484",
+      "size": 20
+    },
+    "pvz_runtime_diagnostic": {
+      "address": "0x83fac83c",
+      "size": 64
+    },
+    "pvzh1_plant_pose_diagnostic": {
+      "address": "0x83f93848",
+      "size": 48
+    },
+    "pvzh1_rgba_font_page_diagnostic": {
+      "address": "0x83f93e48",
+      "size": 32
+    },
+    "pvzh1_level_loading_diagnostic": {
+      "address": "0x83f939b4",
+      "size": 48
+    }
+  }
+}

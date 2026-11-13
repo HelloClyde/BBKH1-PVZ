@@ -11,6 +11,11 @@
 #include "Lawn/Board.h"
 #include "graphics/Graphics.h"
 #include "graphics/ImageFont.h"
+#include "Common.h"
+#include "SaveFile.h"
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
 extern "C" void pvzh1_cache_complete_draw_batch();
 extern "C" size_t pvzh1_cache_memory_pressure(size_t);
 /* Open count, pending, start ms, constructor ms, first presented ms, draws,
@@ -50,7 +55,7 @@ void H1OptionsPrepare(){
         if(auto* imageFont=dynamic_cast<Sexy::ImageFont*>(font))for(const auto& layer:imageFont->mActiveLayerList)
             pvzh1_options_diagnostic[9]+=Sexy::H1ImageCacheReserveLoadedUI(dynamic_cast<Sexy::MemoryImage*>(layer.mScaledImage));
     };
-    warm(Sexy::FONT_DWARVENTODCRAFT18,{"音乐","音效","图形加速","全屏显示"});
+    warm(Sexy::FONT_DWARVENTODCRAFT18,{"音乐","音效"," 0123456789%"});
     warm(Sexy::FONT_DWARVENTODCRAFT18GREENINSET,{"重新开始关卡","主菜单","查看图鉴"});
     warm(Sexy::FONT_DWARVENTODCRAFT18BRIGHTGREENINSET,{"重新开始关卡","主菜单","查看图鉴"});
     warm(Sexy::FONT_DWARVENTODCRAFT36GREENINSET,{"返回游戏"});
@@ -86,3 +91,39 @@ void H1OptionsBegin(){
 void H1OptionsConstructed(){const uint32_t begin=SDL_GetTicks();if(gLawnApp)H1PausedBoardPrime(gLawnApp->mBoard);pvzh1_options_diagnostic[12]=SDL_GetTicks()-begin;pvzh1_options_diagnostic[3]=SDL_GetTicks()-pvzh1_options_diagnostic[2];}
 void H1OptionsDrawn(){++pvzh1_options_diagnostic[5];drawn=true;}
 void H1OptionsPresented(){if(drawn&&pvzh1_options_diagnostic[1]){pvzh1_options_diagnostic[4]=SDL_GetTicks()-pvzh1_options_diagnostic[2];pvzh1_options_diagnostic[1]=0;}}
+
+// Sequence, flow kind (1=new profile, 2=leave board), start ms, followed by
+// cumulative completed-phase times. No file I/O or allocations for timing.
+extern "C" {volatile uint32_t pvzh1_ui_flow_diagnostic[12];}
+void H1UIFlowBegin(unsigned kind){
+    ++pvzh1_ui_flow_diagnostic[0];pvzh1_ui_flow_diagnostic[1]=kind;
+    pvzh1_ui_flow_diagnostic[2]=SDL_GetTicks();
+    for(unsigned i=3;i<12;++i)pvzh1_ui_flow_diagnostic[i]=0;
+}
+void H1UIFlowMark(unsigned phase){if(phase<9)pvzh1_ui_flow_diagnostic[3+phase]=SDL_GetTicks()-pvzh1_ui_flow_diagnostic[2]+1;}
+void H1UIFlowPresented(){if(pvzh1_ui_flow_diagnostic[1]==3&&pvzh1_ui_flow_diagnostic[10]&&!pvzh1_ui_flow_diagnostic[11])H1UIFlowMark(8);}
+void H1BackgroundSaveScopeChange(bool begin){
+#if defined(H1_PVZ_PORTABLE) && !defined(PVZ_HOST_RUNNER)
+    extern void H1BackgroundSaveNative(bool);H1BackgroundSaveNative(begin);
+#endif
+}
+#if defined(H1_PVZ_PORTABLE) && !defined(PVZ_HOST_RUNNER)
+extern "C" void pvzh1_save_scope(int);
+void H1BackgroundSaveNative(bool begin){pvzh1_save_scope(begin?1:0);}
+#endif
+namespace {unsigned savedMusic=10,savedSound=10;
+unsigned Percent(double v){return unsigned(std::clamp(v,0.0,1.0)*100+0.5);}}
+void H1AudioSettingsLoad(LawnApp* app){
+    unsigned char data[6]{};
+    if(auto* f=std::fopen(Sexy::GetAppDataPath("userdata/h1-audio.dat").c_str(),"rb")){
+        const bool read=std::fread(data,1,sizeof(data),f)==sizeof(data);std::fclose(f);
+        if(read&&std::memcmp(data,"H1V1",4)==0&&data[4]<=100&&data[5]<=100){savedMusic=data[4];savedSound=data[5];}
+    }
+    app->SetMusicVolume(savedMusic/100.0);app->SetSfxVolume(savedSound/100.0);
+}
+void H1AudioSettingsSave(LawnApp* app){
+    const unsigned music=Percent(app->GetMusicVolume()),sound=Percent(app->GetSfxVolume());
+    if(music==savedMusic&&sound==savedSound)return;
+    const unsigned char data[6]={'H','1','V','1',static_cast<unsigned char>(music),static_cast<unsigned char>(sound)};
+    if(H1WriteSaveFile(Sexy::GetAppDataPath("userdata/h1-audio.dat"),data,sizeof(data))){savedMusic=music;savedSound=sound;}
+}

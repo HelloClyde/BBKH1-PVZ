@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\compact-tiles-native-v6\\H1PVZPortable.bda",
+  "target": "A:\\应用\\程序\\植物僵尸.bda",
+  "target_gbk_hex": "413a5cd3a6d3c35cb3ccd0f25cd6b2ceefbda9caac2e626461",
+  "phase": "done",
+  "completed": true,
+  "size": 3702604,
+  "crc32": 4279755674,
+  "sha256": "5e4bee604588dc651c5f6477c87be3ed895833d4706f787699d514950489a7bf",
+  "token": 83,
+  "received": 3702604,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 83,
+    "size": 3702604,
+    "received": 3702604,
+    "expected_crc": 4279755674,
+    "actual_crc": 4279755674,
+    "verify_offset": 3702604,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 8,
+    "old_size": 0,
+    "old_crc": 0,
+    "last_activity_tick": 2091228,
+    "step_count": 1816,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "A:\\应用\\程序\\植物僵尸.bda",
+    "temporary": "A:\\应用\\程序\\H1D00000053.TMP",
+    "backup": "A:\\应用\\程序\\H1D00000053.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 237.09400000004098
+}

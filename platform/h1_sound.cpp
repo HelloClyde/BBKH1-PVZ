@@ -75,12 +75,10 @@ extern "C" void pvzh1_sound_warmup(){
         for(auto* candidate:loaded_chunks)if(path==candidate->path&&candidate->samples==samples&&!candidate->cached){chunk=candidate;break;}
         if(chunk){
             auto& data=cached_effects[chunk];data.resize(samples);
-            ok=ok&&fread(data.data(),2,samples,file)==samples&&crc32(0,(const Bytef*)data.data(),samples*2)==crc;
+            ok=ok&&fread(data.data(),2,samples,file)==samples;
             if(ok){chunk->cached=data.data();++pvzh1_sound_bank_diagnostic[0];pvzh1_sound_bank_diagnostic[1]+=samples*2;}
         }else{
-            unsigned char discard[4096];uint32_t left=samples*2,check=0;
-            while(ok&&left){uint32_t n=std::min(left,uint32_t(sizeof(discard)));ok=fread(discard,1,n,file)==n;check=crc32(check,discard,n);left-=n;}
-            ok=ok&&check==crc;
+            ok=fseek(file,samples*2,SEEK_CUR)==0;
         }
         consumed+=12+length+samples*2;pvzp_audio_service();
     }
@@ -121,7 +119,7 @@ static void load_sound_index(){
     FILE* f=fopen(GetResourcePath("sounds/index.h1si").c_str(),"rb");if(!f)return;
     unsigned char header[16];bool ok=fread(header,1,16,f)==16&&!memcmp(header,"H1SI",4)&&u32le(header+4)==1;
     unsigned size=ok?u32le(header+8):0;ok=ok&&size&&size<=131072;std::vector<unsigned char> data;
-    if(ok){data.resize(size);ok=fread(data.data(),1,size,f)==size&&fgetc(f)==EOF&&crc32(0,data.data(),size)==u32le(header+12);}fclose(f);if(!ok)return;
+    if(ok){data.resize(size);ok=fread(data.data(),1,size,f)==size;}fclose(f);if(!ok)return;
     unsigned at=0;while(at+8<=size){unsigned length=u32le(data.data()+at),samples=u32le(data.data()+at+4);at+=8;
         if(!length||length>512||at+length>size){sound_index.clear();return;}
         sound_index.emplace(std::string((const char*)data.data()+at,length),samples);at+=length;

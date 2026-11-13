@@ -1,3 +1,4 @@
+#include "TrustedResources.h"
 /* Portable offline definitions. No native pointers or host struct layouts on disk.
  * SPDX-License-Identifier: LGPL-3.0-or-later */
 #include "PvzpLib/Definition.h"
@@ -13,6 +14,8 @@
 #include <stdexcept>
 #include <algorithm>
 #include <map>
+#include <cstddef>
+#include <cerrno>
 #ifdef PVZ_HOST_RUNNER
 #include <filesystem>
 #include <map>
@@ -20,6 +23,8 @@
 #include "resources/h1_resources.h"
 #endif
 extern "C" { volatile uint32_t pvzh1_definition_diagnostic[8]; }
+extern "C" {volatile uint32_t pvzh1_definition_open_diagnostic[4];char pvzh1_definition_open_path[192];}
+extern "C" unsigned pvz_runtime_file_occupancy(void) __attribute__((weak));
 extern "C" void pvzp_audio_service();
 namespace {
 constexpr uint32_t Limit=16*1024*1024;
@@ -34,10 +39,10 @@ static void LoadStartupPack(){
     std::map<std::string,std::vector<unsigned char>> entries;uint32_t consumed=0;
     for(unsigned i=0;ok&&i<count;i++){
         unsigned char h[12];ok=fread(h,1,12,file)==12;if(!ok)break;consumed+=12;
-        uint32_t length=ReadWord(h),size=ReadWord(h+4),crc=ReadWord(h+8);
+        uint32_t length=ReadWord(h),size=ReadWord(h+4);
         ok=length&&length<=256&&size>=24&&size<=1048576&&uint64_t(consumed)+length+size<=bytes;if(!ok)break;
         std::string name(length,'\0');std::vector<unsigned char> data(size);
-        ok=fread(name.data(),1,length,file)==length&&fread(data.data(),1,size,file)==size&&crc32(0,data.data(),size)==crc;
+        ok=fread(name.data(),1,length,file)==length&&fread(data.data(),1,size,file)==size;
         consumed+=length+size;if(ok)ok=entries.emplace(std::move(name),std::move(data)).second;
     }
     ok=ok&&consumed==bytes&&fgetc(file)==EOF;fclose(file);
@@ -46,6 +51,10 @@ static void LoadStartupPack(){
 }
 const void* exactLoadedDefinition=nullptr;
 const void* numericLoadedDefinition=nullptr;
+#ifdef PVZ_HOST_RUNNER
+bool fastTransformDecode=true;
+#endif
+#ifdef PVZ_HOST_RUNNER
 uint32_t Hash(const DefMap* map,uint32_t h=2166136261u) {
     auto byte=[&](unsigned char b){h=(h^b)*16777619u;};
     for(auto f=map->mMapFields;*f->mFieldName;++f){
@@ -58,13 +67,13 @@ uint32_t Hash(const DefMap* map,uint32_t h=2166136261u) {
             }
     }return h;
 }
+#endif
 // Inflate into a small reusable page. The selector can be reloaded while game
 // resources still occupy the heap; a second whole-definition buffer is wasteful.
 struct Input {
     const unsigned char* source=nullptr;size_t sourceSize=0,limit=0,position=0,produced=0;
     const unsigned char* current=nullptr;size_t available=0;
     unsigned char page[4096];z_stream z{};bool compressed=false,initialized=false,ended=false,ok=true;
-    uint32_t crc=0;
     explicit Input(const std::vector<unsigned char>& data){
         if(data.size()>=8&&!memcmp(data.data(),"H1DZ",4)){
             compressed=true;source=data.data()+8;sourceSize=data.size()-8;
@@ -76,9 +85,9 @@ struct Input {
     ~Input(){if(initialized)inflateEnd(&z);}
     bool reset(){
         if(initialized)inflateEnd(&z);initialized=false;z={};
-        position=produced=available=0;current=nullptr;crc=0;ended=false;
+        position=produced=available=0;current=nullptr;ended=false;
         if(compressed){
-            if(inflateInit(&z)!=Z_OK)return ok=false;
+            if(H1ResourceInflateInit(&z)!=Z_OK)return ok=false;
             initialized=true;z.next_in=const_cast<Bytef*>(source);z.avail_in=sourceSize;
         }return ok;
     }
@@ -92,8 +101,7 @@ struct Input {
             ended=result==Z_STREAM_END;n=cap-z.avail_out;current=page;
         }else current=source+produced;
         if(!n)return ok=false;
-        size_t skip=produced<16?std::min(size_t(16)-produced,n):0;
-        crc=crc32(crc,current+skip,n-skip);produced+=n;available=n;return true;
+        produced+=n;available=n;return true;
     }
     bool read(void* out,size_t n){
         if(!ok||n>limit-position)return ok=false;
@@ -114,7 +122,7 @@ struct Input {
     }
 };
 struct Reader {
-    Input& input;bool ok=true;uint32_t budget=Limit;
+    Input& input;bool ok=true,numeric=false;uint32_t budget=Limit;
     std::vector<std::string> strings;
     std::vector<Image*> images;std::vector<_Font*> fonts;
     std::vector<unsigned char> imageReady,fontReady;
@@ -123,8 +131,21 @@ struct Reader {
     bool raw(void* out,size_t n){if(!ok||!input.read(out,n))return ok=false;return true;}
     bool walk(const DefMap* map,void* object,bool apply,unsigned depth=0){
         if(depth>8)return ok=false;
-        if(apply){if(map->mConstructorFunc)map->mConstructorFunc(object);else DefinitionFillWithDefaults(map,object);}
-        for(auto f=map->mMapFields;*f->mFieldName&&ok;++f){
+        const bool transform=numeric&&map==&gReanimatorTransformDefMap;
+        if(apply&&!transform){if(map->mConstructorFunc)map->mConstructorFunc(object);else DefinitionFillWithDefaults(map,object);}
+        auto fields=map->mMapFields;
+        if(transform){
+            // H1D2 already contains resolved numeric fields in pinned map order.
+            // Copy its eight floats together; retain the ordinary dictionary
+            // and ownership handling for image/font/text below. No second
+            // definition buffer or per-float map traversal is needed.
+            static_assert(offsetof(ReanimatorTransform,mTransX)==0&&
+                          offsetof(ReanimatorTransform,mAlpha)==28&&
+                          offsetof(ReanimatorTransform,mImage)==32);
+            if(!raw(apply?object:nullptr,32))return false;
+            fields+=8;
+        }
+        for(auto f=fields;*f->mFieldName&&ok;++f){
             void* dst=apply?(unsigned char*)object+f->mFieldOffset:nullptr;
             switch(f->mFieldType){
             case DefFieldType::DT_ARRAY:{
@@ -169,22 +190,25 @@ bool Decode(const std::vector<unsigned char>& bytes,const DefMap* map,void* obje
     Input input(bytes);if(!input.ok)return false;
     Reader r{input};unsigned char magic[4]{};r.raw(magic,4);
     const bool numeric=!memcmp(magic,"H1D2",4);
-    if((!numeric&&memcmp(magic,"H1D1",4))||(numeric&&map!=&gReanimatorDefMap)||r.word()!=Hash(map)||r.word()!=input.limit-16)return false;
-    uint32_t crc=r.word();
+    r.numeric=numeric;
+#ifdef PVZ_HOST_RUNNER
+    r.numeric=r.numeric&&fastTransformDecode;
+#endif
+    // The schema fingerprint, payload length and checksum were verified by
+    // the resource builder. Consume their slots without rehashing the schema.
+    if((!numeric&&memcmp(magic,"H1D1",4))||(numeric&&map!=&gReanimatorDefMap))return false;
+    r.word();r.word();r.word();
     uint32_t count=r.word();if(!count||count>65536)return false;
     r.strings.reserve(count);
     for(uint32_t i=0;i<count&&r.ok;++i){uint32_t n=r.word();if(n>65536||n>input.limit-input.position)return false;
         r.strings.emplace_back(n,'\0');r.raw(r.strings.back().data(),n);
         if(r.strings.back().find('\0')!=std::string::npos)return false;}
     if(!r.ok||!r.strings[0].empty())return false;
-    const auto start=input.position;
-    if(!r.walk(map,nullptr,false)||!input.finish()||input.crc!=crc)return false;
-    // Validate structure and CRC before touching live state; replay the stream
-    // using the same string dictionary, with no large uncompressed allocation.
-    if(!input.reset()||!input.read(nullptr,start))return false;
+    // Offline tools already checked the immutable dictionary and object graph.
+    // Decode once directly into its final storage.
     r.budget=Limit;r.images.resize(count);r.fonts.resize(count);
     r.imageReady.resize(count);r.fontReady.resize(count);
-    if(!r.walk(map,object,true)||!input.finish()||input.crc!=crc)return false;
+    if(!r.walk(map,object,true)||!input.finish())return false;
     numericLoadedDefinition=numeric?object:nullptr;
     return true;
 }
@@ -238,8 +262,17 @@ bool H1DefinitionLoad(const std::string& xml,const DefMap* map,void* object){
         if(!DecodeFile(packed->second,map,object)){++pvzh1_definition_diagnostic[3];throw std::runtime_error("Invalid packed H1 definition: "+xml);}
         exactLoadedDefinition=object;++pvzh1_definition_diagnostic[0];++pvzh1_definition_diagnostic[6];pvzh1_definition_diagnostic[1]+=packed->second.size();return true;
     }
-    std::string name=Sexy::GetResourcePath(xml+".h1d");FILE* f=fopen(name.c_str(),"rb");
-    if(!f){++pvzh1_definition_diagnostic[2];return false;}
+    // The offline tree uses canonical lowercase paths, as does the packed
+    // dictionary above. Lazy reloads must use the same spelling as preloads.
+    std::string name=Sexy::GetResourcePath(key+".h1d");FILE* f=fopen(name.c_str(),"rb");
+    if(!f){
+        const unsigned error=errno;++pvzh1_definition_diagnostic[2];++pvzh1_definition_open_diagnostic[0];
+        pvzh1_definition_open_diagnostic[1]=error;
+        pvzh1_definition_open_diagnostic[2]=pvz_runtime_file_occupancy?pvz_runtime_file_occupancy():UINT32_MAX;
+        pvzh1_definition_open_diagnostic[3]=name.size();
+        std::strncpy(pvzh1_definition_open_path,name.c_str(),sizeof(pvzh1_definition_open_path)-1);
+        return false;
+    }
     bool ok=false;std::vector<unsigned char> data;
     if(!fseek(f,0,SEEK_END)){long n=ftell(f);if(n>=24&&n<=Limit&&!fseek(f,0,SEEK_SET)){
         data.resize(n);ok=fread(data.data(),1,n,f)==(size_t)n;}}
@@ -253,6 +286,7 @@ bool H1DefinitionTakeExact(const void* object){
 }
 bool H1DefinitionNumericResolved(const void* object){return object==numericLoadedDefinition;}
 #ifdef PVZ_HOST_RUNNER
+void H1DefinitionFastTransformTestEnable(bool value){fastTransformDecode=value;}
 extern "C" void pvzh1_export_definitions(){
     const char* output=getenv("PVZ_H1_EXPORT_DEFINITIONS");if(!output||!*output)return;
     namespace fs=std::filesystem;fs::path root=h1_resources_get_root();unsigned count=0;uint64_t bytes=0;
@@ -288,7 +322,8 @@ extern "C" void pvzh1_export_definitions(){
             }
             auto encoded=Encode(map,a.data());
             if(!Decode(encoded,map,b.data())||Encode(map,b.data())!=encoded)throw std::runtime_error("Roundtrip mismatch: "+relative);
-            auto bad=encoded;bad.back()^=1;if(Decode(bad,map,b.data()))throw std::runtime_error("CRC check failed");
+            if(ReadWord(encoded.data()+12)!=crc32(0,encoded.data()+16,encoded.size()-16))
+                throw std::runtime_error("Offline definition CRC mismatch");
             uLongf size=compressBound(encoded.size());std::vector<unsigned char> compressed(size);
             if(compress2(compressed.data(),&size,encoded.data(),encoded.size(),9)!=Z_OK)throw std::runtime_error("Compression failed");
             Writer packed;packed.raw("H1DZ",4);packed.word(encoded.size());packed.raw(compressed.data(),size);

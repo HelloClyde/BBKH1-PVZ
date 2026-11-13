@@ -1,0 +1,67 @@
+{
+  "latin-glyphs.json": {
+    "source": "build/cache-v19-latin-font-host-final/run/latin-glyph-verification.json",
+    "sha256": "c63ed7a6ee7820347d88f671c331429c35e6c69eaa81a0359fb7ddc71fcf1e3b"
+  },
+  "fullscreen-mask.json": {
+    "source": "build/cache-v18-fullscreen-mask-host/run/fullscreen-mask-verification.json",
+    "sha256": "2426cc21590ca4188559823d7417330b7b39036ed1e38149ffe6e400c67e1b88"
+  },
+  "boss-music-samples.json": {
+    "source": "build/boss-music-sample-verification-v2-20261108/verification.json",
+    "sha256": "0e3cfcffc3a7fe3f4bc4b4557178d09c796446a32f56e1c36fb620508d802331"
+  },
+  "boss-music-factory.json": {
+    "source": "build/cache-v18-boss-music-factory-verified/run/boss-music-factory-verification.json",
+    "sha256": "dc65e7e5a61e42aa8c7ae7bd18f3a524ce4214ba01ab5287873a7590d9ddfc6d"
+  },
+  "title-music-lifecycle.json": {
+    "source": "build/cache-v18-title-music-regression/run/music-title-reuse-verification.json",
+    "sha256": "9ebc4304ff2781a28867e901463626dcdc8e6cc4ef13841337d4e7f3863a79d2"
+  },
+  "allocation-census.json": {
+    "source": "build/cache-v15-hardware/allocation-census-summary.json",
+    "sha256": "e2fa0b3ba8bdf3b4cb2d7e107ea7546202f94525e2d9b809edf6da46ec4e1aac"
+  },
+  "image-census.json": {
+    "source": "build/cache-v15-hardware/image-census-summary.json",
+    "sha256": "7d1a8c23c7d7715852d0f03b2c04aeb4b3b2fbb27456b593359f9c854dda84f9"
+  },
+  "candidate": {
+    "bda_sha256": "bf3daef4d764e19a8824ccce3ecbce2f46745e7584eb15b741b787eead8eaac7",
+    "elf_sha256": "448c7bc17d4fc3d2ca734a0deb1701fac17a43892b75d60578bd0192534d6b59",
+    "build_receipt_sha256": "fed4c6b9e21d3edf1ff268b941367c65205be4c990beb15a5f29c6be151ca677",
+    "fingerprints": [
+      {
+        "symbol": "h1_bda_main",
+        "address": "0x83c00020",
+        "size": 48,
+        "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3c50b6bd27e0ffbd271800a8af52faf80c000000001800bd8f1800bc8f",
+        "sha256": "727a5a0488ee8b5e0a226259c035560e9b416203b3283121da7a74907ae84bda"
+      },
+      {
+        "symbol": "_open",
+        "address": "0x83e40ab0",
+        "size": 64,
+        "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+        "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+      },
+      {
+        "symbol": "pvzp_present_argb",
+        "address": "0x83e2d608",
+        "size": 64,
+        "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a0008ef7f80c2580c00025984000",
+        "sha256": "0dad733c5b27fbf972b3e79a1e98c003b5c5b38be3d5961063324f6f535a5c4a"
+      },
+      {
+        "symbol": "detect_resource_drive",
+        "address": "0x83e3f1b0",
+        "size": 64,
+        "expected_hex": "fb83023c0080438c4200601400000000d8ffbd27010003241800b1af1400b0aff083113cfa83103c2400bfaf2000beaf1c00b2af25f0a003408424265c651026",
+        "sha256": "7d0d9d3063310ec960487ebb0da7e9881ed244830e7feda0688e4b955e2bf542"
+      }
+    ]
+  },
+  "native_status": "Physical failure animation and final dialog mask passed. Boss frame rate/memory target not passed. App exited normally; entire original userdata restored and two original files read back with matching SHA256.",
+  "native_summary": "native-v19-summary.json"
+}

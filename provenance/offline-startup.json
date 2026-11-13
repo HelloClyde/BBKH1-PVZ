@@ -281,6 +281,8 @@
     "data/pix118bold.txt": "a23744a15abc67edb74234ca79533abb027dcfda0e6997f4f0c630fc7a5a3a2c"
   },
   "font_all_fields_roundtrip": true,
-  "host_sha256": "28c8fb63180ac5672053ce70091137d23d9142ef2a4ad14a72db84496c2ec5f1",
-  "font_reader_sha256": "d8da600a1b9c525d2a99c2aca0680902728594d6206311bbbcb2db38cc93b7f9"
+  "host_sha256": "757c807606b4e6cb4eb8cdd83e257791d329b4e5cd2b43eaf928d647d7492ac8",
+  "font_reader_sha256": "4d1610cbe2cb06078ae466b4d15a849c3049cb01509025a5723b230853fc5bad",
+  "font_reader_revision_verification": "docs/verification/trusted-resources-20261108/font-rebuild.json",
+  "reader_revision_validation": "docs/verification/intro-delete-20261113/offline-metadata-rebuild.json"
 }

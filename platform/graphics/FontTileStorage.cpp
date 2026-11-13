@@ -52,7 +52,7 @@ bool H1FontTileStorage::Open(const char* name,uint32_t width,uint32_t height){
     if(fread(header,1,32,file)!=32||memcmp(header,"H1FT",4)||U32(header+4)!=1||U32(header+12)!=64||U32(header+28)!=16)return false;
     pvzh1_font_tile_diagnostic[4]=3;uint32_t n=U32(header+8);fileBytes=U32(header+16);dataStart=U32(header+20);
     if(!n||n>16||fileBytes>16*1024*1024||dataStart<32+n*64||dataStart>fileBytes)return false;
-    if(fread(directory,1,n*64,file)!=n*64||crc32(0,directory,n*64)!=U32(header+24))return false;
+    if(fread(directory,1,n*64,file)!=n*64)return false;
     pvzh1_font_tile_diagnostic[4]=4;const unsigned char* match=nullptr;
     for(uint32_t i=0;i<n;++i){const auto* r=directory+i*64;
         if(!memchr(r,0,32)||!r[0])return false;
@@ -62,13 +62,15 @@ bool H1FontTileStorage::Open(const char* name,uint32_t width,uint32_t height){
     if(columns!=(width+15)/16||rows!=(height+15)/16)return false;
     count=columns*rows;
     if(bytes!=count*8||offset<32+n*64||offset>dataStart||bytes>dataStart-offset)return false;
-    pvzh1_font_tile_diagnostic[4]=5;records.reset(new(std::nothrow) Record[count]);tiles.reset(new(std::nothrow) unsigned char*[count]());
-    if(!records||!tiles||fseek(file,offset,SEEK_SET)||fread(records.get(),1,bytes,file)!=bytes||crc32(0,(const Bytef*)records.get(),bytes)!=U32(match+56))return false;
-    pvzh1_font_tile_diagnostic[4]=6;static_assert(sizeof(Record)==8);
-    for(uint32_t i=0;i<count;++i){auto& r=records[i];const auto* p=(const unsigned char*)&r;
-        r={U32(p),U32(p+4)};
-        if(!r.offset){if(r.crc!=crc32(0,zeroTile,256))return false;tiles[i]=const_cast<unsigned char*>(zeroTile);}
-        else if(r.offset<dataStart||r.offset>fileBytes||256>fileBytes-r.offset||(r.offset-dataStart)%256)return false;}
+    pvzh1_font_tile_diagnostic[4]=5;records.reset(new(std::nothrow) uint32_t[count]);tiles.reset(new(std::nothrow) unsigned char*[count]());
+    if(!records||!tiles||fseek(file,offset,SEEK_SET))return false;
+    // Disk records retain their offline CRC for the installer. H1 needs only
+    // offsets; don't allocate a second word per tile for unused checksums.
+    unsigned char block[1024];
+    for(uint32_t base=0;base<count;base+=128){const unsigned n=std::min(128u,count-base);
+        if(fread(block,8,n,file)!=n)return false;
+        for(unsigned i=0;i<n;++i){records[base+i]=U32(block+i*8);if(!records[base+i])tiles[base+i]=const_cast<unsigned char*>(zeroTile);}}
+    pvzh1_font_tile_diagnostic[4]=6;
     pvzh1_font_tile_diagnostic[4]=0;return true;
 }
 bool H1FontTileStorage::Prepare(int left,int top,int right,int bottom,uint32_t& readBytes){
@@ -77,7 +79,7 @@ bool H1FontTileStorage::Prepare(int left,int top,int right,int bottom,uint32_t& 
     for(int y=top>>4;y<=(bottom-1)>>4;++y)for(int x=left>>4;x<=(right-1)>>4;++x){
         const auto i=uint32_t(y)*columns+x;if(tiles[i])continue;
         auto data=std::unique_ptr<unsigned char[]>(new(std::nothrow) unsigned char[256]);
-        if(!data||fseek(file,records[i].offset,SEEK_SET)||fread(data.get(),1,256,file)!=256||crc32(0,data.get(),256)!=records[i].crc){++pvzh1_font_tile_diagnostic[7];return false;}
+        if(!data||fseek(file,records[i],SEEK_SET)||fread(data.get(),1,256,file)!=256){++pvzh1_font_tile_diagnostic[7];return false;}
         tiles[i]=data.release();++allocated;readBytes+=256;
     }
     return true;

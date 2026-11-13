@@ -106,14 +106,18 @@ extern "C" void pvzh1_plant_pose_engine_probe(){
  put(compact,16,compact.size());put(compact,20,crc32(0,(Bytef*)compact.data()+32,tableBytes));
  const auto temp=std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"bad-plant-container";std::filesystem::create_directory(temp);Sexy::SetResourceFolder(temp.string());H1ActorPoseTestEnable(true);unsigned rejected=0;
  auto attempt=[&](bool valid){const auto before=pvzh1_plant_pose_diagnostic[1];H1PlantPosePrepare(REANIM_WALLNUT);Check(valid?pvzh1_actor_pose_diagnostic[0]>0:!pvzh1_actor_pose_diagnostic[0]&&pvzh1_plant_pose_diagnostic[1]==before+1,"Plant outer container guard failed");H1PlantPosePrepare(REANIM_WALLNUT);Check(pvzh1_plant_pose_diagnostic[1]==before+!valid,"Plant missing bank retried every draw");pvzh1_actor_pose_shutdown();if(!valid)++rejected;};
- attempt(false);
+ std::filesystem::remove(temp/"plant-poses.h1pp");attempt(false);
  for(unsigned fault=0;fault<6;++fault){auto bytes=compact;
   if(fault==1)bytes.resize(16);
   if(fault==2)bytes[20]^=1;
   if(fault==3){put(bytes,32+index,0xffffffffu);put(bytes,20,crc32(0,(Bytef*)bytes.data()+32,tableBytes));}
-  if(fault==4){bytes.pop_back();put(bytes,16,bytes.size());put(bytes,36+index,size-1);put(bytes,20,crc32(0,(Bytef*)bytes.data()+32,tableBytes));}
+  // The physical EOF contradicts the declared size. A correctly declared
+  // shorter lazy stream need not inspect unused geometry during preload.
+  if(fault==4)bytes.resize(bytes.size()-size/2);
   if(fault==5)bytes.back()^=1;
-  {std::ofstream out(temp/"plant-poses.h1pp",std::ios::binary);out.write(bytes.data(),bytes.size());}attempt(fault==0);
+  // Resource checksums are intentionally offline-only. Changing only the
+  // outer CRC or the zlib Adler trailer must not reject trusted game data.
+  {std::ofstream out(temp/"plant-poses.h1pp",std::ios::binary);out.write(bytes.data(),bytes.size());}attempt(fault==0||fault==2||fault==5);
  }Sexy::SetResourceFolder(resources);
  h1DirtyCanvas.enabled=true;gLawnApp->KillBoard();gLawnApp->mPlayerInfo=old;
  std::ofstream report(std::filesystem::path(getenv("PVZ_HOST_OUTPUT"))/"plant-reader-verification.json");

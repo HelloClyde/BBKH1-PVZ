@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "files": 2849,
+  "resource_bytes": 493809538,
+  "extra_actor_bytes": 337471394,
+  "unchanged_resource_hashes_reused": true,
+  "index_bytes_match_regeneration": true,
+  "changed_banks": 32,
+  "stage": "build/compact-actors-card-stage",
+  "full_inventory_native_tested": false
+}

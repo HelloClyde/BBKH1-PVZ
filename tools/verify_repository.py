@@ -183,13 +183,22 @@ def main():
  assert sod_frames==set(range(actor['sod_roll_frames'])) and len(blend_frames)==actor['pea_blend_frames']
  assert read(ROOT/actor['transition_verification'])['passed']
  assert read(ROOT/actor['zombie_flash_replay_verification'])['passed']
- sun=read(ROOT/'provenance/offline-sun-poses.json');path=ROOT/assets['directory']/sun['runtime_path'];blob=path.read_bytes();h=struct.unpack_from('<16I',blob)
+ sun=read(ROOT/'provenance/offline-sun-poses.json');path=ROOT/assets['directory']/sun['runtime_path'];blob=path.read_bytes()
  assert sha(path)==sun['sha256'] and len(blob)==sun['bytes'] and not sun['lossy']
- assert h[:5]==(0x50413148,1,480,272,49) and h[12]==0 and h[14]==0x314d4352 and h[9]==len(blob)
+ if blob[:4]==b'H1PZ':
+  from pack_actor_pages import decode as decode_sun_pages
+  blob=decode_sun_pages(blob)
+  assert len(blob)==sun['decoded_bytes'] and hashlib.sha256(blob).hexdigest()==sun['decoded_sha256']
+ h=struct.unpack_from('<16I',blob)
+ assert h[:5]==(0x50413148,1,480,272,sun['entries']) and h[12]==0 and h[14]==0x314d4352 and h[9]==len(blob)
  assert zlib.crc32(blob[64:])==h[10]==int(sun['crc32'],16)
- assert {struct.unpack_from('<Q4I',blob,64+i*24)[1] for i in range(49)}==set(range(49))
- assert {struct.unpack_from('<Q4I',blob,64+i*24)[4] for i in range(49)}=={22}
- assert sha(ROOT/'tools/tests/sun_pose_export.cpp')==sun['renderer_exporter_sha256']
+ sun_frames={}
+ for i in range(h[4]):
+  key,frame,offset,size,kind=struct.unpack_from('<Q4I',blob,64+i*24)
+  assert kind==22 and h[8]<=offset and offset+size<=len(blob)
+  sun_frames.setdefault(key,set()).add(frame)
+ assert len(sun_frames)==sun.get('scale_keys',1) and all(frames==set(range(49)) for frames in sun_frames.values())
+ assert sha(ROOT/sun.get('renderer_exporter','tools/tests/sun_pose_export.cpp'))==sun['renderer_exporter_sha256']
  verify_actor_signature(sun['signature_format_sha256'])
  assert read(ROOT/sun['replay_verification'])['passed']
  lawns=read(ROOT/'provenance/offline-early-lawns.json');path=ROOT/assets['directory']/lawns['runtime_path'];data=path.read_bytes();h=struct.unpack_from('<16I',data)
@@ -236,7 +245,17 @@ def main():
   assert name not in names and sha(source)==bank['source_pcm_sha256'][name] and source.read_bytes()[16:]==pcm and zlib.crc32(pcm)==crc;names.add(name)
  assert at==len(data) and names==set(bank['source_pcm_sha256'])
  menu=performance['menu_visibility'];path=ROOT/assets['directory']/menu['runtime_path'];data=path.read_bytes();header=struct.unpack_from('<16I',data)
- assert sha(path)==menu['output_sha256'] and len(data)==menu['bytes'] and header[13]==0 and header[14]==0x31434c56
+ assert header[13] in (0,1) and header[14]==0x31434c56
+ if header[13]:
+  from compress_menu_bundles import decoded_bundle
+  decoded=decoded_bundle(data)
+  assert hashlib.sha256(decoded).hexdigest()==menu['output_sha256'] and len(decoded)==menu['bytes']
+  packaging=read(ROOT/'provenance/compressed-menu-bundles.json')
+  packed=next(row for row in packaging['bundles'] if row['path']==menu['runtime_path'])
+  assert sha(path)==packed['output_sha256'] and len(data)==packed['bytes']
+  decoded_hand=decoded_bundle((ROOT/assets['directory']/adventure['runtime_path']).read_bytes())
+  assert hashlib.sha256(decoded_hand).hexdigest()==menu['adventure']['output_sha256'] and len(decoded_hand)==menu['adventure']['bytes']
+ else:assert sha(path)==menu['output_sha256'] and len(data)==menu['bytes']
  assert sha(ROOT/'tools/bake_menu_visibility.py')==menu['encoder_sha256']==adventure['offline_expander_sha256']
  assert menu['fixed_tracks']==[22,23,25,27,29,45,46,47] and menu['variant_replay_checks']==128
  numeric=sum(zlib.decompress((ROOT/assets['directory']/name).read_bytes()[8:])[:4]==b'H1D2' for name in definitions['files'])

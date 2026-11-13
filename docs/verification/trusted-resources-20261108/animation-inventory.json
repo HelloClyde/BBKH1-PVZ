@@ -1,0 +1,1018 @@
+{
+  "scope": "Animation type routing. Target-density images do not imply pre-rendered animation; color, scale, blend and phase coverage require replay tests.",
+  "counts": {
+    "dedicated_bank": 4,
+    "extra_actor_bank": 90,
+    "plant_bank": 50
+  },
+  "types": [
+    {
+      "id": 0,
+      "type": "REANIM_LOADBAR_SPROUT",
+      "source": "reanim/LoadBar_sprout.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/000.h1ap"
+    },
+    {
+      "id": 1,
+      "type": "REANIM_LOADBAR_ZOMBIEHEAD",
+      "source": "reanim/LoadBar_Zombiehead.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/001.h1ap"
+    },
+    {
+      "id": 2,
+      "type": "REANIM_SODROLL",
+      "source": "reanim/SodRoll.reanim",
+      "coverage": "dedicated_bank",
+      "asset": "sod-roll.h1ap"
+    },
+    {
+      "id": 3,
+      "type": "REANIM_FINAL_WAVE",
+      "source": "reanim/FinalWave.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/003.h1ap"
+    },
+    {
+      "id": 4,
+      "type": "REANIM_PEASHOOTER",
+      "source": "reanim/PeaShooterSingle.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 5,
+      "type": "REANIM_WALLNUT",
+      "source": "reanim/Wallnut.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 6,
+      "type": "REANIM_LILYPAD",
+      "source": "reanim/Lilypad.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 7,
+      "type": "REANIM_SUNFLOWER",
+      "source": "reanim/SunFlower.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 8,
+      "type": "REANIM_LAWNMOWER",
+      "source": "reanim/LawnMower.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/008.h1ap"
+    },
+    {
+      "id": 9,
+      "type": "REANIM_READYSETPLANT",
+      "source": "reanim/StartReadySetPlant.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/009.h1ap"
+    },
+    {
+      "id": 10,
+      "type": "REANIM_CHERRYBOMB",
+      "source": "reanim/CherryBomb.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 11,
+      "type": "REANIM_SQUASH",
+      "source": "reanim/Squash.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 12,
+      "type": "REANIM_DOOMSHROOM",
+      "source": "reanim/DoomShroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 13,
+      "type": "REANIM_SNOWPEA",
+      "source": "reanim/SnowPea.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 14,
+      "type": "REANIM_REPEATER",
+      "source": "reanim/PeaShooter.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 15,
+      "type": "REANIM_SUNSHROOM",
+      "source": "reanim/SunShroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 16,
+      "type": "REANIM_TALLNUT",
+      "source": "reanim/Tallnut.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 17,
+      "type": "REANIM_FUMESHROOM",
+      "source": "reanim/Fumeshroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 18,
+      "type": "REANIM_PUFFSHROOM",
+      "source": "reanim/Puffshroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 19,
+      "type": "REANIM_HYPNOSHROOM",
+      "source": "reanim/Hypnoshroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 20,
+      "type": "REANIM_CHOMPER",
+      "source": "reanim/Chomper.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 21,
+      "type": "REANIM_ZOMBIE",
+      "source": "reanim/Zombie.reanim",
+      "coverage": "dedicated_bank",
+      "asset": "zombie-hit.h1ap"
+    },
+    {
+      "id": 22,
+      "type": "REANIM_SUN",
+      "source": "reanim/Sun.reanim",
+      "coverage": "dedicated_bank",
+      "asset": "sun-poses.h1ap"
+    },
+    {
+      "id": 23,
+      "type": "REANIM_POTATOMINE",
+      "source": "reanim/PotatoMine.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 24,
+      "type": "REANIM_SPIKEWEED",
+      "source": "reanim/Caltrop.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 25,
+      "type": "REANIM_SPIKEROCK",
+      "source": "reanim/SpikeRock.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 26,
+      "type": "REANIM_THREEPEATER",
+      "source": "reanim/ThreePeater.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 27,
+      "type": "REANIM_MARIGOLD",
+      "source": "reanim/Marigold.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 28,
+      "type": "REANIM_ICESHROOM",
+      "source": "reanim/IceShroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 29,
+      "type": "REANIM_ZOMBIE_FOOTBALL",
+      "source": "reanim/Zombie_football.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/029.h1ap"
+    },
+    {
+      "id": 30,
+      "type": "REANIM_ZOMBIE_NEWSPAPER",
+      "source": "reanim/Zombie_paper.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/030.h1ap"
+    },
+    {
+      "id": 31,
+      "type": "REANIM_ZOMBIE_ZAMBONI",
+      "source": "reanim/Zombie_zamboni.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/031.h1ap"
+    },
+    {
+      "id": 32,
+      "type": "REANIM_SPLASH",
+      "source": "reanim/splash.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/032.h1ap"
+    },
+    {
+      "id": 33,
+      "type": "REANIM_JALAPENO",
+      "source": "reanim/Jalapeno.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 34,
+      "type": "REANIM_JALAPENO_FIRE",
+      "source": "reanim/fire.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/034.h1ap"
+    },
+    {
+      "id": 35,
+      "type": "REANIM_COIN_SILVER",
+      "source": "reanim/Coin_silver.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/035.h1ap"
+    },
+    {
+      "id": 36,
+      "type": "REANIM_ZOMBIE_CHARRED",
+      "source": "reanim/Zombie_charred.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/036.h1ap"
+    },
+    {
+      "id": 37,
+      "type": "REANIM_ZOMBIE_CHARRED_IMP",
+      "source": "reanim/Zombie_charred_imp.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/037.h1ap"
+    },
+    {
+      "id": 38,
+      "type": "REANIM_ZOMBIE_CHARRED_DIGGER",
+      "source": "reanim/Zombie_charred_digger.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/038.h1ap"
+    },
+    {
+      "id": 39,
+      "type": "REANIM_ZOMBIE_CHARRED_ZAMBONI",
+      "source": "reanim/Zombie_charred_zamboni.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/039.h1ap"
+    },
+    {
+      "id": 40,
+      "type": "REANIM_ZOMBIE_CHARRED_CATAPULT",
+      "source": "reanim/Zombie_charred_catapult.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/040.h1ap"
+    },
+    {
+      "id": 41,
+      "type": "REANIM_ZOMBIE_CHARRED_GARGANTUAR",
+      "source": "reanim/Zombie_charred_gargantuar.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/041.h1ap"
+    },
+    {
+      "id": 42,
+      "type": "REANIM_SCRAREYSHROOM",
+      "source": "reanim/ScaredyShroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 43,
+      "type": "REANIM_PUMPKIN",
+      "source": "reanim/Pumpkin.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 44,
+      "type": "REANIM_PLANTERN",
+      "source": "reanim/Plantern.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 45,
+      "type": "REANIM_TORCHWOOD",
+      "source": "reanim/Torchwood.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 46,
+      "type": "REANIM_SPLITPEA",
+      "source": "reanim/SplitPea.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 47,
+      "type": "REANIM_SEASHROOM",
+      "source": "reanim/SeaShroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 48,
+      "type": "REANIM_BLOVER",
+      "source": "reanim/Blover.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 49,
+      "type": "REANIM_FLOWER_POT",
+      "source": "reanim/Pot.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 50,
+      "type": "REANIM_CACTUS",
+      "source": "reanim/Cactus.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 51,
+      "type": "REANIM_DANCER",
+      "source": "reanim/Zombie_disco.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/051.h1ap"
+    },
+    {
+      "id": 52,
+      "type": "REANIM_TANGLEKELP",
+      "source": "reanim/Tanglekelp.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 53,
+      "type": "REANIM_STARFRUIT",
+      "source": "reanim/Starfruit.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 54,
+      "type": "REANIM_POLEVAULTER",
+      "source": "reanim/Zombie_polevaulter.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/054.h1ap"
+    },
+    {
+      "id": 55,
+      "type": "REANIM_BALLOON",
+      "source": "reanim/Zombie_balloon.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/055.h1ap"
+    },
+    {
+      "id": 56,
+      "type": "REANIM_GARGANTUAR",
+      "source": "reanim/Zombie_gargantuar.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/056.h1ap"
+    },
+    {
+      "id": 57,
+      "type": "REANIM_IMP",
+      "source": "reanim/Zombie_imp.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/057.h1ap"
+    },
+    {
+      "id": 58,
+      "type": "REANIM_DIGGER",
+      "source": "reanim/Zombie_digger.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/058.h1ap"
+    },
+    {
+      "id": 59,
+      "type": "REANIM_DIGGER_DIRT",
+      "source": "reanim/Digger_rising_dirt.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/059.h1ap"
+    },
+    {
+      "id": 60,
+      "type": "REANIM_ZOMBIE_DOLPHINRIDER",
+      "source": "reanim/Zombie_dolphinrider.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/060.h1ap"
+    },
+    {
+      "id": 61,
+      "type": "REANIM_POGO",
+      "source": "reanim/Zombie_pogo.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/061.h1ap"
+    },
+    {
+      "id": 62,
+      "type": "REANIM_BACKUP_DANCER",
+      "source": "reanim/Zombie_backup.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/062.h1ap"
+    },
+    {
+      "id": 63,
+      "type": "REANIM_BOBSLED",
+      "source": "reanim/Zombie_bobsled.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/063.h1ap"
+    },
+    {
+      "id": 64,
+      "type": "REANIM_JACKINTHEBOX",
+      "source": "reanim/Zombie_jackbox.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/064.h1ap"
+    },
+    {
+      "id": 65,
+      "type": "REANIM_SNORKEL",
+      "source": "reanim/Zombie_snorkle.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/065.h1ap"
+    },
+    {
+      "id": 66,
+      "type": "REANIM_BUNGEE",
+      "source": "reanim/Zombie_bungi.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/066.h1ap"
+    },
+    {
+      "id": 67,
+      "type": "REANIM_CATAPULT",
+      "source": "reanim/Zombie_catapult.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/067.h1ap"
+    },
+    {
+      "id": 68,
+      "type": "REANIM_LADDER",
+      "source": "reanim/Zombie_ladder.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/068.h1ap"
+    },
+    {
+      "id": 69,
+      "type": "REANIM_PUFF",
+      "source": "reanim/Puff.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/069.h1ap"
+    },
+    {
+      "id": 70,
+      "type": "REANIM_SLEEPING",
+      "source": "reanim/Z.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/070.h1ap"
+    },
+    {
+      "id": 71,
+      "type": "REANIM_GRAVE_BUSTER",
+      "source": "reanim/Gravebuster.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 72,
+      "type": "REANIM_ZOMBIES_WON",
+      "source": "reanim/ZombiesWon.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/072.h1ap"
+    },
+    {
+      "id": 73,
+      "type": "REANIM_MAGNETSHROOM",
+      "source": "reanim/Magnetshroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 74,
+      "type": "REANIM_BOSS",
+      "source": "reanim/Zombie_boss.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/074.h1ap"
+    },
+    {
+      "id": 75,
+      "type": "REANIM_CABBAGEPULT",
+      "source": "reanim/Cabbagepult.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 76,
+      "type": "REANIM_KERNELPULT",
+      "source": "reanim/Cornpult.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 77,
+      "type": "REANIM_MELONPULT",
+      "source": "reanim/Melonpult.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 78,
+      "type": "REANIM_COFFEEBEAN",
+      "source": "reanim/Coffeebean.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 79,
+      "type": "REANIM_UMBRELLALEAF",
+      "source": "reanim/Umbrellaleaf.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 80,
+      "type": "REANIM_GATLINGPEA",
+      "source": "reanim/GatlingPea.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 81,
+      "type": "REANIM_CATTAIL",
+      "source": "reanim/Cattail.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 82,
+      "type": "REANIM_GLOOMSHROOM",
+      "source": "reanim/GloomShroom.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 83,
+      "type": "REANIM_BOSS_ICEBALL",
+      "source": "reanim/Zombie_boss_iceball.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/083.h1ap"
+    },
+    {
+      "id": 84,
+      "type": "REANIM_BOSS_FIREBALL",
+      "source": "reanim/Zombie_boss_fireball.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/084.h1ap"
+    },
+    {
+      "id": 85,
+      "type": "REANIM_COBCANNON",
+      "source": "reanim/CobCannon.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 86,
+      "type": "REANIM_GARLIC",
+      "source": "reanim/Garlic.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 87,
+      "type": "REANIM_GOLD_MAGNET",
+      "source": "reanim/GoldMagnet.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 88,
+      "type": "REANIM_WINTER_MELON",
+      "source": "reanim/WinterMelon.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 89,
+      "type": "REANIM_TWIN_SUNFLOWER",
+      "source": "reanim/TwinSunflower.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 90,
+      "type": "REANIM_POOL_CLEANER",
+      "source": "reanim/PoolCleaner.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/090.h1ap"
+    },
+    {
+      "id": 91,
+      "type": "REANIM_ROOF_CLEANER",
+      "source": "reanim/RoofCleaner.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/091.h1ap"
+    },
+    {
+      "id": 92,
+      "type": "REANIM_FIRE_PEA",
+      "source": "reanim/FirePea.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/092.h1ap"
+    },
+    {
+      "id": 93,
+      "type": "REANIM_IMITATER",
+      "source": "reanim/Imitater.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 94,
+      "type": "REANIM_YETI",
+      "source": "reanim/Zombie_yeti.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/094.h1ap"
+    },
+    {
+      "id": 95,
+      "type": "REANIM_BOSS_DRIVER",
+      "source": "reanim/Zombie_Boss_driver.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/095.h1ap"
+    },
+    {
+      "id": 96,
+      "type": "REANIM_LAWN_MOWERED_ZOMBIE",
+      "source": "reanim/LawnMoweredZombie.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/096.h1ap"
+    },
+    {
+      "id": 97,
+      "type": "REANIM_CRAZY_DAVE",
+      "source": "reanim/CrazyDave.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/097.h1ap"
+    },
+    {
+      "id": 98,
+      "type": "REANIM_TEXT_FADE_ON",
+      "source": "reanim/TextFadeOn.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/098.h1ap"
+    },
+    {
+      "id": 99,
+      "type": "REANIM_HAMMER",
+      "source": "reanim/Hammer.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/099.h1ap"
+    },
+    {
+      "id": 100,
+      "type": "REANIM_SLOT_MACHINE_HANDLE",
+      "source": "reanim/SlotMachine.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/100.h1ap"
+    },
+    {
+      "id": 101,
+      "type": "REANIM_CREDITS_FOOTBALL",
+      "source": "reanim/Credits_Football.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/101.h1ap"
+    },
+    {
+      "id": 102,
+      "type": "REANIM_CREDITS_JACKBOX",
+      "source": "reanim/Credits_Jackbox.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/102.h1ap"
+    },
+    {
+      "id": 103,
+      "type": "REANIM_SELECTOR_SCREEN",
+      "source": "reanim/SelectorScreen.reanim",
+      "coverage": "dedicated_bank",
+      "asset": "h1menu/selector-wide.h1mb"
+    },
+    {
+      "id": 104,
+      "type": "REANIM_PORTAL_CIRCLE",
+      "source": "reanim/Portal_Circle.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/104.h1ap"
+    },
+    {
+      "id": 105,
+      "type": "REANIM_PORTAL_SQUARE",
+      "source": "reanim/Portal_Square.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/105.h1ap"
+    },
+    {
+      "id": 106,
+      "type": "REANIM_ZENGARDEN_SPROUT",
+      "source": "reanim/ZenGarden_sprout.reanim",
+      "coverage": "plant_bank",
+      "asset": "plant-poses.h1pp"
+    },
+    {
+      "id": 107,
+      "type": "REANIM_ZENGARDEN_WATERINGCAN",
+      "source": "reanim/ZenGarden_wateringcan.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/107.h1ap"
+    },
+    {
+      "id": 108,
+      "type": "REANIM_ZENGARDEN_FERTILIZER",
+      "source": "reanim/ZenGarden_fertilizer.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/108.h1ap"
+    },
+    {
+      "id": 109,
+      "type": "REANIM_ZENGARDEN_BUGSPRAY",
+      "source": "reanim/ZenGarden_bugspray.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/109.h1ap"
+    },
+    {
+      "id": 110,
+      "type": "REANIM_ZENGARDEN_PHONOGRAPH",
+      "source": "reanim/ZenGarden_phonograph.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/110.h1ap"
+    },
+    {
+      "id": 111,
+      "type": "REANIM_DIAMOND",
+      "source": "reanim/Diamond.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/111.h1ap"
+    },
+    {
+      "id": 112,
+      "type": "REANIM_ZOMBIE_HAND",
+      "source": "reanim/Zombie_hand.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/112.h1ap"
+    },
+    {
+      "id": 113,
+      "type": "REANIM_STINKY",
+      "source": "reanim/Stinky.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/113.h1ap"
+    },
+    {
+      "id": 114,
+      "type": "REANIM_RAKE",
+      "source": "reanim/Rake.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/114.h1ap"
+    },
+    {
+      "id": 115,
+      "type": "REANIM_RAIN_CIRCLE",
+      "source": "reanim/Rain_circle.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/115.h1ap"
+    },
+    {
+      "id": 116,
+      "type": "REANIM_RAIN_SPLASH",
+      "source": "reanim/Rain_splash.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/116.h1ap"
+    },
+    {
+      "id": 117,
+      "type": "REANIM_ZOMBIE_SURPRISE",
+      "source": "reanim/Zombie_surprise.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/117.h1ap"
+    },
+    {
+      "id": 118,
+      "type": "REANIM_COIN_GOLD",
+      "source": "reanim/Coin_gold.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/118.h1ap"
+    },
+    {
+      "id": 119,
+      "type": "REANIM_TREEOFWISDOM",
+      "source": "reanim/TreeOfWisdom.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/119.h1ap"
+    },
+    {
+      "id": 120,
+      "type": "REANIM_TREEOFWISDOM_CLOUDS",
+      "source": "reanim/TreeOfWisdomClouds.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/120.h1ap"
+    },
+    {
+      "id": 121,
+      "type": "REANIM_TREEOFWISDOM_TREEFOOD",
+      "source": "reanim/TreeFood.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/121.h1ap"
+    },
+    {
+      "id": 122,
+      "type": "REANIM_CREDITS_MAIN",
+      "source": "reanim/Credits_Main.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/122.h1ap"
+    },
+    {
+      "id": 123,
+      "type": "REANIM_CREDITS_MAIN2",
+      "source": "reanim/Credits_Main2.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/123.h1ap"
+    },
+    {
+      "id": 124,
+      "type": "REANIM_CREDITS_MAIN3",
+      "source": "reanim/Credits_Main3.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/124.h1ap"
+    },
+    {
+      "id": 125,
+      "type": "REANIM_ZOMBIE_CREDITS_DANCE",
+      "source": "reanim/Zombie_credits_dance.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/125.h1ap"
+    },
+    {
+      "id": 126,
+      "type": "REANIM_CREDITS_STAGE",
+      "source": "reanim/Credits_stage.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/126.h1ap"
+    },
+    {
+      "id": 127,
+      "type": "REANIM_CREDITS_BIGBRAIN",
+      "source": "reanim/Credits_BigBrain.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/127.h1ap"
+    },
+    {
+      "id": 128,
+      "type": "REANIM_CREDITS_FLOWER_PETALS",
+      "source": "reanim/Credits_Flower_petals.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/128.h1ap"
+    },
+    {
+      "id": 129,
+      "type": "REANIM_CREDITS_INFANTRY",
+      "source": "reanim/Credits_Infantry.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/129.h1ap"
+    },
+    {
+      "id": 130,
+      "type": "REANIM_CREDITS_THROAT",
+      "source": "reanim/Credits_Throat.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/130.h1ap"
+    },
+    {
+      "id": 131,
+      "type": "REANIM_CREDITS_CRAZYDAVE",
+      "source": "reanim/Credits_CrazyDave.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/131.h1ap"
+    },
+    {
+      "id": 132,
+      "type": "REANIM_CREDITS_BOSSDANCE",
+      "source": "reanim/Credits_Bossdance.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/132.h1ap"
+    },
+    {
+      "id": 133,
+      "type": "REANIM_ZOMBIE_CREDITS_SCREEN_DOOR",
+      "source": "reanim/Zombie_Credits_Screendoor.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/133.h1ap"
+    },
+    {
+      "id": 134,
+      "type": "REANIM_ZOMBIE_CREDITS_CONEHEAD",
+      "source": "reanim/Zombie_Credits_Conehead.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/134.h1ap"
+    },
+    {
+      "id": 135,
+      "type": "REANIM_CREDITS_ZOMBIEARMY1",
+      "source": "reanim/Credits_ZombieArmy1.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/135.h1ap"
+    },
+    {
+      "id": 136,
+      "type": "REANIM_CREDITS_ZOMBIEARMY2",
+      "source": "reanim/Credits_ZombieArmy2.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/136.h1ap"
+    },
+    {
+      "id": 137,
+      "type": "REANIM_CREDITS_TOMBSTONES",
+      "source": "reanim/Credits_Tombstones.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/137.h1ap"
+    },
+    {
+      "id": 138,
+      "type": "REANIM_CREDITS_SOLARPOWER",
+      "source": "reanim/Credits_SolarPower.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/138.h1ap"
+    },
+    {
+      "id": 139,
+      "type": "REANIM_CREDITS_ANYHOUR",
+      "source": "reanim/Credits_Anyhour.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/139.h1ap"
+    },
+    {
+      "id": 140,
+      "type": "REANIM_CREDITS_WEARETHEUNDEAD",
+      "source": "reanim/Credits_WeAreTheUndead.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/140.h1ap"
+    },
+    {
+      "id": 141,
+      "type": "REANIM_CREDITS_DISCOLIGHTS",
+      "source": "reanim/Credits_DiscoLights.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/141.h1ap"
+    },
+    {
+      "id": 142,
+      "type": "REANIM_FLAG",
+      "source": "reanim/Zombie_FlagPole.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/142.h1ap"
+    },
+    {
+      "id": 143,
+      "type": "REANIM_ZOMBATAR_HEAD",
+      "source": "reanim/zombatar_zombie_head.reanim",
+      "coverage": "extra_actor_bank",
+      "asset": "extra-actors/143.h1ap"
+    }
+  ]
+}

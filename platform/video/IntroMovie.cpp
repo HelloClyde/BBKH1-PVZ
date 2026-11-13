@@ -7,6 +7,7 @@
 #include "graphics/Graphics.h"
 #include "graphics/PhysicalScreen.h"
 #include "graphics/MemoryImage.h"
+#include "graphics/MemoryImageCache.h"
 #include "graphics/DirtyCanvas.h"
 #include "Common.h"
 #include "h1_host.h"
@@ -16,12 +17,14 @@
 #include <cstring>
 #include <stdexcept>
 #include "zlib.h"
+extern "C" void pvzh1_cache_complete_draw_batch();
 extern "C" {volatile uint32_t pvzh1_intro_movie_diagnostic[16];
 // Fill calls/ms/bytes, decode calls/unpack ms/reconstruct ms/copied bytes,
 // maximum unpack ms. All timers use the existing calibrated native clock.
-volatile uint32_t pvzh1_intro_cost_diagnostic[16];}
+volatile uint32_t pvzh1_intro_cost_diagnostic[16];
+volatile uint32_t pvzh1_intro_memory_diagnostic[8];}
 namespace {
-constexpr unsigned Pixels=480*272,Frames=348,CacheCapacity=9*1024*1024,ReadBufferBytes=65536,PageBytes=262144,CachePages=CacheCapacity/PageBytes;
+constexpr unsigned Pixels=480*272,Frames=348,CacheCapacity=9*1024*1024,ReadBufferBytes=65536,PageBytes=16384,CachePages=CacheCapacity/PageBytes;
 struct Packet {unsigned offset,size;int shift;};
 Board* owner=nullptr;Packet* packets=nullptr;uint16_t *before=nullptr,*current=nullptr,*delta=nullptr;
 FILE* input=nullptr;uint8_t *cache[CachePages]{},*readBuffer=nullptr;unsigned allocatedPages=0;unsigned nextLoaded=0,loadingBytes=0,occupied=0,writeAt=0,bufferBytes=0,lowWater=0;
@@ -39,7 +42,7 @@ void DropCache(){for(auto& page:cache){std::free(page);page=nullptr;}allocatedPa
 void CloseInput(){if(input)std::fclose(input);input=nullptr;std::free(readBuffer);readBuffer=nullptr;}
 void Fill(unsigned budget){const auto started=pvzp_ticks_ms();unsigned read=0;while(budget&&nextLoaded<Frames&&occupied<CacheCapacity){
  auto& p=packets[nextLoaded];
- if(!loadingBytes){uint8_t item[8];if(!input||std::fread(item,1,8,input)!=8||Word(item)!=uint32_t(p.shift)||Word(item+4)!=p.size)Fail("Unable to read first-player frame header");p.offset=writeAt;}
+ if(!loadingBytes){uint8_t item[8];if(!input||std::fread(item,1,8,input)!=8)Fail("Unable to read first-player frame header");p.shift=int32_t(Word(item));p.size=Word(item+4);p.offset=writeAt;}
  const unsigned count=std::min({budget,p.size-loadingBytes,CacheCapacity-occupied});
  const unsigned first=std::min(count,PageBytes-writeAt%PageBytes);
  if(std::fread(cache[writeAt/PageBytes]+writeAt%PageBytes,1,first,input)!=first)Fail("Unable to read first-player frame");
@@ -85,6 +88,16 @@ bool H1IntroMoviePrepare(Board* board){
 #endif
  if(!board||board->mApp->mGameMode!=GAMEMODE_INTRO){H1IntroMovieRelease();return false;}
  if(H1IntroMovieActive(board))return true;H1IntroMovieRelease();
+ // The preceding menu/loading draw has returned. Its reconstructible source
+ // pixels are no longer borrowed; retain the screen and music, not old UI or
+ // previous-level textures beside the movie's read-ahead window.
+ pvzh1_cache_complete_draw_batch();
+ const auto previousImages=Sexy::H1ImageCacheGetStats();
+ pvzh1_intro_memory_diagnostic[0]=PageBytes;pvzh1_intro_memory_diagnostic[1]=CacheCapacity;
+ pvzh1_intro_memory_diagnostic[2]=static_cast<uint32_t>(previousImages.residentBytes);
+ Sexy::H1ImageCacheReleaseUI();Sexy::H1ImageCacheSetBudget(0);Sexy::H1ImageCacheEndFrame();
+ pvzh1_intro_memory_diagnostic[3]=static_cast<uint32_t>(Sexy::H1ImageCacheGetStats().residentBytes);
+ Sexy::H1ImageCacheSetBudget(previousImages.budgetBytes);
  input=std::fopen(Sexy::GetResourcePath("first-intro.h1if").c_str(),"rb");
  if(!input)Fail("Missing first-intro.h1if; install the matching resource pack");
  readBuffer=static_cast<uint8_t*>(std::malloc(ReadBufferBytes));
@@ -94,19 +107,11 @@ bool H1IntroMoviePrepare(Board* board){
  const unsigned bytes=Word(header+32),maxPacket=Word(header+28);okay=okay&&bytes>Frames*8&&bytes<=24*1024*1024&&maxPacket<=Pixels*2+2048;
  bufferBytes=std::max(Pixels*2,maxPacket);lowWater=3*maxPacket;
  if(okay){packets=static_cast<Packet*>(std::calloc(Frames,sizeof(Packet)));before=static_cast<uint16_t*>(std::calloc(1,bufferBytes));current=static_cast<uint16_t*>(std::malloc(bufferBytes));delta=static_cast<uint16_t*>(std::malloc(bufferBytes));okay=packets&&before&&current&&delta;}
- // Validate the entire immutable file once before displaying any frame.
- // Only a bounded read-ahead window is retained; the scratch output buffer
- // doubles as validation storage while no frame is being decoded.
- uint32_t crc=0;unsigned consumed=0;
- for(unsigned i=0;i<Frames&&okay;++i){uint8_t item[8];okay=bytes-consumed>=8&&std::fread(item,1,8,input)==8;if(!okay)break;consumed+=8;
-  crc=crc32(crc,item,8);auto& p=packets[i];p.shift=int32_t(Word(item));p.size=Word(item+4);okay=p.shift>=-3&&p.shift<=3&&p.size&&p.size<=maxPacket&&p.size<=bytes-consumed;
-  if(okay)okay=std::fread(delta,1,p.size,input)==p.size;
-  if(okay){crc=crc32(crc,reinterpret_cast<uint8_t*>(delta),p.size);consumed+=p.size;}
- }
- if(okay)okay=consumed==bytes&&crc==Word(header+36)&&std::fgetc(input)==EOF;
- if(!okay)Fail("Damaged or incomplete first-player frames");
- if(std::fseek(input,64,SEEK_SET))Fail("Unable to rewind first-player frames");
- for(auto& page:cache){page=static_cast<uint8_t*>(std::malloc(PageBytes));if(!page)Fail("Not enough memory for opening read-ahead page");++allocatedPages;}
+ if(!okay)Fail("Not enough memory for opening frame buffers");
+ // Packet metadata is read together with its payload during prefetch.
+ // The installer already verified the complete movie.
+ for(auto& page:cache){page=static_cast<uint8_t*>(std::malloc(PageBytes));if(!page){pvzh1_intro_memory_diagnostic[5]=allocatedPages;++pvzh1_intro_memory_diagnostic[6];Fail("Not enough memory for opening read-ahead page");}++allocatedPages;}
+ pvzh1_intro_memory_diagnostic[4]=allocatedPages;
  owner=board;frame=-1;nextLoaded=loadingBytes=occupied=writeAt=0;
  pvzh1_intro_movie_diagnostic[12]=pvzh1_intro_movie_diagnostic[13]=pvzh1_intro_movie_diagnostic[14]=0;Fill(CacheCapacity);Decode();
  pvzh1_intro_movie_diagnostic[0]=1;++pvzh1_intro_movie_diagnostic[5];return true;

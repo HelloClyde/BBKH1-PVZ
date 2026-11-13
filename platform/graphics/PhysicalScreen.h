@@ -8,6 +8,9 @@ namespace Sexy {
 class H1PhysicalScreen final: public GLImage {
     MemoryImage physical;
     bool fullCanvas=false;
+    mutable bool clipCached=false;
+    mutable Rect clipInput,clipOutput;
+    mutable int clipLogicalWidth=0,clipLogicalHeight=0,clipPhysicalWidth=0,clipPhysicalHeight=0;
 public:
     H1PhysicalScreen(GLInterface *device,int logicalWidth,int logicalHeight,int width,int height);
     ~H1PhysicalScreen() override;

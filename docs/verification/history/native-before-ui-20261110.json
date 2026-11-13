@@ -1,0 +1,158 @@
+{
+  "passed": true,
+  "scope": "本版物理 H1：完整新玩家开场全段约23FPS、滚动段25.05FPS，保留原时轴与音乐音效；第一关触摸种植、僵尸及子弹、选项、回菜单、B盘V4存档读回、正常退出和原存档恢复均通过。未重测密集植物场景，不认证所有游戏场景20FPS。",
+  "program": {
+    "passed": true,
+    "bda_sha256": "f74f2f0a902b8267c82e759d80c94e29cb88143a4248a9618fab7c78d01dc1cc",
+    "elf_sha256": "a4b0ff7debde424abc15fb481e6229bf2d8edf98a405863eef919a86cf50dafa",
+    "bda_bytes": 3667588,
+    "build_receipt_sha256": "f10d04b13556633c4ec260b7ade5de51f49ec1ee626e5e1d018ab4e4540e4271",
+    "source_identity_verified": true,
+    "compiled_sources": 191,
+    "device_upload_crc_verified": true,
+    "live_code_fingerprints": 4,
+    "tested_build_receipt_sha256": "8dd49cab45bf42a978d3970b4e918383c2c7a0f8ab48928a7b7d8a8f76090bb9",
+    "byte_equivalent_rebuild": "docs/verification/intro-offline-20261107/byte-equivalent-rebuild.json"
+  },
+  "intro_playback": {
+    "passed": true,
+    "whole_unique_output_frames": 322,
+    "whole_wall_ms": 14000,
+    "whole_fps": 23.0,
+    "pan_distinct_output_frames": 114,
+    "pan_elapsed_ticks": 182,
+    "pan_fps": 25.054945054945055,
+    "raw_clock_hz": 40,
+    "original_natural_end_ms": 13890,
+    "pan_audio_underruns": 0,
+    "original_music_player_active": true,
+    "warmed_effects": 2,
+    "warmed_effect_bytes": 325116,
+    "peak_movie_bytes": 10290256,
+    "movie_bytes_after_handoff": 0,
+    "intermediate_ARGB_expansions": 0,
+    "native_LCD_pixels_equal_baked_frame": 265,
+    "game_RAM_written": false,
+    "scope": "Output frames counted after native LCD writes, distinct baked frame indices; pan sampled at cutscene 6000..10600ms before screenshot download. Whole duration from device callbacks. No all-scene FPS claim."
+  },
+  "first_level": {
+    "passed": true,
+    "max_live_zombies": 1,
+    "max_live_projectiles": 1,
+    "max_live_plants": 2,
+    "host_seconds": 16.015999999945052,
+    "game_RAM_written": false,
+    "scope": "Physical H1 original first-level logic, live entity reads and ordinary touches; no atomic snapshot or FPS claim",
+    "natural_intro_and_sod_preserved": true,
+    "entered_scene_playing": true,
+    "options_opened": true,
+    "wave_clearance_retested": false,
+    "atomic_entity_snapshot_claimed": false,
+    "termination_diagnostic": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "native_written_V4": {
+    "passed": true,
+    "bytes": 47752,
+    "sha256": "04309c226c654b7d1a450d6e2add2393ab00c3ec10ca7581f6807a71cdda90cd",
+    "header": "PVZP_SAVE4",
+    "version": 1,
+    "exact_payload_length": true,
+    "payload_crc32": 1094585814,
+    "native_B_write_and_debug_readback_valid": true
+  },
+  "ordinary_exit": {
+    "passed": true,
+    "return_code": 0,
+    "heap_bytes": 0,
+    "native_charge_bytes": 0,
+    "gLawnApp": 0
+  },
+  "original_saves": {
+    "passed": true,
+    "files": {
+      "users.dat": {
+        "bytes": 19,
+        "sha256": "e7aad6d811104407c551ff3c64cd36d59f08e31d92fc1732bc43291a1f0bdee0",
+        "exact_original_bytes": true
+      },
+      "user1.dat": {
+        "bytes": 886,
+        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa",
+        "exact_original_bytes": true
+      }
+    },
+    "test_V4_removed": true,
+    "restored_userdata_names": [
+      "user1.dat",
+      "users.dat"
+    ],
+    "temporary_directories_removed": true,
+    "obsolete_h264_and_benchmark_removed": true,
+    "debugger_left_running": true,
+    "normal_exit_heap_and_native_charge_zero": true
+  },
+  "resources": {
+    "runtime_manifest_sha256": "66f5f9876676e4998a1757d20f9f86ec4b2a8aaf193e27eb2c0d251b3d01a7e0",
+    "files": 2757,
+    "bytes": 155445398,
+    "this_test_resource_drive": "B",
+    "scope": "New opening and compact intro music uploaded with device CRC receipts; new immutable file index verified. Unchanged resource transfers reused, not a new full-card readback."
+  },
+  "device": "Physical BBK H1 / Y100 V1.41",
+  "debug_handshake": "H1DEBUG/1 V1.41 RESIDENT",
+  "resident_image_id": "71a0983b",
+  "resident_identity_scope": "Previously verified resident image; no H1Debug update in this task. Current handshake/caps and USB diagnostics recorded.",
+  "physical": [
+    480,
+    272
+  ],
+  "limitations": [
+    "Pan FPS is a fixed moving 4.55-second interval; whole-opening average is separately recorded.",
+    "Audio underrun comparison covers the moving interval.",
+    "Current first-level smoke test exercised two plants, a live zombie and a projectile; full four-wave clearance is preserved as beta.2 history.",
+    "Dense40-plant timings from v33 were not repeated for this BDA.",
+    "Some interactive dynamic affine states still use existing rendering."
+  ],
+  "previous_native_verification": "docs/verification/history/first-level-beta2-20261107.json",
+  "evidence_directory": "docs/verification/intro-offline-20261107",
+  "host_verification": "docs/verification/intro-offline-20261107/host-playback.json",
+  "debugger_left_running": true,
+  "evidence": {
+    "baseline.json": "10c2d3850e64087d067a649a6728b801f728374c864130ce6a391f6fb948dca2",
+    "device-final.json": "fb60da70b8d20e2377435d55ba9d6a5f018d166faa6b44638c8e1f2c6bc1c297",
+    "device-fingerprints.json": "373a9e6efe081bf6ff1b47f4349fb2c89e7a3a594a87acff865534f31122b798",
+    "device-symbols.json": "f90904147ae1c6955e278746b424f1f0193dd6b891fb93c937454cd5089933be",
+    "entered-playing.json": "eb713ae7d88379e8bd442d65a0899e154d90ad8836e33f5c474a26ef2021ca1d",
+    "first-battle.json": "89d0ce2a49d64c45f3a44761d065a6858dbfa69dcc900961d3bd849d06319e84",
+    "first-battle.png": "a0f7eb16bb5f69cf61259dc8530bd5def178f830f78492637c82d5bc5b699ad6",
+    "first-level.png": "91b5e8e506c4a9f7324258261ed45338688cd515bff682d04a15846c4cff9dad",
+    "frame-core-before-word-copy.json": "67dc1a9d23db574c51e2030a84e82737b062d6f0a3a1eacccb92a2c28bfb9300",
+    "frames-upload.json": "b2488a14a85328b239cd704ab9f2887b54c3178e1eb8c707edc97a597ef12ad4",
+    "h264-pure-c-o2.json": "94f60a57270ebb41ccaf61f60c5bf2f788c4e82a727033039410165d85322988",
+    "h264-pure-c.json": "8dec1f34895b220e906e2fe6f76290aba8f3e7b2ea8507def1b0ae3312c383a3",
+    "host-playback.json": "b8fe1baec260afb79bbbddc83e0f6cbcab582349394351836915d3c448e7d442",
+    "intro-music-upload.json": "2fc10574a31d71b6da751e9b92788f0d517c262d3a01fc51c390f369bec7892b",
+    "intro-music.json": "76f953827ae38cf296bbf60d2c88b8f3232af3caab0b8223dea2a0058c85882d",
+    "intro-pan.png": "01c9d54ca56f40ddde088ebf75c427e18706f06341f8dae9203e6502dc2f7640",
+    "native-desktop.png": "cf02ca062e4d5d8161a5f5e2fabfbd154a9949d768e27407e38fcca58cc03261",
+    "native-intro-events.json": "fd20305277eb900d642125e5ffe1cb496041b2d5457fdbc7efaedc13d1afd868",
+    "native-intro.json": "282a4f2e267945de51e28e8eabee95c7cc13b2993a29df53a7b167ef34167a86",
+    "native-pixel-comparison.json": "bdbfbe69499cbf40d276bc376c4c3e1483b6b1e6f8c7da61ca2e56a3c0db467d",
+    "native-save.json": "62a844964c01bd309e9645029b1051e56822c01c229a28bc5e773293e4d35082",
+    "normal-exit.json": "c92f9c0dc00c817cb39adcd19484381f31fa511f658270dec0044f8bbfb2863b",
+    "offline-export.json": "c370c4f4bfc5c65cb413b0839c34c83625bd02030be486a7586a76987807612c",
+    "options-state.json": "d1b2bc6161980ec715e0e127bde9eae516fde64a99b043bbc353a195fee7fb70",
+    "options.png": "f3b74201a92afe200eba0969defeff8f1ff5f622ba1cde01bbdfdb3c50a2ba70",
+    "originals-restored.json": "cabe5646a63f741d5d8311cb2a599aade075997551ad9b93d7c7550a3fa10703",
+    "program-upload.json": "6476f4750f106f6451224223567a114982fae485c622ad438108725c53758352",
+    "read-throughput.json": "08aaf31adf6eeaa18e06341539481217837e685f20abb97f59ac04285112cd72",
+    "restored-file-list.json": "48c98b6432d37b3dc2f335c6a2b46fba40a0223bca96dcb23bb90f146a728f8b",
+    "tested-build-receipt.json": "8dd49cab45bf42a978d3970b4e918383c2c7a0f8ab48928a7b7d8a8f76090bb9",
+    "byte-equivalent-rebuild.json": "81f264a0d0516e154de298dc621c6040f9a5ae06f96d5b66ee1beea3352841b2"
+  }
+}

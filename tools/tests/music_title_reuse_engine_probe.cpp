@@ -16,7 +16,7 @@ extern "C" void pvzp_music_shutdown();
 #include <vector>
 namespace {void Check(bool value){if(!value)throw std::runtime_error("Cached title retained halted tracker or failed restart");}}
 extern "C" void pvzh1_music_title_reuse_probe(){
- pvzp_music_shutdown();auto* title=Mix_LoadMUS("sounds/mainmusic.xm");auto* game=Mix_LoadMUS("sounds/mainmusic.xm");Check(title&&game);
+ pvzp_music_shutdown();auto* game=Mix_LoadMUS("sounds/mainmusic.xm");auto* title=Mix_LoadMUS("sounds/mainmusic.xm");Check(title&&game);
  Check(Mix_ModMusicStreamJumpToOrder(title,0x98)==0);
  const auto coldLoads=pvzp_music_diagnostic[5];pvzh1_music_warm_game();
  Check(Mix_PlayingMusicStream(title)&&pvzp_music_diagnostic[0]==1&&pvzp_music_diagnostic[4]==0&&pvzp_music_diagnostic[5]==coldLoads+1);

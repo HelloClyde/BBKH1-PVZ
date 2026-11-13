@@ -67,6 +67,13 @@ extern volatile uint32_t pvz_runtime_hole_diagnostic[12];
    recent user request, and final allocation failures. Hints can be image
    payload or returned pool pages; NativeCharge alone measures actual spans. */
 volatile uint32_t pvz_runtime_pressure_diagnostic[6];
+/* Opt-in, bounded first-failure observations BEFORE any cache is reclaimed.
+   Each row: read-only native heap snapshot[20], native charge, pool reserved,
+   whole-hole allocator status, ordinal. Never overwrites final-OOM evidence. */
+volatile uint32_t pvz_runtime_pressure_trace_enabled;
+volatile uint32_t pvz_runtime_pressure_trace_count;
+volatile uint32_t pvz_runtime_pressure_trace[8][24];
+extern void pvz_runtime_heap_snapshot_into(volatile uint32_t *,size_t,size_t);
 static int pressure_running;
 extern size_t pvzh1_cache_memory_pressure(size_t requested) __attribute__((weak));
 extern size_t pvzh1_actor_pose_release_pressure(size_t requested) __attribute__((weak));
@@ -85,6 +92,7 @@ static void first_allocation_failure(size_t requested,uintptr_t caller,uintptr_t
 static int stat_native(const char *,struct stat *);
 extern void pvzp_audio_service(void) __attribute__((weak));
 static void audio_io_yield(void){if(pvzp_audio_service)pvzp_audio_service();}
+#include "async_save.h"
 char pvz_runtime_last_path[NATIVE_PATH_MAX];
 /* Read-only observations of the native SDK calls. Raw tick units deliberately
    have no assumed frequency; calibrate against PC wall time on the device.
@@ -205,6 +213,39 @@ static int pvz_map_native_path(const char *path,char *output,size_t capacity,int
     memcpy(output,prefix,used);for(i=0;i<=n;i++)output[used+i]=rest[i]=='/'?'\\':rest[i];return 0;
 }
 int pvz_native_path(const char *path,char *output,size_t capacity){return pvz_map_native_path(path,output,capacity,1);}
+
+/* Exceptional exits unload the BDA and erase its diagnostic RAM. Persist one
+   bounded record before shutdown; the normal frame and exit paths do no I/O.
+   Use native stdio directly so even an exhausted C++/newlib heap can report. */
+void pvz_runtime_report_failure(int code){
+    struct FailureRecord {
+        uint32_t magic,version,bytes,status,tick;
+        uint32_t runtime[16],termination[4],charge[2],charge_fault[4],heap[20],game[32];
+        char message[256],last_path[512];
+    };
+    extern volatile uint32_t pvz_runtime_termination_diagnostic[4];
+    extern char pvz_runtime_termination_message[256];
+    extern volatile uint32_t pvz_runtime_heap_failure[20];
+    extern volatile uint32_t pvzp_diagnostic[32] __attribute__((weak));
+    static struct FailureRecord record;
+    static int reported;
+    char native[NATIVE_PATH_MAX];h1_file *file;unsigned i;
+    if(!code||reported)return;
+    reported=1;record.magic=0x58463148u;record.version=1;record.bytes=sizeof(record);
+    record.status=(uint32_t)code;record.tick=h1_raw_tick_80hz();
+    for(i=0;i<16;++i)record.runtime[i]=pvz_runtime_diagnostic[i];
+    for(i=0;i<4;++i){record.termination[i]=pvz_runtime_termination_diagnostic[i];record.charge_fault[i]=pvz_runtime_native_charge_fault[i];}
+    for(i=0;i<2;++i)record.charge[i]=pvz_runtime_native_charge[i];
+    for(i=0;i<20;++i)record.heap[i]=pvz_runtime_heap_failure[i];
+    if(pvzp_diagnostic)for(i=0;i<32;++i)record.game[i]=pvzp_diagnostic[i];
+    memcpy(record.message,pvz_runtime_termination_message,sizeof(record.message));
+    memcpy(record.last_path,pvz_runtime_last_path,sizeof(record.last_path));
+    if(pvz_native_path("/PVZSAVE/H1FAULT.BIN",native,sizeof(native)))return;
+    file=io_native_open(native,"wb");
+    if(!file||(uintptr_t)file==0xffffffffu)return;
+    (void)h1_fwrite(&record,1,sizeof(record),file);
+    h1_fclose(file);
+}
 static PvzAssetIndex asset_index;
 static unsigned char *asset_index_data;
 static int asset_index_state,asset_index_disabled;
@@ -349,6 +390,14 @@ static void *native_allocate(size_t requested,size_t size,uintptr_t *span){
     }
     {size_t actual=0;raw=pvz_runtime_native_allocate_span(requested,size,&actual);
     if(raw&&(uintptr_t)raw!=UINT32_MAX){*span=actual;charge_native(actual);}}
+    if((!raw||(uintptr_t)raw==UINT32_MAX)&&pvz_runtime_pressure_trace_enabled){
+        uint32_t ordinal=pvz_runtime_pressure_trace_count++;
+        if(ordinal<8){volatile uint32_t *row=pvz_runtime_pressure_trace[ordinal];
+            pvz_runtime_heap_snapshot_into(row,requested,size);
+            row[20]=pvz_runtime_native_charge[0];row[21]=pvz_runtime_small_pool_diagnostic[6];
+            row[22]=pvz_runtime_hole_diagnostic[3];row[23]=ordinal;
+        }
+    }
     update_small_pool_diagnostic();return raw;
 }
 static void *allocate_aligned(size_t size,size_t alignment,uintptr_t caller){
@@ -402,13 +451,26 @@ int posix_memalign(void **out,size_t alignment,size_t size){
     if(!out||alignment<sizeof(void *)||(alignment&(alignment-1))||alignment>32)return EINVAL;
     *out=allocate_aligned(size,alignment,(uintptr_t)__builtin_return_address(0));return *out?0:ENOMEM;
 }
+unsigned pvz_runtime_file_occupancy(void){
+    unsigned count=0;for(unsigned i=0;i<FILE_COUNT;++i)if(files[i]||directory_paths[i])++count;return count;
+}
+static int trusted_definition_path(const char *path){
+    size_t n=strlen(path);return n>=4&&!strcmp(path+n-4,".h1d");
+}
 int _open(const char *path,int flags,...){
     char native[NATIVE_PATH_MAX];const char *mode;h1_file *file;int i;
+    pvzh1_save_wait(path);
     if(pvz_map_native_path(path,native,sizeof(native),(flags&O_DIRECTORY)==0&&(flags&O_ACCMODE)==O_RDONLY))return -1;
     for(i=0;i<FILE_COUNT&&(files[i]||directory_paths[i]);i++);if(i==FILE_COUNT){errno=EMFILE;return -1;}
     if(flags&O_DIRECTORY){struct stat st;if(stat_native(native,&st))return -1;if(!S_ISDIR(st.st_mode)){errno=ENOTDIR;return -1;}directory_paths[i]=strdup(native);if(!directory_paths[i])return -1;descriptor_flags[i]=flags;return i+3;}
+    /* Offline definitions are known required resources. Open their canonical
+       file directly; an auxiliary existence index must not reject a real
+       definition during a later animation reload. Keep negative image-alias
+       probes indexed, where avoiding nonexistent SDK opens is valuable. */
     if((flags&O_ACCMODE)==O_RDONLY&&!(flags&(O_CREAT|O_TRUNC|O_APPEND))){
-        if(query_asset_index(native,0,0)==0){pvz_runtime_asset_index_diagnostic[2]++;trace_index_miss(native);errno=ENOENT;return -1;}
+        // A direct definition read bypasses the existence lookup, but it does
+        // not mutate resources. Keep the authoritative negative index active.
+        if(!trusted_definition_path(path)&&query_asset_index(native,0,0)==0){pvz_runtime_asset_index_diagnostic[2]++;trace_index_miss(native);errno=ENOENT;return -1;}
     }else invalidate_asset_index(native);
     if(flags&O_APPEND)mode=(flags&O_RDWR)?"ab+":"ab";
     else if(flags&O_TRUNC)mode=(flags&O_RDWR)?"wb+":"wb";
@@ -506,6 +568,9 @@ static int stat_native(const char *native,struct stat *out){
 }
 int _stat(const char *path,struct stat *out){
     char native[NATIVE_PATH_MAX];uint32_t size;int directory,found;
+    // A just-queued save must exist before the original menu's FileExists
+    // decides between Continue and starting a new level.
+    pvzh1_save_wait(path);
     if(pvz_native_path(path,native,sizeof(native)))return -1;
     found=query_asset_index(native,&size,&directory);
     if(found>=0){pvz_runtime_asset_index_diagnostic[3]++;if(!found){trace_index_miss(native);errno=ENOENT;return -1;}
@@ -524,7 +589,7 @@ int _fstat(int fd,struct stat *out){
     out->st_mode=S_IFREG|0666;out->st_size=end;out->st_blksize=4096;out->st_blocks=(end+511)/512;return 0;
 }
 int _isatty(int fd){return fd>=0&&fd<3;}
-int _unlink(const char *path){char native[NATIVE_PATH_MAX];if(pvz_native_path(path,native,sizeof(native)))return -1;invalidate_asset_index(native);return h1_remove(native)?native_failure(EIO):0;}
+int _unlink(const char *path){char native[NATIVE_PATH_MAX];pvzh1_save_wait(path);if(pvz_native_path(path,native,sizeof(native)))return -1;invalidate_asset_index(native);return h1_remove(native)?native_failure(EIO):0;}
 int rename(const char *from,const char *to){
     typedef int (*Rename)(const char *,const char *);char a[NATIVE_PATH_MAX],b[NATIVE_PATH_MAX];
     if(pvz_native_path(from,a,sizeof(a))||pvz_native_path(to,b,sizeof(b)))return -1;
@@ -621,6 +686,7 @@ long pathconf(const char *path,int name){(void)path;switch(name){case _PC_PATH_M
 long fpathconf(int fd,int name){(void)fd;return pathconf("/PVZ",name);}
 int fcntl(int fd,int command,...){if(fd<0||fd>=FILE_COUNT+3){errno=EBADF;return -1;}if(command==F_GETFD)return FD_CLOEXEC;if(command==F_SETFD)return 0;if(command==F_GETFL)return fd<3?O_RDWR:descriptor_flags[fd-3];errno=EINVAL;return -1;}
 void pvz_runtime_shutdown(void){
+    pvzh1_save_shutdown();
     extern void pvzp_audio_close(void) __attribute__((weak));
     extern void pvzp_window_close(void) __attribute__((weak));
     int i;

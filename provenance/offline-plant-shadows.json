@@ -10,5 +10,9 @@
   "encoder_sha256": "c4b6a1ad93d34eee84f82d9900ed22b823f23c6e8639ed7fb8de211c77f4998e",
   "span_encoder_sha256": "844c6e53b8d16a043b61c19a9aa7cdae69ee5f66d9e37f9ce3855bab3839b1b8",
   "exporter_sha256": "d44af5258038ce1be8f9b272162757bc3a19a1f2e81944c4591a1642184e64cc",
-  "lossy": false
+  "lossy": false,
+  "retired": true,
+  "archive_path": "private/resource-build-inputs/retired/plant-shadows.h1ap",
+  "replacement": "combat-sprites.h1ap",
+  "reason": "Reuse one bitmap per display scale at arbitrary position; do not retain 280 grid-position packets"
 }

@@ -31,6 +31,7 @@ static int early(bool value){PVZProfileScope s(PVZ_PROFILE_UPDATE);timer_value+=
 static void throws(){PVZProfileScope s(PVZ_PROFILE_UPDATE);timer_value+=11;throw 5;}
 int main(){
     uint32_t start;auto d=pvz_runtime_profile_diagnostic;
+    pvz_runtime_profile_mode=2;
     timer_value=100;start=pvz_profile_enter(PVZ_PROFILE_UPDATE);timer_value=125;pvz_profile_leave(PVZ_PROFILE_UPDATE,start);
     assert(d[0]==1&&d[1]==25&&d[2]==0&&d[3]==25);
     timer_value=1000;assert(early(true)==3);assert(d[0]==2&&d[1]==32);
@@ -47,6 +48,20 @@ int main(){
     assert(d[row]==1&&d[row+1]==8&&d[row+2]==4&&d[row+3]==16);
     start=pvz_profile_enter(99);pvz_profile_leave(99,start);pvz_profile_leave(PVZ_PROFILE_FRAME,0);
     assert(!d[PVZ_PROFILE_FRAME*4]);
+    // A mode change must neither enable an inactive outer scope on exit,
+    // nor lose the depth of an active scope spanning the change.
+    const unsigned detailed=PVZ_PROFILE_ACTOR_PACKET*4;
+    pvz_runtime_profile_mode=0;
+    {PVZProfileScope disabled(PVZ_PROFILE_ACTOR_PACKET);
+     pvz_runtime_profile_mode=2;timer_value=100;
+     {PVZProfileScope enabled(PVZ_PROFILE_ACTOR_PACKET);timer_value=107;pvz_runtime_profile_mode=0;}}
+    assert(d[detailed]==1&&d[detailed+1]==7);
+    pvz_runtime_profile_mode=1;timer_value=200;
+    {PVZProfileScope filtered(PVZ_PROFILE_ACTOR_PACKET);timer_value=220;}
+    assert(d[detailed]==1&&d[detailed+1]==7);
+    pvz_runtime_profile_mode=2;timer_value=0xffffffffu;
+    {PVZProfileScope wrap(PVZ_PROFILE_ACTOR_PACKET);timer_value=5;}
+    assert(d[detailed]==2&&d[detailed+1]==13);
     auto c=pvz_runtime_profile_clock;
 #ifdef PVZ_NATIVE_PROFILE_RAW_TICKS
     raw=0xfffffff0u;pvz_profile_mark_frame();

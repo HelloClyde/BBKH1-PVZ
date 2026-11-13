@@ -8,11 +8,14 @@ namespace Sexy {
  * modified through BitsChanged are never reclaimed by this cache. */
 bool H1ImageCacheDescribe(MemoryImage *image,const std::string& path,bool autoAlpha,int alphaColor);
 bool H1ImageCacheLoad(MemoryImage *image);
+void H1ImageCacheNoteLogicalRequest(MemoryImage* image,uintptr_t caller);
 /* Before software blits borrow pointers, prepare exact A8 alpha indices or a
  * <=256-full-ARGB palette for immutable original RGBA font data under data/. */
 bool H1ImageCachePrepareAlphaPalette(MemoryImage *image);
 /* Bounded, already-clipped glyph draw for >256-color RGBA font strips. Exact
  * pixels are paged; the original blitter renders a small dynamic glyph tile. */
+bool H1ImageCacheIsReducedFont(MemoryImage* source);
+bool H1ImageCachePrepareFontGlyph(MemoryImage* source,const Rect& sourceRect,MemoryImage& glyph);
 bool H1ImageCacheBltFontGlyph(MemoryImage *source,MemoryImage *destination,int x,int y,
     const Rect& validSource,const Color& color,int drawMode);
 struct H1ImageCacheFontPageStats {

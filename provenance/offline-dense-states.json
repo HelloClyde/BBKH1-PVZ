@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "blink_poses": 650,
+  "sun_poses": 1911,
+  "shader_comparisons": 3861,
+  "blink_vertical_scale_step": 0.015625,
+  "sun_scale_step": 0.02,
+  "simulation_unchanged": true,
+  "files": {
+    "plant-blinks.h1ap": {
+      "bytes": 80183,
+      "sha256": "51dba5584b4ba3b33521096c8161909f34adad0737a6513f54d2877f8bcfb84c"
+    },
+    "sun-poses.h1ap": {
+      "bytes": 2900030,
+      "sha256": "bebdea6828dc54de2efb8a9e65346a3f0306849ead6f839459c2ee89fb38be57"
+    }
+  },
+  "runtime_scale_sampling_only": true,
+  "exporter_sha256": "e6bd3bff1cb199c2425085f2e7e6a7237a699683852b1a5900bba53ca43a4d7c",
+  "replay_verification": "docs/verification/dense-states-20261109/scale-replay.json",
+  "encoder_sha256": "60d992ec7c5545283c699e37988338cc84beae36fcebbce37562ebefee13852b",
+  "display_scale_sampling": "Blink vertical 1/64, Sun .02; original simulation matrices restored bit-for-bit"
+}

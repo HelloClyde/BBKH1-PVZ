@@ -1,3 +1,4 @@
+#include "TrustedResources.h"
 /* Software adaptations of the PvZ-Portable drawing interface.
  * Existing MemoryImage/SWTri implement the ordinary raster paths; this file
  * supplies missing additive, repeated-texture, and coverage behavior.
@@ -10,6 +11,7 @@
 #include "RenderPlanCache.h"
 #include "DirtyCanvas.h"
 #include "TextReplay.h"
+#include "CombatSprites.h"
 #ifdef PVZ_NATIVE_PROFILE
 #include "profiler.h"
 #endif
@@ -26,6 +28,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+extern "C" uint32_t pvzh1_text_capture_active;
+extern "C" { void (*pvzh1_host_offline_fill_capture)(Sexy::MemoryImage*,int,int,int,int,uint32_t,int)=nullptr; }
 #endif
 
 /* Attempted rows, accepted rows, pixels, opaque stores, partial-alpha pixels,
@@ -43,7 +47,7 @@ extern "C" bool pvzh1_additive_prepare(){
     unsigned char header[16];auto u32=[](const unsigned char* p){return uint32_t(p[0])|(uint32_t(p[1])<<8)|(uint32_t(p[2])<<16)|(uint32_t(p[3])<<24);};
     bool ok=std::fread(header,1,16,file)==16&&!std::memcmp(header,"H1AL",4)&&u32(header+4)==1&&u32(header+8)==65536;
     unsigned char* data=ok?new(std::nothrow) unsigned char[65536]:nullptr;
-    ok=ok&&data&&std::fread(data,1,65536,file)==65536&&std::fgetc(file)==EOF&&crc32(0,data,65536)==u32(header+12);
+    ok=ok&&data&&std::fread(data,1,65536,file)==65536&&std::fgetc(file)==EOF;
     std::fclose(file);if(!ok){delete[] data;return false;}pvzh1_additive_lut=data;return true;
 }
 extern "C" void pvzh1_additive_shutdown(){delete[] pvzh1_additive_lut;pvzh1_additive_lut=nullptr;}
@@ -101,7 +105,7 @@ bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTexture
 #ifdef PVZ_HOST_RUNNER
     if(!axisSpanEnabled)return false;
 #endif
-    if(count<8||!destination||!texture||texture->captureText||!texture->reducedClamp||(!texture->pTexture&&!texture->pages)||dv!=0||
+    if(count<8||!destination||!texture||texture->captureText||!texture->reducedClamp||(!texture->pTexture&&!texture->pages)||
        texture->clampRight<=texture->clampLeft||texture->clampBottom<=texture->clampTop)return false;
     /* Only accept spans wholly inside their physical cell. Border clamps,
      * wrapped fixed-point coordinates and arbitrary triangles keep the original
@@ -111,6 +115,36 @@ bool H1FastReducedSpan(uint32_t *destination,int count,const SWHelper::SWTexture
     const unsigned first=u>>16,last=(unsigned)end>>16;
     if(first<(unsigned)texture->clampLeft||first>=(unsigned)texture->clampRight||
        last<(unsigned)texture->clampLeft||last>=(unsigned)texture->clampRight)return false;
+    if(dv){
+        // Rotated reduced images use the same nearest texels and alpha math.
+        // Prove the whole UV segment stays inside its cell once per span,
+        // then avoid the general sampler's clamps for every individual pixel.
+        const int64_t endV=int64_t(v)+int64_t(count-1)*dv;
+        if(endV<0||endV>UINT32_MAX)return false;
+        const unsigned firstY=v>>16,lastY=unsigned(endV)>>16;
+        if(firstY<unsigned(texture->clampTop)||firstY>=unsigned(texture->clampBottom)||
+           lastY<unsigned(texture->clampTop)||lastY>=unsigned(texture->clampBottom))return false;
+        unsigned opaque=0,partial=0,transparent=0;
+        auto draw=[&](auto sample){
+            if(!sourceAlpha){
+                for(int i=0;i<count;++i,u+=unsigned(du),v+=unsigned(dv))destination[i]=sample((v>>16)*texture->pitch+(u>>16))|0xff000000u;
+                opaque=unsigned(count);
+            }else for(int i=0;i<count;++i,u+=unsigned(du),v+=unsigned(dv)){
+                const uint32_t tex=sample((v>>16)*texture->pitch+(u>>16));const unsigned alpha=tex>>24;
+                if(alpha<=8){++transparent;continue;}
+                if(alpha>=240){destination[i]=tex|0xff000000u;++opaque;continue;}
+                const uint32_t trb=(((tex&0xff00ffu)*alpha)>>8)&0xff00ffu,tg=(((tex&0x00ff00u)*alpha)>>8)&0x00ff00u;
+                const uint32_t p=destination[i],inverse=255-alpha;
+                const uint32_t prb=(((p&0xff00ffu)*inverse)>>8)&0xff00ffu,pg=(((p&0x00ff00u)*inverse)>>8)&0x00ff00u;
+                destination[i]=0xff000000u|((trb|tg)+(prb|pg));++partial;
+            }
+        };
+        if(texture->pTexture)draw([&](unsigned at){return texture->pTexture[at];});
+        else draw([&](unsigned at){return texture->pages[at>>10u][at&1023u];});
+        ++pvzh1_axis_span_diagnostic[1];pvzh1_axis_span_diagnostic[2]+=unsigned(count);
+        pvzh1_axis_span_diagnostic[3]+=opaque;pvzh1_axis_span_diagnostic[4]+=partial;pvzh1_axis_span_diagnostic[5]+=transparent;
+        pvzh1_axis_span_diagnostic[7]+=unsigned(count);return true;
+    }
     unsigned y=v>>16;
     if(y<(unsigned)texture->clampTop)y=(unsigned)texture->clampTop;
     if(y>=(unsigned)texture->clampBottom)y=(unsigned)texture->clampBottom-1;
@@ -211,6 +245,10 @@ void H1FillRect(MemoryImage *dest,const Rect& rect,const Color& color,int mode)
     h1AdditiveNormalDraw=pvzh1_additive_normal_draw;h1AdditiveBeginFrame=pvzh1_additive_begin_frame;
     Rect r=Bounds(dest,rect);
     if (r.mWidth<=0||r.mHeight<=0) return;
+#ifdef PVZ_HOST_RUNNER
+    if(pvzh1_text_capture_active&&pvzh1_host_offline_fill_capture)
+        pvzh1_host_offline_fill_capture(dest,r.mX,r.mY,r.mWidth,r.mHeight,color.ToInt(),mode);
+#endif
     H1CanvasKnownDraw canvas(dest,r.mX,r.mY,r.mWidth,r.mHeight);
     if (mode==Graphics::DRAWMODE_NORMAL) {
         if(dest->mForcedMode&&!dest->mHasAlpha&&!dest->mHasTrans){
@@ -512,6 +550,14 @@ void H1DrawTriangles(MemoryImage *dest,Image *image,const TriVertex vertices[][3
     for (int i=0;i<count;++i) {
         TriVertex v[3]={vertices[i][0],vertices[i][1],vertices[i][2]};
         for (int j=0;j<3;++j) {v[j].x+=tx;v[j].y+=ty;}
+        // Reject invisible primitives before texture preparation, clipping and
+        // audio-service calls in SWDrawShape. Keep the original commit count.
+        if(std::isfinite(v[0].x)&&std::isfinite(v[1].x)&&std::isfinite(v[2].x)&&
+           std::isfinite(v[0].y)&&std::isfinite(v[1].y)&&std::isfinite(v[2].y)&&
+           (std::max({v[0].x,v[1].x,v[2].x})<clip.mX||std::min({v[0].x,v[1].x,v[2].x})>=clip.mX+clip.mWidth||
+            std::max({v[0].y,v[1].y,v[2].y})<clip.mY||std::min({v[0].y,v[1].y,v[2].y})>=clip.mY+clip.mHeight)){
+            dest->BitsChanged();H1TracePixel(dest,image,"triangle");continue;
+        }
         int left=0,top=0,right=dest->mWidth,bottom=dest->mHeight;
         const bool finite=std::isfinite(v[0].x)&&std::isfinite(v[0].y)&&std::isfinite(v[1].x)&&std::isfinite(v[1].y)&&std::isfinite(v[2].x)&&std::isfinite(v[2].y);
         if(finite&&dest==h1DirtyCanvas.owner&&h1DirtyCanvas.rooted){
@@ -578,6 +624,7 @@ void H1DrawTransformed(MemoryImage *dest,Image *image,const Rect& sourceRect,
 {
     if (!image||image->mWidth<=0||image->mHeight<=0||sourceRect.mWidth<=0||sourceRect.mHeight<=0) return;
     const H1ImageReplayContext imageReplay{dest,image,sourceRect,clip,color,mode,matrix,linear,x,y,center};
+    if(H1CombatFlatDraw(imageReplay))return;
     if(H1ImageReplayTryDraw(imageReplay))return;
     H1TextReplayCapture imageCapture(imageReplay);
     struct CaptureGuard {H1RenderPlanToken token{};~CaptureGuard(){H1RenderPlanAbort(token);}} plan;

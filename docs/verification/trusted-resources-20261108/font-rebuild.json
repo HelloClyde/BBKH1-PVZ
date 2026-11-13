@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "font_count": 20,
+  "all_fields_roundtrip": true,
+  "all_font_bytes_identical_to_installed_resources": true,
+  "font_reader_sha256": "4d1610cbe2cb06078ae466b4d15a849c3049cb01509025a5723b230853fc5bad",
+  "host_sha256": "52fc44c5225f12f467e2e79b47882f4cd5843c7066deea9c9297fcc92e8c172f"
+}

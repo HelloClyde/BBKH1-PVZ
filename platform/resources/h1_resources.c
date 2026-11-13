@@ -82,7 +82,7 @@ static int make_path(char *out,size_t capacity,const char *logical,const char *e
 static void image_pack_init(unsigned slot){
     ImagePack *pack=&image_packs[slot];
     unsigned char header[32],*index=0;char path[640];FILE *fp=0;
-    uint32_t count,bytes,total,hash=2166136261u,i,previous_end;const char *previous=0;
+    uint32_t count,bytes,total;
     if(pack->state)return;pack->state=-1;
     if(strlen(resource_root)+strlen(image_pack_names[slot])+1>sizeof(path))return;
     strcpy(path,resource_root);strcat(path,image_pack_names[slot]);fp=fopen(path,"rb");if(!fp)return;
@@ -90,17 +90,7 @@ static void image_pack_init(unsigned slot){
     count=little32(header+8);bytes=little32(header+12);total=little32(header+16);
     if(!count||count>4096||bytes<count*16||bytes>1048576||total<32+bytes||total>67108864||little32(header+24)||little32(header+28))goto done;
     index=(unsigned char*)malloc(bytes);if(!index||fread(index,1,bytes,fp)!=bytes)goto done;
-    for(i=0;i<bytes;++i)hash=(hash^index[i])*16777619u;
-    if(hash!=little32(header+20)||fseek(fp,0,SEEK_END)||ftell(fp)!=(long)total)goto done;
-    previous_end=32+bytes;
-    for(i=0;i<count;++i){
-        const unsigned char *r=index+i*16;uint32_t name=little32(r),offset=little32(r+4),size=little32(r+8);const char *key;
-        if(name>=bytes-count*16||offset<previous_end||offset>total||size<24||size>total-offset)goto done;
-        key=(const char*)index+count*16+name;
-        if(!memchr(key,0,bytes-count*16-name)||!*key||*key=='/'||strchr(key,':')||strstr(key,"..")||(previous&&strcmp(previous,key)>=0))goto done;
-        previous=key;previous_end=offset+size;
-    }
-    pack->file=fp;pack->index=index;pack->count=count;pack->position=total;pack->state=1;
+    pack->file=fp;pack->index=index;pack->count=count;pack->position=32+bytes;pack->state=1;
     pack->bytes=bytes;pvzh1_image_pack_diagnostic[0]=image_packs[0].count+image_packs[1].count;pvzh1_image_pack_diagnostic[1]=image_packs[0].bytes+image_packs[1].bytes;return;
 done:
     free(index);if(fp)fclose(fp);
@@ -143,7 +133,7 @@ static void index_info(const unsigned char *record,uint32_t stride,H1ImageInfo *
 }
 static void metadata_init(void) {
     unsigned char header[28],*data=0;char path[640];FILE *fp;
-    uint32_t count,strings,bytes,stride,hash=2166136261u,i;const char *previous=0;
+    uint32_t count,strings,bytes,stride;
     if (metadata_state) return;
     metadata_state=-1;
     if (strlen(resource_root)+sizeof("image-metadata.h1x")>sizeof(path)) return;
@@ -158,17 +148,6 @@ static void metadata_init(void) {
         count*stride>bytes || strings!=bytes-count*stride) goto done;
     data=(unsigned char*)malloc(bytes);if (!data) goto done;
     if (fread(data,1,bytes,fp)!=bytes || fgetc(fp)!=EOF) goto done;
-    for (i=0;i<bytes;i++) hash=(hash^data[i])*16777619u;
-    if (hash!=little32(header+24)) goto done;
-    for (i=0;i<count;i++) {
-        const unsigned char *record=data+i*stride;uint32_t offset=little32(record);H1ImageInfo info;
-        const char *name;
-        if (offset>=strings) goto done;
-        name=(const char*)data+count*stride+offset;
-        if (!memchr(name,0,strings-offset) || !*name || (previous && strcmp(previous,name)>=0)) goto done;
-        index_info(record,stride,&info);if (!valid_info(&info)) goto done;
-        previous=name;
-    }
     metadata_data=data;metadata_count=count;metadata_record_bytes=stride;metadata_state=1;data=0;
 done:
     free(data);fclose(fp);

@@ -48,6 +48,7 @@ entries=[
  ('board.plants','OFF(Board,mPlants)'),('board.projectiles','OFF(Board,mProjectiles)'),
  ('board.coins','OFF(Board,mCoins)'),('board.paused','OFF(Board,mPaused)'),
  ('board.main_counter','OFF(Board,mMainCounter)'),('board.update_counter','OFF(Board,mBoardUpdateCounter)'),
+ ('board.time_stop','OFF(Board,mTimeStopCounter)'),
  ('board.level','OFF(Board,mLevel)'),('board.current_wave','OFF(Board,mCurrentWave)'),
  ('board.sun','OFF(Board,mSunMoney)'),('board.x','OFF(Board,mX)'),('board.y','OFF(Board,mY)'),
  ('plant.stride','sizeof(P::DataArrayItem)'),('plant.bytes','sizeof(Plant)'),
@@ -59,6 +60,7 @@ entries=[
  ('zombie.type','OFF(Zombie,mZombieType)'),('zombie.row','OFF(Zombie,mRow)'),
  ('zombie.health','OFF(Zombie,mBodyHealth)'),('zombie.max_health','OFF(Zombie,mBodyMaxHealth)'),
  ('zombie.dead','OFF(Zombie,mDead)'),('zombie.pos_x','OFF(Zombie,mPosX)'),('zombie.pos_y','OFF(Zombie,mPosY)'),
+ ('zombie.age','OFF(Zombie,mZombieAge)'),('zombie.speed','OFF(Zombie,mVelX)'),
  ('projectile.stride','sizeof(J::DataArrayItem)'),('projectile.bytes','sizeof(Projectile)'),
  ('projectile.type','OFF(Projectile,mProjectileType)'),('projectile.row','OFF(Projectile,mRow)'),
  ('projectile.dead','OFF(Projectile,mDead)'),('projectile.pos_x','OFF(Projectile,mPosX)'),
@@ -75,7 +77,17 @@ if args.reanimations:
   ('reanim.bytes','sizeof(Reanimation)'),('reanim.type','OFF(Reanimation,mReanimationType)'),
   ('reanim.dead','OFF(Reanimation,mDead)'),('reanim.time','OFF(Reanimation,mAnimTime)'),('reanim.rate','OFF(Reanimation,mAnimRate)'),
   ('reanim.start','OFF(Reanimation,mFrameStart)'),('reanim.count','OFF(Reanimation,mFrameCount)'),
-  ('reanim.base','OFF(Reanimation,mFrameBasePose)'),('reanim.matrix','OFF(Reanimation,mOverlayMatrix)')]
+  ('reanim.base','OFF(Reanimation,mFrameBasePose)'),('reanim.matrix','OFF(Reanimation,mOverlayMatrix)'),
+  ('reanim.extra_enabled','OFF(Reanimation,mEnableExtraAdditiveDraw)'),
+  ('reanim.extra_color','OFF(Reanimation,mExtraAdditiveColor)'),
+  ('zombie.body_reanim','OFF(Zombie,mBodyReanimID)'),('zombie.phase','OFF(Zombie,mZombiePhase)'),
+  ('zombie.chilled','OFF(Zombie,mChilledCounter)'),('zombie.butter','OFF(Zombie,mButteredCounter)'),
+  ('zombie.ice','OFF(Zombie,mIceTrapCounter)'),('zombie.yucky','OFF(Zombie,mYuckyFace)'),
+  ('zombie.yucky_counter','OFF(Zombie,mYuckyFaceCounter)'),('zombie.scale','OFF(Zombie,mScaleZombie)'),
+  ('zombie.original_rate','OFF(Zombie,mOriginalAnimRate)'),('zombie.from_wave','OFF(Zombie,mFromWave)'),
+  ('reanim.definition','OFF(Reanimation,mDefinition)'),('track.bytes','sizeof(ReanimatorTrack)'),
+  ('track.name','OFF(ReanimatorTrack,mName)'),('track.transforms','OFF(ReanimatorTrack,mTransforms)'),
+  ('transform.bytes','sizeof(ReanimatorTransform)')]
 cpp='''#include "DataArray.public.h"
 #include "PvzpLib/EffectSystem.h"
 #include "PvzpLib/Reanimator.h"
@@ -105,7 +117,7 @@ extern "C" unsigned pvzh1_probe_page_count(P& a){return a.mItems.mPages.size();}
 extern "C" Plant* pvzh1_probe_page_get(P& a,unsigned p){return a.mItems.mPages[p].get();}
 '''
 (OUT/'day_entities.cpp').write_text(cpp,encoding='utf8')
-flags=report['flags']+['-Wno-invalid-offsetof','-I',str(SOURCE/'PvzpLib')]
+flags=['-I',str(SOURCE),'-I',str(SOURCE/'SexyAppFramework')]+report['flags']+['-fno-lto','-Wno-invalid-offsetof','-I',str(SOURCE/'PvzpLib')]
 command=[str(TC/'mipsel-none-elf-g++.exe'),*flags,'-c',str(OUT/'day_entities.cpp'),'-o',str(OUT/'day_entities.o')]
 r=subprocess.run(command,capture_output=True,text=True)
 (OUT/'day_entities.log').write_text(r.stdout+r.stderr)

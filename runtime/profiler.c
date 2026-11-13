@@ -5,6 +5,7 @@
 #ifdef PVZ_NATIVE_PROFILE
 volatile uint32_t pvz_runtime_profile_diagnostic[PVZ_PROFILE_STAGE_COUNT*4];
 volatile uint32_t pvz_runtime_profile_clock[6];
+volatile uint32_t pvz_runtime_profile_mode=1;
 static unsigned depth[PVZ_PROFILE_STAGE_COUNT];
 static uint32_t last_count,count_high;
 static int clock_started;

@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "level": 1,
+  "old_saved_zombies": 4,
+  "matched_zombies": [
+    {
+      "id": 66125825,
+      "x": [
+        794.0,
+        660.5697631835938
+      ],
+      "time": [
+        0.0,
+        0.9449958205223083
+      ],
+      "age": [
+        132870,
+        133906
+      ],
+      "rate_on_load": 11.001669883728027
+    },
+    {
+      "id": 66060290,
+      "x": [
+        790.0,
+        670.0590209960938
+      ],
+      "time": [
+        0.0,
+        0.7955522537231445
+      ],
+      "age": [
+        135613,
+        136649
+      ],
+      "rate_on_load": 12.374505043029785
+    },
+    {
+      "id": 65994755,
+      "x": [
+        791.0,
+        674.87255859375
+      ],
+      "time": [
+        0.0,
+        0.9853118658065796
+      ],
+      "age": [
+        138527,
+        139563
+      ],
+      "rate_on_load": 13.264338493347168
+    }
+  ],
+  "remaining_zombies_after_combat": 0,
+  "read_only_motion_observations": true,
+  "game_RAM_written_by_test": false,
+  "resume_input": "touch Continue button; keyboard command was rejected BUSY before any accepted key",
+  "clock_hz": 40,
+  "ticks": [
+    359426,
+    363119,
+    363230
+  ]
+}

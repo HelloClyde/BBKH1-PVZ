@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-12",
+  "baseline_program_sha256": "512e025c07ca6bc781a05c9eb7cf4c1370b32f39657d93614544f537fdd91613",
+  "baseline_code_fingerprints_match": true,
+  "native_observation": {
+    "scene": 3,
+    "level": 1,
+    "paused": false,
+    "time_stop": 0,
+    "zombies": 5,
+    "ticks": [
+      89131,
+      89342
+    ],
+    "main_counter": [
+      75288,
+      75818
+    ],
+    "zombie_age": [
+      65508,
+      66040
+    ],
+    "all_five_rates_zero": true,
+    "all_five_animation_times_zero": true,
+    "all_five_positions_unchanged": true
+  },
+  "host": {
+    "passed": true,
+    "steps": 600,
+    "start_x": 805,
+    "end_x": 717.067,
+    "distinct_animation_times": 601,
+    "distinct_rendered_zombie_regions": 121,
+    "zero_rate_first_update_recovered": true,
+    "pause_and_resume": true,
+    "save_and_continue_200_steps": true,
+    "zero_rate_save_recovered": true,
+    "legitimate_butter_preserved_on_load": true,
+    "resumed_end_x": 690.612,
+    "scope": "Original full game logic on host, not physical H1 performance",
+    "executable_sha256": "d578115bbc6460026d74a3bf01ee4fa3ef97c43fac54250ff0969fb4568acd38",
+    "compile_report_sha256": "584f42a9f4784b37f22078763f0e434ae38dabefc4db50c02276e235d7ce4d83",
+    "probe_sha256": "03820d0b3b3cde91fd93aa6862758e9caea5e5e9ce291944ee10552ade09ce14"
+  },
+  "candidate": {
+    "bda_bytes": 3752692,
+    "sha256": "dedbe8f8807ced1cd68eba1e6ec7cf4a96294054f72d6e38c1fae716fd27345b",
+    "elf_sha256": "9d91f19c94fc15d71d9e1dba3e245cab5d52c5935919ba23826758b11f041782",
+    "gp_tls_audit": true,
+    "native_sources": 192,
+    "installed": false,
+    "hardware_acceptance_passed": false
+  },
+  "device": {
+    "serial_closed": true,
+    "debugger_was_left_running": true,
+    "connection_lost_before_new_build_test": true,
+    "save_files_written_by_tools": false,
+    "exec_modules_completed": true,
+    "exec_live_allocations": 0,
+    "production_callback_hooks_installed": false
+  },
+  "limitations": [
+    "Confirmed the zero-rate stopping mechanism; the earliest site that originally changed the rates to zero is not yet proven.",
+    "A diagnostic invocation of original UpdateAnimSpeed restored movement of one live zombie. This is diagnostic evidence, not acceptance of the new BDA.",
+    "spawn.py failed during port discovery; its callback module was never uploaded or armed.",
+    "trace.c/recompute-result.json mistakenly read reanimation offset20 (dead), not offset8 (rate); these output words are not rate evidence. Baseline snapshots use compiler-emitted offsets and are the rate evidence.",
+    "New BDA hardware test is pending because the USB debug port disappeared. No deploy was attempted."
+  ]
+}

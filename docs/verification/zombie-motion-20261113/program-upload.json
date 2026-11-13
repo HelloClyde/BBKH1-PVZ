@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\build\\zombie-motion-v77-hardware\\candidate.bda",
+  "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+  "target_gbk_hex": "413a5cd3a6d3c35cb3ccd0f25c483150565a506f727461626c652e626461",
+  "phase": "done",
+  "completed": true,
+  "size": 3752692,
+  "crc32": 2794627903,
+  "sha256": "dedbe8f8807ced1cd68eba1e6ec7cf4a96294054f72d6e38c1fae716fd27345b",
+  "token": 14,
+  "received": 3752692,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 14,
+    "size": 3752692,
+    "received": 3752692,
+    "expected_crc": 2794627903,
+    "actual_crc": 2794627903,
+    "verify_offset": 3752692,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 9,
+    "old_size": 3752388,
+    "old_crc": 2315167848,
+    "last_activity_tick": 353479,
+    "step_count": 2760,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "A:\\应用\\程序\\H1PVZPortable.bda",
+    "temporary": "A:\\应用\\程序\\H1D0000000E.TMP",
+    "backup": "A:\\应用\\程序\\H1D0000000E.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 270.01499999989755
+}

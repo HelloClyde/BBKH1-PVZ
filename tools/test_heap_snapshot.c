@@ -5,6 +5,7 @@
 volatile uint32_t pvz_runtime_diagnostic[16];
 extern volatile uint32_t pvz_runtime_heap_failure[20];
 extern void pvz_runtime_capture_heap_failure(size_t,size_t);
+extern void pvz_runtime_heap_snapshot_into(volatile uint32_t *,size_t,size_t);
 static uint32_t base,end,bottom,count,top,records[8][2],reads,top_reads;
 static int change_header;
 uint32_t pvz_heap_snapshot_test_read32(uintptr_t address)
@@ -39,6 +40,11 @@ int main(void)
     assert(pvz_runtime_heap_failure[11]==bottom-top+2048);
     assert(pvz_runtime_heap_failure[12]==bottom-top&&pvz_runtime_heap_failure[13]==bottom-top-8);
     assert(pvz_runtime_heap_failure[14]==12288&&pvz_runtime_heap_failure[15]==1&&reads==6);
+    {uint32_t pressure[20],terminal[20];unsigned i;
+     for(i=0;i<20;++i)terminal[i]=pvz_runtime_heap_failure[i];
+     pvz_runtime_heap_snapshot_into(pressure,32,64);
+     assert(pressure[1]==1&&pressure[4]==32&&pressure[5]==64);
+     for(i=0;i<20;++i)assert(terminal[i]==pvz_runtime_heap_failure[i]);}
     /* More aggregate free memory than requested, but no sufficiently large hole. */
     setup(5,8);
     record(0,base,1048576,0);record(1,base+1048576,65536,1);

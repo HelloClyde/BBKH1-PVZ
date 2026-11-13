@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "zombie_whole_frame_comparisons": 156,
+  "camera_whole_frame_comparisons": 340,
+  "panorama_released_before_play": true,
+  "all_idle_half_frames_and_visibility_selections": true,
+  "probe_sha256": "7c6aa36d7c178b0a068f1f3101ccf65605a7940162b1387ca9cf27ef778e40cb",
+  "executable_sha256": "bc5e569c9a97e121e70ce1e8d241455ba32397b1a862b10ec24e30687daf0081",
+  "compile_report_sha256": "cd9e390e2fe44528f4d083521be0378706d48ec9dc04d82286c53456d176a441",
+  "scope": "Original host game callbacks and real offline resources; not physical H1 timing"
+}

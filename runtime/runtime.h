@@ -17,6 +17,7 @@ int pvz_native_path(const char *path,char *output,size_t capacity);
 void pvz_runtime_delay_ms(unsigned int milliseconds);
 uint32_t pvz_runtime_ticks(void);
 void pvz_runtime_shutdown(void);
+void pvz_runtime_report_failure(int code);
 void pvz_runtime_log(const void *data,size_t size);
 void pvz_runtime_abort(int code) __attribute__((noreturn));
 extern volatile uint32_t pvz_runtime_diagnostic[16];

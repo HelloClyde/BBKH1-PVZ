@@ -5,10 +5,13 @@ from build_paths import ROOT,TOOLCHAIN,RUNTIME_PREFIX
 # Normal RGB32 kernels retain their targeted O2 pragma; other generated
 # triangle formats use Os to keep the BDA below the firmware caller stack.
 HOT=('SoftwareRaster.cpp','RenderPlanCache.cpp','TextReplay.cpp','ActorPose.cpp','EarlyLawn.cpp','RewardEffects.cpp','BoardLoading.cpp',
+     'Board.cpp','Plant.cpp','Zombie.cpp',
      'PhysicalScreen.cpp','GLImage.cpp','GLInterface.cpp','MemoryImage.cpp',
      'MemoryImageCache.cpp','ImageFont.cpp','Reanimator.cpp','h1_host.cpp',
      'mixer.c','period.c','SelectorOffline.cpp','IntroMovie.cpp',
-     'IntroFrames.c')
+     'IntroFrames.c','inflate.c','inffast.c','inftrees.c',
+     'DeferredOverlay.cpp','Projectile.cpp','Coin.cpp','PvzpParticle.cpp',
+     'Attachment.cpp','PvzpCommon.cpp','LawnApp.cpp')
 def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('--prefix',type=Path,default=RUNTIME_PREFIX)
@@ -16,10 +19,12 @@ def main():
  p.add_argument('--jobs',type=int,default=6)
  p.add_argument('--build-dir',default='build/native-widescreen')
  p.add_argument('--output-dir',default='dist')
+ p.add_argument('--no-lto',action='store_true',help='Disable the hardware-tested cross-file optimization for comparisons')
  a=p.parse_args()
  command=[sys.executable,ROOT/'tools/build.py','--prefix',a.prefix.resolve(),'--toolchain',a.toolchain.resolve(),
           '--jobs',str(a.jobs),'--build-dir',a.build_dir,'--output-dir',a.output_dir,
           '--optimization','Os','--xmp-numeric-cache']
+ if not a.no_lto:command.append('--lto')
  for name in HOT:command.extend(('--optimize-source',name))
  for define in ('PVZH1_PHYSICAL_SCREEN','PVZH1_WIDESCREEN','PVZ_H1_RAW_TICK_HZ=40','PVZ_NATIVE_PROFILE','PVZ_NATIVE_PROFILE_RAW_TICKS'):
   command.extend(('--define',define))

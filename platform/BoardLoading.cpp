@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <new>
 #include <zlib.h>
+#include "TrustedResources.h"
 extern "C" int pvzh1_widget_draw_active();
 extern "C" {volatile uint32_t pvzh1_level_loading_diagnostic[12];}
 namespace {
@@ -25,7 +26,7 @@ void ReleaseBackground(){
  pvzh1_level_loading_diagnostic[10]=cache.h[8]*cache.h[9]*4;
 }
 bool Decode(unsigned offset,unsigned size,void* output,unsigned bytes){
- if(inflateReset(&cache.z)!=Z_OK)return false;cache.z.next_in=cache.data+offset;cache.z.avail_in=size;cache.z.next_out=(Bytef*)output;cache.z.avail_out=bytes;
+ if(H1ResourceInflateReset(&cache.z)!=Z_OK)return false;cache.z.next_in=cache.data+offset;cache.z.avail_in=size;cache.z.next_out=(Bytef*)output;cache.z.avail_out=bytes;
  return inflate(&cache.z,Z_FINISH)==Z_STREAM_END&&cache.z.total_out==bytes&&!cache.z.avail_in;
 }
 bool Load(){
@@ -34,13 +35,10 @@ bool Load(){
  if(!ok||h[0]!=0x4c4c3148||h[1]!=1||h[2]!=480||h[3]!=272||h[4]!=522240||!h[5]||h[5]>1024*1024||h[6]>=480||h[7]>=272||!h[8]||h[8]>480-h[6]||!h[9]||h[9]>272-h[7]||!h[10]||h[10]>65536||h[13]!=64+h[5]+h[10])ok=false;
  if(ok){cache.data=new(std::nothrow) unsigned char[h[5]+h[10]];cache.patch=new(std::nothrow) uint32_t[h[8]*h[9]];ok=cache.data&&cache.patch;}
  if(ok)ok=fread(cache.data,1,h[5]+h[10],f)==h[5]+h[10]&&fgetc(f)==EOF;fclose(f);if(!ok)return false;
- cache.initialized=inflateInit(&cache.z)==Z_OK;if(!cache.initialized)return false;
- // Validate and warm the inflater's window once while the menu is loading.
- // Repainting never allocates a logical 1060x600 image or a second canvas.
- cache.z.next_in=cache.data;cache.z.avail_in=h[5];unsigned char scratch[4096];unsigned crc=crc32(0,nullptr,0);int result=Z_OK;
- while(result==Z_OK){cache.z.next_out=scratch;cache.z.avail_out=sizeof(scratch);result=inflate(&cache.z,Z_NO_FLUSH);crc=crc32(crc,scratch,sizeof(scratch)-cache.z.avail_out);if(cache.z.total_out>h[4])return false;}
- if(result!=Z_STREAM_END||cache.z.avail_in||cache.z.total_out!=h[4]||crc!=h[11])return false;
- if(!Decode(h[5],h[10],cache.patch,h[8]*h[9]*4)||crc32(0,(const Bytef*)cache.patch,h[8]*h[9]*4)!=h[12])return false;
+ cache.initialized=H1ResourceInflateInit(&cache.z)==Z_OK;if(!cache.initialized)return false;
+ // Decode only the patch used by subsequent progress updates. The full
+ // background is decoded once, directly into the real screen on first draw.
+ if(!Decode(h[5],h[10],cache.patch,h[8]*h[9]*4))return false;
  cache.ready=true;pvzh1_level_loading_diagnostic[10]=h[5]+h[10]+h[8]*h[9]*4+32768+sizeof(z_stream);return true;
 }
 void Draw(bool force){

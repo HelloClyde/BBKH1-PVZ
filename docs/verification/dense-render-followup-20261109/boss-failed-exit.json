@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "result": {
+    "status": {
+      "version": 1,
+      "state": 1,
+      "usb_configured": 1,
+      "usb_fault": 0,
+      "usb_resets": 3,
+      "commands": 985887,
+      "bad_frames": 0,
+      "tick": 5829285,
+      "poll_count": 293104467,
+      "last_poll_tick": 5829285,
+      "resident_base": 2185888384,
+      "resident_size": 727104,
+      "keys_low": 0,
+      "keys_high": 0,
+      "exec_state": 5,
+      "last_error": 0
+    },
+    "desktop": {
+      "job_id": 120,
+      "kind": 2,
+      "state": 4,
+      "error": 0,
+      "menu_idle": 0,
+      "app_index": 101,
+      "entry_count": 67,
+      "return_code": 107,
+      "state_name": "done"
+    },
+    "code_fingerprints": [
+      {
+        "symbol": "h1_bda_main",
+        "match": false
+      },
+      {
+        "symbol": "_open",
+        "match": false
+      },
+      {
+        "symbol": "pvzp_present_argb",
+        "match": false
+      },
+      {
+        "symbol": "detect_resource_drive",
+        "match": false
+      }
+    ]
+  },
+  "seconds": 0.0470000000204891
+}

@@ -1269,11 +1269,13 @@
     "reanim/zombie_zamboni.reanim": "6de7f40117211d8c1c0a22fa3c928712da8a2dc3ce4c4af2db24d52d2ec046a1",
     "reanim/zombieswon.reanim": "236209a5b391496ddce68b725fc7adc8b66a77d3e3aca6d149fc8f8fc4c62be5"
   },
-  "host_sha256": "6489bed181fe472ef42e3efb9721ab0f299f015bbaf78cee459e8328c4617320",
+  "host_sha256": "757c807606b4e6cb4eb8cdd83e257791d329b4e5cd2b43eaf928d647d7492ac8",
   "count": 253,
   "bytes": 1226524,
   "all_fields_roundtrip": true,
-  "crc_rejection": true,
-  "exporter_source_sha256": "8a92327f83810202c6e273e484a7ed3e650d2daab90effd9c05246ac98846029",
-  "upstream_parser_sha256": "285b7e29e58bbbc4a958ce95fc18213758b9b0b99355be8908ed01103e7a53a0"
+  "offline_crc_verified": true,
+  "runtime_resource_checksums": false,
+  "exporter_source_sha256": "4dd0ab9b196ac38561ec279c82f560e96061fc3baa881ef09eef82c0488e0ac8",
+  "upstream_parser_sha256": "285b7e29e58bbbc4a958ce95fc18213758b9b0b99355be8908ed01103e7a53a0",
+  "reader_revision_validation": "docs/verification/intro-delete-20261113/offline-metadata-rebuild.json"
 }

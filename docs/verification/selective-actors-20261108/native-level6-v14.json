@@ -1,0 +1,108 @@
+{
+  "candidate": "v14",
+  "identity": {
+    "bda_sha256": "9328f62afc908be63074ed8f31f4959d537b77c124aadb3d22b73837cac16b82",
+    "elf_sha256": "6712f41480762f65b352b1e23cd2a421dba574cb758d8cc11bc395864cdebb49",
+    "build_receipt_sha256": "a995e5b6ac8591fc9c3d002a7b0b095f0ca184de8ac658b9eb139e07b8053b24",
+    "fingerprints": [
+      {
+        "symbol": "h1_bda_main",
+        "address": "0x83c00020",
+        "size": 48,
+        "expected_hex": "e0ffbd271c00bfaf1800bcaf2540a003fd831d3c30afbd27e0ffbd271800a8affcf8f80c000000001800bd8f1800bc8f",
+        "sha256": "67c19b06646a66cf733b7fd09adb463107c52be78e5427442f969322202c1dcf"
+      },
+      {
+        "symbol": "_open",
+        "address": "0x83e40558",
+        "size": 64,
+        "expected_hex": "78fdbd278002beaf25f0a0037002b2af8402bfaf7c02b5af7802b4af7402b3af6c02b1af6802b0af9402c7af2000073c0300e7242438a7002590a0009002c6af",
+        "sha256": "fbe784b70270f5212945d50b86e513527d2a4a823bfeae0660b7eb1edc63b236"
+      },
+      {
+        "symbol": "pvzp_present_argb",
+        "address": "0x83e2d168",
+        "size": 64,
+        "expected_hex": "78ffbd278000beaf7800b4af25f0a0037400b3af6c00b1af6800b0af8400bfaf7c00b5af7000b2af25a08000020004242588a00038f6f80c2580c00025984000",
+        "sha256": "cf54412438a66e94675aac5ffb4e4af013b0b3b5855cec9921b7b96eb09dbd40"
+      },
+      {
+        "symbol": "detect_resource_drive",
+        "address": "0x83e3ec58",
+        "size": 64,
+        "expected_hex": "fa83023ce078438c4200601400000000d8ffbd27010003241800b1af1400b0afef83113cfa83103c2400bfaf2000beaf1c00b2af25f0a003e07e24263c5e1026",
+        "sha256": "a512eccd22e477b61a0d230e8204aeec22742461dad6ccb4c3bceb090e0b1ad8"
+      }
+    ]
+  },
+  "scope": "Physical H1 level6, fresh disposable profile, natural camera/intro, then options. No game RAM writes.",
+  "clock_hz": 40,
+  "quiet_lawn_fps": 39.824561403508774,
+  "quiet_observe_seconds": 5.7,
+  "pan": {
+    "toward_zombies": {
+      "samples": 5,
+      "presented_frames": 14,
+      "raw_ticks": 30,
+      "fps": 18.666666666666668
+    },
+    "return_to_lawn": {
+      "samples": 6,
+      "presented_frames": 15,
+      "raw_ticks": 38,
+      "fps": 15.789473684210526
+    }
+  },
+  "options_present_ms": 75,
+  "runtime": [
+    1347836496,
+    2,
+    0,
+    18006013,
+    19576802,
+    183,
+    1,
+    66,
+    21,
+    1024,
+    25,
+    2210579332,
+    0,
+    0,
+    0,
+    65536
+  ],
+  "heap_failure": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "generic_bank_activity": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "source_evidence": "build/selective-live-v14-hardware/"
+}

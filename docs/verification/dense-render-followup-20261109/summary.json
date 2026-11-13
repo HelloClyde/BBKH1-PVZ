@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-09",
+  "target": "physical BBK H1 480x272",
+  "fixture_sha256": "1eb0afa9d36751bbcb0a76d3b6f855a9d3305ec013e877452daf46e09fee0bab",
+  "plants": 45,
+  "zombies": 5,
+  "baseline_FPS": 5.394736842105263,
+  "candidate_FPS": 6.491803278688525,
+  "improvement_percent": 20.335865653738505,
+  "target_20_FPS_met": false,
+  "loading_ms_before": 29800,
+  "loading_ms_after": 10475,
+  "installed_BDA_sha256": "ffdbf133720a3b2c2f114632bb12f23aad5b552a846daa51e063940535d261ab",
+  "native_boss_passed": false,
+  "native_boss_exit_code": 107,
+  "original_saves_restored": true,
+  "pending_native_candidate": {
+    "sha256": "e5c935f731525b5891f22efe4ddffb4f04a58a8fd024a8af94aace93c8e40895",
+    "bytes": 3734732,
+    "built": true,
+    "hardware_tested": false
+  },
+  "required_next": "Reboot H1, reopen H1Debug and reconnect USB; protect the restored original userdata again before any new fixture; reproduce Boss fault with V63 error capture."
+}

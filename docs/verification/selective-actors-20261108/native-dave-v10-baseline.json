@@ -1,0 +1,24 @@
+{
+  "candidate": "v10",
+  "bda_sha256": "e5c25bec51700ce7884f7e9401876a5e574f6eb5f4462d8202862b0bdc2c9894",
+  "elf_sha256": "664f7d59a0a131436e89de69674513afc5377393aa6c16765c0a213b101f11b5",
+  "scope": "Physical H1, first Boss Dave message, no generic banks. No performance counters changed.",
+  "clock_hz": 40,
+  "observe_seconds": 5.775,
+  "fps": 12.121212121212121,
+  "dave_draw_calls": 94,
+  "dave_draw_milliseconds": 1925,
+  "draw_profile_before": [
+    10511,
+    29459,
+    0,
+    112
+  ],
+  "draw_profile_after": [
+    10599,
+    29717,
+    0,
+    112
+  ],
+  "result": "Whole scene below 20 FPS; isolate background cost before baking Dave frames."
+}

@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "scope": "Physical H1/Y100 V1.41: this UI/new-player fix. No claim of 20 FPS in dense or all game scenes.",
+  "program": {
+    "passed": true,
+    "bda_sha256": "512e025c07ca6bc781a05c9eb7cf4c1370b32f39657d93614544f537fdd91613",
+    "elf_sha256": "802fecc15c97fd372f40ebbe7dafcbffbef0139a03e57215090468315e087ec6",
+    "bda_bytes": 3752388,
+    "build_receipt_sha256": "85cafd15f37a98d967b618772bd8b866ba2183f8d353f4f3836b935ce6f8cccd",
+    "source_identity_verified": true,
+    "native_repository_inputs_verified": 279,
+    "device_upload_crc_verified": true
+  },
+  "device": {
+    "identity": "H1DEBUG/1 V1.41 RESIDENT",
+    "screen": [
+      480,
+      272
+    ],
+    "debugger_remains_running": true,
+    "serial_closed": true
+  },
+  "menu": {
+    "old_visible_seconds": 7.125,
+    "v74_visible_seconds": 2.725,
+    "final_visible_seconds": 2.75,
+    "raw_clock_hz": 40,
+    "clock_scope": "From post-tap observation to first physically presented menu; polling interval about 0.2s"
+  },
+  "new_player": {
+    "profile": "Ccc (typed ccc)",
+    "callback_ms": 50,
+    "new_audio_wraps": 0,
+    "new_audio_underruns": 0,
+    "first_level_playing": true,
+    "real_plant_sun": [
+      150,
+      50
+    ]
+  },
+  "intro": {
+    "functional_passed": true,
+    "target_20fps_met": false,
+    "quiet_unique_frame_fps": 18.18815331010453,
+    "no_device_polling": true,
+    "original_end_time_ms": 13890,
+    "final_movie_cache_bytes": 0,
+    "allocation_page_bytes": 65536
+  },
+  "volume": {
+    "default_music_percent": 10,
+    "default_effects_percent": 10,
+    "native_touch_verified_v74": true,
+    "persisted_bytes": [
+      72,
+      49,
+      86,
+      49,
+      29,
+      39
+    ],
+    "normal_restart_screenshot_verified": true,
+    "reuse_scope": "V74 volume touch/persistence evidence uses the exact same stable program bytes reinstalled as V76; all 279 repository-owned native inputs match."
+  },
+  "saves": {
+    "v74_immediate_continue_sun": 50,
+    "v76_async_jobs_completed": 3,
+    "write_errors": 0,
+    "worker_payload_bytes_after_exit": 0,
+    "worker_task_removed": true,
+    "original_irq_restored": true,
+    "originals_restored": {
+      "passed": true,
+      "whole_original_directory_restored": true,
+      "test_archive": "B:\\应用\\数据\\游戏\\PVZ\\userdata.test-ui-v76-1794255927",
+      "files": {
+        "users.dat": {
+          "size": 33,
+          "sha256": "eba5c5d5ebe82f96d9685a5b6c99bb9f8cf8117a486f7d417b5cbc5edb53eca1"
+        },
+        "user1.dat": {
+          "size": 886,
+          "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+        },
+        "game1_0.v4": {
+          "size": 39480,
+          "sha256": "5540c956e3a0988440a2bf33310b3e80d5683f0873a2dcc53a6ed1b3b6fed97c"
+        }
+      }
+    }
+  },
+  "resources": {
+    "bytes": 166473603,
+    "files": 2674,
+    "menu_pack_saved_bytes": 3208445,
+    "menu_payloads_lossless": true,
+    "menu_and_hand_pixel_oracle_cases": 340
+  },
+  "validation": {
+    "gp_tls_audit": true,
+    "host_ui": true,
+    "host_hand": {
+      "passed": true,
+      "frame_cases": 340,
+      "original_bake_oracle": true,
+      "repeat_and_reverse": true,
+      "resident_bytes": 4692741
+    },
+    "host_menu": {
+      "test_only": true,
+      "all_passed": true,
+      "checks": 223,
+      "full_frame_pixel_cases": 56,
+      "clipped_page_cases": 6,
+      "hidden_page_skips": 3,
+      "group_hits": 106,
+      "button_state_hits": 30,
+      "welcome_hits": 49,
+      "resident_requested_bytes": 4697087,
+      "released_bytes": 0,
+      "warm_bundle_opens": 0,
+      "original_attachments_preserved": true,
+      "starting_retains_cache": true,
+      "fallback_states": [
+        "open",
+        "slide",
+        "parent_tint",
+        "hover_fade"
+      ],
+      "gameplay_input_proof": false
+    },
+    "atomic_write_failure_injection": true
+  },
+  "limitations": [
+    "Opening quiet-window FPS is about18.2 and has not met20FPS. A tested256KiB-page candidate failed allocation and was rejected; stable64KiB pages are retained.",
+    "Dense gameplay FPS was not rerun by this UI task. The prior V66 result of 6.49 FPS is historical, not a measurement of the final V76 installation.",
+    "Full repository verifier has a pre-existing preferred-alpha reader provenance mismatch; targeted checks only in this task."
+  ]
+}

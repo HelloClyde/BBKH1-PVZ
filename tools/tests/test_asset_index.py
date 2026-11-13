@@ -27,13 +27,11 @@ def main():
  def rejected(blob):
   b=ctypes.create_string_buffer(blob);v=View(123,7,8,9);assert not lib.pvz_asset_index_parse(ctypes.byref(v),b,len(blob));assert (v.data,v.count,v.strings,v.bytes)==(123,7,8,9)
  for length in (0,1,4,16,31,32,len(data)-1):rejected(data[:length]);checks+=1
- for at in (0,4,8,12,16,20,24,28,40,len(data)-1):
+ for at in (0,4,8,12,16,20,28):
   b=bytearray(data);b[at]^=0x80;rejected(bytes(b));checks+=1
- # Recomputed checksums must not allow bad paths, flags, sizes or offsets.
- for field,value in [(32,0xffffffff),(36,0xffffffff),(40,2)]:
-  b=bytearray(data);struct.pack_into('<I',b,field,value);h=2166136261
-  for x in b[32:]:h=((h^x)*16777619)&0xffffffff
-  struct.pack_into('<I',b,24,h);rejected(bytes(b));checks+=1
+ # Index bodies were checked offline; the device does not hash them again.
+ b=bytearray(data);b[24]^=0x80;trusted=ctypes.create_string_buffer(bytes(b));trusted_view=View()
+ assert lib.pvz_asset_index_parse(ctypes.byref(trusted_view),trusted,len(b));checks+=1
  text=(ROOT/'runtime/syscalls.c').read_text()
  prefix=r'''
 #include <stdint.h>
@@ -67,7 +65,7 @@ static int asset_bucket_state,openCalls,statCalls,indexMissing,inside;
 static int ascii_prefix(const char* a,const char* b){while(*b){unsigned x=*a++,y=*b++;if(x>='A'&&x<='Z')x+=32;if(y>='A'&&y<='Z')y+=32;if(x!=y)return 0;}return 1;}
 static h1_file* io_native_open(const char* path,const char* mode){assert(!inside);openCalls++;
  if(strstr(path,"resource-files.h1fi")){if(indexMissing)return 0;indexFile.at=0;return &indexFile;}
- if(strstr(path,"briannetod12.txt")||strstr(path,"userdata")||strcmp(mode,"rb"))return &regular;return 0;}
+ if(strstr(path,"briannetod12.txt.h1fc")||strstr(path,"userdata")||strcmp(mode,"rb"))return &regular;return 0;}
 static unsigned io_native_read(void* p,unsigned n,h1_file* f){assert(!inside);inside=1;if(n>f->size-f->at)n=f->size-f->at;memcpy(p,f->data+f->at,n);f->at+=n;inside=0;return n;}
 static int h1_fclose(h1_file* f){(void)f;return 0;}
 static void audio_io_yield(void){assert(!inside);}
@@ -88,8 +86,8 @@ int main(int argc,char** argv){
  assert(_open("b:\\pvz\\images\\never_exists.h1a",O_RDONLY)==-1&&openCalls==1);
  assert(_open("B:\\PVZ\\REANIM_SELECTORSCREEN_GHOST.h1a",O_RDONLY)==-1&&openCalls==1);
  assert(_open("B:\\PVZ\\REANIM_SELECTORSCREEN_GHOST.h1i",O_RDONLY)==-1&&openCalls==1);
- assert(_open("B:\\PVZ\\data\\briannetod12.txt",O_RDONLY)==3&&openCalls==2);
- assert(_stat("B:\\PVZ\\data\\briannetod12.txt",&st)==0&&st.st_size>0&&statCalls==0);
+ assert(_open("B:\\PVZ\\data\\briannetod12.txt.h1fc",O_RDONLY)==3&&openCalls==2);
+ assert(_stat("B:\\PVZ\\data\\briannetod12.txt.h1fc",&st)==0&&st.st_size>0&&statCalls==0);
  assert(_stat("B:\\PVZ\\sounds",&st)==0&&S_ISDIR(st.st_mode)&&statCalls==0);
  assert(_stat("B:\\PVZ\\images\\never_exists.h1a",&st)==-1&&errno==ENOENT&&statCalls==0);
  assert(_stat("B:\\PVZ\\userdata\\user1.dat",&st)==0&&st.st_size==17&&statCalls==1);
@@ -100,12 +98,12 @@ int main(int argc,char** argv){
  before=openCalls;assert(_open("B:\\PVZ\\images\\never_exists.h1a",O_RDONLY)==-1&&openCalls==before+1);
  reset();resource_prefix="A:\\PVZ";assert(_open("A:\\PVZ\\images\\never_exists.h1a",O_RDONLY)==-1&&openCalls==1);resource_prefix="B:\\PVZ";
  reset();indexMissing=1;assert(_open("B:\\PVZ\\images\\never_exists.h1a",O_RDONLY)==-1&&openCalls==2&&asset_index_state==1);
- reset();bytes[n-1]^=1;assert(_open("B:\\PVZ\\images\\never_exists.h1a",O_RDONLY)==-1&&openCalls==2&&asset_index_state==1);bytes[n-1]^=1;
+ reset();bytes[24]^=1;assert(_open("B:\\PVZ\\images\\never_exists.h1a",O_RDONLY)==-1&&openCalls==1&&asset_index_state==2);bytes[24]^=1;
  reset();free(bytes);return 0;
 }
 '''
  (out/'integration.c').write_text(code,encoding='utf8');compile([out/'integration.c',ROOT/'runtime/asset_index.c','-o',out/'integration.exe'])
  subprocess.run([str(out/'integration.exe'),str(ROOT/'private/resources-h1-wide/resource-files.h1fi')],env=env,check=True)
- proof=dict(passed=True,lookup_checks=checks,production_open_stat_bodies=True,save_paths_bypass=True,drive_a_and_b=True,bucket_layout=True,mutation_invalidates=True,missing_corrupt_fallback=True,syscalls_sha256=hashlib.sha256((ROOT/'runtime/syscalls.c').read_bytes()).hexdigest(),parser_sha256=hashlib.sha256((ROOT/'runtime/asset_index.c').read_bytes()).hexdigest())
+ proof=dict(passed=True,lookup_checks=checks,production_open_stat_bodies=True,save_paths_bypass=True,drive_a_and_b=True,bucket_layout=True,mutation_invalidates=True,missing_index_fallback=True,trusted_checksum_ignored=True,syscalls_sha256=hashlib.sha256((ROOT/'runtime/syscalls.c').read_bytes()).hexdigest(),parser_sha256=hashlib.sha256((ROOT/'runtime/asset_index.c').read_bytes()).hexdigest())
  (out/'verification.json').write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof))
 if __name__=='__main__':main()

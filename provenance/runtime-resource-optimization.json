@@ -153,8 +153,8 @@
     "images-common.h1pk": {
       "reason": "Common pack rebuilt with final scaled Latin glyphs",
       "before_bytes": 2966724,
-      "bytes": 2418209,
-      "sha256": "9920b39c920d034052e3ff3ca010bcca8f2ba4368b2f673bb007a095de710938"
+      "bytes": 5161667,
+      "sha256": "63ad3d7aaf9ae6f432b184e77640c7903d479616f98c6c2fc41c77d5021b86d8"
     },
     "image-metadata.h1x": {
       "reason": "Original standalone/virtual metadata plus 214 display-density offline preview keys",
@@ -169,6 +169,27 @@
       "before_bytes": 5882613,
       "bytes": 3420204,
       "sha256": "f898a823e720f9fb6a01006b9e8e4c4486aed6bf4073eb16d5d49dc88cb74aca"
+    },
+    "sunflower-glow.h1ap": {
+      "reason": "Lossless offline color interning; whole baked glow table fits in the level heap without per-flower card reads",
+      "before_bytes": 649024,
+      "bytes": 363834,
+      "sha256": "c51fed487fe815eab9aa1956c0628f4609a85a414f2a3a0d2b87d6099b686d5d"
+    },
+    "combat-sprites.h1ap": {
+      "reason": "LCD-density direct combat sprites / layer-preserving head transitions / damaged hats",
+      "bytes": 240854,
+      "sha256": "a42a673301d97c54b96dc05aa67462a4c33b482f1ed6ddbcc5211894a70ac15e"
+    },
+    "zombie-hats.h1ap": {
+      "reason": "LCD-density direct combat sprites / layer-preserving head transitions / damaged hats",
+      "bytes": 996908,
+      "sha256": "375e3473b33e48581df873395cd0b33560a66bcc2344d99b2f8629203a0362c1"
+    },
+    "pea-transitions.h1ap": {
+      "reason": "Offline empty-track ranges preserve all attachment order and pixel bytes while removing 38220 redundant segment headers",
+      "bytes": 680712,
+      "sha256": "56aed6d87283b64acdf60dafd903ffb6e0aa65ebbfa75880f8707af03d5c431f"
     }
   },
   "removed": {
@@ -5036,6 +5057,643 @@
       "sha256": "d39ca8e4ec774d0441fad7dcd5f07c35a73a8e9460d0b05176bee3c2778de7ed",
       "baseline_sha256": "d39ca8e4ec774d0441fad7dcd5f07c35a73a8e9460d0b05176bee3c2778de7ed",
       "baseline_bytes": 160814
+    },
+    "images/background6boss.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "207542184a549bdce5c4584396fc9d8875807b81dd45126279549b3166732c88",
+      "bytes": 510332,
+      "baseline_sha256": "207542184a549bdce5c4584396fc9d8875807b81dd45126279549b3166732c88",
+      "baseline_bytes": 510332
+    },
+    "particles/bossexplosion1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "12226d21e84027f23fd739d16a7028972d0ed29803d2858720cc9d66ace65731",
+      "bytes": 11696,
+      "baseline_sha256": "12226d21e84027f23fd739d16a7028972d0ed29803d2858720cc9d66ace65731",
+      "baseline_bytes": 11696
+    },
+    "particles/bossexplosion2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "7f85849f97fce14b84e3ad860f82605c076de9ad551ed39bde3c19e8d28f97ce",
+      "bytes": 11696,
+      "baseline_sha256": "7f85849f97fce14b84e3ad860f82605c076de9ad551ed39bde3c19e8d28f97ce",
+      "baseline_bytes": 11696
+    },
+    "particles/bossexplosion3.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "70aeda0e0934022b45b72ee21a2934f9147bf566062102537eebecfb2da4d579",
+      "bytes": 11696,
+      "baseline_sha256": "70aeda0e0934022b45b72ee21a2934f9147bf566062102537eebecfb2da4d579",
+      "baseline_bytes": 11696
+    },
+    "particles/zombie_boss_fireball_additiveparticle.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "3463d15f5aeb41a7f287947f14517825e0a47ff88d28b20f6ececa7f6b7c9f5c",
+      "bytes": 68,
+      "baseline_sha256": "3463d15f5aeb41a7f287947f14517825e0a47ff88d28b20f6ececa7f6b7c9f5c",
+      "baseline_bytes": 68
+    },
+    "particles/zombie_boss_fireball_groundparticles.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "1816b021853d2e5e907ced35f9c443c66edb7a48f34e7d6c4474af58d5a5a68c",
+      "bytes": 3040,
+      "baseline_sha256": "1816b021853d2e5e907ced35f9c443c66edb7a48f34e7d6c4474af58d5a5a68c",
+      "baseline_bytes": 3040
+    },
+    "particles/zombie_boss_fireball_particles.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "de6b3a03ced958b6ce8560a742de76ebf9fd157d7486b6696cd529b41726ae7e",
+      "bytes": 26696,
+      "baseline_sha256": "de6b3a03ced958b6ce8560a742de76ebf9fd157d7486b6696cd529b41726ae7e",
+      "baseline_bytes": 26696
+    },
+    "particles/zombie_boss_iceball_groundparticles.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "3e97ac3320f857c33cac864ade81e5cad21c042de584c64b3ba751dfdccdebc5",
+      "bytes": 2752,
+      "baseline_sha256": "3e97ac3320f857c33cac864ade81e5cad21c042de584c64b3ba751dfdccdebc5",
+      "baseline_bytes": 2752
+    },
+    "particles/zombie_boss_iceball_particles.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "65e2046b080ce39d38ea3df48df9f391eb5090d310fa1ea08206ba965ad2594b",
+      "bytes": 13220,
+      "baseline_sha256": "65e2046b080ce39d38ea3df48df9f391eb5090d310fa1ea08206ba965ad2594b",
+      "baseline_bytes": 13220
+    },
+    "particles/zomboss_particles.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "4063ebe0449e772849c05b4b0a15c7d98f769e392d2452ba8b3183743fc13407",
+      "bytes": 22352,
+      "baseline_sha256": "4063ebe0449e772849c05b4b0a15c7d98f769e392d2452ba8b3183743fc13407",
+      "baseline_bytes": 22352
+    },
+    "reanim/zombie_boss_antenna.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "c07efe2a1676749091bbc109778b188b6984cfdbb918cc623e73905db513ddb8",
+      "bytes": 1796,
+      "baseline_sha256": "c07efe2a1676749091bbc109778b188b6984cfdbb918cc623e73905db513ddb8",
+      "baseline_bytes": 1796
+    },
+    "reanim/zombie_boss_antenna_lit.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "bd46be4f226be5f3de9f826902659614a8bb583472c0458b65dfdca637d23481",
+      "bytes": 1796,
+      "baseline_sha256": "bd46be4f226be5f3de9f826902659614a8bb583472c0458b65dfdca637d23481",
+      "baseline_bytes": 1796
+    },
+    "reanim/zombie_boss_arm_upper2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "8a1b54a98ab4aabbff984c350dbcbd4cbb4efee9300d5c812ad87e259825d556",
+      "bytes": 16380,
+      "baseline_sha256": "8a1b54a98ab4aabbff984c350dbcbd4cbb4efee9300d5c812ad87e259825d556",
+      "baseline_bytes": 16380
+    },
+    "reanim/zombie_boss_eyeglow.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "5126d3a288d7521b8a743b61d12028aa59789eece6cd936c9ff5dac4374b8079",
+      "bytes": 14272,
+      "baseline_sha256": "5126d3a288d7521b8a743b61d12028aa59789eece6cd936c9ff5dac4374b8079",
+      "baseline_bytes": 14272
+    },
+    "reanim/zombie_boss_eyeglow_black.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "673db579061afd696a0b3bc6e00c29044a5c279d5a5e1aad626395cb95cca09a",
+      "bytes": 14272,
+      "baseline_sha256": "673db579061afd696a0b3bc6e00c29044a5c279d5a5e1aad626395cb95cca09a",
+      "baseline_bytes": 14272
+    },
+    "reanim/zombie_boss_eyeglow_blue.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "aafd7b1e093a36307903cb588fbce02dbb41de92b11d5cff4b2cfefeda321450",
+      "bytes": 14272,
+      "baseline_sha256": "aafd7b1e093a36307903cb588fbce02dbb41de92b11d5cff4b2cfefeda321450",
+      "baseline_bytes": 14272
+    },
+    "reanim/zombie_boss_eyeglow_red.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "b41e27cbeabca6e35015d9b1797e74dc9fae499d06f39f4c2ad23b8cf8b2f4df",
+      "bytes": 14272,
+      "baseline_sha256": "b41e27cbeabca6e35015d9b1797e74dc9fae499d06f39f4c2ad23b8cf8b2f4df",
+      "baseline_bytes": 14272
+    },
+    "reanim/zombie_boss_fireball.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "651073a51991fce1a74489d875c5d9a253f846e528341c09547666a2b75d0595",
+      "bytes": 23136,
+      "baseline_sha256": "651073a51991fce1a74489d875c5d9a253f846e528341c09547666a2b75d0595",
+      "baseline_bytes": 23136
+    },
+    "reanim/zombie_boss_fireball_additive.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "15b38194eec6382afad812cee0e48ffa3888ad77acebc30a8f77aa85dd8444ba",
+      "bytes": 23136,
+      "baseline_sha256": "15b38194eec6382afad812cee0e48ffa3888ad77acebc30a8f77aa85dd8444ba",
+      "baseline_bytes": 23136
+    },
+    "reanim/zombie_boss_fireball_black.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "0740a7d988abc7ba093473dd7fcb5add72ebb22361944d2291231bdbe65c8c44",
+      "bytes": 23136,
+      "baseline_sha256": "0740a7d988abc7ba093473dd7fcb5add72ebb22361944d2291231bdbe65c8c44",
+      "baseline_bytes": 23136
+    },
+    "reanim/zombie_boss_fireball_chunks.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "00e39e0e4ced3bcda7babdd13b8296c24184ec66c5667fc6d0c9ade1c615e79d",
+      "bytes": 23136,
+      "baseline_sha256": "00e39e0e4ced3bcda7babdd13b8296c24184ec66c5667fc6d0c9ade1c615e79d",
+      "baseline_bytes": 23136
+    },
+    "reanim/zombie_boss_fireball_multiply.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "0ebe87d25843dd65341e21e18ed9920c19e3259c0581618d5094e8fd875f236d",
+      "bytes": 23136,
+      "baseline_sha256": "0ebe87d25843dd65341e21e18ed9920c19e3259c0581618d5094e8fd875f236d",
+      "baseline_bytes": 23136
+    },
+    "reanim/zombie_boss_fireball_shadow.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "250e1fce2a234f2a2ed8acb082d679e13422053069e856eecfdcfd1356f6ab4b",
+      "bytes": 23136,
+      "baseline_sha256": "250e1fce2a234f2a2ed8acb082d679e13422053069e856eecfdcfd1356f6ab4b",
+      "baseline_bytes": 23136
+    },
+    "reanim/zombie_boss_fireball_superglow.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "4f4daba6127cef37a42a31d9a115ecab6d087e0c896c12c859fd48dca269869d",
+      "bytes": 67632,
+      "baseline_sha256": "4f4daba6127cef37a42a31d9a115ecab6d087e0c896c12c859fd48dca269869d",
+      "baseline_bytes": 67632
+    },
+    "reanim/zombie_boss_fireball_superhilight.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "422c8415f71e555140ab3ec1a55efcd02f7549a097f06dc8b98f788c4bb8d536",
+      "bytes": 23136,
+      "baseline_sha256": "422c8415f71e555140ab3ec1a55efcd02f7549a097f06dc8b98f788c4bb8d536",
+      "baseline_bytes": 23136
+    },
+    "reanim/zombie_boss_flag.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "a2758fe537614aee0d6b6197f9e8688b57e3f995bd477c1211667e73a528b56f",
+      "bytes": 2496,
+      "baseline_sha256": "a2758fe537614aee0d6b6197f9e8688b57e3f995bd477c1211667e73a528b56f",
+      "baseline_bytes": 2496
+    },
+    "reanim/zombie_boss_flagpole.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "c4d1b1bb273ef3c4813759834bb3d8d813d22f2bdaafc8a94d9888c32006deae",
+      "bytes": 560,
+      "baseline_sha256": "c4d1b1bb273ef3c4813759834bb3d8d813d22f2bdaafc8a94d9888c32006deae",
+      "baseline_bytes": 560
+    },
+    "reanim/zombie_boss_foot.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "83bc21b0f0a145fac6072be4d73c9e9d677bcf0c31a48435a703259bbbc5befa",
+      "bytes": 67352,
+      "baseline_sha256": "83bc21b0f0a145fac6072be4d73c9e9d677bcf0c31a48435a703259bbbc5befa",
+      "baseline_bytes": 67352
+    },
+    "reanim/zombie_boss_foot_damage1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "e138bbb08e51f8fc68775458f157f1e88ff643ae53eb2fd43966ab7f3999a19a",
+      "bytes": 67352,
+      "baseline_sha256": "e138bbb08e51f8fc68775458f157f1e88ff643ae53eb2fd43966ab7f3999a19a",
+      "baseline_bytes": 67352
+    },
+    "reanim/zombie_boss_foot_damage2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "2efaaba1dc0875cf69d14309c49483d124dce16f7f5fd4c1ab04a816a308c3b9",
+      "bytes": 67352,
+      "baseline_sha256": "2efaaba1dc0875cf69d14309c49483d124dce16f7f5fd4c1ab04a816a308c3b9",
+      "baseline_bytes": 67352
+    },
+    "reanim/zombie_boss_head.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "c637ec7e65e9d492a80448ceeb2946cca52f9347e06acc90e18a98a4ed099327",
+      "bytes": 50216,
+      "baseline_sha256": "c637ec7e65e9d492a80448ceeb2946cca52f9347e06acc90e18a98a4ed099327",
+      "baseline_bytes": 50216
+    },
+    "reanim/zombie_boss_head2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "bbcb57d80103fb54f8cf4a000ad9c269108f94b43c565936fc7520575d5a90df",
+      "bytes": 11320,
+      "baseline_sha256": "bbcb57d80103fb54f8cf4a000ad9c269108f94b43c565936fc7520575d5a90df",
+      "baseline_bytes": 11320
+    },
+    "reanim/zombie_boss_head_damage1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "9db8f3048a7312954190714abe4a8d93b80cd8b1d111486af8888d31c1d1fba5",
+      "bytes": 50216,
+      "baseline_sha256": "9db8f3048a7312954190714abe4a8d93b80cd8b1d111486af8888d31c1d1fba5",
+      "baseline_bytes": 50216
+    },
+    "reanim/zombie_boss_head_damage2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "b16c592722add85cff5dd5824cc15e9cc3668a8aea332863c55dd4ea8f493ae9",
+      "bytes": 50216,
+      "baseline_sha256": "b16c592722add85cff5dd5824cc15e9cc3668a8aea332863c55dd4ea8f493ae9",
+      "baseline_bytes": 50216
+    },
+    "reanim/zombie_boss_iceball.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "51c94f3aa83ee1c634df722c466deacb7f13b5e6e688f92c0ea53a7b6b473ff5",
+      "bytes": 24996,
+      "baseline_sha256": "51c94f3aa83ee1c634df722c466deacb7f13b5e6e688f92c0ea53a7b6b473ff5",
+      "baseline_bytes": 24996
+    },
+    "reanim/zombie_boss_iceball_crystal1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "65ad67b92e3848866a4d78ca21f2868360ff30585b02ad48103eee4b17dfa06e",
+      "bytes": 552,
+      "baseline_sha256": "65ad67b92e3848866a4d78ca21f2868360ff30585b02ad48103eee4b17dfa06e",
+      "baseline_bytes": 552
+    },
+    "reanim/zombie_boss_iceball_crystal2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "295b33586f6aecb12911c305680bcc8455c003ab740b188dbc4b00f6a187b992",
+      "bytes": 2424,
+      "baseline_sha256": "295b33586f6aecb12911c305680bcc8455c003ab740b188dbc4b00f6a187b992",
+      "baseline_bytes": 2424
+    },
+    "reanim/zombie_boss_iceball_crystal3.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "09a0f13dbfb395600892b79cfafd1506c186d2517a79973beffc4c74e739299e",
+      "bytes": 2240,
+      "baseline_sha256": "09a0f13dbfb395600892b79cfafd1506c186d2517a79973beffc4c74e739299e",
+      "baseline_bytes": 2240
+    },
+    "reanim/zombie_boss_iceball_grow.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "21f343d50bf7b5ef3109d11b47df095c216cc878bafc636605a700cc9baaaba0",
+      "bytes": 24996,
+      "baseline_sha256": "21f343d50bf7b5ef3109d11b47df095c216cc878bafc636605a700cc9baaaba0",
+      "baseline_bytes": 24996
+    },
+    "reanim/zombie_boss_iceball_highlight.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "39c6da9b8680d5af8498c231ecae1dc99c085bf5932ae5a9bd685e894a88ba03",
+      "bytes": 24996,
+      "baseline_sha256": "39c6da9b8680d5af8498c231ecae1dc99c085bf5932ae5a9bd685e894a88ba03",
+      "baseline_bytes": 24996
+    },
+    "reanim/zombie_boss_iceball_multiply.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "341364d73fbc79c04ae759dacbd76080cf9872efa563f87477985295b16ff6c9",
+      "bytes": 24996,
+      "baseline_sha256": "341364d73fbc79c04ae759dacbd76080cf9872efa563f87477985295b16ff6c9",
+      "baseline_bytes": 24996
+    },
+    "reanim/zombie_boss_iceball_overlay.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "1833d32a7217147ae1caf12995dbd061c94fde5deb311ada673cb46e0e172c56",
+      "bytes": 24996,
+      "baseline_sha256": "1833d32a7217147ae1caf12995dbd061c94fde5deb311ada673cb46e0e172c56",
+      "baseline_bytes": 24996
+    },
+    "reanim/zombie_boss_icefire_shadow.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "c8b7a3708cb55519b8675f85706781a6524be2b512c48374ac8ff0fdf25df6cb",
+      "bytes": 8268,
+      "baseline_sha256": "c8b7a3708cb55519b8675f85706781a6524be2b512c48374ac8ff0fdf25df6cb",
+      "baseline_bytes": 8268
+    },
+    "reanim/zombie_boss_innerarm_finger.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "ad05b38d87b1d22a242e805cb6a70e1ab130db69bf3812dda87dffcfa1c9774a",
+      "bytes": 6104,
+      "baseline_sha256": "ad05b38d87b1d22a242e805cb6a70e1ab130db69bf3812dda87dffcfa1c9774a",
+      "baseline_bytes": 6104
+    },
+    "reanim/zombie_boss_innerarm_fingerrope.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "75795fc6ff26ba49bc3a6c9b639d2e84baedc6eaf8f3b6b415c097d47cb63690",
+      "bytes": 6104,
+      "baseline_sha256": "75795fc6ff26ba49bc3a6c9b639d2e84baedc6eaf8f3b6b415c097d47cb63690",
+      "baseline_bytes": 6104
+    },
+    "reanim/zombie_boss_innerarm_hand.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "95227d1e86d91b8ccb562d3784ae3674e38831131ad4ff052759395ca150a17c",
+      "bytes": 18176,
+      "baseline_sha256": "95227d1e86d91b8ccb562d3784ae3674e38831131ad4ff052759395ca150a17c",
+      "baseline_bytes": 18176
+    },
+    "reanim/zombie_boss_innerarm_lower.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "8831d3152550ef43aafc456a07e6d0acb605ae59b8c90c93709aafbb946eab31",
+      "bytes": 36224,
+      "baseline_sha256": "8831d3152550ef43aafc456a07e6d0acb605ae59b8c90c93709aafbb946eab31",
+      "baseline_bytes": 36224
+    },
+    "reanim/zombie_boss_innerarm_thumb1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "51d1a2192c72b5188ed58bef6f6452a1224a8831031f0bcad81f65990d4d09e8",
+      "bytes": 2944,
+      "baseline_sha256": "51d1a2192c72b5188ed58bef6f6452a1224a8831031f0bcad81f65990d4d09e8",
+      "baseline_bytes": 2944
+    },
+    "reanim/zombie_boss_innerarm_thumb2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "b11e26e99e4aabe775e082e8fdb7de7c041d792d175c74a9dfc68c498deff890",
+      "bytes": 4568,
+      "baseline_sha256": "b11e26e99e4aabe775e082e8fdb7de7c041d792d175c74a9dfc68c498deff890",
+      "baseline_bytes": 4568
+    },
+    "reanim/zombie_boss_innerarm_upper.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "4b852854450641ae2f53f10b5c24e50e4d6141438eab791c2b651a39a93635b1",
+      "bytes": 46136,
+      "baseline_sha256": "4b852854450641ae2f53f10b5c24e50e4d6141438eab791c2b651a39a93635b1",
+      "baseline_bytes": 46136
+    },
+    "reanim/zombie_boss_innerjaw.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "c1a574be495d08f027924fb1dd70270b5ecbf99ef99d5b4920badef344f5b190",
+      "bytes": 11744,
+      "baseline_sha256": "c1a574be495d08f027924fb1dd70270b5ecbf99ef99d5b4920badef344f5b190",
+      "baseline_bytes": 11744
+    },
+    "reanim/zombie_boss_innerleg_upper.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "bef310db6a66550c4a91649eccb10a82dcc9d2674d1cc657e6f3745d42cf7ef5",
+      "bytes": 27104,
+      "baseline_sha256": "bef310db6a66550c4a91649eccb10a82dcc9d2674d1cc657e6f3745d42cf7ef5",
+      "baseline_bytes": 27104
+    },
+    "reanim/zombie_boss_jaw.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "c43d5e52609c5d6c02e87cd2dc24ae700b57a4e613881010cf734658e416a130",
+      "bytes": 34248,
+      "baseline_sha256": "c43d5e52609c5d6c02e87cd2dc24ae700b57a4e613881010cf734658e416a130",
+      "baseline_bytes": 34248
+    },
+    "reanim/zombie_boss_jaw_damage1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "60d01c00680a16632de2ce12a4c800b9b0e197d767232be9eb50120e2dad950c",
+      "bytes": 34248,
+      "baseline_sha256": "60d01c00680a16632de2ce12a4c800b9b0e197d767232be9eb50120e2dad950c",
+      "baseline_bytes": 34248
+    },
+    "reanim/zombie_boss_jaw_damage2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "0531b7b174dcb5bde67cc849e81df827c976d6dad25e7508c12b7795b80b0d4b",
+      "bytes": 34248,
+      "baseline_sha256": "0531b7b174dcb5bde67cc849e81df827c976d6dad25e7508c12b7795b80b0d4b",
+      "baseline_bytes": 34248
+    },
+    "reanim/zombie_boss_leg_lower.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "f96c3a73470b11ffb61efaa293db3efb649018d993bc3b42db221ccce5ccc24b",
+      "bytes": 62952,
+      "baseline_sha256": "f96c3a73470b11ffb61efaa293db3efb649018d993bc3b42db221ccce5ccc24b",
+      "baseline_bytes": 62952
+    },
+    "reanim/zombie_boss_legbits.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "e8eccdf61d8e8b70a4587283a0defd447680d1915e31bda835b1bb39c0cc8acd",
+      "bytes": 12752,
+      "baseline_sha256": "e8eccdf61d8e8b70a4587283a0defd447680d1915e31bda835b1bb39c0cc8acd",
+      "baseline_bytes": 12752
+    },
+    "reanim/zombie_boss_lowerbody.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "ca50eada7fac9686493fc017e811f4222f401a5aa6357d181403a6ff36fba044",
+      "bytes": 67832,
+      "baseline_sha256": "ca50eada7fac9686493fc017e811f4222f401a5aa6357d181403a6ff36fba044",
+      "baseline_bytes": 67832
+    },
+    "reanim/zombie_boss_mouthglow.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "fe96994fca903d03481212d588d7a7e396beddc6161d9538ac7ef523669efe86",
+      "bytes": 14916,
+      "baseline_sha256": "fe96994fca903d03481212d588d7a7e396beddc6161d9538ac7ef523669efe86",
+      "baseline_bytes": 14916
+    },
+    "reanim/zombie_boss_mouthglow_blue.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "b27dac26bab11a8363f90363881cf2d361d6b44bf3b46e53bd4d40c34d09058e",
+      "bytes": 14916,
+      "baseline_sha256": "b27dac26bab11a8363f90363881cf2d361d6b44bf3b46e53bd4d40c34d09058e",
+      "baseline_bytes": 14916
+    },
+    "reanim/zombie_boss_mouthglow_red.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "ca590b16133f9c5378cccc062e4a84d0e53d60f500fd09bc20d357833dc14d89",
+      "bytes": 14916,
+      "baseline_sha256": "ca590b16133f9c5378cccc062e4a84d0e53d60f500fd09bc20d357833dc14d89",
+      "baseline_bytes": 14916
+    },
+    "reanim/zombie_boss_neck.h1a": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "190689c400562277ef11c5cf7612267a167916738987db141a75de8415ce762b",
+      "bytes": 62952,
+      "baseline_sha256": "190689c400562277ef11c5cf7612267a167916738987db141a75de8415ce762b",
+      "baseline_bytes": 62952
+    },
+    "reanim/zombie_boss_neck_.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "7a002193f53a244f4f4fd8c0746c07e28ab41753d1479bd98fb2bed69c5fe3f1",
+      "bytes": 47222,
+      "baseline_sha256": "7a002193f53a244f4f4fd8c0746c07e28ab41753d1479bd98fb2bed69c5fe3f1",
+      "baseline_bytes": 47222
+    },
+    "reanim/zombie_boss_outerarm_finger1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "18eb154dbcfd3018dc0b19b0f53a344aa695d7d99fc27df8aba9b4193334600e",
+      "bytes": 4656,
+      "baseline_sha256": "18eb154dbcfd3018dc0b19b0f53a344aa695d7d99fc27df8aba9b4193334600e",
+      "baseline_bytes": 4656
+    },
+    "reanim/zombie_boss_outerarm_finger2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "e1ad05e54785c62e602bf0103680cd6efb5b3e13bb91c36de01d80f90c879f9f",
+      "bytes": 11660,
+      "baseline_sha256": "e1ad05e54785c62e602bf0103680cd6efb5b3e13bb91c36de01d80f90c879f9f",
+      "baseline_bytes": 11660
+    },
+    "reanim/zombie_boss_outerarm_hand.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "476618ccd85cf8e55b3ff10f09f59cf61b67df6cf3fddcfc6f83de36e9ca6757",
+      "bytes": 31716,
+      "baseline_sha256": "476618ccd85cf8e55b3ff10f09f59cf61b67df6cf3fddcfc6f83de36e9ca6757",
+      "baseline_bytes": 31716
+    },
+    "reanim/zombie_boss_outerarm_hand_damage1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "5fcb35da87e20add5a00d2e3d3aec292008b78e5d19e46d2f236e01e4fe7d32b",
+      "bytes": 31716,
+      "baseline_sha256": "5fcb35da87e20add5a00d2e3d3aec292008b78e5d19e46d2f236e01e4fe7d32b",
+      "baseline_bytes": 31716
+    },
+    "reanim/zombie_boss_outerarm_hand_damage2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "73fa6880b59bf82de11a5d5e824935bc099650fd1d11fe1f7f3db040e7bc3d11",
+      "bytes": 31716,
+      "baseline_sha256": "73fa6880b59bf82de11a5d5e824935bc099650fd1d11fe1f7f3db040e7bc3d11",
+      "baseline_bytes": 31716
+    },
+    "reanim/zombie_boss_outerarm_lower.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "868368a0b36822593215d8cf7f5c3d633ccf72837a980d6f8964d5de97100d73",
+      "bytes": 39552,
+      "baseline_sha256": "868368a0b36822593215d8cf7f5c3d633ccf72837a980d6f8964d5de97100d73",
+      "baseline_bytes": 39552
+    },
+    "reanim/zombie_boss_outerarm_thumb1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "51daf07f91ecc70f79a690e62663a9aa47e9402fb767f8ac0319e7ee1e000b2c",
+      "bytes": 3432,
+      "baseline_sha256": "51daf07f91ecc70f79a690e62663a9aa47e9402fb767f8ac0319e7ee1e000b2c",
+      "baseline_bytes": 3432
+    },
+    "reanim/zombie_boss_outerarm_thumb2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "3585f0e8f5827d55d29999931d9f30d409f7bafc32a849cf975d88a4605b9aa5",
+      "bytes": 7052,
+      "baseline_sha256": "3585f0e8f5827d55d29999931d9f30d409f7bafc32a849cf975d88a4605b9aa5",
+      "baseline_bytes": 7052
+    },
+    "reanim/zombie_boss_outerarm_thumb_damage1.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "3c712f65ca551fde9eef45e3b35da9670d42d66cc19b21aa8a120992fb63011a",
+      "bytes": 7052,
+      "baseline_sha256": "3c712f65ca551fde9eef45e3b35da9670d42d66cc19b21aa8a120992fb63011a",
+      "baseline_bytes": 7052
+    },
+    "reanim/zombie_boss_outerarm_thumb_damage2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "1ed371af83d847972b2883454988f850c83ca52d099d6c8e846109cdedd43329",
+      "bytes": 7052,
+      "baseline_sha256": "1ed371af83d847972b2883454988f850c83ca52d099d6c8e846109cdedd43329",
+      "baseline_bytes": 7052
+    },
+    "reanim/zombie_boss_outerarm_upper.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "5549ecd99e7d89f7362f1536608cef9c374c5b443104a195b0238136aaf3a079",
+      "bytes": 81952,
+      "baseline_sha256": "5549ecd99e7d89f7362f1536608cef9c374c5b443104a195b0238136aaf3a079",
+      "baseline_bytes": 81952
+    },
+    "reanim/zombie_boss_outerleg_upper.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "474148fc05a0e8d22a0d911fddfd8184acf104520e6d033261d0c19bf4949504",
+      "bytes": 40352,
+      "baseline_sha256": "474148fc05a0e8d22a0d911fddfd8184acf104520e6d033261d0c19bf4949504",
+      "baseline_bytes": 40352
+    },
+    "reanim/zombie_boss_rv.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "05b835981a76b611b1c59a0d9a9901319670363ba01dea140df2f1cc224c6c19",
+      "bytes": 41612,
+      "baseline_sha256": "05b835981a76b611b1c59a0d9a9901319670363ba01dea140df2f1cc224c6c19",
+      "baseline_bytes": 41612
+    },
+    "reanim/zombie_boss_rv2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "81a3ff2b9e2b3241af8d99ed456042bb51337e95b5a58985ec3a6e2f3aff7a23",
+      "bytes": 41612,
+      "baseline_sha256": "81a3ff2b9e2b3241af8d99ed456042bb51337e95b5a58985ec3a6e2f3aff7a23",
+      "baseline_bytes": 41612
+    },
+    "reanim/zombie_boss_rvwheel.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "cc5c3e8f3619e76dc09d68ee0fdb377c3df90eb487f20d5bab4563169ed827b1",
+      "bytes": 1968,
+      "baseline_sha256": "cc5c3e8f3619e76dc09d68ee0fdb377c3df90eb487f20d5bab4563169ed827b1",
+      "baseline_bytes": 1968
+    },
+    "reanim/zombie_boss_upperbody.h1a": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "edbc6b9dafe03653466f117d044c7adf125a0df186f7bf24cba201cdddfe27ae",
+      "bytes": 203072,
+      "baseline_sha256": "edbc6b9dafe03653466f117d044c7adf125a0df186f7bf24cba201cdddfe27ae",
+      "baseline_bytes": 203072
+    },
+    "reanim/zombie_boss_upperbody_.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "5218d2f620e0e976cede3ecb3b40962964b6c29ead9500d5b0c9221c435bf058",
+      "bytes": 152312,
+      "baseline_sha256": "5218d2f620e0e976cede3ecb3b40962964b6c29ead9500d5b0c9221c435bf058",
+      "baseline_bytes": 152312
+    },
+    "reanim/zombie_bossdriver_body.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "a26c9a51143954a7660c44365c38198029f2441826c2eec77858fb47de44cc3d",
+      "bytes": 2540,
+      "baseline_sha256": "a26c9a51143954a7660c44365c38198029f2441826c2eec77858fb47de44cc3d",
+      "baseline_bytes": 2540
+    },
+    "reanim/zombie_bossdriver_brain.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "2c61a447715f0d9b6930a41ee0e0447d5b2284f7c6591466381b4c7dfbdb0114",
+      "bytes": 2516,
+      "baseline_sha256": "2c61a447715f0d9b6930a41ee0e0447d5b2284f7c6591466381b4c7dfbdb0114",
+      "baseline_bytes": 2516
+    },
+    "reanim/zombie_bossdriver_face.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "6103f5b1a9ed3e121ecabadca67c3d21b4ee48a0b7a9f486ea176d44b2456c64",
+      "bytes": 1616,
+      "baseline_sha256": "6103f5b1a9ed3e121ecabadca67c3d21b4ee48a0b7a9f486ea176d44b2456c64",
+      "baseline_bytes": 1616
+    },
+    "reanim/zombie_bossdriver_face2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "bee53de8f61f4c9a3529539e550ab0c34261a59741d444cc4d91439ca64fb943",
+      "bytes": 1616,
+      "baseline_sha256": "bee53de8f61f4c9a3529539e550ab0c34261a59741d444cc4d91439ca64fb943",
+      "baseline_bytes": 1616
+    },
+    "reanim/zombie_bossdriver_innerhand.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "3fc460fcc663636a471219c55be5c7c0dfd89b4117f046158ac5b4423472a449",
+      "bytes": 1172,
+      "baseline_sha256": "3fc460fcc663636a471219c55be5c7c0dfd89b4117f046158ac5b4423472a449",
+      "baseline_bytes": 1172
+    },
+    "reanim/zombie_bossdriver_jaw.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "f71f1a237000f18f59e4e79548561fd90f183b9554546656d9f8897d64a07ba4",
+      "bytes": 760,
+      "baseline_sha256": "f71f1a237000f18f59e4e79548561fd90f183b9554546656d9f8897d64a07ba4",
+      "baseline_bytes": 760
+    },
+    "reanim/zombie_bossdriver_jaw2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "ba668b111bfb1ed15bc87c19526bda5bf1dc7c5fd8692543ffa120226904a3dc",
+      "bytes": 760,
+      "baseline_sha256": "ba668b111bfb1ed15bc87c19526bda5bf1dc7c5fd8692543ffa120226904a3dc",
+      "baseline_bytes": 760
+    },
+    "reanim/zombie_bossdriver_lowerarm.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "af281fcbefb00862a0485015363e668d8736f9a0bd9d32ed436476dd631e3b10",
+      "bytes": 1184,
+      "baseline_sha256": "af281fcbefb00862a0485015363e668d8736f9a0bd9d32ed436476dd631e3b10",
+      "baseline_bytes": 1184
+    },
+    "reanim/zombie_bossdriver_lowerarm2.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "c645a72577b45abc3db33827948df927dc9eab2867a81388950b9980e72d88f1",
+      "bytes": 428,
+      "baseline_sha256": "c645a72577b45abc3db33827948df927dc9eab2867a81388950b9980e72d88f1",
+      "baseline_bytes": 428
+    },
+    "reanim/zombie_bossdriver_outerhand.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "b5c122ac97a1ab8c1c686c9017143f36102e0fc296a07fd0605a4fac3024029d",
+      "bytes": 872,
+      "baseline_sha256": "b5c122ac97a1ab8c1c686c9017143f36102e0fc296a07fd0605a4fac3024029d",
+      "baseline_bytes": 872
+    },
+    "reanim/zombie_bossdriver_upperarm.h1i": {
+      "reason": "Byte-identical Boss texture in common pack; avoid repeated native FAT opens",
+      "sha256": "b0c22f64efd2568e93cabaa2e331a1fe56b217bb0f736630b00f73c8a683bab2",
+      "bytes": 692,
+      "baseline_sha256": "b0c22f64efd2568e93cabaa2e331a1fe56b217bb0f736630b00f73c8a683bab2",
+      "baseline_bytes": 692
     }
   },
   "virtual_images": {
@@ -7467,6 +8125,1189 @@
         "channels": 1,
         "flags": 1,
         "pixel_bytes": 725760,
+        "format": "H1I2"
+      }
+    },
+    "images/background6boss.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 1400,
+        "height": 600,
+        "storage_width": 630,
+        "storage_height": 270,
+        "channels": 3,
+        "flags": 0,
+        "pixel_bytes": 510300,
+        "format": "H1I2"
+      }
+    },
+    "particles/bossexplosion1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 120,
+        "height": 120,
+        "storage_width": 54,
+        "storage_height": 54,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 11664,
+        "format": "H1I2"
+      }
+    },
+    "particles/bossexplosion2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 120,
+        "height": 120,
+        "storage_width": 54,
+        "storage_height": 54,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 11664,
+        "format": "H1I2"
+      }
+    },
+    "particles/bossexplosion3.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 120,
+        "height": 120,
+        "storage_width": 54,
+        "storage_height": 54,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 11664,
+        "format": "H1I2"
+      }
+    },
+    "particles/zombie_boss_fireball_additiveparticle.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 6,
+        "height": 6,
+        "storage_width": 3,
+        "storage_height": 3,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 36,
+        "format": "H1I2"
+      }
+    },
+    "particles/zombie_boss_fireball_groundparticles.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 208,
+        "height": 17,
+        "storage_width": 94,
+        "storage_height": 8,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 3008,
+        "format": "H1I2"
+      }
+    },
+    "particles/zombie_boss_fireball_particles.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 448,
+        "height": 74,
+        "storage_width": 202,
+        "storage_height": 33,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 26664,
+        "format": "H1I2"
+      }
+    },
+    "particles/zombie_boss_iceball_groundparticles.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 152,
+        "height": 23,
+        "storage_width": 68,
+        "storage_height": 10,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 2720,
+        "format": "H1I2"
+      }
+    },
+    "particles/zombie_boss_iceball_particles.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 348,
+        "height": 46,
+        "storage_width": 157,
+        "storage_height": 21,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 13188,
+        "format": "H1I2"
+      }
+    },
+    "particles/zomboss_particles.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 345,
+        "height": 80,
+        "storage_width": 155,
+        "storage_height": 36,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 22320,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_antenna.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 47,
+        "height": 47,
+        "storage_width": 21,
+        "storage_height": 21,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 1764,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_antenna_lit.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 47,
+        "height": 47,
+        "storage_width": 21,
+        "storage_height": 21,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 1764,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_arm_upper2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 135,
+        "height": 148,
+        "storage_width": 61,
+        "storage_height": 67,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 16348,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_eyeglow.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 197,
+        "height": 89,
+        "storage_width": 89,
+        "storage_height": 40,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 14240,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_eyeglow_black.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 197,
+        "height": 89,
+        "storage_width": 89,
+        "storage_height": 40,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 14240,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_eyeglow_blue.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 197,
+        "height": 89,
+        "storage_width": 89,
+        "storage_height": 40,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 14240,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_eyeglow_red.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 197,
+        "height": 89,
+        "storage_width": 89,
+        "storage_height": 40,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 14240,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 169,
+        "height": 169,
+        "storage_width": 76,
+        "storage_height": 76,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 23104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball_additive.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 169,
+        "height": 169,
+        "storage_width": 76,
+        "storage_height": 76,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 23104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball_black.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 169,
+        "height": 169,
+        "storage_width": 76,
+        "storage_height": 76,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 23104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball_chunks.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 169,
+        "height": 169,
+        "storage_width": 76,
+        "storage_height": 76,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 23104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball_multiply.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 169,
+        "height": 169,
+        "storage_width": 76,
+        "storage_height": 76,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 23104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball_shadow.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 169,
+        "height": 169,
+        "storage_width": 76,
+        "storage_height": 76,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 23104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball_superglow.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 288,
+        "height": 288,
+        "storage_width": 130,
+        "storage_height": 130,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 67600,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_fireball_superhilight.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 169,
+        "height": 169,
+        "storage_width": 76,
+        "storage_height": 76,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 23104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_flag.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 63,
+        "height": 49,
+        "storage_width": 28,
+        "storage_height": 22,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 2464,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_flagpole.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 6,
+        "height": 98,
+        "storage_width": 3,
+        "storage_height": 44,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 528,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_foot.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 367,
+        "height": 226,
+        "storage_width": 165,
+        "storage_height": 102,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 67320,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_foot_damage1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 367,
+        "height": 226,
+        "storage_width": 165,
+        "storage_height": 102,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 67320,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_foot_damage2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 367,
+        "height": 226,
+        "storage_width": 165,
+        "storage_height": 102,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 67320,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_head.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 274,
+        "height": 226,
+        "storage_width": 123,
+        "storage_height": 102,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 50184,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_head2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 185,
+        "height": 76,
+        "storage_width": 83,
+        "storage_height": 34,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 11288,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_head_damage1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 274,
+        "height": 226,
+        "storage_width": 123,
+        "storage_height": 102,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 50184,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_head_damage2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 274,
+        "height": 226,
+        "storage_width": 123,
+        "storage_height": 102,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 50184,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 175,
+        "height": 175,
+        "storage_width": 79,
+        "storage_height": 79,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 24964,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball_crystal1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 23,
+        "height": 29,
+        "storage_width": 10,
+        "storage_height": 13,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 520,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball_crystal2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 51,
+        "height": 58,
+        "storage_width": 23,
+        "storage_height": 26,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 2392,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball_crystal3.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 51,
+        "height": 54,
+        "storage_width": 23,
+        "storage_height": 24,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 2208,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball_grow.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 175,
+        "height": 175,
+        "storage_width": 79,
+        "storage_height": 79,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 24964,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball_highlight.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 175,
+        "height": 175,
+        "storage_width": 79,
+        "storage_height": 79,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 24964,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball_multiply.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 175,
+        "height": 175,
+        "storage_width": 79,
+        "storage_height": 79,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 24964,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_iceball_overlay.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 175,
+        "height": 175,
+        "storage_width": 79,
+        "storage_height": 79,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 24964,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_icefire_shadow.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 157,
+        "height": 65,
+        "storage_width": 71,
+        "storage_height": 29,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 8236,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerarm_finger.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 73,
+        "height": 103,
+        "storage_width": 33,
+        "storage_height": 46,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 6072,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerarm_fingerrope.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 73,
+        "height": 103,
+        "storage_width": 33,
+        "storage_height": 46,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 6072,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerarm_hand.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 161,
+        "height": 141,
+        "storage_width": 72,
+        "storage_height": 63,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 18144,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerarm_lower.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 194,
+        "height": 232,
+        "storage_width": 87,
+        "storage_height": 104,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 36192,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerarm_thumb1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 63,
+        "height": 57,
+        "storage_width": 28,
+        "storage_height": 26,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 2912,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerarm_thumb2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 60,
+        "height": 93,
+        "storage_width": 27,
+        "storage_height": 42,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 4536,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerarm_upper.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 227,
+        "height": 250,
+        "storage_width": 102,
+        "storage_height": 113,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 46104,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerjaw.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 142,
+        "height": 135,
+        "storage_width": 64,
+        "storage_height": 61,
+        "channels": 3,
+        "flags": 0,
+        "pixel_bytes": 11712,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_innerleg_upper.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 160,
+        "height": 208,
+        "storage_width": 72,
+        "storage_height": 94,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 27072,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_jaw.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 209,
+        "height": 203,
+        "storage_width": 94,
+        "storage_height": 91,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 34216,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_jaw_damage1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 209,
+        "height": 203,
+        "storage_width": 94,
+        "storage_height": 91,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 34216,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_jaw_damage2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 209,
+        "height": 203,
+        "storage_width": 94,
+        "storage_height": 91,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 34216,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_leg_lower.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 268,
+        "height": 288,
+        "storage_width": 121,
+        "storage_height": 130,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 62920,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_legbits.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 134,
+        "height": 117,
+        "storage_width": 60,
+        "storage_height": 53,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 12720,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_lowerbody.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 333,
+        "height": 250,
+        "storage_width": 150,
+        "storage_height": 113,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 67800,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_mouthglow.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 135,
+        "height": 135,
+        "storage_width": 61,
+        "storage_height": 61,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 14884,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_mouthglow_blue.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 135,
+        "height": 135,
+        "storage_width": 61,
+        "storage_height": 61,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 14884,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_mouthglow_red.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 135,
+        "height": 135,
+        "storage_width": 61,
+        "storage_height": 61,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 14884,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_neck.h1a": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 268,
+        "height": 289,
+        "storage_width": 121,
+        "storage_height": 130,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 62920,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_neck_.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 268,
+        "height": 289,
+        "storage_width": 121,
+        "storage_height": 130,
+        "channels": 3,
+        "flags": 0,
+        "pixel_bytes": 47190,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_finger1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 76,
+        "height": 76,
+        "storage_width": 34,
+        "storage_height": 34,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 4624,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_finger2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 114,
+        "height": 127,
+        "storage_width": 51,
+        "storage_height": 57,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 11628,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_hand.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 198,
+        "height": 198,
+        "storage_width": 89,
+        "storage_height": 89,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 31684,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_hand_damage1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 198,
+        "height": 198,
+        "storage_width": 89,
+        "storage_height": 89,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 31684,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_hand_damage2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 198,
+        "height": 198,
+        "storage_width": 89,
+        "storage_height": 89,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 31684,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_lower.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 231,
+        "height": 211,
+        "storage_width": 104,
+        "storage_height": 95,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 39520,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_thumb1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 76,
+        "height": 56,
+        "storage_width": 34,
+        "storage_height": 25,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 3400,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_thumb2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 87,
+        "height": 101,
+        "storage_width": 39,
+        "storage_height": 45,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 7020,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_thumb_damage1.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 87,
+        "height": 101,
+        "storage_width": 39,
+        "storage_height": 45,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 7020,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_thumb_damage2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 87,
+        "height": 101,
+        "storage_width": 39,
+        "storage_height": 45,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 7020,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerarm_upper.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 285,
+        "height": 356,
+        "storage_width": 128,
+        "storage_height": 160,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 81920,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_outerleg_upper.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 200,
+        "height": 249,
+        "storage_width": 90,
+        "storage_height": 112,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 40320,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_rv.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 299,
+        "height": 170,
+        "storage_width": 135,
+        "storage_height": 77,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 41580,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_rv2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 299,
+        "height": 170,
+        "storage_width": 135,
+        "storage_height": 77,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 41580,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_rvwheel.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 49,
+        "height": 49,
+        "storage_width": 22,
+        "storage_height": 22,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 1936,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_upperbody.h1a": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 522,
+        "height": 479,
+        "storage_width": 235,
+        "storage_height": 216,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 203040,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_boss_upperbody_.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 522,
+        "height": 479,
+        "storage_width": 235,
+        "storage_height": 216,
+        "channels": 3,
+        "flags": 0,
+        "pixel_bytes": 152280,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_body.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 42,
+        "height": 73,
+        "storage_width": 19,
+        "storage_height": 33,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 2508,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_brain.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 61,
+        "height": 52,
+        "storage_width": 27,
+        "storage_height": 23,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 2484,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_face.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 49,
+        "height": 41,
+        "storage_width": 22,
+        "storage_height": 18,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 1584,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_face2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 49,
+        "height": 41,
+        "storage_width": 22,
+        "storage_height": 18,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 1584,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_innerhand.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 33,
+        "height": 43,
+        "storage_width": 15,
+        "storage_height": 19,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 1140,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_jaw.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 30,
+        "height": 28,
+        "storage_width": 14,
+        "storage_height": 13,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 728,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_jaw2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 30,
+        "height": 28,
+        "storage_width": 14,
+        "storage_height": 13,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 728,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_lowerarm.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 39,
+        "height": 36,
+        "storage_width": 18,
+        "storage_height": 16,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 1152,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_lowerarm2.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 21,
+        "height": 25,
+        "storage_width": 9,
+        "storage_height": 11,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 396,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_outerhand.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 34,
+        "height": 30,
+        "storage_width": 15,
+        "storage_height": 14,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 840,
+        "format": "H1I2"
+      }
+    },
+    "reanim/zombie_bossdriver_upperarm.h1i": {
+      "backing": "images-common.h1pk",
+      "info": {
+        "width": 25,
+        "height": 33,
+        "storage_width": 11,
+        "storage_height": 15,
+        "channels": 4,
+        "flags": 0,
+        "pixel_bytes": 660,
         "format": "H1I2"
       }
     }
@@ -14728,17 +16569,17 @@
     "encoder_sha256": "0989afd9c49250ad4c38d08c012c1ff80618c0f9b2a9023d89efedefb2e1a674",
     "reader_source_sha256": {
       "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
-      "platform/graphics/memory_patches.py": "a81b81aa7e21973b7e7f4454291bac235d02bbaca0e1f2deab42f40baf91ac1b",
-      "platform/graphics/MemoryImageCache.cpp": "65a4ef2938d549f399f5414f76c2e332606c6cdf6c43cf3ea94d27690d96e75a"
+      "platform/graphics/memory_patches.py": "136a40817a5b4453b23db0f3ff73e3cd006163af6460a0c4c12bc86d3f88d76d",
+      "platform/graphics/MemoryImageCache.cpp": "4aa7e162264272ce1179564aa64341f504d47271f7b7bfa5201bf5f1d3a1dab9"
     },
     "observation_sha256": "c7f8033b7d9aeb1dbc786ee9d0e41bdcbc0cdd00be3fa52732838d99816e8853",
     "scope": "Same preferred alpha pixels; remove never-selected RGB variant and pack shadows",
     "previous_reader_source_sha256": {
       "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
-      "platform/graphics/memory_patches.py": "385fb3604c9119509cd666c1dceb63ae3126255ca4bc7f7070c85af920eaf987",
-      "platform/graphics/MemoryImageCache.cpp": "772962490ef4fa6518603870afe153729112d8d0eaadec84d89a71c96f9e21b0"
+      "platform/graphics/memory_patches.py": "a81b81aa7e21973b7e7f4454291bac235d02bbaca0e1f2deab42f40baf91ac1b",
+      "platform/graphics/MemoryImageCache.cpp": "65a4ef2938d549f399f5414f76c2e332606c6cdf6c43cf3ea94d27690d96e75a"
     },
-    "reader_revision_validation": "docs/verification/exit-plants-host-verification.json"
+    "reader_revision_validation": "docs/verification/intro-delete-20261113/preferred-alpha-revision.json"
   },
   "BDA_unchanged_scope": "Initial image adaptation/pruning used the existing image reader. The new lossless actor page envelope requires the matching tested program; distribute them together.",
   "requires_actor_page_reader": true,
@@ -14749,5 +16590,377 @@
       "sha256": "f898a823e720f9fb6a01006b9e8e4c4486aed6bf4073eb16d5d49dc88cb74aca",
       "reason": "Replaced by three lifetime banks and the complete ordinary-frame bank; exact original packets verified"
     }
-  ]
+  ],
+  "boss_image_bundle": {
+    "files": {
+      "images/background6boss.h1i": {
+        "sha256": "207542184a549bdce5c4584396fc9d8875807b81dd45126279549b3166732c88",
+        "bytes": 510332
+      },
+      "particles/bossexplosion1.h1i": {
+        "sha256": "12226d21e84027f23fd739d16a7028972d0ed29803d2858720cc9d66ace65731",
+        "bytes": 11696
+      },
+      "particles/bossexplosion2.h1i": {
+        "sha256": "7f85849f97fce14b84e3ad860f82605c076de9ad551ed39bde3c19e8d28f97ce",
+        "bytes": 11696
+      },
+      "particles/bossexplosion3.h1i": {
+        "sha256": "70aeda0e0934022b45b72ee21a2934f9147bf566062102537eebecfb2da4d579",
+        "bytes": 11696
+      },
+      "particles/zombie_boss_fireball_additiveparticle.h1i": {
+        "sha256": "3463d15f5aeb41a7f287947f14517825e0a47ff88d28b20f6ececa7f6b7c9f5c",
+        "bytes": 68
+      },
+      "particles/zombie_boss_fireball_groundparticles.h1i": {
+        "sha256": "1816b021853d2e5e907ced35f9c443c66edb7a48f34e7d6c4474af58d5a5a68c",
+        "bytes": 3040
+      },
+      "particles/zombie_boss_fireball_particles.h1i": {
+        "sha256": "de6b3a03ced958b6ce8560a742de76ebf9fd157d7486b6696cd529b41726ae7e",
+        "bytes": 26696
+      },
+      "particles/zombie_boss_iceball_groundparticles.h1i": {
+        "sha256": "3e97ac3320f857c33cac864ade81e5cad21c042de584c64b3ba751dfdccdebc5",
+        "bytes": 2752
+      },
+      "particles/zombie_boss_iceball_particles.h1i": {
+        "sha256": "65e2046b080ce39d38ea3df48df9f391eb5090d310fa1ea08206ba965ad2594b",
+        "bytes": 13220
+      },
+      "particles/zomboss_particles.h1i": {
+        "sha256": "4063ebe0449e772849c05b4b0a15c7d98f769e392d2452ba8b3183743fc13407",
+        "bytes": 22352
+      },
+      "reanim/zombie_boss_antenna.h1i": {
+        "sha256": "c07efe2a1676749091bbc109778b188b6984cfdbb918cc623e73905db513ddb8",
+        "bytes": 1796
+      },
+      "reanim/zombie_boss_antenna_lit.h1i": {
+        "sha256": "bd46be4f226be5f3de9f826902659614a8bb583472c0458b65dfdca637d23481",
+        "bytes": 1796
+      },
+      "reanim/zombie_boss_arm_upper2.h1i": {
+        "sha256": "8a1b54a98ab4aabbff984c350dbcbd4cbb4efee9300d5c812ad87e259825d556",
+        "bytes": 16380
+      },
+      "reanim/zombie_boss_eyeglow.h1i": {
+        "sha256": "5126d3a288d7521b8a743b61d12028aa59789eece6cd936c9ff5dac4374b8079",
+        "bytes": 14272
+      },
+      "reanim/zombie_boss_eyeglow_black.h1i": {
+        "sha256": "673db579061afd696a0b3bc6e00c29044a5c279d5a5e1aad626395cb95cca09a",
+        "bytes": 14272
+      },
+      "reanim/zombie_boss_eyeglow_blue.h1i": {
+        "sha256": "aafd7b1e093a36307903cb588fbce02dbb41de92b11d5cff4b2cfefeda321450",
+        "bytes": 14272
+      },
+      "reanim/zombie_boss_eyeglow_red.h1i": {
+        "sha256": "b41e27cbeabca6e35015d9b1797e74dc9fae499d06f39f4c2ad23b8cf8b2f4df",
+        "bytes": 14272
+      },
+      "reanim/zombie_boss_fireball.h1i": {
+        "sha256": "651073a51991fce1a74489d875c5d9a253f846e528341c09547666a2b75d0595",
+        "bytes": 23136
+      },
+      "reanim/zombie_boss_fireball_additive.h1i": {
+        "sha256": "15b38194eec6382afad812cee0e48ffa3888ad77acebc30a8f77aa85dd8444ba",
+        "bytes": 23136
+      },
+      "reanim/zombie_boss_fireball_black.h1i": {
+        "sha256": "0740a7d988abc7ba093473dd7fcb5add72ebb22361944d2291231bdbe65c8c44",
+        "bytes": 23136
+      },
+      "reanim/zombie_boss_fireball_chunks.h1i": {
+        "sha256": "00e39e0e4ced3bcda7babdd13b8296c24184ec66c5667fc6d0c9ade1c615e79d",
+        "bytes": 23136
+      },
+      "reanim/zombie_boss_fireball_multiply.h1i": {
+        "sha256": "0ebe87d25843dd65341e21e18ed9920c19e3259c0581618d5094e8fd875f236d",
+        "bytes": 23136
+      },
+      "reanim/zombie_boss_fireball_shadow.h1i": {
+        "sha256": "250e1fce2a234f2a2ed8acb082d679e13422053069e856eecfdcfd1356f6ab4b",
+        "bytes": 23136
+      },
+      "reanim/zombie_boss_fireball_superglow.h1i": {
+        "sha256": "4f4daba6127cef37a42a31d9a115ecab6d087e0c896c12c859fd48dca269869d",
+        "bytes": 67632
+      },
+      "reanim/zombie_boss_fireball_superhilight.h1i": {
+        "sha256": "422c8415f71e555140ab3ec1a55efcd02f7549a097f06dc8b98f788c4bb8d536",
+        "bytes": 23136
+      },
+      "reanim/zombie_boss_flag.h1i": {
+        "sha256": "a2758fe537614aee0d6b6197f9e8688b57e3f995bd477c1211667e73a528b56f",
+        "bytes": 2496
+      },
+      "reanim/zombie_boss_flagpole.h1i": {
+        "sha256": "c4d1b1bb273ef3c4813759834bb3d8d813d22f2bdaafc8a94d9888c32006deae",
+        "bytes": 560
+      },
+      "reanim/zombie_boss_foot.h1i": {
+        "sha256": "83bc21b0f0a145fac6072be4d73c9e9d677bcf0c31a48435a703259bbbc5befa",
+        "bytes": 67352
+      },
+      "reanim/zombie_boss_foot_damage1.h1i": {
+        "sha256": "e138bbb08e51f8fc68775458f157f1e88ff643ae53eb2fd43966ab7f3999a19a",
+        "bytes": 67352
+      },
+      "reanim/zombie_boss_foot_damage2.h1i": {
+        "sha256": "2efaaba1dc0875cf69d14309c49483d124dce16f7f5fd4c1ab04a816a308c3b9",
+        "bytes": 67352
+      },
+      "reanim/zombie_boss_head.h1i": {
+        "sha256": "c637ec7e65e9d492a80448ceeb2946cca52f9347e06acc90e18a98a4ed099327",
+        "bytes": 50216
+      },
+      "reanim/zombie_boss_head2.h1i": {
+        "sha256": "bbcb57d80103fb54f8cf4a000ad9c269108f94b43c565936fc7520575d5a90df",
+        "bytes": 11320
+      },
+      "reanim/zombie_boss_head_damage1.h1i": {
+        "sha256": "9db8f3048a7312954190714abe4a8d93b80cd8b1d111486af8888d31c1d1fba5",
+        "bytes": 50216
+      },
+      "reanim/zombie_boss_head_damage2.h1i": {
+        "sha256": "b16c592722add85cff5dd5824cc15e9cc3668a8aea332863c55dd4ea8f493ae9",
+        "bytes": 50216
+      },
+      "reanim/zombie_boss_iceball.h1i": {
+        "sha256": "51c94f3aa83ee1c634df722c466deacb7f13b5e6e688f92c0ea53a7b6b473ff5",
+        "bytes": 24996
+      },
+      "reanim/zombie_boss_iceball_crystal1.h1i": {
+        "sha256": "65ad67b92e3848866a4d78ca21f2868360ff30585b02ad48103eee4b17dfa06e",
+        "bytes": 552
+      },
+      "reanim/zombie_boss_iceball_crystal2.h1i": {
+        "sha256": "295b33586f6aecb12911c305680bcc8455c003ab740b188dbc4b00f6a187b992",
+        "bytes": 2424
+      },
+      "reanim/zombie_boss_iceball_crystal3.h1i": {
+        "sha256": "09a0f13dbfb395600892b79cfafd1506c186d2517a79973beffc4c74e739299e",
+        "bytes": 2240
+      },
+      "reanim/zombie_boss_iceball_grow.h1i": {
+        "sha256": "21f343d50bf7b5ef3109d11b47df095c216cc878bafc636605a700cc9baaaba0",
+        "bytes": 24996
+      },
+      "reanim/zombie_boss_iceball_highlight.h1i": {
+        "sha256": "39c6da9b8680d5af8498c231ecae1dc99c085bf5932ae5a9bd685e894a88ba03",
+        "bytes": 24996
+      },
+      "reanim/zombie_boss_iceball_multiply.h1i": {
+        "sha256": "341364d73fbc79c04ae759dacbd76080cf9872efa563f87477985295b16ff6c9",
+        "bytes": 24996
+      },
+      "reanim/zombie_boss_iceball_overlay.h1i": {
+        "sha256": "1833d32a7217147ae1caf12995dbd061c94fde5deb311ada673cb46e0e172c56",
+        "bytes": 24996
+      },
+      "reanim/zombie_boss_icefire_shadow.h1i": {
+        "sha256": "c8b7a3708cb55519b8675f85706781a6524be2b512c48374ac8ff0fdf25df6cb",
+        "bytes": 8268
+      },
+      "reanim/zombie_boss_innerarm_finger.h1i": {
+        "sha256": "ad05b38d87b1d22a242e805cb6a70e1ab130db69bf3812dda87dffcfa1c9774a",
+        "bytes": 6104
+      },
+      "reanim/zombie_boss_innerarm_fingerrope.h1i": {
+        "sha256": "75795fc6ff26ba49bc3a6c9b639d2e84baedc6eaf8f3b6b415c097d47cb63690",
+        "bytes": 6104
+      },
+      "reanim/zombie_boss_innerarm_hand.h1i": {
+        "sha256": "95227d1e86d91b8ccb562d3784ae3674e38831131ad4ff052759395ca150a17c",
+        "bytes": 18176
+      },
+      "reanim/zombie_boss_innerarm_lower.h1i": {
+        "sha256": "8831d3152550ef43aafc456a07e6d0acb605ae59b8c90c93709aafbb946eab31",
+        "bytes": 36224
+      },
+      "reanim/zombie_boss_innerarm_thumb1.h1i": {
+        "sha256": "51d1a2192c72b5188ed58bef6f6452a1224a8831031f0bcad81f65990d4d09e8",
+        "bytes": 2944
+      },
+      "reanim/zombie_boss_innerarm_thumb2.h1i": {
+        "sha256": "b11e26e99e4aabe775e082e8fdb7de7c041d792d175c74a9dfc68c498deff890",
+        "bytes": 4568
+      },
+      "reanim/zombie_boss_innerarm_upper.h1i": {
+        "sha256": "4b852854450641ae2f53f10b5c24e50e4d6141438eab791c2b651a39a93635b1",
+        "bytes": 46136
+      },
+      "reanim/zombie_boss_innerjaw.h1i": {
+        "sha256": "c1a574be495d08f027924fb1dd70270b5ecbf99ef99d5b4920badef344f5b190",
+        "bytes": 11744
+      },
+      "reanim/zombie_boss_innerleg_upper.h1i": {
+        "sha256": "bef310db6a66550c4a91649eccb10a82dcc9d2674d1cc657e6f3745d42cf7ef5",
+        "bytes": 27104
+      },
+      "reanim/zombie_boss_jaw.h1i": {
+        "sha256": "c43d5e52609c5d6c02e87cd2dc24ae700b57a4e613881010cf734658e416a130",
+        "bytes": 34248
+      },
+      "reanim/zombie_boss_jaw_damage1.h1i": {
+        "sha256": "60d01c00680a16632de2ce12a4c800b9b0e197d767232be9eb50120e2dad950c",
+        "bytes": 34248
+      },
+      "reanim/zombie_boss_jaw_damage2.h1i": {
+        "sha256": "0531b7b174dcb5bde67cc849e81df827c976d6dad25e7508c12b7795b80b0d4b",
+        "bytes": 34248
+      },
+      "reanim/zombie_boss_leg_lower.h1i": {
+        "sha256": "f96c3a73470b11ffb61efaa293db3efb649018d993bc3b42db221ccce5ccc24b",
+        "bytes": 62952
+      },
+      "reanim/zombie_boss_legbits.h1i": {
+        "sha256": "e8eccdf61d8e8b70a4587283a0defd447680d1915e31bda835b1bb39c0cc8acd",
+        "bytes": 12752
+      },
+      "reanim/zombie_boss_lowerbody.h1i": {
+        "sha256": "ca50eada7fac9686493fc017e811f4222f401a5aa6357d181403a6ff36fba044",
+        "bytes": 67832
+      },
+      "reanim/zombie_boss_mouthglow.h1i": {
+        "sha256": "fe96994fca903d03481212d588d7a7e396beddc6161d9538ac7ef523669efe86",
+        "bytes": 14916
+      },
+      "reanim/zombie_boss_mouthglow_blue.h1i": {
+        "sha256": "b27dac26bab11a8363f90363881cf2d361d6b44bf3b46e53bd4d40c34d09058e",
+        "bytes": 14916
+      },
+      "reanim/zombie_boss_mouthglow_red.h1i": {
+        "sha256": "ca590b16133f9c5378cccc062e4a84d0e53d60f500fd09bc20d357833dc14d89",
+        "bytes": 14916
+      },
+      "reanim/zombie_boss_neck.h1a": {
+        "sha256": "190689c400562277ef11c5cf7612267a167916738987db141a75de8415ce762b",
+        "bytes": 62952
+      },
+      "reanim/zombie_boss_neck_.h1i": {
+        "sha256": "7a002193f53a244f4f4fd8c0746c07e28ab41753d1479bd98fb2bed69c5fe3f1",
+        "bytes": 47222
+      },
+      "reanim/zombie_boss_outerarm_finger1.h1i": {
+        "sha256": "18eb154dbcfd3018dc0b19b0f53a344aa695d7d99fc27df8aba9b4193334600e",
+        "bytes": 4656
+      },
+      "reanim/zombie_boss_outerarm_finger2.h1i": {
+        "sha256": "e1ad05e54785c62e602bf0103680cd6efb5b3e13bb91c36de01d80f90c879f9f",
+        "bytes": 11660
+      },
+      "reanim/zombie_boss_outerarm_hand.h1i": {
+        "sha256": "476618ccd85cf8e55b3ff10f09f59cf61b67df6cf3fddcfc6f83de36e9ca6757",
+        "bytes": 31716
+      },
+      "reanim/zombie_boss_outerarm_hand_damage1.h1i": {
+        "sha256": "5fcb35da87e20add5a00d2e3d3aec292008b78e5d19e46d2f236e01e4fe7d32b",
+        "bytes": 31716
+      },
+      "reanim/zombie_boss_outerarm_hand_damage2.h1i": {
+        "sha256": "73fa6880b59bf82de11a5d5e824935bc099650fd1d11fe1f7f3db040e7bc3d11",
+        "bytes": 31716
+      },
+      "reanim/zombie_boss_outerarm_lower.h1i": {
+        "sha256": "868368a0b36822593215d8cf7f5c3d633ccf72837a980d6f8964d5de97100d73",
+        "bytes": 39552
+      },
+      "reanim/zombie_boss_outerarm_thumb1.h1i": {
+        "sha256": "51daf07f91ecc70f79a690e62663a9aa47e9402fb767f8ac0319e7ee1e000b2c",
+        "bytes": 3432
+      },
+      "reanim/zombie_boss_outerarm_thumb2.h1i": {
+        "sha256": "3585f0e8f5827d55d29999931d9f30d409f7bafc32a849cf975d88a4605b9aa5",
+        "bytes": 7052
+      },
+      "reanim/zombie_boss_outerarm_thumb_damage1.h1i": {
+        "sha256": "3c712f65ca551fde9eef45e3b35da9670d42d66cc19b21aa8a120992fb63011a",
+        "bytes": 7052
+      },
+      "reanim/zombie_boss_outerarm_thumb_damage2.h1i": {
+        "sha256": "1ed371af83d847972b2883454988f850c83ca52d099d6c8e846109cdedd43329",
+        "bytes": 7052
+      },
+      "reanim/zombie_boss_outerarm_upper.h1i": {
+        "sha256": "5549ecd99e7d89f7362f1536608cef9c374c5b443104a195b0238136aaf3a079",
+        "bytes": 81952
+      },
+      "reanim/zombie_boss_outerleg_upper.h1i": {
+        "sha256": "474148fc05a0e8d22a0d911fddfd8184acf104520e6d033261d0c19bf4949504",
+        "bytes": 40352
+      },
+      "reanim/zombie_boss_rv.h1i": {
+        "sha256": "05b835981a76b611b1c59a0d9a9901319670363ba01dea140df2f1cc224c6c19",
+        "bytes": 41612
+      },
+      "reanim/zombie_boss_rv2.h1i": {
+        "sha256": "81a3ff2b9e2b3241af8d99ed456042bb51337e95b5a58985ec3a6e2f3aff7a23",
+        "bytes": 41612
+      },
+      "reanim/zombie_boss_rvwheel.h1i": {
+        "sha256": "cc5c3e8f3619e76dc09d68ee0fdb377c3df90eb487f20d5bab4563169ed827b1",
+        "bytes": 1968
+      },
+      "reanim/zombie_boss_upperbody.h1a": {
+        "sha256": "edbc6b9dafe03653466f117d044c7adf125a0df186f7bf24cba201cdddfe27ae",
+        "bytes": 203072
+      },
+      "reanim/zombie_boss_upperbody_.h1i": {
+        "sha256": "5218d2f620e0e976cede3ecb3b40962964b6c29ead9500d5b0c9221c435bf058",
+        "bytes": 152312
+      },
+      "reanim/zombie_bossdriver_body.h1i": {
+        "sha256": "a26c9a51143954a7660c44365c38198029f2441826c2eec77858fb47de44cc3d",
+        "bytes": 2540
+      },
+      "reanim/zombie_bossdriver_brain.h1i": {
+        "sha256": "2c61a447715f0d9b6930a41ee0e0447d5b2284f7c6591466381b4c7dfbdb0114",
+        "bytes": 2516
+      },
+      "reanim/zombie_bossdriver_face.h1i": {
+        "sha256": "6103f5b1a9ed3e121ecabadca67c3d21b4ee48a0b7a9f486ea176d44b2456c64",
+        "bytes": 1616
+      },
+      "reanim/zombie_bossdriver_face2.h1i": {
+        "sha256": "bee53de8f61f4c9a3529539e550ab0c34261a59741d444cc4d91439ca64fb943",
+        "bytes": 1616
+      },
+      "reanim/zombie_bossdriver_innerhand.h1i": {
+        "sha256": "3fc460fcc663636a471219c55be5c7c0dfd89b4117f046158ac5b4423472a449",
+        "bytes": 1172
+      },
+      "reanim/zombie_bossdriver_jaw.h1i": {
+        "sha256": "f71f1a237000f18f59e4e79548561fd90f183b9554546656d9f8897d64a07ba4",
+        "bytes": 760
+      },
+      "reanim/zombie_bossdriver_jaw2.h1i": {
+        "sha256": "ba668b111bfb1ed15bc87c19526bda5bf1dc7c5fd8692543ffa120226904a3dc",
+        "bytes": 760
+      },
+      "reanim/zombie_bossdriver_lowerarm.h1i": {
+        "sha256": "af281fcbefb00862a0485015363e668d8736f9a0bd9d32ed436476dd631e3b10",
+        "bytes": 1184
+      },
+      "reanim/zombie_bossdriver_lowerarm2.h1i": {
+        "sha256": "c645a72577b45abc3db33827948df927dc9eab2867a81388950b9980e72d88f1",
+        "bytes": 428
+      },
+      "reanim/zombie_bossdriver_outerhand.h1i": {
+        "sha256": "b5c122ac97a1ab8c1c686c9017143f36102e0fc296a07fd0605a4fac3024029d",
+        "bytes": 872
+      },
+      "reanim/zombie_bossdriver_upperarm.h1i": {
+        "sha256": "b0c22f64efd2568e93cabaa2e331a1fe56b217bb0f736630b00f73c8a683bab2",
+        "bytes": 692
+      }
+    },
+    "test_sha256": "a12e12e06552ec5c7a15f0b9bfe36af02c46eeff7a46a42a26b75c8e426ddc45",
+    "encoder_sha256": "91390a99da54a8f55267cd22636d392034aa2d288aeabd4dc751cc3f13f42f6f",
+    "resource_pixels_changed": false
+  },
+  "requires_shade_major_flash_reader": true
 }
