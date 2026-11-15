@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "scope": "Seven decoder/alpha/palette/storage function bodies equal accepted-source baseline ignoring ownership-registration calls and whitespace; actual raster, menu and lawn pixel tests accompany this revision.",
+  "previous_reader_source_sha256": {
+    "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+    "platform/graphics/memory_patches.py": "136a40817a5b4453b23db0f3ff73e3cd006163af6460a0c4c12bc86d3f88d76d",
+    "platform/graphics/MemoryImageCache.cpp": "4aa7e162264272ce1179564aa64341f504d47271f7b7bfa5201bf5f1d3a1dab9"
+  },
+  "preferred_alpha_reader_source_sha256": {
+    "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
+    "platform/graphics/memory_patches.py": "136a40817a5b4453b23db0f3ff73e3cd006163af6460a0c4c12bc86d3f88d76d",
+    "platform/graphics/MemoryImageCache.cpp": "51e567bb8e100cfa530521aaf5d1043e9ff87f72213aea25da2fd2ec1c87832f"
+  },
+  "source_comparison": "alpha-source-comparison.json",
+  "pixel_proofs": [
+    "host-raster.json",
+    "host-menu-pixels.json",
+    "host-lawns.json"
+  ]
+}

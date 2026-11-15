@@ -4,8 +4,10 @@
 #include <cstddef>
 #include <cstdint>
 namespace Sexy {
-/* Only immutable file-backed sources are registered. Dynamic images and images
- * modified through BitsChanged are never reclaimed by this cache. */
+/* Immutable backing storage is owned by scene/widget/effect references.
+ * Historical function names remain for the existing physical raster helpers;
+ * there is no size budget, LRU or allocator-triggered texture eviction.
+ * Dynamic images remain owned by their Image object. */
 bool H1ImageCacheDescribe(MemoryImage *image,const std::string& path,bool autoAlpha,int alphaColor);
 bool H1ImageCacheLoad(MemoryImage *image);
 void H1ImageCacheNoteLogicalRequest(MemoryImage* image,uintptr_t caller);
@@ -71,7 +73,7 @@ bool H1ImageCacheReserveUI(MemoryImage *image);
 void H1ImageCacheReleaseUI();
 std::size_t H1ImageCacheReserveLoadedUI(MemoryImage *image);
 void H1ImageCacheEndFrame();
-/* Limit applies after completed frames; an active draw may exceed it. */
+/* Deprecated compatibility entry for old host probes; does not affect storage. */
 void H1ImageCacheSetBudget(std::size_t bytes);
 using H1SandingAverage=uint32_t (*)(MemoryImage*,uint32_t*,int,int);
 bool H1ImageCacheSandingStorage(MemoryImage *image,void (*sanding)(Image*),H1SandingAverage average);

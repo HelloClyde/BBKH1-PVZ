@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "baseline_commit": "7cd6b9ded8374aa4e253fdc717e0d685318aa709",
+  "scope": "Seven decoder body comparisons ignore only whitespace and ownership registration; decoding and alpha/palette/storage interpretation unchanged.",
+  "functions": {
+    "bool LoadRGB(": true,
+    "bool ApplyAlpha(": true,
+    "bool H1ImageCachePrepareAlphaPalette(": true,
+    "bool H1ImageCacheSetAlpha(": true,
+    "bool H1ImageCachePrepareStorageTexture(": true,
+    "bool H1ImageCachePrepareStorageAlphaPages(": true,
+    "bool H1ImageCachePrepareStorageRGBPages(": true
+  },
+  "current_source_sha256": "51e567bb8e100cfa530521aaf5d1043e9ff87f72213aea25da2fd2ec1c87832f"
+}

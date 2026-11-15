@@ -1,3 +1,4 @@
+#include "graphics/ImageLifetime.h"
 /* Warm current-board dependencies before play, independent of profile unlocks.
  * SPDX-License-Identifier: LGPL-3.0-or-later */
 #include "LawnApp.h"
@@ -36,11 +37,25 @@ extern "C" void pvzh1_music_warm_game();
 extern "C" void pvzh1_music_warm_intro();
 extern "C" {volatile uint32_t pvzh1_level_preload_diagnostic[4];}
 extern "C" {volatile uint32_t pvzh1_board_replay_retirement_diagnostic[3];}
+extern "C" {volatile uint32_t pvzh1_play_image_handoff_diagnostic[6];}
 extern "C" volatile uint32_t pvzh1_actor_pose_diagnostic[16];
 extern "C" void pvzh1_cache_complete_draw_batch();
 extern "C" void pvzh1_selector_definition_trim(void*);
 extern void H1ReanimationDefinitionsTrimForMenu();
 
+extern "C" {volatile uint32_t pvzh1_award_retirement_diagnostic[6];}
+extern "C" volatile uint32_t pvzh1_early_lawn_diagnostic[8];
+void H1RetireFinishedBoardGraphics(){
+    // Award card previews have separate ownership in CachedFrames. The old
+    // battlefield has no consumers once its Board has been disposed.
+    if(!gLawnApp||gLawnApp->mBoard)return;
+    H1AudioSaveScope audio;
+    pvzh1_cache_complete_draw_batch();
+    auto& d=pvzh1_award_retirement_diagnostic;++d[0];
+    d[1]=pvzh1_actor_pose_diagnostic[0];d[2]=pvzh1_early_lawn_diagnostic[0];
+    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();
+    d[3]=pvzh1_actor_pose_diagnostic[0];d[4]=pvzh1_early_lawn_diagnostic[0];
+}
 void H1RetireBoardReplay(){
     // Only the confirmed leave/quit paths call this, after drawing returns and
     // before the original serializer allocates its payload. Actor/board state
@@ -99,13 +114,24 @@ void H1PrewarmDefinitionImages(int type,bool preloading){
         return; // Finished pixels need no source image warmup.
     }
     if(!warmImages)return;
-    const auto& definition=gReanimatorDefArray[type];
-    for(int t=0;t<definition.mTracks.count;++t){const auto& track=definition.mTracks.tracks[t];
-        for(int f=0;f<track.mTransforms.count;++f)WarmImage(track.mTransforms.mTransforms[f].mImage);
-    }
+    // Definitions can mention every pose and cosmetic state. Owning a live
+    // animation does not require loading pixels for all of those future poses.
+    // The actual forthcoming board frame is drawn once behind the loader;
+    // each live animation then owns precisely the backing it really uses.
 }
 static void PreloadCurrentBoard(LawnApp* app,bool enteringPlay){
     if(!app||!app->mBoard)return;
+    if(enteringPlay){
+        // The camera preview and actual play share a Board, but not their
+        // backdrop/cutscene pixels. End that phase's ownership before warming
+        // the playable frame. Live animations and common UI keep their own
+        // references; the forthcoming frame reacquires its actual Board data.
+        pvzh1_cache_complete_draw_batch();
+        auto& d=pvzh1_play_image_handoff_diagnostic;++d[0];d[1]=app->mBoard->mLevel;
+        d[2]=Sexy::H1ImageResourcesStats().residentBytes;
+        Sexy::H1ImageResourcesReleaseOwner(Sexy::H1ImageOwner::Widget,app->mBoard);
+        d[3]=Sexy::H1ImageResourcesStats().residentBytes;
+    }
     // This callback follows completed constructors. Preserve every live/dead
     // holder borrower, retire unused startup definitions, then load the actual
     // board dependencies. Preloaded definitions are reconstructible on demand.
@@ -115,7 +141,7 @@ static void PreloadCurrentBoard(LawnApp* app,bool enteringPlay){
     // level preload, rather than waiting for the next screen draw afterwards.
     pvzh1_selector_definition_trim(nullptr);
     H1BoardSupportChanged();
-    Sexy::H1ImageCacheReleaseUI();
+    Sexy::H1ImageUseScope boardImages(Sexy::H1ImageOwner::Widget,app->mBoard);
     H1AudioSaveScope loading;
     std::set<Sexy::MemoryImage*> images;
     bool preparedActors[NUM_REANIMS]{};
@@ -245,11 +271,9 @@ static void PreloadCurrentBoard(LawnApp* app,bool enteringPlay){
     // no borrowers yet; keeping every allowed enemy decoded crowds out the
     // current Boss textures. Active and pending-delete actors stay protected.
     if(enteringPlay&&app->IsFinalBossLevel())H1ReanimationDefinitionsTrimForMenu();
-    if(enteringPlay){
-        // Banks and UI allocations are now complete. Warm the actual visible
-        // frame last, so broad dependency preloads cannot leave future poses
-        // newer in the image LRU than the board about to be shown. Draw into
-        // the existing backbuffer only; the loading UI owns presentation.
+    {
+        // Banks and UI are ready. Prepare the actual intro/play frame with
+        // the same owner scopes as normal rendering, before first presentation.
         h1DirtyCanvas.RequireClear();
         Sexy::Graphics graphics(app->mGLInterface->GetScreenImage());
         graphics.Translate(board->mX,board->mY);
@@ -258,6 +282,7 @@ static void PreloadCurrentBoard(LawnApp* app,bool enteringPlay){
         h1DirtyCanvas.RequireClear();
         pvzh1_level_loading_step(100);
     }
+    if(enteringPlay)pvzh1_play_image_handoff_diagnostic[4]=Sexy::H1ImageResourcesStats().residentBytes;
 }
 void H1PreloadCurrentBoard(LawnApp* app){PreloadCurrentBoard(app,false);}
 void H1PreloadCurrentBoardForPlay(LawnApp* app){PreloadCurrentBoard(app,true);}

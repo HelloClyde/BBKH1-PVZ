@@ -214,24 +214,33 @@ static int pvz_map_native_path(const char *path,char *output,size_t capacity,int
 }
 int pvz_native_path(const char *path,char *output,size_t capacity){return pvz_map_native_path(path,output,capacity,1);}
 
-/* Exceptional exits unload the BDA and erase its diagnostic RAM. Persist one
-   bounded record before shutdown; the normal frame and exit paths do no I/O.
-   Use native stdio directly so even an exhausted C++/newlib heap can report. */
+/* Freeze failure evidence before cleanup. Native stdio also needs heap space,
+   so emit the frozen record only after shutdown has returned allocations. */
+static const void *failure_record;
+static unsigned failure_record_bytes;
 void pvz_runtime_report_failure(int code){
     struct FailureRecord {
         uint32_t magic,version,bytes,status,tick;
         uint32_t runtime[16],termination[4],charge[2],charge_fault[4],heap[20],game[32];
         char message[256],last_path[512];
+        uint32_t actor_page[16],actor_heap[20],actor_residency[16],image_lifetime[16],actor_frames[4];
+        char actor_path[96];
     };
     extern volatile uint32_t pvz_runtime_termination_diagnostic[4];
     extern char pvz_runtime_termination_message[256];
     extern volatile uint32_t pvz_runtime_heap_failure[20];
     extern volatile uint32_t pvzp_diagnostic[32] __attribute__((weak));
+    extern volatile uint32_t pvzh1_actor_page_failure_diagnostic[16] __attribute__((weak));
+    extern volatile uint32_t pvzh1_actor_page_failure_heap[20] __attribute__((weak));
+    extern volatile uint32_t pvzh1_actor_pose_diagnostic[16] __attribute__((weak));
+    extern volatile uint32_t pvzh1_image_lifetime_diagnostic[16] __attribute__((weak));
+    extern volatile uint32_t pvzh1_actor_frame_lifetime_diagnostic[4] __attribute__((weak));
+    extern char pvzh1_actor_page_failure_path[96] __attribute__((weak));
     static struct FailureRecord record;
     static int reported;
-    char native[NATIVE_PATH_MAX];h1_file *file;unsigned i;
+    unsigned i;
     if(!code||reported)return;
-    reported=1;record.magic=0x58463148u;record.version=1;record.bytes=sizeof(record);
+    reported=1;record.magic=0x58463148u;record.version=2;record.bytes=sizeof(record);
     record.status=(uint32_t)code;record.tick=h1_raw_tick_80hz();
     for(i=0;i<16;++i)record.runtime[i]=pvz_runtime_diagnostic[i];
     for(i=0;i<4;++i){record.termination[i]=pvz_runtime_termination_diagnostic[i];record.charge_fault[i]=pvz_runtime_native_charge_fault[i];}
@@ -240,10 +249,24 @@ void pvz_runtime_report_failure(int code){
     if(pvzp_diagnostic)for(i=0;i<32;++i)record.game[i]=pvzp_diagnostic[i];
     memcpy(record.message,pvz_runtime_termination_message,sizeof(record.message));
     memcpy(record.last_path,pvz_runtime_last_path,sizeof(record.last_path));
+    for(i=0;i<16;++i){
+        if(pvzh1_actor_page_failure_diagnostic)record.actor_page[i]=pvzh1_actor_page_failure_diagnostic[i];
+        if(pvzh1_actor_pose_diagnostic)record.actor_residency[i]=pvzh1_actor_pose_diagnostic[i];
+        if(pvzh1_image_lifetime_diagnostic)record.image_lifetime[i]=pvzh1_image_lifetime_diagnostic[i];
+    }
+    if(pvzh1_actor_page_failure_heap)for(i=0;i<20;++i)record.actor_heap[i]=pvzh1_actor_page_failure_heap[i];
+    if(pvzh1_actor_frame_lifetime_diagnostic)for(i=0;i<4;++i)record.actor_frames[i]=pvzh1_actor_frame_lifetime_diagnostic[i];
+    if(pvzh1_actor_page_failure_path)memcpy(record.actor_path,pvzh1_actor_page_failure_path,sizeof(record.actor_path));
+    failure_record=&record;failure_record_bytes=sizeof(record);
+}
+void pvz_runtime_flush_failure(void){
+    char native[NATIVE_PATH_MAX];h1_file *file;
+    const void *record=failure_record;unsigned bytes=failure_record_bytes;
+    if(!record)return;failure_record=0;failure_record_bytes=0;
     if(pvz_native_path("/PVZSAVE/H1FAULT.BIN",native,sizeof(native)))return;
     file=io_native_open(native,"wb");
     if(!file||(uintptr_t)file==0xffffffffu)return;
-    (void)h1_fwrite(&record,1,sizeof(record),file);
+    (void)h1_fwrite(record,1,bytes,file);
     h1_fclose(file);
 }
 static PvzAssetIndex asset_index;
@@ -366,17 +389,10 @@ static size_t trim_small_pool(void){
     update_small_pool_diagnostic();return released;
 }
 static size_t reclaim_one(size_t requested){
-    size_t released=trim_small_pool();
-    if(released)return released;
-    if(pvzh1_cache_memory_pressure){
-        released=pvzh1_cache_memory_pressure(requested);
-        /* A source's small buffers may only have made slab pages empty.
-           Return those pages before the very next real native allocation. */
-        (void)trim_small_pool();
-    }
-    if(!released&&pvzh1_actor_pose_release_pressure)
-        released=pvzh1_actor_pose_release_pressure(requested);
-    return released;
+    (void)requested;
+    /* Only empty allocator slabs are returned here. Application resources
+       are released by their real owners, never by a failed allocation. */
+    return trim_small_pool();
 }
 static void *native_allocate(size_t requested,size_t size,uintptr_t *span){
     void *raw;PvzSmallPoolOwner *owner=0;*span=0;

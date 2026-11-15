@@ -49,6 +49,7 @@ entries=[
  ('board.coins','OFF(Board,mCoins)'),('board.paused','OFF(Board,mPaused)'),
  ('board.main_counter','OFF(Board,mMainCounter)'),('board.update_counter','OFF(Board,mBoardUpdateCounter)'),
  ('board.time_stop','OFF(Board,mTimeStopCounter)'),
+ ('board.tutorial_state','OFF(Board,mTutorialState)'),
  ('board.level','OFF(Board,mLevel)'),('board.current_wave','OFF(Board,mCurrentWave)'),
  ('board.sun','OFF(Board,mSunMoney)'),('board.x','OFF(Board,mX)'),('board.y','OFF(Board,mY)'),
  ('plant.stride','sizeof(P::DataArrayItem)'),('plant.bytes','sizeof(Plant)'),

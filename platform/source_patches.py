@@ -58,7 +58,7 @@ def apply(source_root:Path):
     replace(source_root/'main.cpp','int main(int argc, char** argv)','int pvzp_upstream_main(int argc, char** argv)')
     lawn=source_root/'LawnApp.cpp'
     text=lawn.read_text(encoding='utf8')
-    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n#include "graphics/RewardEffects.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\nextern void H1PreloadCurrentBoardForPlay(LawnApp*);\nextern void H1RetireBoardReplay();\n'+text
+    text='#include "Startup.h"\n#include "actors/ActorPose.h"\n#include "graphics/EarlyLawn.h"\n#include "graphics/RewardEffects.h"\nclass LawnApp; extern void H1PreloadCurrentBoard(LawnApp*);\nextern void H1PreloadCurrentBoardForPlay(LawnApp*);\nextern void H1RetireBoardReplay();\nextern void H1RetireFinishedBoardGraphics();\n'+text
     # These are the confirmed return-to-menu and app-quit saves. Replays are
     # no longer drawn, while all original simulation data is still available.
     if text.count('mBoard->TryToSaveGame();')!=2:raise ValueError('Confirmed board-exit save boundaries changed')
@@ -68,7 +68,7 @@ def apply(source_root:Path):
     text=text.replace(anchor,anchor+'\n    pvzh1_actor_pose_shutdown();pvzh1_early_lawn_shutdown();pvzh1_reward_effect_shutdown();\n    {extern void H1ReanimationDefinitionsTrimForMenu();H1ReanimationDefinitionsTrimForMenu();}',1)
     anchor='void LawnApp::ShowAwardScreen(AwardType theAwardType, bool theShowAchievements)\n{'
     assert text.count(anchor)==1
-    text=text.replace(anchor,anchor+'\n    pvzh1_reward_effect_shutdown();',1)
+    text=text.replace(anchor,anchor+'\n    H1RetireFinishedBoardGraphics();pvzh1_reward_effect_shutdown();',1)
     anchor='void LawnApp::CheckForGameEnd()\n{\n\tif (mBoard == nullptr || !mBoard->mLevelComplete)\n\t\treturn;'
     assert text.count(anchor)==1
     text=text.replace(anchor,anchor+'\n    H1AudioSaveScope audioLoadingScope;',1)
@@ -552,5 +552,8 @@ bool PvzpLoadNextResource()
 
     # Apply last, after the original lifecycle boundaries have been installed.
     spec=importlib.util.spec_from_file_location('pvzh1_ui_flow',ROOT/'platform/ui_flow_patches.py')
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    module.apply(source_root)
+    spec=importlib.util.spec_from_file_location('pvzh1_resource_lifetime',ROOT/'platform/resource_lifetime_patches.py')
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     module.apply(source_root)

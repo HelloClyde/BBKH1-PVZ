@@ -2485,8 +2485,8 @@
     "reanim/zombieswon.reanim.h1d": "0b664c03e70aae08d94e859f6ac207900b0feaa0a46cb773e175ad54ebdf01eb",
     "reanim/zombieswon_.h1i": "e4bc9aca42ee264098882fb1f712e6d8ba5d7e1358ecaff01f59bdce7c455dad",
     "reanim/zombieswonscreen.h1i": "2607ff727c27919aaec17da673fe6ce6ed6ee964f06e6f734066f8b2beddb953",
-    "resource-files.h1fi": "63588c03714345f10b26e7b1671c7d7eab62f0dc778e688d7d1b609bbba60f90",
-    "reward-effects.h1re": "92358c3e58b32fdd7774e6c94a5c606ad3887ba7d8ba6665ac195e1aa0458e22",
+    "resource-files.h1fi": "b5d2719b5ff3df286da78798a65ac573057fe68c4cce47f31e29b029b34e2bd9",
+    "reward-effects.h1re": "eb07f7348d277bfffa4d74e94f7f02858e45f7119ef09323e3396f16c97c3133",
     "sod-roll.h1ap": "be1e7899bb4a125c3a65a8a02f3639a39002c8889a773e89d2edccc3d06e19a2",
     "sounds/achievement.h1pcm": "2db6d55b925cb0145877c67960cc49f28f0e7eaa81b67487c1bc16ea3122025d",
     "sounds/awooga.h1pcm": "b8901254db89049971e4ec45a7f95e385d3a8df07cdf0cb99d6d7a85b6862bdc",
@@ -2676,7 +2676,7 @@
     "zombie-blends.h1ap": "ead5fca929b9a39c73979e88fcc01e3ca89e1a1323d63d9ea3ffa358ea49e581",
     "zombie-blend-colors.h1cr": "dacb9a3b6b54742bde6c8e356adf820d694385227548a7cc953324d71f2ccce6"
   },
-  "bytes": 166473603,
+  "bytes": 166759394,
   "count": 2674,
   "locale": "zh_CN"
 }

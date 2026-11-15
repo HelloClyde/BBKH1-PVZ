@@ -1,3 +1,4 @@
+#include "graphics/ImageLifetime.h"
 /* Target-size baked first-player opening. LGPL-3.0-or-later. */
 #include "IntroMovie.h"
 #include "IntroFrames.h"
@@ -63,10 +64,11 @@ void Decode(uint32_t* out=nullptr){const unsigned next=unsigned(frame+1);if(next
  if(frame==int(Frames-1)){DropCache();}Resident();
 }
 }
-void H1IntroMovieRelease(Board* board){if(board&&board!=owner)return;
+void H1IntroMovieRelease(Board* board){if(board&&board!=owner)return;const bool wasActive=owner!=nullptr;
  CloseInput();DropCache();std::free(packets);std::free(before);std::free(current);std::free(delta);
  packets=nullptr;before=current=delta=nullptr;owner=nullptr;frame=shownFrame=-1;backingValid=false;nextLoaded=loadingBytes=occupied=writeAt=bufferBytes=lowWater=0;
- pvzh1_intro_movie_diagnostic[0]=0;pvzh1_intro_movie_diagnostic[1]=0;++pvzh1_intro_movie_diagnostic[6];}
+ pvzh1_intro_movie_diagnostic[0]=0;pvzh1_intro_movie_diagnostic[1]=0;++pvzh1_intro_movie_diagnostic[6];
+ if(wasActive&&Sexy::H1ImageResourcesStats().scene==Sexy::H1ImageScene::Opening)Sexy::H1ImageResourcesBeginScene(Sexy::H1ImageScene::Board);}
 bool H1IntroMovieRequired(){
 #ifdef PVZ_HOST_RUNNER
  return enabled;
@@ -88,16 +90,13 @@ bool H1IntroMoviePrepare(Board* board){
 #endif
  if(!board||board->mApp->mGameMode!=GAMEMODE_INTRO){H1IntroMovieRelease();return false;}
  if(H1IntroMovieActive(board))return true;H1IntroMovieRelease();
- // The preceding menu/loading draw has returned. Its reconstructible source
- // pixels are no longer borrowed; retain the screen and music, not old UI or
- // previous-level textures beside the movie's read-ahead window.
- pvzh1_cache_complete_draw_batch();
+ // Menu and previous-level owners are retired at their scene boundary.
+ // The noninteractive opening also retires shared options UI until the next board loader.
  const auto previousImages=Sexy::H1ImageCacheGetStats();
  pvzh1_intro_memory_diagnostic[0]=PageBytes;pvzh1_intro_memory_diagnostic[1]=CacheCapacity;
  pvzh1_intro_memory_diagnostic[2]=static_cast<uint32_t>(previousImages.residentBytes);
- Sexy::H1ImageCacheReleaseUI();Sexy::H1ImageCacheSetBudget(0);Sexy::H1ImageCacheEndFrame();
+ Sexy::H1ImageResourcesBeginScene(Sexy::H1ImageScene::Opening);
  pvzh1_intro_memory_diagnostic[3]=static_cast<uint32_t>(Sexy::H1ImageCacheGetStats().residentBytes);
- Sexy::H1ImageCacheSetBudget(previousImages.budgetBytes);
  input=std::fopen(Sexy::GetResourcePath("first-intro.h1if").c_str(),"rb");
  if(!input)Fail("Missing first-intro.h1if; install the matching resource pack");
  readBuffer=static_cast<uint8_t*>(std::malloc(ReadBufferBytes));

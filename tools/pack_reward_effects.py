@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse,array,collections,hashlib,json,struct,zlib
 from build_paths import ROOT
+from reward_container import index_container
 U32=lambda *n:struct.pack('<'+'I'*len(n),*n)
 def frames(path):
  with path.open('rb') as f:
@@ -112,10 +113,10 @@ def main():
  for kind,age,offset,size in entries:table+=U32(kind,age,data_offset+offset,size)
  body=U32(*palette)+table+b''.join(struct.pack('<4h',*box) for box in frame_bounds)+blobs
  header=[0x45523148,4,960,544,len(palette),len(entries),64,64+len(palette)*4,data_offset,64+len(body),zlib.crc32(body),30,480,272,1,bounds_offset]
- decoded=U32(*header)+body
- output=ROOT/'private/resources-h1-wide/reward-effects.h1re';output.write_bytes(U32(0x5a523148,1,len(decoded),zlib.crc32(decoded))+zlib.compress(decoded,9))
+ decoded=index_container(U32(*header)+body)
+ output=ROOT/'private/resources-h1-wide/reward-effects.h1re';output.write_bytes(decoded)
  sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
  report=dict(version=1,bytes=output.stat().st_size,sha256=sha(output),canvas=[960,544],viewport=[480,272],frames=len(entries),unique_frames=unique,palette_colors=len(palette),sample_rate=30,raw_bytes=a.input.stat().st_size,normal_passes_lossless=True,additive_max_RGB8_error=[8,8,8],runtime_path=output.name,encoder_sha256=sha(Path(__file__)),renderer_exporter_sha256=sha(ROOT/'tools/tests/reward_effect_export.cpp'),scope='Precomputed award light including original coin scale curve for the 600-tick level-end sequence, and seeded starburst through 100 ticks. Centers translate at LCD pixel resolution. Normal alpha and /256 rounding retained; summed additive colors quantized with a maximum RGB8 error of 8 per channel.')
- report.update(version=4,decoded_bytes=len(decoded),decoded_sha256=hashlib.sha256(decoded).hexdigest(),frame_scratch_bytes=frame_capacity,compression='Outer zlib expanded once before play. Prebaked LZ4-HC row streams with local byte palettes expand into two preallocated reusable frame buffers; no playback IO, allocation, particle simulation or texture sampling.',viewport_bounds_sha256=sha(a.bounds),bounds_exporter_sha256=sha(ROOT/'tools/tests/reward_bounds_export.cpp'),cropping='Only texels outside every reachable viewport of the original 350-tick collection curve are removed; actual LCD center is checked against the stored bounds.')
+ report.update(version=5,decoded_bytes=len(decoded),decoded_sha256=hashlib.sha256(decoded).hexdigest(),frame_scratch_bytes=frame_capacity,compression='Seekable independent prebaked LZ4-HC frames. Only directory, palette, one input buffer and two frame buffers reside in memory; first frames are prepared during Loading. Playback performs positioned frame reads and bounded expansion, without allocation, particle simulation or texture sampling.',viewport_bounds_sha256=sha(a.bounds),bounds_exporter_sha256=sha(ROOT/'tools/tests/reward_bounds_export.cpp'),cropping='Only texels outside every reachable viewport of the original 350-tick collection curve are removed; actual LCD center is checked against the stored bounds.')
  (ROOT/'provenance/offline-reward-effects.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)
 if __name__=='__main__':main()

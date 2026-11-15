@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "date": "2026-11-15",
+  "scope": "H1 真机：18 株植物的第三关测试存档从第 3 波正常打到通关；完整 600 tick 领奖、卡片预览及战斗资源释放，同进程第四关/选项/回菜单保存，真实创建和删除测试玩家，普通帧回收保存数据、正常退出与原始存档整体恢复均通过。无游戏 RAM 写入、无分配失败或保存错误。光效常驻 55,708 字节，领奖页释放 3,950,999 字节；删除界面首次显示 175 ms。该领奖活跃区间含战场绘制约 13.05 FPS，尚未达到全场景 20 FPS；未重测全部关卡或数小时连续运行。本版光效格式更新，须同时更新 BDA 和完整资源。更新明细见仓库 docs/releases/v0.1.0-beta.4.md。",
+  "program": {
+    "passed": true,
+    "bda_sha256": "cf22401b7011151e782221b21ccad9f3cec9393ae3c0c1eec3883e8e8a158ea7",
+    "elf_sha256": "d7cc52ac4cb752e33e23abd0fbcdec5e2937eea1743e94ff213ee172e8793eeb",
+    "build_receipt_sha256": "ca3fc2d65a568f2c6ac7178a65877e2b98414d386004d51d640e53b28dd90b65",
+    "bytes": 3759940,
+    "compiled_sources": 194,
+    "gp_tls_audit": true,
+    "device_upload_crc_verified": true,
+    "source_identity": {
+      "passed": true,
+      "count": 148,
+      "bda_sha256": "cf22401b7011151e782221b21ccad9f3cec9393ae3c0c1eec3883e8e8a158ea7"
+    }
+  },
+  "hardware": {
+    "bridge": "ESP32 0.4.5 via esp://COM6",
+    "H1Debug_image_id": "e14aaef1",
+    "program_fingerprints_match": true,
+    "snapshots": 20,
+    "same_BDA_process": true,
+    "game_RAM_written": false,
+    "allocation_failures": 0,
+    "actor_page_failures": 0,
+    "reward_resident_bytes": 55708,
+    "reward_duration_ticks": 600,
+    "max_reward_age_sampled": 595,
+    "reward_original_render_fallbacks": 0,
+    "award_actor_bytes_before": 3179819,
+    "award_lawn_bytes_before": 771180,
+    "award_actor_bytes_after": 0,
+    "award_lawn_bytes_after": 0,
+    "award_card_preview_visible": true,
+    "fourth_level_and_options": true,
+    "save_jobs_completed": 5,
+    "pending_save_bytes": 0,
+    "delete_callback_ms": 50,
+    "delete_first_presented_ms": 175,
+    "reward_active_sample": {
+      "scope": "Active reward ages54..539 in18-plant third level; includes battle drawing; transition after last frame excluded",
+      "frames": 62,
+      "raw_ticks": 190,
+      "raw_tick_hz": 40,
+      "seconds": 4.75,
+      "fps": 13.052631578947368
+    }
+  },
+  "exit": {
+    "return_code": 0,
+    "native_charge_bytes": 0,
+    "async_jobs_pending": 0,
+    "async_write_errors": 0,
+    "save_worker_task_removed": true,
+    "new_fault_file_absent": true
+  },
+  "originals_restored": {
+    "passed": true,
+    "whole_original_directory_restored": true,
+    "files": {
+      "users.dat": {
+        "size": 45,
+        "sha256": "23c312b4c452bd1c7c606143f5a7474119a18882025c30883394d76280c9dda4"
+      },
+      "user1.dat": {
+        "size": 886,
+        "sha256": "e40224914127bdda75cefc147eceaa9ab8627efbd211a3f9123e6c35618d23fa"
+      },
+      "game1_0.v4": {
+        "size": 39480,
+        "sha256": "5540c956e3a0988440a2bf33310b3e80d5683f0873a2dcc53a6ed1b3b6fed97c"
+      },
+      "user4.dat": {
+        "size": 886,
+        "sha256": "d7bb4ac3ff7eb36f04af0b4c1c8383ca8c30f2c53b364ceea888fd0b91f8a5ad"
+      },
+      "h1-audio.dat": {
+        "size": 6,
+        "sha256": "ef848f85e0de2a2de770cf263b6ff76f5ee680ac29b0a743e4305af67fe25084"
+      }
+    },
+    "test_archive": "B:\\应用\\数据\\游戏\\PVZ\\userdata.test-life81-20261115",
+    "desktop": {
+      "job_id": 20,
+      "kind": 2,
+      "state": 4,
+      "error": 0,
+      "menu_idle": 1,
+      "app_index": 113,
+      "entry_count": 11,
+      "return_code": 0,
+      "state_name": "done"
+    },
+    "debugger_left_running": true
+  },
+  "resources_changed": true,
+  "resource_files": [
+    "reward-effects.h1re",
+    "resource-files.h1fi"
+  ],
+  "resources_runtime_validation": false,
+  "resources_install_transfer_CRC_verified": true,
+  "prior_unaffected_coverage": "docs/verification/history/native-before-resource-lifetime-20261115.json"
+}

@@ -57,6 +57,9 @@ extern "C" {volatile uint32_t pvzh1_actor_fallback_diagnostic[64];}
 extern "C" {volatile uint32_t pvzh1_shadow_pose_diagnostic[4];}
 extern "C" {volatile uint32_t pvzh1_normal_actor_diagnostic[4];}
 extern "C" {volatile uint32_t pvzh1_actor_lifetime_diagnostic[8];}
+extern "C" {volatile uint32_t pvzh1_actor_frame_lifetime_diagnostic[4];}
+extern "C" {volatile uint32_t pvzh1_actor_page_failure_diagnostic[16],pvzh1_actor_page_failure_heap[20];char pvzh1_actor_page_failure_path[96];}
+extern "C" void pvz_runtime_heap_snapshot_into(volatile uint32_t*,size_t,size_t) __attribute__((weak));
 extern "C" {volatile uint32_t pvzh1_frame_time_diagnostic[4];}
 extern "C" {volatile uint32_t pvzh1_linear_actor_diagnostic[4];}
 extern "C" {volatile uint32_t pvzh1_active_track_diagnostic[4];}
@@ -131,7 +134,8 @@ struct Cache{uint8_t** pages=nullptr;uint32_t* palette=nullptr;uint32_t** palett
  uint32_t** flashTablePages=nullptr;uint32_t flashTablePageCount=0,flashTableBytes=0;uint16_t* flashReferences=nullptr;
  EncodedPage* encoded=nullptr;uint8_t** blob=nullptr;uint16_t* slotForPage=nullptr;
  FILE* storageFile=nullptr;uint32_t storageOffset=0;bool directStorageReady=false;
- uint8_t* decoded[DecodedSlots]{};uint32_t decodedPage[DecodedSlots]{},stamp[DecodedSlots]{},clock=0,encodedBytes=0,blobCount=0;
+ char sourceName[96]{};uint32_t sourceSlot=UINT32_MAX;
+ uint8_t* decoded[DecodedSlots]{};uint32_t decodedPage[DecodedSlots]{},stamp[DecodedSlots]{},clock=0,encodedBytes=0,blobCount=0,presentedClock=0;
  TileSlot* tiles=nullptr;uint8_t* tileInput=nullptr;uint8_t* tileScratch=nullptr;uint32_t tileClock=0,tileAllocated=0;
   unsigned decodeLimit=128;bool streamPreferred=false,flashColumns=false,flashIndexed=false,compressed=false,rawPages=false,denseTiles=false,inflateReady=false,tried=false,busy=false,enabled=true,perTrack=false,directLiterals=false,colorVariants=false,alignedRuns=false,linearRuns=false,segmentOffsets=false,extendedRuns=false;} baseCache,sunCache,normalCache,zombieCache,sodCache,glowCache,poleIdleCache,blinkCache,zombieBlendCache;
 struct PlantBanks{Cache* items[4]{};};
@@ -228,7 +232,7 @@ void Drop(){if(cache.inflateReady)ReleaseInflater();cache.inflateReady=false;
  if(cache.blob){for(unsigned i=0;i<cache.blobCount;++i)delete[] cache.blob[i];delete[] cache.blob;}
  delete[] cache.encoded;delete[] cache.slotForPage;
  cache.encoded=nullptr;cache.blob=nullptr;cache.slotForPage=nullptr;cache.compressed=cache.rawPages=cache.denseTiles=false;
- cache.encodedBytes=cache.blobCount=cache.clock=0;cache.perTrack=cache.directLiterals=cache.colorVariants=cache.alignedRuns=cache.linearRuns=cache.segmentOffsets=cache.extendedRuns=false;cache.flashColumns=cache.flashIndexed=false;for(unsigned i=0;i<DecodedSlots;++i){cache.decodedPage[i]=0;cache.stamp[i]=0;}
+ cache.encodedBytes=cache.blobCount=cache.clock=cache.presentedClock=0;cache.perTrack=cache.directLiterals=cache.colorVariants=cache.alignedRuns=cache.linearRuns=cache.segmentOffsets=cache.extendedRuns=false;cache.flashColumns=cache.flashIndexed=false;for(unsigned i=0;i<DecodedSlots;++i){cache.decodedPage[i]=0;cache.stamp[i]=0;}
  for(auto*& p:cache.variantColors){delete[] p;p=nullptr;}
  if(cache.palettePages){for(unsigned i=0;i<(cache.colors+1023)/1024;++i)delete[] cache.palettePages[i];delete[] cache.palettePages;cache.palettePages=nullptr;}
  delete[] cache.flashNormal;cache.flashNormal=nullptr;delete[] cache.palette;delete[] cache.entries;cache.pages=nullptr;cache.palette=nullptr;cache.entries=nullptr;
@@ -261,19 +265,28 @@ void BlobRead(unsigned offset,unsigned bytes,uint8_t* out){
  }
  while(bytes){unsigned n=std::min(bytes,4096-(offset&4095));std::memcpy(out,cache.blob[offset>>12]+(offset&4095),n);out+=n;offset+=n;bytes-=n;}}
 void CloseLoadFile(FILE*f){if(f!=cache.storageFile)fclose(f);}
+void NotePageFailure(unsigned reason,unsigned page,unsigned slot,int reset,int result){
+ auto& d=pvzh1_actor_page_failure_diagnostic;
+ d[0]=1;d[1]=reason;d[2]=page;d[3]=cache.npages;d[4]=cache.size;d[5]=slot;d[6]=cache.decodeLimit;
+ d[7]=uint32_t(reset);d[8]=uint32_t(result);d[9]=inflateWork?inflateWork->inflater.total_in:0;d[10]=inflateWork?inflateWork->inflater.total_out:0;
+ d[11]=cache.rawPages?std::min(4096u,cache.size-page*4096):cache.encoded[page].bytes;
+ d[12]=cache.storageOffset;d[13]=cache.rawPages?page*4096:cache.encoded[page].offset;d[14]=cache.sourceSlot;d[15]=uint32_t(activeBankType);
+ std::memcpy(pvzh1_actor_page_failure_path,cache.sourceName,sizeof(cache.sourceName));
+ if(pvz_runtime_heap_snapshot_into)pvz_runtime_heap_snapshot_into(pvzh1_actor_page_failure_heap,reason==1?4096:0,0);
+}
 const uint8_t* Page(unsigned page){
  if(!cache.compressed)return cache.pages[page];
  if(cache.pages[page]){cache.stamp[cache.slotForPage[page]]=++cache.clock;++pvzh1_actor_page_diagnostic[3];if(activeBankType>=0)++pvzh1_bank_page_hits[activeBankType];return cache.pages[page];}
  H1_BANK_PHASE(pagePhase,3);
  unsigned slot=0;for(unsigned i=1;i<std::min(pageSlotLimit,cache.decodeLimit);++i)if(cache.stamp[i]<cache.stamp[slot])slot=i;
- if(!cache.decoded[slot]){cache.decoded[slot]=new(std::nothrow) uint8_t[4096];if(!cache.decoded[slot])return nullptr;}
+ if(!cache.decoded[slot]){cache.decoded[slot]=new(std::nothrow) uint8_t[4096];if(!cache.decoded[slot]){NotePageFailure(1,page,slot,0,0);return nullptr;}}
  if(cache.stamp[slot]){cache.pages[cache.decodedPage[slot]]=nullptr;cache.slotForPage[cache.decodedPage[slot]]=UINT16_MAX;}
- const unsigned bytes=std::min(4096u,cache.size-page*4096);bool ok=true;
+ const unsigned bytes=std::min(4096u,cache.size-page*4096);bool ok=true;int reset=Z_OK,result=Z_STREAM_END;
  if(cache.rawPages)BlobRead(page*4096,bytes,cache.decoded[slot]);
  else{uint8_t input[4128];const auto& e=cache.encoded[page];BlobRead(e.offset,e.bytes,input);auto& z=inflateWork->inflater;
-  ok=H1ResourceInflateReset(&z)==Z_OK;z.next_in=input;z.avail_in=e.bytes;z.next_out=cache.decoded[slot];z.avail_out=bytes;
-  ok=ok&&inflate(&z,Z_FINISH)==Z_STREAM_END&&z.total_out==bytes;}
- if(!ok){++pvzh1_actor_page_diagnostic[4];return nullptr;}
+  reset=H1ResourceInflateReset(&z);ok=reset==Z_OK;z.next_in=input;z.avail_in=e.bytes;z.next_out=cache.decoded[slot];z.avail_out=bytes;
+  result=ok?inflate(&z,Z_FINISH):Z_STREAM_ERROR;ok=ok&&result==Z_STREAM_END&&z.total_out==bytes;}
+ if(!ok){NotePageFailure(2,page,slot,reset,result);++pvzh1_actor_page_diagnostic[4];return nullptr;}
  cache.decodedPage[slot]=page;cache.slotForPage[page]=slot;cache.pages[page]=cache.decoded[slot];cache.stamp[slot]=++cache.clock;
  ++pvzh1_actor_page_diagnostic[2];if(activeBankType>=0)++pvzh1_bank_page_misses[activeBankType];unsigned resident=0;for(auto* p:cache.decoded)if(p)resident+=4096;
  pvzh1_actor_page_diagnostic[1]=std::max((uint32_t)pvzh1_actor_page_diagnostic[1],resident);return cache.pages[page];
@@ -433,6 +446,7 @@ __attribute__((optimize("Os"))) bool LoadShared(FILE* f,const uint32_t* h,unsign
  ++pvzh1_actor_page_diagnostic[7];return true;
 }
 __attribute__((optimize("Os"))) bool Load(const char* filename,uint32_t start=0,uint32_t length=0,uint32_t total=0,uint32_t slot=UINT32_MAX){
+ std::snprintf(cache.sourceName,sizeof(cache.sourceName),"%s",filename);cache.sourceSlot=slot;
  auto path=Sexy::GetResourcePath(filename);FILE* f=fopen(path.c_str(),"rb");if(!f)return false;setvbuf(f,nullptr,_IOFBF,16384);
  uint8_t header[64]{};bool okay=(!start||fseek(f,start,SEEK_SET)==0)&&fread(header,1,64,f)==64;
  if(okay&&LE32(header)==0x53503148u){uint32_t h[16];for(unsigned i=0;i<16;++i)h[i]=LE32(header+i*4);
@@ -1117,6 +1131,28 @@ bool H1SodOfflineDraw(Board* board,Sexy::Graphics* g){
    }}cache.busy=false;
  }
  target->BitsChanged();Sexy::H1ScreenNoteDraw(screen);++pvzh1_sod_offline_diagnostic[1];pvzh1_sod_offline_diagnostic[4]=age;pvzh1_sod_offline_diagnostic[5]=frame;return true;
+}
+extern "C" void pvzh1_actor_pose_end_frame(){
+ // Pixel borrowers have returned and the screen was presented. A bank is
+ // shared by its currently drawn animation family. Retire it when that family
+ // has no drawing consumer; do not repeatedly decode a still-playing loop.
+ // Loading reservations with no decoded content never have a consumer.
+ unsigned kept=0,released=0;
+ auto finish=[&](Cache& c){if(c.busy||!c.compressed)return;
+  bool used=false;for(unsigned i=0;i<DecodedSlots;++i)
+   used|=c.decoded[i]&&c.stamp[i]&&int32_t(c.stamp[i]-c.presentedClock)>0;
+  for(unsigned i=0;i<DecodedSlots;++i)if(c.decoded[i]){
+   if(c.stamp[i]&&used){++kept;continue;}
+   if(c.stamp[i]){c.pages[c.decodedPage[i]]=nullptr;c.slotForPage[c.decodedPage[i]]=UINT16_MAX;}
+   delete[] c.decoded[i];c.decoded[i]=nullptr;c.stamp[i]=0;++released;
+  }c.presentedClock=c.clock;
+ };
+ for(auto* c:{&baseCache,&sunCache,&normalCache,&zombieCache,&sodCache,&glowCache,&poleIdleCache,&blinkCache,&zombieBlendCache,shadowCache,combatCache,hatsCache})if(c)finish(*c);
+ for(auto* banks:plantCaches)if(banks)for(auto* c:banks->items)if(c)finish(*c);
+ ++pvzh1_actor_frame_lifetime_diagnostic[0];pvzh1_actor_frame_lifetime_diagnostic[1]+=released;
+ pvzh1_actor_frame_lifetime_diagnostic[2]+=released*4096u;
+ pvzh1_actor_frame_lifetime_diagnostic[3]=kept;
+ if(released)CountResident();
 }
 extern "C" size_t pvzh1_actor_pose_release_pressure(size_t){
  // Encoded frames and palette stay resident. Releasing only idle decoded

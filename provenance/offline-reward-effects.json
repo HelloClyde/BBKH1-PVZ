@@ -1,7 +1,7 @@
 {
-  "version": 4,
-  "bytes": 934748,
-  "sha256": "92358c3e58b32fdd7774e6c94a5c606ad3887ba7d8ba6665ac195e1aa0458e22",
+  "version": 5,
+  "bytes": 1220539,
+  "sha256": "eb07f7348d277bfffa4d74e94f7f02858e45f7119ef09323e3396f16c97c3133",
   "canvas": [
     960,
     544
@@ -22,17 +22,18 @@
     8
   ],
   "runtime_path": "reward-effects.h1re",
-  "encoder_sha256": "3c27a0f47dd4208707dc957a07e608afa25f8edcd247c24c646722f8c747edd9",
+  "encoder_sha256": "23a713a472c99ca92fcc983feb2679c1ee86f5482aeecbf99c79d94219aabe9d",
   "renderer_exporter_sha256": "156852f5a18463cae3ba5e2cc20822c486f8c72e32bb451893ce346c834f39e3",
   "scope": "Precomputed award light including original coin scale curve for the 600-tick level-end sequence, and seeded starburst through 100 ticks. Centers translate at LCD pixel resolution. Normal alpha and /256 rounding retained; summed additive colors quantized with a maximum RGB8 error of 8 per channel.",
   "decoded_bytes": 1220539,
-  "decoded_sha256": "46cb7b8fd6dd24ad8c3f3c8078e8e76dc9b3ad779192a104889b2b58a2437b46",
+  "decoded_sha256": "eb07f7348d277bfffa4d74e94f7f02858e45f7119ef09323e3396f16c97c3133",
   "frame_scratch_bytes": [
     30328,
     4891
   ],
-  "compression": "Outer zlib expanded once before play. Prebaked LZ4-HC row streams with local byte palettes expand into two preallocated reusable frame buffers; no playback IO, allocation, particle simulation or texture sampling.",
+  "compression": "Seekable independent prebaked LZ4-HC frames; resident directory, palette, reusable input buffer and two frame buffers, with first frames prewarmed before input.",
   "viewport_bounds_sha256": "25ac5ed9196c75bc675916b9ad1cb701d4047cc854005d81552c72ede716e67f",
   "bounds_exporter_sha256": "3bc2b93f0b5d903ea5449aa899c0c79e6c337ef4a3784b58f870a1f55235598b",
-  "cropping": "Only texels outside every reachable viewport of the original 350-tick collection curve are removed; actual LCD center is checked against the stored bounds."
+  "cropping": "Only texels outside every reachable viewport of the original 350-tick collection curve are removed; actual LCD center is checked against the stored bounds.",
+  "indexer_sha256": "ecc9fddfc9bc71648d9b34de70ea1ade77d360bf9516be9fac3e54123fde6626"
 }

@@ -16570,16 +16570,16 @@
     "reader_source_sha256": {
       "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
       "platform/graphics/memory_patches.py": "136a40817a5b4453b23db0f3ff73e3cd006163af6460a0c4c12bc86d3f88d76d",
-      "platform/graphics/MemoryImageCache.cpp": "4aa7e162264272ce1179564aa64341f504d47271f7b7bfa5201bf5f1d3a1dab9"
+      "platform/graphics/MemoryImageCache.cpp": "51e567bb8e100cfa530521aaf5d1043e9ff87f72213aea25da2fd2ec1c87832f"
     },
     "observation_sha256": "c7f8033b7d9aeb1dbc786ee9d0e41bdcbc0cdd00be3fa52732838d99816e8853",
     "scope": "Same preferred alpha pixels; remove never-selected RGB variant and pack shadows",
     "previous_reader_source_sha256": {
       "platform/resources/ImageLib.cpp": "34a03b5bb59612a5865a9ed1b9d841a4df7202f1331717d7246d0152509da932",
-      "platform/graphics/memory_patches.py": "a81b81aa7e21973b7e7f4454291bac235d02bbaca0e1f2deab42f40baf91ac1b",
-      "platform/graphics/MemoryImageCache.cpp": "65a4ef2938d549f399f5414f76c2e332606c6cdf6c43cf3ea94d27690d96e75a"
+      "platform/graphics/memory_patches.py": "136a40817a5b4453b23db0f3ff73e3cd006163af6460a0c4c12bc86d3f88d76d",
+      "platform/graphics/MemoryImageCache.cpp": "4aa7e162264272ce1179564aa64341f504d47271f7b7bfa5201bf5f1d3a1dab9"
     },
-    "reader_revision_validation": "docs/verification/intro-delete-20261113/preferred-alpha-revision.json"
+    "reader_revision_validation": "docs/verification/image-lifetime-20261113/preferred-alpha-revision.json"
   },
   "BDA_unchanged_scope": "Initial image adaptation/pruning used the existing image reader. The new lossless actor page envelope requires the matching tested program; distribute them together.",
   "requires_actor_page_reader": true,

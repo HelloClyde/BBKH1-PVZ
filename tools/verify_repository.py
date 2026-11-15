@@ -75,11 +75,10 @@ def main():
  assert sha(reward_file)==reward['sha256'] and reward_file.stat().st_size==reward['bytes']
  assert sha(ROOT/'tools/pack_reward_effects.py')==reward['encoder_sha256']
  assert sha(ROOT/'tools/tests/reward_effect_export.cpp')==reward['renderer_exporter_sha256']
- packed=reward_file.read_bytes();magic,version,decoded_size,checksum=struct.unpack_from('<4I',packed)
- assert magic==0x5a523148 and version==1
- decoded=zlib.decompress(packed[16:]);assert len(decoded)==decoded_size==reward['decoded_bytes'] and zlib.crc32(decoded)==checksum
- assert hashlib.sha256(decoded).hexdigest()==reward['decoded_sha256']
- rh=struct.unpack_from('<16I',decoded);assert rh[:4]==(0x45523148,4,960,544) and rh[5]==reward['frames']==212 and rh[9]==decoded_size
+ decoded=reward_file.read_bytes();decoded_size=len(decoded)
+ assert decoded_size==reward['decoded_bytes'] and hashlib.sha256(decoded).hexdigest()==reward['decoded_sha256']
+ assert sha(ROOT/'tools/reward_container.py')==reward['indexer_sha256']
+ rh=struct.unpack_from('<16I',decoded);assert rh[:4]==(0x45523148,5,960,544) and rh[5]==reward['frames']==212 and rh[9]==decoded_size
  assert rh[11:15]==(30,480,272,1) and zlib.crc32(decoded[64:])==rh[10]
  assert sha(ROOT/'provenance/reward-viewport-bounds.json')==reward['viewport_bounds_sha256']
  assert sha(ROOT/'tools/tests/reward_bounds_export.cpp')==reward['bounds_exporter_sha256']

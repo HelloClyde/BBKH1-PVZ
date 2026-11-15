@@ -4,6 +4,8 @@
 #include "graphics/SoftwareDisplay.h"
 #include "graphics/SoftwareRaster.h"
 #include "graphics/MemoryImageCache.h"
+#include "graphics/ImageLifetime.h"
+#include "graphics/CombatSprites.h"
 #include "h1_resources.h"
 #include <cassert>
 #include <cstdio>
@@ -18,6 +20,8 @@ extern "C" void pvzh1_cache_pressure_stats(uint64_t*,uint64_t*,uint64_t*);
 extern "C" void pvzh1_cache_complete_draw_batch();
 extern "C" volatile uint32_t pvzh1_cache_diagnostic[6];
 extern "C" uint64_t pvzh1_image_pixel_bytes_loaded();
+// This isolated raster suite does not link the game's combat subsystem.
+bool H1CombatFlatDraw(const Sexy::H1ImageReplayContext&){return false;}
 static bool forbidAllocation=false,reenterOnDelete=false,insideDelete=false;
 static size_t allocations=0,injectArrayBytes=0,injectedFreed=0;
 static unsigned injectedCalls=0,nestedCalls=0;
@@ -84,77 +88,49 @@ static void TestCache(GLInterface *device)
 {
     std::filesystem::create_directory("cache-fixtures");
     WriteImage("cache-fixtures/a.h1a",true);WriteImage("cache-fixtures/b.h1a",false);
-    WriteImage("cache-fixtures/small.h1a",false,16);
-    WriteImage("cache-fixtures/large.h1a",false,64);
+    WriteImage("cache-fixtures/small.h1a",false,16);WriteImage("cache-fixtures/large.h1a",false,64);
     h1_resources_set_root("cache-fixtures");
     GLImage a(device),b(device),modified(device);
+    H1ImageUseScope primary(H1ImageOwner::Operation,&a);
     assert(H1ImageCacheDescribe(&a,"a",true,0x345678));
     assert(H1ImageCacheDescribe(&b,"b",true,0xffffff));
-    assert(a.mWidth==32&&a.mHeight==32&&!a.mBits&&!b.mBits);
     const auto initialLoads=H1ImageCacheGetStats().loads;
+    assert(a.mWidth==32&&a.mHeight==32&&!a.mBits&&!b.mBits);
     assert(!b.Palletize()&&!b.mBits&&!b.mColorIndices&&!b.mColorTable);
-    assert(H1ImageCacheGetStats().loads==initialLoads); /* metadata stays lazy */
+    assert(H1ImageCacheGetStats().loads==initialLoads);
     assert(a.GetBits()[1]==0xff345678u&&b.GetBits()[1]==0xff285078u);
-    {
-        const uint32_t expected0=b.GetBits()[0],expected1=b.GetBits()[1];
-        assert(b.Palletize()&&!b.mBits&&b.mColorIndices&&b.mColorTable);
-        const auto loads=H1ImageCacheGetStats().loads;
-        assert(b.GetBits()[0]==expected0&&b.GetBits()[1]==expected1);
-        assert(b.mBits&&!b.mColorIndices&&!b.mColorTable);
-        assert(H1ImageCacheGetStats().loads==loads); /* lossless expansion, no I/O */
-    }
-    a.PurgeBits();assert(a.mBits); /* software purge never destroys source */
-    H1ImageCacheSetBudget(5000);
-    b.GetBits();
-    assert(a.mBits&&b.mBits); /* naked pointers stay valid throughout the frame */
-    H1ImageCacheEndFrame();
-    assert(!a.mBits&&b.mBits); /* access-order LRU, no unnecessary frame grace */
-    assert(H1ImageCacheGetStats().residentBytes<=5000);
-    assert(a.GetBits()[1]==0xff345678u); /* original per-image alpha color survives */
-    assert(H1ImageCacheGetStats().evictions>=1);
-    SandFixture(&a);
-    H1ImageCacheSetBudget(1);
-    H1ImageCacheEndFrame();H1ImageCacheEndFrame();H1ImageCacheEndFrame();
-    assert(!a.mBits);
-    assert(a.GetBits()[0]==0x00123456u&&sandCount==2); /* deterministic rebuild */
+    const uint32_t b0=b.GetBits()[0],b1=b.GetBits()[1];
+    assert(b.Palletize()&&!b.mBits&&b.mColorIndices&&b.mColorTable);
+    const auto paletteLoads=H1ImageCacheGetStats().loads;
+    assert(b.GetBits()[0]==b0&&b.GetBits()[1]==b1);
+    assert(b.mBits&&!b.mColorIndices&&!b.mColorTable&&H1ImageCacheGetStats().loads==paletteLoads);
+    a.PurgeBits();assert(a.mBits);SandFixture(&a);
+    for(unsigned frame=0;frame<100;++frame)H1ImageCacheEndFrame();
+    assert(a.mBits&&b.mBits&&H1ImageCacheGetStats().evictions==0);
     assert(H1ImageCacheDescribe(&modified,"b",true,0xffffff));
     modified.GetBits()[1]=0xffabcdefu;modified.BitsChanged();
     assert(modified.mFilePath.empty()&&!H1ImageCacheContains(&modified));
-    H1ImageCacheEndFrame();H1ImageCacheEndFrame();H1ImageCacheEndFrame();
-    assert(modified.mBits&&modified.GetBits()[1]==0xffabcdefu);
+    {H1ImageUseScope second(H1ImageOwner::Operation,&b);assert(b.GetBits()[1]==b1);}
+    assert(H1ImageResourceOwnerCount(&b)==2);
+    const auto allocationsBefore=allocations;forbidAllocation=true;
+    H1ImageResourcesReleaseOwner(H1ImageOwner::Operation,&a);
+    forbidAllocation=false;assert(allocations==allocationsBefore);
+    assert(!a.mBits&&b.mBits&&modified.mBits&&H1ImageResourceOwnerCount(&b)==1);
+    {H1ImageUseScope reload(H1ImageOwner::Operation,&a);
+     assert(a.GetBits()[0]==0x00123456u&&a.GetBits()[1]==0xff345678u&&sandCount==2);}
+    H1ImageResourcesReleaseOwner(H1ImageOwner::Operation,&a);assert(!a.mBits);
+    H1ImageResourcesReleaseOwner(H1ImageOwner::Operation,&b);assert(!b.mBits);
+    assert(modified.mBits[1]==0xffabcdefu);
+    GLImage grid(device);
+    assert(H1ImageCacheDescribe(&grid,"b",true,0xffffff));
+    {H1ImageUseScope gridOwner(H1ImageOwner::Operation,&grid);
+     assert(H1ImageCacheSetAlpha(&grid,"small",2,2)&&!grid.mBits);}
+    for(unsigned pass=0;pass<2;++pass){
+        {H1ImageUseScope gridOwner(H1ImageOwner::Operation,&grid);
+         assert(grid.GetBits()[1]==0x78285078u&&grid.GetBits()[17]==0x78285078u);}
+        H1ImageResourcesReleaseOwner(H1ImageOwner::Operation,&grid);assert(!grid.mBits);
+    }
     assert(H1ImageCacheGetStats().loadFailures==0);
-    {
-        GLImage grid(device);
-        assert(H1ImageCacheDescribe(&grid,"b",true,0xffffff));
-        assert(H1ImageCacheSetAlpha(&grid,"small",2,2)&&!grid.mBits);
-        assert(grid.GetBits()[1]==0x78285078u&&grid.GetBits()[17]==0x78285078u);
-        H1ImageCacheEndFrame();H1ImageCacheEndFrame();H1ImageCacheEndFrame();
-        assert(!grid.mBits&&grid.GetBits()[1]==0x78285078u);
-    }
-    {
-        GLImage large(device),small(device);
-        assert(H1ImageCacheDescribe(&large,"large",true,0xffffff));
-        assert(H1ImageCacheDescribe(&small,"b",true,0xffffff));
-        uint32_t *bits=large.GetBits();
-        std::vector<uint32_t> expected(bits,bits+64*64);
-        auto *screen=device->GetScreenImage();
-        screen->FillRect(Rect(0,0,64,64),Color::Black,0);
-        screen->Blt(&large,0,0,Rect(0,0,64,64),Color::White,0,false);
-        std::vector<uint32_t> expectedFrame(screen->GetBits(),screen->GetBits()+64*64);
-        small.GetBits(); /* smaller image is newer, as with foreground glyphs */
-        const auto loads=H1ImageCacheGetStats().loads;
-        H1ImageCacheSetBudget(24576);H1ImageCacheEndFrame();
-        assert(large.mBits&&!small.mBits&&H1ImageCacheGetStats().residentBytes<=24576);
-        assert(memcmp(large.GetBits(),expected.data(),64*64*4)==0);
-        screen->FillRect(Rect(0,0,64,64),Color::Black,0);
-        screen->Blt(&large,0,0,Rect(0,0,64,64),Color::White,0,false);
-        assert(memcmp(screen->GetBits(),expectedFrame.data(),64*64*4)==0);
-        assert(H1ImageCacheGetStats().loads==loads); /* background needs no reread */
-        H1ImageCacheEndFrame(); /* finish the background's new touch */
-        small.GetBits();H1ImageCacheSetBudget(5000);H1ImageCacheEndFrame();
-        assert(!large.mBits&&small.mBits); /* unused old background gets no pin */
-    }
-    H1ImageCacheSetBudget(20u*1024u*1024u);
 }
 
 static size_t OnePressureWithoutAllocation(size_t requested){
@@ -168,48 +144,21 @@ static size_t PressureWithoutAllocation(){
     size_t total=0;while(size_t n=OnePressureWithoutAllocation((size_t)-1))total+=n;return total;
 }
 static void TestPressureSelection(GLInterface *device){
-    H1ImageCacheSetBudget(20u*1024u*1024u);
-    {
-        GLImage big(device),small(device),current(device);
-        assert(H1ImageCacheDescribe(&big,"large",true,0xffffff));
-        assert(H1ImageCacheDescribe(&small,"small",true,0xffffff));
-        assert(H1ImageCacheDescribe(&current,"b",true,0xffffff));
-        big.GetBits();small.GetBits();H1ImageCacheEndFrame();current.GetBits();
-        auto stats=H1ImageCacheGetStats();
-        assert(OnePressureWithoutAllocation(20)==1028);
-        assert(big.mBits&&!small.mBits&&current.mBits);
-        assert(H1ImageCacheGetStats().evictions==stats.evictions+1);
-        const auto loads=H1ImageCacheGetStats().loads;
-        assert(small.GetBits()[1]==0xff285078u&&H1ImageCacheGetStats().loads==loads+1);
-        /* A prior-frame source outranks a smaller source already reused now. */
-        pvzh1_cache_complete_draw_batch();current.GetBits();
-        assert(OnePressureWithoutAllocation(20)==16388);
-        assert(!big.mBits&&small.mBits&&current.mBits);
-    }
-    {
-        GLImage small(device),middle(device),big(device);
-        assert(H1ImageCacheDescribe(&small,"small",true,0xffffff));
-        assert(H1ImageCacheDescribe(&middle,"b",true,0xffffff));
-        assert(H1ImageCacheDescribe(&big,"large",true,0xffffff));
-        small.GetBits();middle.GetBits();big.GetBits();H1ImageCacheEndFrame();
-        assert(OnePressureWithoutAllocation(3000)==4100);
-        assert(small.mBits&&!middle.mBits&&big.mBits);
-        assert(OnePressureWithoutAllocation(20000)==1028); /* no fit -> LRU */
-        assert(!small.mBits&&big.mBits);
-    }
-    {
-        GLImage combined(device),contiguous(device);
-        assert(H1ImageCacheDescribe(&combined,"b",true,0xffffff));
-        assert(H1ImageCacheDescribe(&contiguous,"large",true,0xffffff));
-        combined.GetBits();combined.GetNativeAlphaData(device);contiguous.GetBits();H1ImageCacheEndFrame();
-        /* Combined bytes exceed 5K but neither of its individual buffers does. */
-        assert(OnePressureWithoutAllocation(5000)==16388);
-        assert(combined.mBits&&combined.mNativeAlphaData&&!contiguous.mBits);
-    }
-    puts("staged pressure selection passed: one source/call, cold-first, smallest real-buffer fit, LRU fallback, current pins and exact reload");
+    GLImage large(device),small(device),current(device);int first=0,second=0;
+    assert(H1ImageCacheDescribe(&large,"large",true,0xffffff));
+    assert(H1ImageCacheDescribe(&small,"small",true,0xffffff));
+    assert(H1ImageCacheDescribe(&current,"b",true,0xffffff));
+    {H1ImageUseScope owner(H1ImageOwner::Operation,&first);large.GetBits();small.GetBits();}
+    {H1ImageUseScope owner(H1ImageOwner::Operation,&second);large.GetBits();current.GetBits();}
+    assert(OnePressureWithoutAllocation(SIZE_MAX)==0);
+    assert(large.mBits&&small.mBits&&current.mBits);
+    H1ImageResourcesReleaseOwner(H1ImageOwner::Operation,&first);
+    assert(large.mBits&&!small.mBits&&current.mBits);
+    H1ImageResourcesReleaseOwner(H1ImageOwner::Operation,&second);
+    assert(!large.mBits&&!small.mBits&&!current.mBits);
+    puts("explicit ownership passed: shared backing, last-owner release and no pressure eviction");
 }
 static void TestPressure(GLInterface *device){
-    H1ImageCacheSetBudget(20u*1024u*1024u);
     for(int mode=0;mode<4;++mode){
         GLImage source(device),old1(device),old2(device),dynamic(device);
         assert(H1ImageCacheDescribe(&source,"b",true,0xffffff));
@@ -224,13 +173,13 @@ static void TestPressure(GLInterface *device){
         };
         void *pointer=getter();unsigned char expected[8];memcpy(expected,pointer,8);
         H1ImageCacheEndFrame();assert(source.mBits&&old1.mBits&&old2.mBits);
-        assert(getter()==pointer); /* cached getters must pin, too */
-        assert(PressureWithoutAllocation()>=8200);
-        assert(!old1.mBits&&!old2.mBits&&source.mBits&&memcmp(pointer,expected,8)==0);
+        assert(getter()==pointer); /* repeated getters retain explicit ownership */
+        assert(PressureWithoutAllocation()==0);
+        assert(old1.mBits&&old2.mBits&&source.mBits&&memcmp(pointer,expected,8)==0);
         assert(dynamic.mBits&&dynamic.mBits[0]==0xffabcde0);
-        assert(old1.GetBits()[1]==0xff285078u); /* exact old-frame reload */
+        assert(old1.GetBits()[1]==0xff285078u); /* resident old-frame pixels */
     }
-    assert(nestedCalls>0);
+    assert(nestedCalls==0);
     {
         GLImage grid(device),old(device);
         assert(H1ImageCacheDescribe(&grid,"b",true,0xffffff));
@@ -240,11 +189,11 @@ static void TestPressure(GLInterface *device){
         protectedImage=&grid;injectArrayBytes=16*4;protectPalette=false;
         const unsigned before=injectedCalls;
         assert(grid.GetBits()[1]==0x78285078u);
-        assert(injectedCalls==before+1&&injectedFreed>0&&!old.mBits);
+        assert(injectedCalls==before+1&&injectedFreed==0&&old.mBits);
         /* Direct alpha changes also pin an already loaded, older image. */
         old.GetBits();H1ImageCacheEndFrame();injectArrayBytes=16*4;
         assert(H1ImageCacheSetAlpha(&grid,"small",2,2)&&grid.mBits&&grid.GetBits()[1]==0x78285078u);
-        assert(!old.mBits);
+        assert(old.mBits);
     }
     {
         GLImage source(device),old(device),dest(device);
@@ -254,7 +203,7 @@ static void TestPressure(GLInterface *device){
         /* The old palette branch obtains pointers before dest.GetBits allocates. */
         injectArrayBytes=(8*8+1)*4;
         dest.Blt(&source,0,0,Rect(0,0,8,8),Color::White,0,false);
-        assert(!injectArrayBytes&&source.mColorIndices&&source.mColorTable&&!old.mBits);
+        assert(!injectArrayBytes&&source.mColorIndices&&source.mColorTable&&old.mBits);
         assert(dest.GetBits()[1]==0xff274f77u); /* original /256 blend into alpha-zero destination */
         protectPalette=false;
     }
@@ -264,7 +213,7 @@ static void TestPressure(GLInterface *device){
         assert(H1ImageCacheDescribe(&old,"b",true,0xffffff));old.GetBits();H1ImageCacheEndFrame();
         protectedImage=&source;protectPalette=true;injectArrayBytes=256*4;
         std::unique_ptr<GLImage> colored(device->mApp->CreateColorizedImage(&source,Color::White));
-        assert(colored&&!injectArrayBytes&&!old.mBits&&source.mColorIndices&&source.mColorTable);
+        assert(colored&&!injectArrayBytes&&old.mBits&&source.mColorIndices&&source.mColorTable);
         assert(colored->GetBits()[1]==0xfe274f77u); /* original color helper arithmetic */
         protectPalette=false;
     }
@@ -281,17 +230,17 @@ static void TestPressure(GLInterface *device){
         forbidAllocation=false;assert(allocations==count&&completed.mBits);
         assert(H1ImageCacheGetStats().frames==frames);
         uint32_t *current=active.GetBits();const uint32_t expected=current[1];
-        assert(PressureWithoutAllocation()>0&&!completed.mBits&&active.mBits);
+        assert(PressureWithoutAllocation()==0&&completed.mBits&&active.mBits);
         assert(current[1]==expected&&H1ImageCacheGetStats().frames==frames);
         assert(completed.GetBits()[1]==0xff285078u);
     }
     uint64_t calls=0,evicted=0,bytes=0;pvzh1_cache_pressure_stats(&calls,&evicted,&bytes);
-    assert(calls>0&&evicted>0&&bytes>0);
+    assert(calls>0&&evicted==0&&bytes==0);
     auto stats=H1ImageCacheGetStats();
     assert(pvzh1_cache_diagnostic[0]==stats.residentBytes&&pvzh1_cache_diagnostic[1]==stats.peakBytes);
     assert(pvzh1_cache_diagnostic[2]==stats.loads&&pvzh1_cache_diagnostic[3]==stats.evictions);
     assert(pvzh1_cache_diagnostic[4]==stats.frames&&pvzh1_cache_diagnostic[5]==(uint32_t)pvzh1_image_pixel_bytes_loaded());
-    puts("allocation pressure passed: zero allocations, old-frame-only/full reclaim, current getters/palettes, alpha-row loading, original color helper, recursion guard, exact reload");
+    puts("allocation hooks passed: no implicit eviction, stable getter/palette/alpha pointers and exact diagnostics");
 }
 
 int main()
@@ -418,6 +367,6 @@ int main()
     }
     TestCache(device);TestPressure(device);
     printf("software graphics passed: native MemoryImage/SWTri blit, alpha, tint, additive, mirror, stretch, rotate, matrix, triangles, repeat, coverage, transforms, present\n");
-    puts("lazy image cache passed: metadata, original alpha color, frame pins, eviction/reload, sanding replay, mutation safety");
+    puts("image resources passed: metadata, exact alpha/color, shared owners, deterministic release/reload, sanding replay, mutation safety");
     return 0;
 }

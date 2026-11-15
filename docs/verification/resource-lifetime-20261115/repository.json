@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "sdk_commit": "067fe072477861dfc8949d7b1a55279fb92d2548",
+  "upstream_files": 753,
+  "runtime_files": 2674,
+  "runtime_bytes": 166759394,
+  "prebuilt_sha256": "cf22401b7011151e782221b21ccad9f3cec9393ae3c0c1eec3883e8e8a158ea7",
+  "BDA_validation": true,
+  "desktop_title": "\u690d\u7269\u50f5\u5c38",
+  "offline_definitions": 253,
+  "native_repository_inputs_verified": 285,
+  "scope": "Source, resource bytes and tested BDA envelope; not a new hardware test"
+}

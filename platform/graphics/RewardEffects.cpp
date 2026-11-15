@@ -1,4 +1,3 @@
-#include "TrustedResources.h"
 /* The asset contains finished shader contributions, not source textures.
  * Only a clock, LCD translation and bounded pixel blending run on H1.
  * SPDX-License-Identifier: LGPL-3.0-or-later */
@@ -15,24 +14,31 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <fcntl.h>
+#include <unistd.h>
 #include <cstring>
 #include <new>
-#include <zlib.h>
+#include <stdexcept>
 extern "C" {volatile uint32_t pvzh1_reward_effect_diagnostic[12];}
 namespace {
-struct Cache {uint8_t** pages=nullptr;uint32_t* palette=nullptr;uint8_t* frame[2]{};uint32_t local[2][256]{};unsigned localCount[2]{},frameStart[2]{},passes[2]{};unsigned capacity[2]{},current[2]{~0u,~0u},frameBytes[2]{};unsigned bytes=0,count=0,colors=0,table=0,bounds=0;bool tried=false;} cache;
+struct Record {uint32_t offset,bytes;int16_t bounds[4];};
+struct Cache {int file=-1;Record* records=nullptr;uint8_t* input=nullptr;uint32_t* palette=nullptr;uint8_t* frame[2]{};uint32_t local[2][256]{};unsigned localCount[2]{},frameStart[2]{},passes[2]{};unsigned capacity[2]{},current[2]{~0u,~0u},frameBytes[2]{};unsigned inputBytes=0,count=0,colors=0;bool tried=false;} cache;
 struct Live {PvzpParticleSystem* system=nullptr;unsigned age=0,kind=0;} live[8];
 bool enabled=true,starburstSpawn=false;
 unsigned U16(const uint8_t* p){return unsigned(p[0])|(unsigned(p[1])<<8);}
 unsigned U32(const uint8_t* p){return U16(p)|(U16(p+2)<<16);}
-struct Reader {unsigned at;const uint8_t* plain=nullptr;uint8_t Byte(){unsigned p=at++;return plain?plain[p]:cache.pages[p>>12][p&4095];}
+struct Reader {unsigned at;const uint8_t* plain;uint8_t Byte(){return plain[at++];}
  unsigned Short(){unsigned n=Byte();return n|(Byte()<<8);}unsigned Word(){unsigned n=Short();return n|(Short()<<16);}
  unsigned Index(){unsigned n=Byte();return n<128?n:(n&127)|(Byte()<<7);}};
-void Drop(){if(cache.pages){for(unsigned i=0;i<(cache.bytes+4095)/4096;++i)delete[] cache.pages[i];delete[] cache.pages;}delete[] cache.palette;for(auto* p:cache.frame)delete[] p;cache={};pvzh1_reward_effect_diagnostic[0]=0;}
+void Drop(){if(cache.file>=0)close(cache.file);delete[] cache.records;delete[] cache.input;delete[] cache.palette;for(auto* p:cache.frame)delete[] p;cache={};pvzh1_reward_effect_diagnostic[0]=0;}
 bool Frame(unsigned index){
  unsigned kind=index>=181;if(cache.current[kind]==index)return true;
- Reader entry{cache.table+index*16};if(entry.Word()!=kind)return false;entry.Word();unsigned start=entry.Word(),bytes=entry.Word();if(start>cache.bytes||bytes<5||bytes>cache.bytes-start)return false;
- Reader input{start};unsigned expected=input.Word(),end=start+bytes,written=0;auto* out=cache.frame[kind];if(!out||expected>cache.capacity[kind])return false;
+ const auto& record=cache.records[index];
+ if(cache.current[kind]<cache.count&&cache.records[cache.current[kind]].offset==record.offset){cache.current[kind]=index;return true;}
+ if(lseek(cache.file,record.offset,SEEK_SET)!=off_t(record.offset)||read(cache.file,cache.input,record.bytes)!=ssize_t(record.bytes))
+  throw std::runtime_error("Unable to read offline reward frame");
+ ++pvzh1_reward_effect_diagnostic[11];
+ Reader input{0,cache.input};unsigned expected=input.Word(),end=record.bytes,written=0;auto* out=cache.frame[kind];if(!out||expected>cache.capacity[kind])return false;
  auto length=[&](unsigned n){if(n==15){unsigned c;do{if(input.at>=end)return ~0u;c=input.Byte();if(c>expected||n>expected-c)return ~0u;n+=c;}while(c==255);}return n;};
  while(input.at<end){unsigned token=input.Byte(),literal=length(token>>4);if(literal>expected-written||literal>end-input.at)return false;while(literal--)out[written++]=input.Byte();
   if(input.at==end)break;if(input.at+2>end)return false;unsigned offset=input.Short();if(!offset||offset>written)return false;unsigned match=length(token&15);if(match>expected-written||match+4>expected-written)return false;match+=4;
@@ -42,31 +48,38 @@ bool Frame(unsigned index){
  for(unsigned i=0;i<colors;++i){unsigned id=header.Short();if(id>=cache.colors||(!i&&id))return false;cache.local[kind][i]=cache.palette[id];}
  cache.localCount[kind]=colors;cache.frameStart[kind]=header.at;cache.passes[kind]=passes;cache.current[kind]=index;cache.frameBytes[kind]=written;++pvzh1_reward_effect_diagnostic[9];return true;
 }
-bool InitializeMetadata(){
- Reader r{0};unsigned h[16];for(auto& n:h)n=r.Word();
- cache.count=h[5];cache.colors=h[4];cache.table=h[7];cache.bounds=h[15];cache.palette=new(std::nothrow) uint32_t[h[4]];if(!cache.palette)return false;
- r.at=64;for(unsigned i=0;i<h[4];++i)cache.palette[i]=r.Word();
- for(unsigned i=0;i<cache.count;++i){Reader e{cache.table+i*16};unsigned kind=e.Word();e.Word();unsigned start=e.Word();e.Word();Reader n{start};cache.capacity[kind]=std::max(cache.capacity[kind],n.Word());}
- for(unsigned k=0;k<2;++k){cache.frame[k]=new(std::nothrow) uint8_t[cache.capacity[k]];if(!cache.frame[k])return false;}
- return true;
-}
-
 bool Load(const char* alternate=nullptr){
- auto path=Sexy::GetResourcePath("reward-effects.h1re");FILE* f=fopen(alternate?alternate:path.c_str(),"rb");if(!f)return false;
- unsigned char header[16];bool ok=fread(header,1,16,f)==16&&U32(header)==0x5a523148&&U32(header+4)==1;
- unsigned bytes=ok?U32(header+8):0,expected=ok?U32(header+12):0;
- if(bytes<64||bytes>12*1024*1024)ok=false;
- if(ok){cache.bytes=bytes;cache.pages=new(std::nothrow) uint8_t*[(bytes+4095)/4096]{};if(!cache.pages)ok=false;}
- z_stream stream{};bool initialized=ok&&H1ResourceInflateInit(&stream)==Z_OK;ok=ok&&initialized;unsigned char input[4096];int state=Z_OK;
- for(unsigned page=0;ok&&page<(bytes+4095)/4096;++page){unsigned n=std::min(4096u,bytes-page*4096);cache.pages[page]=new(std::nothrow) uint8_t[n];if(!cache.pages[page]){ok=false;break;}
-  stream.next_out=cache.pages[page];stream.avail_out=n;
-  while(ok&&stream.avail_out){if(!stream.avail_in){stream.avail_in=fread(input,1,sizeof(input),f);stream.next_in=input;if(!stream.avail_in){ok=false;break;}}
-   state=inflate(&stream,Z_NO_FLUSH);if(state!=Z_OK&&state!=Z_STREAM_END)ok=false;if(state==Z_STREAM_END&&stream.avail_out)ok=false;}
+ const auto path=Sexy::GetResourcePath("reward-effects.h1re");int flags=O_RDONLY;
+#ifdef O_BINARY
+ flags|=O_BINARY;
+#endif
+ cache.file=open(alternate?alternate:path.c_str(),flags);if(cache.file<0)return false;
+ // This is an offline-indexed trusted pack. No whole-file inflation, CRC,
+ // decoded bank or per-frame allocation is needed on the device.
+ // Use read directly: H1 newlib built with -Os refills a one-byte
+ // unbuffered stdio buffer and would issue one SD read per byte.
+ auto exact=[&](void* p,unsigned n){return read(cache.file,p,n)==ssize_t(n);};
+ auto seek=[&](unsigned at){return lseek(cache.file,at,SEEK_SET)==off_t(at);};
+ uint8_t header[64],entries[212*16],bounds[212*8];
+ bool ok=exact(header,64)&&U32(header)==0x45523148&&U32(header+4)==5&&U32(header+20)==212;
+ if(!ok){Drop();return false;}
+ cache.count=212;cache.colors=U32(header+16);
+ cache.records=new(std::nothrow) Record[cache.count];cache.palette=new(std::nothrow) uint32_t[cache.colors];
+ if(!cache.records||!cache.palette){Drop();return false;}
+ ok=exact(cache.palette,cache.colors*4);
+ ok=ok&&seek(U32(header+28))&&exact(entries,sizeof(entries));
+ ok=ok&&seek(U32(header+60))&&exact(bounds,sizeof(bounds));
+ if(!ok){Drop();return false;}
+ for(unsigned i=0;i<212;++i){auto& r=cache.records[i];const auto* e=entries+i*16;r.offset=U32(e+8);r.bytes=U32(e+12);
+  for(unsigned j=0;j<4;++j)r.bounds[j]=int16_t(U16(bounds+i*8+j*2));
+  cache.capacity[i>=181]=std::max(cache.capacity[i>=181],U32(e));cache.inputBytes=std::max(cache.inputBytes,r.bytes);
  }
- if(ok&&state!=Z_STREAM_END){unsigned char extra;stream.next_out=&extra;stream.avail_out=1;state=inflate(&stream,Z_FINISH);}
- if(ok&&(state!=Z_STREAM_END||stream.total_out!=bytes||stream.avail_in||fgetc(f)!=EOF))ok=false;
- if(initialized)inflateEnd(&stream);fclose(f);if(ok)ok=InitializeMetadata();if(!ok){Drop();return false;}
- pvzh1_reward_effect_diagnostic[0]=cache.bytes+cache.colors*4+((cache.bytes+4095)/4096)*sizeof(void*)+cache.capacity[0]+cache.capacity[1];pvzh1_reward_effect_diagnostic[10]=cache.capacity[0]+cache.capacity[1];++pvzh1_reward_effect_diagnostic[1];return true;
+ cache.input=new(std::nothrow) uint8_t[cache.inputBytes];
+ for(unsigned k=0;k<2;++k)cache.frame[k]=new(std::nothrow) uint8_t[cache.capacity[k]];
+ if(!cache.input||!cache.frame[0]||!cache.frame[1]||!Frame(0)||!Frame(181)){Drop();return false;}
+ pvzh1_reward_effect_diagnostic[0]=sizeof(Record)*cache.count+cache.colors*4+cache.inputBytes+cache.capacity[0]+cache.capacity[1];
+ cache.tried=true;
+ pvzh1_reward_effect_diagnostic[10]=cache.capacity[0]+cache.capacity[1];++pvzh1_reward_effect_diagnostic[1];return true;
 }
 Live* Find(PvzpParticleSystem* s){for(auto& l:live)if(l.system==s)return &l;return nullptr;}
 __attribute__((always_inline)) inline uint32_t Blend(uint32_t d,uint32_t s,unsigned mode){
@@ -81,9 +94,9 @@ __attribute__((always_inline)) inline uint32_t Blend(uint32_t d,uint32_t s,unsig
  if(s>>24==255)return s;unsigned a=s>>24;return 0xff000000u|((s&0xffffffu)+((((d&0xff00ffu)*a)>>8)&0xff00ffu)+((((d&0xff00u)*a)>>8)&0xff00u));
 }
 bool Draw(unsigned kind,unsigned age,Sexy::Graphics* g,int cx,int cy){
- using namespace Sexy;auto* screen=H1GetPhysicalScreen(dynamic_cast<GLImage*>(g->mDestImage));if(!cache.pages||!screen||!screen->Active()||!screen->mGLInterface->mTransformStack.empty()||g->mScaleX!=1||g->mScaleY!=1||g->mColorizeImages||g->mDrawMode!=Graphics::DRAWMODE_NORMAL)return false;
+ using namespace Sexy;auto* screen=H1GetPhysicalScreen(dynamic_cast<GLImage*>(g->mDestImage));if(!cache.records||!screen||!screen->Active()||!screen->mGLInterface->mTransformStack.empty()||g->mScaleX!=1||g->mScaleY!=1||g->mColorizeImages||g->mDrawMode!=Graphics::DRAWMODE_NORMAL)return false;
  auto* target=screen->Target();if(target!=h1DirtyCanvas.owner||target->mWidth!=480||target->mHeight!=272)return false;
- unsigned frame=std::min(kind?30u:180u,(age*3+5)/10),index=(kind?181:0)+frame;Reader bounds{cache.bounds+index*8};int minx=bounds.Short(),maxx=bounds.Short(),miny=bounds.Short(),maxy=bounds.Short();if(cx<minx||cx>maxx||cy<miny||cy>maxy)return false;
+ unsigned frame=std::min(kind?30u:180u,(age*3+5)/10),index=(kind?181:0)+frame;const auto* bounds=cache.records[index].bounds;int minx=bounds[0],maxx=bounds[1],miny=bounds[2],maxy=bounds[3];if(cx<minx||cx>maxx||cy<miny||cy>maxy)return false;
  if(!Frame(index))return false;Reader data{cache.frameStart[kind],cache.frame[kind]};
  unsigned passes=cache.passes[kind];const int dx=cx-480,dy=cy-272;auto clip=screen->MapRect(g->mClipRect).Intersection(Rect(0,0,480,272));
  H1CanvasKnownDraw damage(target,clip.mX,clip.mY,clip.mWidth,clip.mHeight);auto* pixels=target->mBits.get();
@@ -103,9 +116,9 @@ bool Draw(unsigned kind,unsigned age,Sexy::Graphics* g,int cx,int cy){
 }
 void Fallback(PvzpParticleSystem* s){auto* l=Find(s);if(!l)return;unsigned age=l->age;*l={};++pvzh1_reward_effect_diagnostic[7];while(age--&&!s->mDead)s->Update();}
 }
-void H1RewardEffectsPrepare(){if(!enabled||cache.tried)return;cache.tried=true;if(!Load()){cache.tried=true;++pvzh1_reward_effect_diagnostic[2];}}
+void H1RewardEffectsPrepare(){if(!enabled||cache.tried)return;cache.tried=true;if(!Load()){cache.tried=true;++pvzh1_reward_effect_diagnostic[2];throw std::runtime_error("Unable to prepare offline reward frames");}}
 bool H1RewardEffectsBegin(PvzpParticleSystem* s){
- if(!enabled||!cache.pages||!gLawnApp||!gLawnApp->mBoard||s->mDead)return false;
+ if(!enabled||!cache.records||!gLawnApp||!gLawnApp->mBoard||s->mDead)return false;
  unsigned kind=s->mEffectType==PARTICLE_STARBURST?1:0;
  if(kind?!starburstSpawn:(s->mEffectType!=PARTICLE_SEED_PACKET_PICKUP||gLawnApp->mBoard->mBoardFadeOutCounter<0))return false;
  for(auto& l:live)if(!l.system||l.system==s){l={s,0,kind};++pvzh1_reward_effect_diagnostic[3];return true;}return false;

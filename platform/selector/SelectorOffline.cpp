@@ -655,7 +655,11 @@ void H1SelectorOfflineWelcomeEnd(GameSelector* selector,Sexy::Graphics* g){
     state.resident+=count*sizeof(WelcomePixel);w.capturing=false;w.ready=true;Add(13);Count();
 }
 #endif
-void H1SelectorOfflineRelease(GameSelector* selector){if(state.owner==selector){if(state.preculled)Detach();else Clear();}}
+void H1SelectorOfflineRelease(GameSelector* selector){
+    // The menu's owner has ended. Its expanded pixels and visibility data
+    // must not follow the board until an unrelated allocation fails.
+    if(state.owner==selector)Clear();
+}
 extern "C" void pvzh1_selector_shutdown(){Clear();}
 extern "C" size_t pvzh1_selector_release_idle(size_t){
     if(state.owner||!state.loaded)return 0;

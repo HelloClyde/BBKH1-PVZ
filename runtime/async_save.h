@@ -97,10 +97,12 @@ static unsigned save_profile_delete(SaveJob *job){
     ++pvzh1_delete_diagnostic[1];if(error)++pvzh1_delete_diagnostic[5];return error;
 }
 static SaveJob *save_next_job(void){
+    const uint32_t irq=save_irq_lock();
     SaveJob *next=0;
     for(unsigned i=0;i<SAVE_SLOTS;++i){SaveJob *j=save_jobs[i];
         if(j&&j->state<=1&&(!next||(int32_t)(j->sequence-next->sequence)<0))next=j;}
-    return next&&next->state==1?next:0;
+    if(next&&next->state==1)next->state=2;else next=0;
+    save_irq_unlock(irq);return next;
 }
 static void save_worker(void *unused){
     (void)unused;
@@ -108,7 +110,7 @@ static void save_worker(void *unused){
         int work=0;
         SaveJob *job;
         while((job=save_next_job())!=0){
-            save_barrier();job->state=2;work=1;unsigned start=h1_raw_tick_80hz();
+            work=1;unsigned start=h1_raw_tick_80hz();
             job->result=job->operation?save_profile_delete(job):save_commit(job);job->ticks=h1_raw_tick_80hz()-start;
             if(job->operation)pvzh1_delete_diagnostic[6]=job->ticks;
             ++pvzh1_async_save_diagnostic[3];pvzh1_async_save_diagnostic[8]+=job->ticks;
@@ -136,19 +138,29 @@ static int save_start(void){
     }
     irq=save_irq_lock();*(volatile uint32_t*)0x8057b6d4u=save_previous_tick;save_previous_tick=0;save_irq_unlock(irq);return 0;
 }
+static void save_collect(void);
 void pvzh1_save_service(void){
+    save_collect();
     int pending=0;
     // The changed player list has reached the LCD before deletion starts.
     // A state-0 command also holds later FIFO writes behind that boundary.
+    const uint32_t irq=save_irq_lock();
     for(unsigned i=0;i<SAVE_SLOTS;++i){SaveJob *job=save_jobs[i];
         if(job&&job->state==0){save_barrier();job->state=1;}
         if(job&&job->state<3)pending=1;}
+    save_irq_unlock(irq);
     const uint32_t now=h1_raw_tick_80hz();
     if(pending&&now-save_last_yield>=2){save_last_yield=now;save_delay();audio_io_yield();}
+    save_collect();
 }
 static void save_collect(void){
-    for(unsigned i=0;i<SAVE_SLOTS;++i){SaveJob *job=save_jobs[i];if(!job||job->state!=3)continue;
-        save_barrier();save_jobs[i]=0;save_barrier();
+    for(unsigned i=0;i<SAVE_SLOTS;++i){
+        const uint32_t irq=save_irq_lock();SaveJob *job=save_jobs[i];
+        if(job&&job->state==3)save_jobs[i]=0;else job=0;
+        save_irq_unlock(irq);if(!job)continue;
+        // Claim/scan/detach share one scheduling guard. Nothing can still be
+        // inspecting this completed job after its slot has been detached.
+        // Allocation and filesystem work always stay outside that guard.
         pvzh1_async_save_diagnostic[6]-=sizeof(*job)+job->size;
         --pvzh1_async_save_diagnostic[1];free(job);
     }
@@ -164,12 +176,14 @@ void pvzh1_save_wait(const char *path){
     if(!save_priority)return;
     char native[512];int all=!path;if(!all&&pvz_native_path(path,native,sizeof(native)))return;
     for(;;){int pending=0;
+        const uint32_t irq=save_irq_lock();
         for(unsigned i=0;i<SAVE_SLOTS;++i){SaveJob *job=save_jobs[i];
             if(job&&(all||save_affects_path(job,native))&&job->state<3){
                 // An explicit same-file dependency or shutdown must not wait
                 // for another frame to grant the pending command execution.
                 if(job->state==0){save_barrier();job->state=1;}
                 pending=1;break;}}
+        save_irq_unlock(irq);
         if(!pending)break;save_delay();audio_io_yield();
     }
     save_collect();
@@ -187,10 +201,11 @@ int pvzh1_save_enqueue(const char *path,const void *data,size_t size){
     memcpy(job->temporary,job->path,n);memcpy(job->temporary+n,".h1tmp",7);
     memcpy(job->backup,job->path,n);memcpy(job->backup+n,".h1bak",7);
     memcpy(job->data,data,size);job->size=size;job->sequence=++save_sequence;job->state=1;
-    save_barrier();save_jobs[slot]=job;save_barrier();
+    const uint32_t irq=save_irq_lock();
     ++pvzh1_async_save_diagnostic[0];++pvzh1_async_save_diagnostic[1];
     pvzh1_async_save_diagnostic[6]+=sizeof(*job)+size;
     if(pvzh1_async_save_diagnostic[6]>pvzh1_async_save_diagnostic[7])pvzh1_async_save_diagnostic[7]=pvzh1_async_save_diagnostic[6];
+    save_barrier();save_jobs[slot]=job;save_irq_unlock(irq);
     return 1;
 }
 int pvzh1_delete_profile_enqueue(const char *root,int id,unsigned modes){
@@ -205,11 +220,12 @@ int pvzh1_delete_profile_enqueue(const char *root,int id,unsigned modes){
     snprintf(job->backup,sizeof(job->backup),"game%d_",id);
     job->size=bytes;job->operation=1;job->modes=modes;job->sequence=++save_sequence;
     job->state=0; // Released by the next presented-frame callback.
-    save_barrier();save_jobs[slot]=job;save_barrier();
+    const uint32_t irq=save_irq_lock();
     ++pvzh1_async_save_diagnostic[0];++pvzh1_async_save_diagnostic[1];
     pvzh1_async_save_diagnostic[6]+=sizeof(*job)+bytes;
     if(pvzh1_async_save_diagnostic[6]>pvzh1_async_save_diagnostic[7])pvzh1_async_save_diagnostic[7]=pvzh1_async_save_diagnostic[6];
-    ++pvzh1_delete_diagnostic[0];pvzh1_delete_diagnostic[7]=(unsigned)id;return 1;
+    ++pvzh1_delete_diagnostic[0];pvzh1_delete_diagnostic[7]=(unsigned)id;
+    save_barrier();save_jobs[slot]=job;save_irq_unlock(irq);return 1;
 }
 void pvzh1_save_shutdown(void){
     if(!save_priority)return;

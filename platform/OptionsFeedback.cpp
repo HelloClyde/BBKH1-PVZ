@@ -1,3 +1,4 @@
+#include "graphics/ImageLifetime.h"
 #include "OptionsFeedback.h"
 #include "SDL.h"
 #include <cstdint>
@@ -27,6 +28,7 @@ extern "C" { volatile uint32_t pvzh1_options_preclean_test; }
 #endif
 namespace {bool drawn=false;}
 void H1OptionsPrepare(){
+    Sexy::H1ImageUseScope commonUI(Sexy::H1ImageOwner::CommonUI,nullptr);
     ++pvzh1_options_diagnostic[6];const uint32_t start=SDL_GetTicks();
     pvzh1_options_diagnostic[7]=pvzh1_options_diagnostic[9]=0;
     // Small, fixed UI textures remain resident at their offline resolution.

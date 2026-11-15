@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\reward-effects.h1re",
+  "target": "B:\\应用\\数据\\游戏\\PVZ\\reward-effects.h1re",
+  "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c7265776172642d656666656374732e68317265",
+  "phase": "done",
+  "completed": true,
+  "size": 1220539,
+  "crc32": 957136273,
+  "sha256": "eb07f7348d277bfffa4d74e94f7f02858e45f7119ef09323e3396f16c97c3133",
+  "token": 63,
+  "received": 1220539,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 63,
+    "size": 1220539,
+    "received": 1220539,
+    "expected_crc": 957136273,
+    "actual_crc": 957136273,
+    "verify_offset": 1220539,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 9,
+    "old_size": 934748,
+    "old_crc": 2830333421,
+    "last_activity_tick": 3393077,
+    "step_count": 834,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "B:\\应用\\数据\\游戏\\PVZ\\reward-effects.h1re",
+    "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D0000003F.TMP",
+    "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D0000003F.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 221.35899999993853
+}

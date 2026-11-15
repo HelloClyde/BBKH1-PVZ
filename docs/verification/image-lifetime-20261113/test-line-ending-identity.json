@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "files": [
+    {
+      "source": "tools/tests/selector_offline_engine_probe.cpp",
+      "tested_sha256": "0a601b136af5aa30722a5b4ef3a8dfe3b578faaf10a163fd4ab2b2df167d6c63",
+      "current_sha256": "0a601b136af5aa30722a5b4ef3a8dfe3b578faaf10a163fd4ab2b2df167d6c63",
+      "only_CRLF_line_endings_changed": true
+    }
+  ]
+}

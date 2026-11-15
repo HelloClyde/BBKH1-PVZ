@@ -275,3 +275,17 @@ extern "C" std::size_t pvzh1_text_replay_release_pressure(std::size_t){
     const std::size_t bytes=old->bytes;Drop(*old);Stats();return bytes;
 }
 extern "C" void pvzh1_text_scratch_shutdown(){using namespace Sexy;delete[] state.scratch;state.scratch=nullptr;}
+extern "C" void pvzh1_render_plan_forget_image(void*) __attribute__((weak));
+extern "C" void pvzh1_render_plan_shutdown() __attribute__((weak));
+extern "C" void pvzh1_image_storage_released(void* image){
+    Sexy::H1ImageReplayForget(static_cast<Sexy::MemoryImage*>(image));
+    if(pvzh1_render_plan_forget_image)pvzh1_render_plan_forget_image(image);
+}
+extern "C" void pvzh1_image_scene_finished(){
+    using namespace Sexy;
+    if(state.busy||state.capture)return;
+    for(auto& entry:state.entries)if(entry.text)Drop(entry);
+    delete[] state.scratch;state.scratch=nullptr;
+    state.matrixSeenCount=state.matrixSeenNext=0;state.disabled=false;Stats();
+    if(pvzh1_render_plan_shutdown)pvzh1_render_plan_shutdown();
+}

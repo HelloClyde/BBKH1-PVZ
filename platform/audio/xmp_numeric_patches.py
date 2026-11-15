@@ -67,6 +67,16 @@ double libxmp_note_to_period_mix(int n, int b)
             assert text.count(old)==1
             text=text.replace(old,new)
         else:
+            old='\tCLAMP(total_size, 5 * 49170 * 2 / 20, XMP_MAX_FRAMESIZE);'
+            new='''#ifdef H1_PVZ_PORTABLE
+	/* The bound above already includes the current rate, output channels,
+	 * maximum time factor and minimum BPM. H1 uses 16000 Hz mono; the
+	 * historical 49170 Hz stereo floor wastes 120 KiB per active player. */
+	CLAMP(total_size, 1, XMP_MAX_FRAMESIZE);
+#else
+	CLAMP(total_size, 5 * 49170 * 2 / 20, XMP_MAX_FRAMESIZE);
+#endif'''
+            assert text.count(old)==1;text=text.replace(old,new)
             old='\t\tstep = C4_PERIOD * c5spd / s->freq / vi->period;'
             new='''#ifdef H1_PVZ_PORTABLE
 		if (!h1_xmp_step_read(&h1_step_cache,c5spd,s->freq,vi->period,&step)) {

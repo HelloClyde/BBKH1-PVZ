@@ -60,6 +60,8 @@ int pvz_runtime_main(void){
     if(pvzp_window_close)pvzp_window_close();
     exit_ready=0;
     __deregister_frame(__eh_frame_start);
-    pvz_runtime_shutdown();pvz_runtime_diagnostic[1]=status?0xffu:9;
+    pvz_runtime_shutdown();
+    if(status)pvz_runtime_flush_failure();
+    pvz_runtime_diagnostic[1]=status?0xffu:9;
     return status;
 }

@@ -347,3 +347,8 @@ extern "C" std::size_t pvzh1_render_plan_release_pressure(std::size_t){
 extern "C" void pvzh1_render_plan_shutdown(){
     using namespace Sexy;if(state.busy||state.active.entry){Add(12);return;}for(auto& e:state.entries)if(e.phase!=Empty)Drop(e);Add(16);Stats();
 }
+extern "C" void pvzh1_render_plan_forget_image(void* image){
+    using namespace Sexy;if(state.busy||state.active.entry){Add(12);return;}
+    for(auto& entry:state.entries)if(entry.phase!=Empty&&entry.key.source==image)Drop(entry);
+    Stats();
+}

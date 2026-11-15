@@ -1,0 +1,40 @@
+{
+  "operation": "file_put",
+  "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\bbk H1\\BBKH1-PVZ\\private\\resources-h1-wide\\resource-files.h1fi",
+  "target": "B:\\应用\\数据\\游戏\\PVZ\\resource-files.h1fi",
+  "target_gbk_hex": "423a5cd3a6d3c35ccafdbedd5cd3cecfb75c50565a5c7265736f757263652d66696c65732e68316669",
+  "phase": "done",
+  "completed": true,
+  "size": 114114,
+  "crc32": 3808643231,
+  "sha256": "b5d2719b5ff3df286da78798a65ac573057fe68c4cce47f31e29b029b34e2bd9",
+  "token": 65,
+  "received": 114114,
+  "status": {
+    "version": 1,
+    "state": 5,
+    "token": 65,
+    "size": 114114,
+    "received": 114114,
+    "expected_crc": 3808643231,
+    "actual_crc": 3808643231,
+    "verify_offset": 114114,
+    "error": 0,
+    "fs_errno": 0,
+    "flags": 9,
+    "old_size": 114114,
+    "old_crc": 922990109,
+    "last_activity_tick": 3399926,
+    "step_count": 93,
+    "reserved": 0,
+    "state_name": "done",
+    "error_name": "ok"
+  },
+  "paths": {
+    "target": "B:\\应用\\数据\\游戏\\PVZ\\resource-files.h1fi",
+    "temporary": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000041.TMP",
+    "backup": "B:\\应用\\数据\\游戏\\PVZ\\H1D00000041.BAK"
+  },
+  "device_crc_verified": true,
+  "elapsed_seconds": 24.25
+}

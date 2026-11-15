@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "groups": 7,
+  "compared_blocks": 50400,
+  "PCM_and_timing_equal": true,
+  "unit": {
+    "passed": true,
+    "checks": 184092,
+    "note_entry_bytes": 16,
+    "step_entry_bytes": 24,
+    "note_table_with_stats": 2104,
+    "step_table_with_stats": 1584
+  },
+  "source_patch_sha256": "aeb87e866d5248c645820ca6526c6b5cd31056a8c1e28026140c3ad48a2ae46d"
+}

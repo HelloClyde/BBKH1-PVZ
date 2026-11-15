@@ -10,6 +10,7 @@
 #include "graphics/Graphics.h"
 #include "graphics/PhysicalScreen.h"
 #include "graphics/ScreenLayout.h"
+#include "graphics/ImageLifetime.h"
 #include "selector/SelectorOffline.h"
 #include <vector>
 #include <fstream>
@@ -112,13 +113,17 @@ extern "C" void pvzh1_offline_selector_engine_probe(){
     const uint32_t resident=pvzh1_selector_offline_diagnostic[2],groups=pvzh1_selector_offline_diagnostic[4],welcome=pvzh1_selector_offline_diagnostic[6];
     H1SelectorOfflineRelease(selector);
     const uint32_t retained=pvzh1_selector_offline_diagnostic[2];
-    Check(retained<=2100000,"scene release must drop hand animation and username data");
-    if(retained){const auto opens=pvzh1_selector_offline_diagnostic[11];Pair(selector);Check(pvzh1_selector_offline_diagnostic[11]==opens+1,"return should reuse base menu and load only hand frames");}
+    Check(resident>0&&retained==0,"menu owner release must drop all expanded menu data");
+    Pair(selector);Check(pvzh1_selector_offline_diagnostic[2]>0,"return to menu failed to reload its data");
+    H1ImageResourcesBeginScene(H1ImageScene::Board);
+    Check(pvzh1_selector_offline_diagnostic[2]==0,"board entry retained pending menu data");
+    H1ImageResourcesBeginScene(H1ImageScene::Menu);Pair(selector);
+    Check(pvzh1_selector_offline_diagnostic[2]>0,"menu data did not reload after scene transition");
     pvzh1_selector_shutdown();Check(pvzh1_selector_offline_diagnostic[2]==0,"shutdown must release retained menu");
     std::ofstream out(std::filesystem::path(std::getenv("PVZ_HOST_OUTPUT"))/"selector-offline-engine-verification.json");
     out<<"{\"test_only\":true,\"all_passed\":true,\"checks\":"<<checks<<",\"full_frame_pixel_cases\":"<<cases
        <<",\"clipped_page_cases\":"<<pageCases<<",\"hidden_page_skips\":"<<pvzh1_selector_cull_diagnostic[0]
        <<",\"group_hits\":"<<groups<<",\"button_state_hits\":"<<buttonHits<<",\"welcome_hits\":"<<welcome
-       <<",\"resident_requested_bytes\":"<<resident<<",\"released_bytes\":0,\"warm_bundle_opens\":0,\"original_attachments_preserved\":true,\"starting_retains_cache\":true,\"fallback_states\":[\"open\",\"slide\",\"parent_tint\",\"hover_fade\"],\"gameplay_input_proof\":false}\n";
+       <<",\"resident_requested_bytes\":"<<resident<<",\"released_bytes\":"<<resident<<",\"menu_release_retained_bytes\":"<<retained<<",\"board_entry_retained_bytes\":0,\"menu_reloaded_after_return\":true,\"original_attachments_preserved\":true,\"starting_retains_cache\":true,\"fallback_states\":[\"open\",\"slide\",\"parent_tint\",\"hover_fade\"],\"gameplay_input_proof\":false}\n";
     gLawnApp->mPlayerInfo=old;
 }

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "concurrent_jobs": 20000,
+  "fifo_and_presented_frame_gate": true,
+  "claimed_jobs_not_freed": true,
+  "completed_payload_reclaimed_by_frame": true,
+  "allocator_only_on_foreground": true,
+  "native_scheduler_tested": false,
+  "source_sha256": "bcb23ac9bd4befaa6b500c9d81f8137e3daef81899b0cc75d392a289d6bd926b"
+}

@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-15",
+  "static_only": true,
+  "production_modified": false,
+  "new_device_tests": false,
+  "installed_bda_sha256": "10de8fc168694898eaceaeedd1b3e1eed3cd03f04e14745b70622ee8dde607fe",
+  "source_sha256": {
+    "runtime/async_save.h": "fc268d8cac3f375474b975f63e288b0318212ffe13545043597869cc5451f0b4",
+    "platform/source_patches.py": "ce012068a624b0dcb3e2faa01871e7c20ae32b1253ebeee3b2ce0d5ebf0ca032",
+    "platform/graphics/RewardEffects.cpp": "a75196a737792ad096b13dd0b1a1e2a0cffeef68521b6c4b860d2f478f20e114",
+    "platform/actors/ActorPose.cpp": "715fe5c35e7f82eacf9e5c5d2e9bbef0ca3be16fbdf16607d9f6c4238bcf594a",
+    "platform/graphics/EarlyLawn.cpp": "ae3537e25ee47e721b2cd0204e7204ec37401ba5aee80a51d0ee3bcbb47baaee",
+    "platform/BoardLoading.cpp": "0c1bba6a82169061fd6dc383ef5c34f9f2807c581d4674d7bcc591e9124d5e28",
+    "platform/graphics/PausedBoardCache.cpp": "26fd7731fa7dba4457d735d1a4477d117d99a88d19bf2bd2c9fd569825d16bf3",
+    "platform/h1_music.cpp": "c15c3e9a36869c695f4985c1207d7637b9d639f387a6440f690344149cff3143",
+    "platform/h1_sound.cpp": "72cea412bdf0d48b767b16e27f0a4de7255e00daa0c18e8fe0114d69a2ebaca2"
+  },
+  "reward_asset": {
+    "file_bytes": 934748,
+    "expanded_bytes": 1220539,
+    "palette_bytes": 1220,
+    "page_table_bytes": 1192,
+    "frame_buffers": [
+      30328,
+      4891
+    ],
+    "H1_heap_payload_bytes": 1258170
+  },
+  "prior_evidence": [
+    "build/level3-crash-20261115/fixed-chain-15.json",
+    "build/level3-crash-20261115/fixed-chain-40.json",
+    "build/level3-crash-20261115/fixed-exit-verification.json"
+  ]
+}

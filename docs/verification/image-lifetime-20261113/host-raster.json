@@ -1,0 +1,26 @@
+{
+  "target": "Isolated host original MemoryImage/SWTri/Graphics regression, not firmware or physical H1",
+  "passed": true,
+  "compiler": "C:/msys64/ucrt64/bin/g++.exe",
+  "executable_sha256": "d1a90afde15f731652bca1306715b9c90464f2c316df7257ff799f479028126f",
+  "source_sha256": {
+    "platform\\graphics\\MemoryImageCache.cpp": "51e567bb8e100cfa530521aaf5d1043e9ff87f72213aea25da2fd2ec1c87832f",
+    "platform\\graphics\\memory_patches.py": "136a40817a5b4453b23db0f3ff73e3cd006163af6460a0c4c12bc86d3f88d76d",
+    "platform\\graphics\\SoftwareRaster.cpp": "5bfbd000d3b79df86e4819adfb74e194dddf0104373a721020deba814ddea9c1",
+    "platform\\graphics\\tests\\test_software.cpp": "bdfe7e311166048f11093835691cc5ee8ede1d826d57393120ebce9c9d637d7c"
+  },
+  "resource_lifetime_cases": [
+    "uninitialized callback does not allocate",
+    "frame completion does not evict owned pixels",
+    "shared owners reuse one backing",
+    "first release preserves other users",
+    "last owner release allocates nothing and frees pixels",
+    "explicit reload preserves original alpha/color and sanding recipe",
+    "mutable images remain Image-owned",
+    "large and small sources follow their owners rather than size/recency",
+    "pressure callback allocates nothing and releases no live source",
+    "GetBits/native/RL/palette/alpha-row/color-helper pointers remain valid",
+    "diagnostics show no automatic eviction"
+  ],
+  "fixture_note": "Surrounding app/image fallback are test fixtures. The original color helper bodies are extracted from patched upstream. Unused Win32 service headers are omitted only in the isolated Common.h overlay to avoid GCC intrinsic-header ICEs."
+}

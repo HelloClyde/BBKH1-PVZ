@@ -1,4 +1,6 @@
 #include "xmp_numeric_cache.h"
+#include "../../vendor/libxmp/src/common.h"
+#include "../../vendor/libxmp/src/mixer.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +12,21 @@ static double plain(int n,int b){double d=(double)n+(double)b/12800;return 13696
 int main(void){
     H1XmpNoteCache notes={0};H1XmpStepCache steps={0};double out=0;unsigned i;uint32_t random=0x12345678u;
     CHECK(sizeof(H1XmpNoteEntry)==16&&sizeof(H1XmpStepEntry)==24);
+    {
+        const int rates[]={8000,16000,48000};
+        const int formats[]={XMP_FORMAT_MONO,0,XMP_FORMAT_MONO|XMP_FORMAT_8BIT,XMP_FORMAT_32BIT};
+        for(unsigned rate=0;rate<3;++rate)for(unsigned format=0;format<4;++format){
+            struct context_data context;memset(&context,0,sizeof context);
+            const int channels=formats[format]&XMP_FORMAT_MONO?1:2;
+            const int bound=channels*libxmp_mixer_get_ticksize(rates[rate],DEFAULT_TIME_FACTOR*2,PAL_RATE,XMP_MIN_BPM);
+            CHECK(libxmp_mixer_on(&context,rates[rate],formats[format],8363)==0);
+            CHECK(context.s.total_size==bound);
+            CHECK(context.s.total_size/2>=channels*libxmp_mixer_get_ticksize(rates[rate],DEFAULT_TIME_FACTOR,PAL_RATE,XMP_MIN_BPM));
+            CHECK(context.s.buffer&&context.s.buf32);
+            libxmp_mixer_off(&context);CHECK(!context.s.buffer&&!context.s.buf32);
+        }
+        CHECK(libxmp_mixer_get_ticksize(16000,DEFAULT_TIME_FACTOR*2,PAL_RATE,XMP_MIN_BPM)==4000);
+    }
     pvzh1_xmp_note_cache_reset();pvzh1_xmp_step_cache_reset();
     for(i=0;i<120000;++i){int n,b;double actual,expected;
         random=random*1664525u+1013904223u;n=(int)((random>>16)%140u)-10;

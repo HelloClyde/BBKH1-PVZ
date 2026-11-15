@@ -1,0 +1,17 @@
+{
+  "candidate_sha256": "cf22401b7011151e782221b21ccad9f3cec9393ae3c0c1eec3883e8e8a158ea7",
+  "host_checks_passed": true,
+  "native_test": "passed",
+  "files": {
+    "runtime/async_save.h": "bcb23ac9bd4befaa6b500c9d81f8137e3daef81899b0cc75d392a289d6bd926b",
+    "platform/graphics/RewardEffects.cpp": "6e5be3def4c9401109365c9fa8a9b2c93d67a345032fa1efedf3fdc7151efd8d",
+    "platform/LevelPreload.cpp": "3cb434e02cd782da236af9bd9d9a1d92d5547a5c0c95c0073a218c39314a21a1",
+    "platform/source_patches.py": "3ed61b54be4b388208dd200097571a793ca34aea9172eb5d4d8c023fda3cbb81",
+    "tools/reward_container.py": "ecc9fddfc9bc71648d9b34de70ea1ade77d360bf9516be9fac3e54123fde6626",
+    "tools/pack_reward_effects.py": "23a713a472c99ca92fcc983feb2679c1ee86f5482aeecbf99c79d94219aabe9d",
+    "tools/tests/test_async_save_queue.py": "5bd70f98258903c99673dd69d9ce598cbbe6fdc3e2547a76df88fd87c7da4a99",
+    "tools/tests/reward_stream_engine_probe.cpp": "e9d5a00c1e05c8e3d2fdd0e7afe3dd92e3c2a83866201f829460f2bff1f84581",
+    "tools/tests/reward_effect_v4_oracle.inc": "a75196a737792ad096b13dd0b1a1e2a0cffeef68521b6c4b860d2f478f20e114"
+  },
+  "hardware_verification": "docs/verification/resource-lifetime-20261115/hardware.json"
+}

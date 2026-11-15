@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "source_sha256": "bcb23ac9bd4befaa6b500c9d81f8137e3daef81899b0cc75d392a289d6bd926b",
+  "stdout": "PASS: short write, open/close/install failure preserve original; interrupted backup recovered; replacement and identical skip\n",
+  "stderr": "",
+  "scope": "Host real files; mocked SDK boundary. Native task separately tested."
+}

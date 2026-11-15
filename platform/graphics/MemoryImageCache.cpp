@@ -1,27 +1,24 @@
-/* Completed-draw source-image cache for the original MemoryImage renderer.
+/* Owner-managed immutable image storage for the original MemoryImage renderer.
  * SPDX-License-Identifier: LGPL-3.0-or-later */
 #include "MemoryImageCache.h"
+#include "ImageLifetime.h"
 #include "graphics/Graphics.h"
 #include "FontTileStorage.h"
 #include "ReducedTextureMapping.h"
 #include "h1_resources.h"
 #include <map>
+#include <set>
 #include <new>
 #include <limits>
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
-
-/* Optional render metadata cache. Its no-allocation, same-thread hook releases
- * one idle plan and returns an allocation-size hint, never a native heap span.
- * The allocator retries before asking this callback for another release. */
-extern "C" size_t pvzh1_render_plan_release_pressure(size_t requested) __attribute__((weak));
-extern "C" size_t pvzh1_text_replay_release_pressure(size_t requested) __attribute__((weak));
-extern "C" size_t pvzh1_paused_board_release_pressure(size_t requested) __attribute__((weak));
-extern "C" size_t pvzh1_music_release_idle(size_t requested) __attribute__((weak));
-extern "C" size_t pvzh1_selector_release_idle(size_t requested) __attribute__((weak));
+extern "C" void pvzh1_image_storage_released(void*) __attribute__((weak));
+extern "C" void pvzh1_image_scene_finished() __attribute__((weak));
+extern "C" void pvzh1_selector_shutdown() __attribute__((weak));
 
 extern "C" { volatile uint32_t pvzh1_cache_pressure_diagnostic[4]; }
+extern "C" { volatile uint32_t pvzh1_image_lifetime_diagnostic[16]; }
 /* Resident, peak, loads, evictions, physical frames, payload bytes (low32). */
 extern "C" { volatile uint32_t pvzh1_cache_diagnostic[6]; }
 /* RGB payload resident, pages resident, cumulative pages, source loads,
@@ -83,12 +80,12 @@ bool IsCJKDataPath(const std::string& file){
     return path.compare(slash==std::string::npos?0:slash+1,4,"h1zh")==0;
 }
 struct Source {
+    unsigned owners=0;
+    uint64_t lastOwner=0;
     uint64_t identity=NextStorageRevision();
     std::string path;
     bool autoAlpha,sanded;
     int alphaColor;
-    uint64_t lastUse;
-    uint64_t lastEpoch;
     std::string alphaPath;
     int alphaRows=1,alphaColumns=1;
     uint32_t width=0,height=0;
@@ -114,8 +111,8 @@ struct Source {
     uint64_t fontLoads=0,fontBlits=0,fontARGBLoads=0;
     bool rasterStorage=false;
     H1SandingAverage sandingAverage=nullptr;
-    Source(const std::string& file,bool automatic,int color,uint64_t use,uint64_t epoch,const H1ImageInfo& info)
-        :path(file),autoAlpha(automatic),sanded(false),alphaColor(color),lastUse(use),lastEpoch(epoch),
+    Source(const std::string& file,bool automatic,int color,const H1ImageInfo& info)
+        :path(file),autoAlpha(automatic),sanded(false),alphaColor(color),
          width(info.width),height(info.height),storageWidth(info.storage_width?info.storage_width:info.width),
          storageHeight(info.storage_height?info.storage_height:info.height),rgbEligible(info.channels==3&&info.flags==0),
          alphaPaletteEligible(info.channels==1&&info.flags==H1_IMAGE_MASK_ONLY),
@@ -146,17 +143,26 @@ struct Source {
  * cache, including while its own first allocation is in progress. */
 struct Cache {
     std::map<MemoryImage*,Source> sources;
-    H1ImageCacheStats stats{0,0,0,20u*1024u*1024u,0,0,0,0};
-    uint64_t useClock=0;
-    uint64_t frameBeginUse=0;
-    uint64_t pixelEpoch=0;
+    H1ImageCacheStats stats{0,0,0,0,0,0,0,0};
     uint64_t loadedPixelBytes=0;
     uint64_t pressureCalls=0,pressureEvictions=0,pressureBytes=0;
     bool accountingDirty=true;
     void (*sanding)(Image*)=nullptr;
+    struct Owner {
+        uint64_t serial,scene;
+        unsigned kind;
+        uintptr_t object;
+        std::set<MemoryImage*> images;
+    };
+    using OwnerKey=std::pair<unsigned,uintptr_t>;
+    std::map<OwnerKey,Owner> owners;
+    Owner* currentOwner=nullptr;
+    uint64_t ownerClock=0,ownerEpoch=0,sceneGeneration=1;
+    uint64_t ownerReleases=0,sourceReleases=0,releasedBytes=0;
+    size_t references=0;
+    H1ImageScene scene=H1ImageScene::Startup;
 };
 Cache *cacheInstance=nullptr;
-bool pressureInProgress=false;
 bool reducedPackConfigured=false,reducedPack=false;
 #ifdef PVZ_HOST_RUNNER
 bool storageAlphaEnabled=true;
@@ -196,32 +202,6 @@ std::size_t Size(MemoryImage *image,const Source *source=nullptr)
     if(source&&source->storagePages)size+=source->storagePageBytes+source->storagePageCount*sizeof(uint32_t*);
     return size;
 }
-/* The size of one real backing allocation, rather than the sum of separate
- * pixel caches. This is a selection heuristic; only the allocator's retry can
- * establish whether a contiguous block is now available. */
-std::size_t LargestBuffer(MemoryImage *image,const Source *source=nullptr)
-{
-    const std::size_t area=(std::size_t)image->mWidth*image->mHeight;
-    std::size_t largest=image->mBits?area*4+4:0;
-    if(image->mColorIndices)largest=std::max(largest,area);
-    if(image->mColorTable)largest=std::max(largest,(std::size_t)1024);
-    if(image->mNativeAlphaData)largest=std::max(largest,(image->mColorTable?256:area)*4);
-    if(image->mRLAlphaData||image->mRLAdditiveData)largest=std::max(largest,area);
-    if(source&&source->rgbPages){
-        largest=std::max(largest,source->rgbPageCount*sizeof(unsigned char*));
-        if(source->rgbBytes)largest=std::max(largest,std::min(RGBPageBytes,source->rgbBytes));
-    }
-    if(source&&source->fontPages){
-        largest=std::max(largest,source->fontPageCount*sizeof(uint32_t*));
-        if(source->fontBytes)largest=std::max(largest,std::min(FontPageBytes,source->fontBytes));
-    }
-    if(source&&source->storageBits)largest=std::max(largest,(std::size_t)source->storageWidth*source->storageHeight*4+4);
-    if(source&&source->storageAlpha)largest=std::max(largest,(std::size_t)source->storageWidth*source->storageHeight);
-    if(source&&source->alphaPages)largest=std::max(largest,std::max(std::min(size_t(1024),source->alphaPageBytes),source->alphaPageCount*sizeof(unsigned char*)));
-    if(source&&source->fontTiles)largest=std::max(largest,source->fontTiles->Largest());
-    if(source&&source->storagePages)largest=std::max(largest,std::max(std::min(size_t(4096),source->storagePageBytes),source->storagePageCount*sizeof(uint32_t*)));
-    return largest;
-}
 std::size_t Recount(bool changed=false)
 {
     Cache& cache=State();
@@ -257,6 +237,51 @@ std::size_t Recount(bool changed=false)
     cache.accountingDirty=false;
     UpdateDiagnostic(cache);
     return size;
+}
+Cache::Owner& ImageOwner(H1ImageOwner kind,const void* object){
+    auto& store=State();const Cache::OwnerKey key{unsigned(kind),uintptr_t(object)};
+    auto found=store.owners.find(key);
+    if(found!=store.owners.end())return found->second;
+    const bool common=kind==H1ImageOwner::CommonUI;
+    return store.owners.emplace(key,Cache::Owner{++store.ownerClock,common?0:store.sceneGeneration,unsigned(kind),uintptr_t(object),{}}).first->second;
+}
+Cache::Owner& SceneOwner(){
+    auto& store=State();return ImageOwner(H1ImageOwner::Scene,reinterpret_cast<void*>(uintptr_t(store.sceneGeneration)));
+}
+void PublishOwners(){
+    auto& s=State();auto& d=pvzh1_image_lifetime_diagnostic;
+    d[0]=1;d[1]=unsigned(s.scene);d[2]=s.sceneGeneration;d[3]=s.owners.size();d[4]=s.references;
+    d[5]=s.ownerReleases;d[6]=s.releasedBytes;d[8]=s.sourceReleases;
+}
+void RetainImage(MemoryImage* image,Source& source){
+    auto& store=State();auto& owner=store.currentOwner?*store.currentOwner:SceneOwner();
+    if(source.lastOwner==owner.serial)return;
+    if(owner.images.insert(image).second){++source.owners;++store.references;}
+    source.lastOwner=owner.serial;
+}
+void ReleasePixels(MemoryImage* image,Source& source){
+    auto& store=State();const size_t bytes=Size(image,&source);
+    if(bytes&&pvzh1_image_storage_released)pvzh1_image_storage_released(image);
+    source.ClearRGB();source.ClearFontPages();source.ClearStorage();
+    image->mBits.reset();image->mColorIndices.reset();image->mColorTable.reset();
+    image->mNativeAlphaData.reset();image->mRLAlphaData.reset();image->mRLAdditiveData.reset();
+    store.releasedBytes+=bytes;if(bytes)++store.sourceReleases;
+    store.accountingDirty=true;
+}
+void DetachImage(MemoryImage* image){
+    auto& store=State();
+    for(auto& entry:store.owners)if(entry.second.images.erase(image))--store.references;
+}
+void ReleaseOwner(std::map<Cache::OwnerKey,Cache::Owner>::iterator it){
+    auto& store=State();auto& owner=it->second;
+    if(store.currentOwner==&owner)store.currentOwner=nullptr;
+    for(auto* image:owner.images){
+        auto source=store.sources.find(image);if(source==store.sources.end())continue;
+        auto& data=source->second;--store.references;
+        if(data.lastOwner==owner.serial)data.lastOwner=0;
+        if(data.owners&&!--data.owners)ReleasePixels(image,data);
+    }
+    store.owners.erase(it);++store.ownerReleases;++store.ownerEpoch;
 }
 bool RGBEligible(MemoryImage *image,const Source& source){
     return source.rgbEligible&&source.alphaPath.empty()&&image->mFilePath==source.path&&
@@ -531,6 +556,52 @@ bool ApplyAlpha(MemoryImage *image,const Source& source)
 }
 }
 
+H1ImageUseScope::H1ImageUseScope(H1ImageOwner kind,const void* object){
+    auto& s=State();previous_=s.currentOwner;previousSerial_=0;previousKind_=0;previousObject_=0;
+    if(s.currentOwner){
+        previousKind_=s.currentOwner->kind;previousObject_=s.currentOwner->object;previousSerial_=s.currentOwner->serial;
+    }
+    epoch_=s.ownerEpoch;scene_=s.sceneGeneration;s.currentOwner=&ImageOwner(kind,object);
+}
+H1ImageUseScope::~H1ImageUseScope(){
+    if(!cacheInstance)return;auto& s=*cacheInstance;
+    if(scene_!=s.sceneGeneration){s.currentOwner=nullptr;return;}
+    if(epoch_==s.ownerEpoch){s.currentOwner=static_cast<Cache::Owner*>(previous_);return;}
+    auto found=s.owners.find({previousKind_,previousObject_});
+    s.currentOwner=found!=s.owners.end()&&found->second.serial==previousSerial_?&found->second:nullptr;
+}
+void H1ImageResourcesReleaseOwner(H1ImageOwner kind,const void* object){
+    if(!cacheInstance)return;auto& s=*cacheInstance;
+    auto it=s.owners.find({unsigned(kind),uintptr_t(object)});if(it!=s.owners.end())ReleaseOwner(it);
+    PublishOwners();
+}
+void H1ImageResourcesBeginScene(H1ImageScene scene){
+    auto& s=State();s.currentOwner=nullptr;
+    if(pvzh1_image_scene_finished)pvzh1_image_scene_finished();
+    // Includes preloaded menu pixels whose widget is still pending deletion.
+    if(scene!=H1ImageScene::Menu&&scene!=H1ImageScene::Startup&&pvzh1_selector_shutdown)pvzh1_selector_shutdown();
+    for(auto it=s.owners.begin();it!=s.owners.end();){auto current=it++;
+        // Shared interactive UI has no consumer during the baked opening.
+        // The next board's loader prepares it again before accepting input.
+        if(current->second.scene||scene==H1ImageScene::Opening||scene==H1ImageScene::Closed)ReleaseOwner(current);
+    }
+    ++s.sceneGeneration;s.scene=scene;++pvzh1_image_lifetime_diagnostic[7];
+    PublishOwners();Recount(true);
+}
+void H1ImageResourcesShutdown(){
+    if(!cacheInstance)return;H1ImageResourcesBeginScene(H1ImageScene::Closed);
+    pvzh1_image_lifetime_diagnostic[12]=cacheInstance->sources.size();
+    delete cacheInstance;cacheInstance=nullptr;
+}
+H1ImageLifetimeStats H1ImageResourcesStats(){
+    if(!cacheInstance)return {};auto& s=*cacheInstance;size_t owned=0;
+    for(auto& entry:s.sources)owned+=entry.second.owners!=0;
+    PublishOwners();return {s.owners.size(),s.references,owned,Recount(),s.sceneGeneration,s.ownerReleases,s.sourceReleases,s.releasedBytes,s.scene};
+}
+unsigned H1ImageResourceOwnerCount(MemoryImage* image){
+    if(!cacheInstance)return 0;auto found=cacheInstance->sources.find(image);
+    return found==cacheInstance->sources.end()?0:found->second.owners;
+}
 bool H1ImageCacheDescribe(MemoryImage *image,const std::string& path,bool autoAlpha,int alphaColor)
 {
     H1ImageInfo info;
@@ -542,34 +613,39 @@ bool H1ImageCacheDescribe(MemoryImage *image,const std::string& path,bool autoAl
     image->mWidth=(int)info.width;image->mHeight=(int)info.height;
     image->mFilePath=path;image->mPurgeBits=false;image->mBitsChanged=false;
     image->mHasTrans=image->mHasAlpha=info.channels!=3;
-    State().sources.emplace(image,Source(path,autoAlpha,alphaColor,++State().useClock,State().pixelEpoch,info));
+    State().sources.emplace(image,Source(path,autoAlpha,alphaColor,info));
     State().accountingDirty=true;
     return true;
 }
 bool H1ImageCacheContains(MemoryImage *image)
 {return State().sources.find(image)!=State().sources.end();}
 bool H1ImageCacheReserveUI(MemoryImage *image){
+    H1ImageUseScope use(H1ImageOwner::CommonUI,nullptr);
     auto& cache=State();auto it=cache.sources.find(image);if(it==cache.sources.end())return false;
     auto& s=it->second;s.uiReserved=true;
     const uint32_t* bits=nullptr;const uint32_t*const* pages=nullptr;uint32_t w=0,h=0;
     const bool ok=H1ImageCachePrepareStorageRGBPages(image,&pages,&w,&h)||H1ImageCachePrepareStorageTexture(image,&bits,&w,&h);
     if(!ok)s.uiReserved=false;return ok;
 }
-void H1ImageCacheReleaseUI(){for(auto& e:State().sources)e.second.uiReserved=false;}
+void H1ImageCacheReleaseUI(){
+    H1ImageResourcesReleaseOwner(H1ImageOwner::CommonUI,nullptr);
+    for(auto& e:State().sources)e.second.uiReserved=false;
+}
 size_t H1ImageCacheReserveLoadedUI(MemoryImage* image){
     auto& cache=State();auto it=cache.sources.find(image);if(it==cache.sources.end()||it->second.uiReserved)return 0;
-    const size_t bytes=Size(image,&it->second);if(bytes)it->second.uiReserved=true;return bytes;
+    const size_t bytes=Size(image,&it->second);if(bytes){it->second.uiReserved=true;H1ImageUseScope use(H1ImageOwner::CommonUI,nullptr);RetainImage(image,it->second);}return bytes;
 }
 void H1ImageCacheTouch(MemoryImage *image)
 {
     Cache& cache=State();auto found=cache.sources.find(image);
     if(found==cache.sources.end())return;
-    if(image->mFilePath!=found->second.path){cache.sources.erase(found);return;}
-    found->second.lastUse=++cache.useClock;
-    found->second.lastEpoch=cache.pixelEpoch;
+    if(image->mFilePath!=found->second.path){DetachImage(image);cache.sources.erase(found);return;}
+    RetainImage(image,found->second);
+
+
 }
 void H1ImageCacheForget(MemoryImage *image)
-{if(State().sources.erase(image))Recount(true);}
+{if(!cacheInstance)return;DetachImage(image);if(cacheInstance->sources.erase(image))Recount(true);}
 void H1ImageCacheNoteLogicalRequest(MemoryImage* image,uintptr_t caller){
     if(!cacheInstance||!image||image->mBits)return;
     auto it=cacheInstance->sources.find(image);
@@ -593,6 +669,7 @@ void H1ImageCacheNoteLogicalRequest(MemoryImage* image,uintptr_t caller){
 }
 bool H1ImageCacheLoad(MemoryImage *image)
 {
+    H1ImageCacheTouch(image);
     Cache& cache=State();auto found=cache.sources.find(image);
     if(found==cache.sources.end())return false;
     if(!image->mBits&&found->second.Reduced()&&found->second.cjkFont){
@@ -602,8 +679,8 @@ bool H1ImageCacheLoad(MemoryImage *image)
         // original-size RGBA representation for generic pixel consumers.
         throw std::logic_error("H1 CJK fonts require the glyph renderer");
     }
-    found->second.lastUse=++cache.useClock;
-    found->second.lastEpoch=cache.pixelEpoch; /* before every allocation below */
+
+
     /* Generic pixel consumers require the original contiguous ARGB format.
      * Release RGB pages before its allocation, never retain both copies. */
     if(found->second.rgbPages||found->second.fontPages){found->second.ClearRGB();found->second.ClearFontPages();Recount(true);}
@@ -648,8 +725,8 @@ bool H1ImageCacheLoad(MemoryImage *image)
         for(std::size_t i=0;i<area;++i){unsigned a=image->mBits[i]>>24;if(!a)image->mHasTrans=true;else if(a<255)image->mHasAlpha=true;}
     }
     image->mBitsChanged=false;
-    found->second.lastUse=++cache.useClock;
-    found->second.lastEpoch=cache.pixelEpoch;
+
+
     ++cache.stats.loads;
     if(found->second.sanded&&cache.sanding)cache.sanding(image);
     Recount(true);
@@ -657,6 +734,7 @@ bool H1ImageCacheLoad(MemoryImage *image)
 }
 bool H1ImageCachePrepareAlphaPalette(MemoryImage *image)
 {
+    H1ImageCacheTouch(image);
     if(!image||!cacheInstance)return false;
     Cache& cache=*cacheInstance;auto found=cache.sources.find(image);
     if(found==cache.sources.end())return false;
@@ -719,6 +797,7 @@ bool H1ImageCacheIsReducedFont(MemoryImage* image){
     return it!=cacheInstance->sources.end()&&it->second.Reduced()&&it->second.alphaPaletteEligible&&it->second.fontData;
 }
 bool H1ImageCachePrepareFontGlyph(MemoryImage* image,const Rect& rect,MemoryImage& glyph){
+    H1ImageCacheTouch(image);
     if(!image||!cacheInstance||rect.mWidth<=0||rect.mHeight<=0||rect.mWidth>256||rect.mHeight>256||size_t(rect.mWidth)*rect.mHeight>16384)return false;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
     auto& source=found->second;
@@ -836,6 +915,7 @@ bool H1ImageCacheBltFontGlyph(MemoryImage *image,MemoryImage *destination,int x,
 }
 bool H1ImageCachePrepareTexturePages(MemoryImage *image,const uint32_t* const**pages)
 {
+    H1ImageCacheTouch(image);
     if(pages)*pages=nullptr;
     if(!pages||!image||!cacheInstance)return false;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
@@ -872,6 +952,7 @@ void H1ImageCacheConfigureReducedPack()
 }
 bool H1ImageCacheReducedPack(){return reducedPackConfigured&&reducedPack;}
 bool H1ImageCachePrepareStorageRGBPages(MemoryImage *image,const uint32_t *const **pages,uint32_t *width,uint32_t *height){
+    H1ImageCacheTouch(image);
     if(pages)*pages=nullptr;
     if(!pages||!width||!height||!image||!cacheInstance)return false;
     auto it=cacheInstance->sources.find(image);if(it==cacheInstance->sources.end())return false;
@@ -905,6 +986,7 @@ bool H1ImageCachePrepareStorageRGBPages(MemoryImage *image,const uint32_t *const
 }
 bool H1ImageCachePrepareStorageFontTiles(MemoryImage* image,const float (&inputU)[3],const float (&inputV)[3],
     const unsigned char* const** tiles,uint32_t* columns,uint32_t* width,uint32_t* height){
+    H1ImageCacheTouch(image);
     if(tiles)*tiles=nullptr;
     if(!tiles||!columns||!width||!height||!image||!cacheInstance)return false;
 #ifdef PVZ_HOST_RUNNER
@@ -949,6 +1031,7 @@ bool H1ImageCachePrepareStorageFontTiles(MemoryImage* image,const float (&inputU
 }
 bool H1ImageCachePrepareStorageAlphaPages(MemoryImage *image,const unsigned char *const **pages,uint32_t *width,uint32_t *height)
 {
+    H1ImageCacheTouch(image);
     if(pages)*pages=nullptr;
     if(!pages||!width||!height||!cacheInstance||!image)return false;
 #ifdef PVZ_HOST_RUNNER
@@ -998,6 +1081,7 @@ void H1ImageCacheAllocationChanged(MemoryImage *image){
 }
 bool H1ImageCachePrepareStorageAlpha(MemoryImage *image,const unsigned char **alpha,uint32_t *width,uint32_t *height)
 {
+    H1ImageCacheTouch(image);
     if(alpha)*alpha=nullptr;
     if(!alpha||!width||!height||!cacheInstance||!image)return false;
 #ifdef PVZ_HOST_RUNNER
@@ -1024,6 +1108,7 @@ bool H1ImageCachePrepareStorageAlpha(MemoryImage *image,const unsigned char **al
 }
 bool H1ImageCachePrepareStorageTexture(MemoryImage *image,const uint32_t **bits,uint32_t *width,uint32_t *height)
 {
+    H1ImageCacheTouch(image);
     if(bits)*bits=nullptr;
     if(!bits||!width||!height||!cacheInstance||!image)return false;
     auto found=cacheInstance->sources.find(image);if(found==cacheInstance->sources.end())return false;
@@ -1211,64 +1296,13 @@ bool H1ImageCacheBltOpaqueRGB(MemoryImage *image,MemoryImage *destination,int x,
     }
     ++source.rgbBlits;image->mDrawn=true;destination->BitsChanged();return true;
 }
-void H1ImageCacheSetBudget(std::size_t bytes){State().stats.budgetBytes=bytes;}
-void H1ImageCacheEndFrame()
-{
-    Cache& cache=State();std::size_t bytes=Recount();
-    // The small fixed UI reserve has its own residency. Counting it against
-    // the gameplay working set made the lawn reload textures every frame.
-    size_t reserved=0;for(auto& e:cache.sources)if(e.second.uiReserved)reserved+=Size(e.first,&e.second);
-    const size_t frameBudget=cache.stats.budgetBytes+reserved;
-    // Most completed frames only reuse resident images. No eviction victim or
-    // second set of counters is needed while the accurate recount fits.
-    if(bytes<=frameBudget){
-        cache.frameBeginUse=cache.useClock;++cache.stats.frames;++cache.pixelEpoch;
-        UpdateDiagnostic(cache);return;
-    }
-    /* A large background is normally drawn first. Pure LRU would throw it out
-     * every frame to save a few glyphs and reread several MiB on the next draw.
-     * Prefer the largest source actually used this frame that fits the budget;
-     * unused large images receive no preference. No pointer is held past here. */
-    MemoryImage *preferred=nullptr;std::size_t preferredBytes=0;uint64_t preferredUse=0;
-#ifdef PVZ_HOST_RUNNER
-    const char *preferSetting=std::getenv("PVZ_HOST_CACHE_PREFER_LARGE");
-    const bool preferLarge=!preferSetting||preferSetting[0]!='0';
-#else
-    const bool preferLarge=true;
-#endif
-    for(auto& entry:cache.sources){
-        const std::size_t size=Size(entry.first,&entry.second);
-        if(!preferLarge||!size||size>cache.stats.budgetBytes||entry.second.lastUse<=cache.frameBeginUse)continue;
-        if(size>preferredBytes||(size==preferredBytes&&entry.second.lastUse>preferredUse)){
-            preferred=entry.first;preferredBytes=size;preferredUse=entry.second.lastUse;
-        }
-    }
-    while(bytes>frameBudget){
-        auto oldest=cache.sources.end();
-        for(auto it=cache.sources.begin();it!=cache.sources.end();++it){
-            if(!Size(it->first,&it->second)||it->first==preferred||it->second.uiReserved)continue;
-            if(it->first->mFilePath!=it->second.path)continue;
-            if(oldest==cache.sources.end()||it->second.lastUse<oldest->second.lastUse)oldest=it;
-        }
-        if(oldest==cache.sources.end()){
-            if(preferred){preferred=nullptr;continue;}
-            break;
-        }
-        MemoryImage *image=oldest->first;
-        bytes-=Size(image,&oldest->second);oldest->second.ClearRGB();oldest->second.ClearFontPages();oldest->second.ClearStorage();
-        image->mBits.reset();image->mColorIndices.reset();image->mColorTable.reset();
-        image->mNativeAlphaData.reset();image->mRLAlphaData.reset();image->mRLAdditiveData.reset();
-        ++cache.stats.evictions;
-    }
-    cache.stats.residentBytes=bytes;cache.frameBeginUse=cache.useClock;++cache.stats.frames;++cache.pixelEpoch;
-    // Eviction changed backing allocations; one recount publishes all formats.
-    Recount(true);
+// Kept for older host probes; production has no size budget or eviction.
+void H1ImageCacheSetBudget(std::size_t){ }
+void H1ImageCacheEndFrame(){
+    auto& store=State();Recount();++store.stats.frames;PublishOwners();UpdateDiagnostic(store);
 }
-/* A top-level Widget::DrawAll has completely returned. Mark an allocation-
- * pressure boundary only: no eviction, screen clearing or presentation. */
-extern "C" void pvzh1_cache_complete_draw_batch(){
-    if(cacheInstance)++cacheInstance->pixelEpoch;
-}
+// A completed raster batch no longer authorizes eviction of any resource.
+extern "C" void pvzh1_cache_complete_draw_batch(){ }
 H1ImageCacheStats H1ImageCacheGetStats(){Recount();return State().stats;}
 uint64_t H1ImageCacheSourceCookie(MemoryImage* image) noexcept {
     if(!cacheInstance)return 0;
@@ -1277,83 +1311,10 @@ uint64_t H1ImageCacheSourceCookie(MemoryImage* image) noexcept {
 }
 H1ImageCacheStats H1ImageCacheCompletedFrameStats(){return State().stats;}
 extern "C" uint64_t pvzh1_image_pixel_bytes_loaded(){return State().loadedPixelBytes;}
-extern "C" size_t pvzh1_cache_memory_pressure(size_t requested){
-    if(!cacheInstance||pressureInProgress)return 0;
-    pressureInProgress=true;
-    Cache& cache=*cacheInstance;++cache.pressureCalls;
-    pvzh1_cache_pressure_diagnostic[0]=(uint32_t)cache.pressureCalls;
-    if(pvzh1_text_replay_release_pressure){
-        const size_t hint=pvzh1_text_replay_release_pressure(requested);
-        if(hint){pvzh1_cache_pressure_diagnostic[3]=0;pressureInProgress=false;return hint;}
-    }
-    if(pvzh1_render_plan_release_pressure){
-        const size_t hint=pvzh1_render_plan_release_pressure(requested);
-        if(hint){
-            /* Do not attribute render metadata to source pixel eviction/bytes.
-             * A successful real allocation retry may preserve every image. */
-            pvzh1_cache_pressure_diagnostic[3]=0;
-            pressureInProgress=false;return hint;
-        }
-    }
-    if(pvzh1_music_release_idle){
-        const size_t hint=pvzh1_music_release_idle(requested);
-        if(hint){pressureInProgress=false;return hint;}
-    }
-    if(pvzh1_selector_release_idle){
-        const size_t hint=pvzh1_selector_release_idle(requested);
-        if(hint){pressureInProgress=false;return hint;}
-    }
-    size_t freed=0,bestBuffer=0,bestBytes=0;bool bestCold=false,bestFits=false;
-    auto chosen=cache.sources.end();
-    /* No allocation, logging, descriptor/map mutation, or epoch advancement.
-     * Current drawing-batch getters and palette readers pin before allocating. */
-    for(auto& entry:cache.sources){
-        MemoryImage *image=entry.first;
-        if(entry.second.uiReserved||entry.second.lastEpoch>=cache.pixelEpoch||image->mFilePath!=entry.second.path)continue;
-        const size_t bytes=Size(image,&entry.second);if(!bytes)continue;
-        const bool cold=entry.second.lastUse<=cache.frameBeginUse;
-        const size_t buffer=LargestBuffer(image,&entry.second);const bool fits=buffer>=requested;
-        bool better=chosen==cache.sources.end();
-        if(!better&&cold!=bestCold)better=cold;
-        else if(!better&&cold==bestCold){
-            if(fits!=bestFits)better=fits;
-            else if(fits){
-                if(buffer!=bestBuffer)better=buffer<bestBuffer;
-                else if(bytes!=bestBytes)better=bytes<bestBytes;
-                else better=entry.second.lastUse<chosen->second.lastUse;
-            }else better=entry.second.lastUse<chosen->second.lastUse;
-        }
-        if(better){chosen=cache.sources.find(image);bestCold=cold;bestFits=fits;bestBuffer=buffer;bestBytes=bytes;}
-    }
-    /* One source per callback. The runtime retries the actual allocation after
-     * each release, asking again only if it still fails. In particular, a tiny
-     * metadata request no longer discards every completed background image. */
-    if(chosen!=cache.sources.end()){
-        MemoryImage *image=chosen->first;freed=bestBytes;
-        chosen->second.ClearRGB();chosen->second.ClearFontPages();chosen->second.ClearStorage();
-        image->mBits.reset();image->mColorIndices.reset();image->mColorTable.reset();
-        image->mNativeAlphaData.reset();image->mRLAlphaData.reset();image->mRLAdditiveData.reset();
-        ++cache.stats.evictions;++cache.pressureEvictions;
-    }
-    cache.pressureBytes+=freed;
-    pvzh1_cache_pressure_diagnostic[1]=(uint32_t)cache.pressureEvictions;
-    pvzh1_cache_pressure_diagnostic[2]=(uint32_t)cache.pressureBytes;
-    pvzh1_cache_pressure_diagnostic[3]=(uint32_t)freed;
-    size_t bytes=0,rgbBytes=0,rgbPages=0,fontBytes=0,fontPages=0,rasterBytes=0,rasterPages=0;for(auto& entry:cache.sources){bytes+=Size(entry.first,&entry.second);rgbBytes+=entry.second.rgbBytes;if(entry.second.rgbPages)rgbPages+=entry.second.rgbPageCount;
-        if(entry.second.rasterStorage){rasterBytes+=entry.second.fontBytes;if(entry.second.fontPages)rasterPages+=entry.second.fontPageCount;}
-        else{fontBytes+=entry.second.fontBytes;if(entry.second.fontPages)fontPages+=entry.second.fontPageCount;}}
-    pvzh1_paged_rgb_diagnostic[0]=(uint32_t)rgbBytes;pvzh1_paged_rgb_diagnostic[1]=(uint32_t)rgbPages;
-    pvzh1_rgba_font_page_diagnostic[0]=(uint32_t)fontBytes;pvzh1_rgba_font_page_diagnostic[1]=(uint32_t)fontPages;
-    pvzh1_rgba_raster_page_diagnostic[0]=(uint32_t)rasterBytes;pvzh1_rgba_raster_page_diagnostic[1]=(uint32_t)rasterPages;
-    cache.stats.residentBytes=bytes;
-    UpdateDiagnostic(cache);
-    Recount(true);
-    /* A paused board replaces all of its source textures. Reclaim those idle
-     * textures first: dropping the replacement first makes a modal alternate
-     * between rebuilding the board and reloading its own background forever. */
-    if(!freed&&pvzh1_paused_board_release_pressure)
-        freed=pvzh1_paused_board_release_pressure(requested);
-    pressureInProgress=false;return freed;
+extern "C" size_t pvzh1_cache_memory_pressure(size_t){
+    // Live owner references never disappear because another allocation fails.
+    if(cacheInstance){++cacheInstance->pressureCalls;pvzh1_cache_pressure_diagnostic[0]=cacheInstance->pressureCalls;}
+    return 0;
 }
 extern "C" void pvzh1_cache_pressure_stats(uint64_t *calls,uint64_t *evictions,uint64_t *bytes){
     if(calls)*calls=cacheInstance?cacheInstance->pressureCalls:0;

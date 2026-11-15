@@ -1,3 +1,4 @@
+#include "graphics/ImageLifetime.h"
 /* LGPL-3.0-or-later. Only host lifecycle; all game flow is upstream main. */
 #include "h1_host.h"
 #include "graphics/SoftwareDisplay.h"
@@ -33,7 +34,9 @@ static int present(const uint32_t *pixels,int w,int h,void*){
     }
     pvzp_present_argb(pixels,w,h);H1UIFlowPresented();return pvzp_diagnostic[3]==2?0:1;
 }
+extern "C" void pvzh1_actor_pose_end_frame();
 static void frame_complete(void* context){
+    pvzh1_actor_pose_end_frame();
     pvzh1_reanim_atlas_end_frame(context);
     // EndFrame has already published the complete accounting. Do not walk
     // every source a second time just to populate these diagnostics.
@@ -50,12 +53,13 @@ extern "C" int pvz_portable_main(void){
     h1_resources_set_logger(pvzp_log_line);
     Sexy::H1ImageCacheConfigureReducedPack();
     pvzh1_additive_prepare();
-    Sexy::H1ImageCacheSetBudget(7u*1024u*1024u);
+    Sexy::H1ImageResourcesBeginScene(Sexy::H1ImageScene::Startup);
     pvzh1_graphics_set_display_size(480,272);
     pvzh1_graphics_set_present(present,nullptr);
     pvzh1_graphics_set_frame_complete(frame_complete,nullptr);
     char program[]="H1PVZPortable.bda";char *args[]={program,nullptr};
     int result=pvzp_upstream_main(1,args);
+    Sexy::H1ImageResourcesShutdown();
     gLawnApp=nullptr; // Upstream main has deleted the app; host diagnostics must not dereference it.
     // Release optional rendering plans before closing either host or native I/O.
     if(pvzh1_render_plan_shutdown)pvzh1_render_plan_shutdown();

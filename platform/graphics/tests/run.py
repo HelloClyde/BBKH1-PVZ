@@ -17,7 +17,7 @@ cc = os.environ.get('CXX') or shutil.which('g++') or 'g++'
 os.environ['PATH']=str(Path(cc).resolve().parent)+os.pathsep+os.environ.get('PATH','')
 compiler_stamp=BUILD/'compiler.txt'
 compiler_changed=not compiler_stamp.exists() or compiler_stamp.read_text()!=cc
-sources = [GRAPHICS / s for s in ('GLImage.cpp','GLInterface.cpp','SoftwareRaster.cpp','MemoryImageCache.cpp',
+sources = [GRAPHICS / s for s in ('GLImage.cpp','GLInterface.cpp','SoftwareRaster.cpp','MemoryImageCache.cpp','FontTileStorage.cpp',
                                 'PhysicalScreen.cpp','RenderPlanCache.cpp','TextReplay.cpp')]
 sources += [UP / 'graphics' / s for s in ('Image.cpp','NativeDisplay.cpp','Quantize.cpp','Color.cpp','Font.cpp')]
 sources += [UP / 'misc/SexyMatrix.cpp',GRAPHICS / 'tests/test_software.cpp']
@@ -46,12 +46,19 @@ if not generated_graphics.exists() or generated_graphics.stat().st_mtime < max((
     generated_graphics.write_text((UP/'graphics/Graphics.cpp').read_text(encoding='utf-8'),encoding='utf-8')
     patches.patch_graphics_scratch(generated_graphics)
 sources.append(generated_graphics)
-generated_tri=BUILD/'generated/SWTri.cpp'
-if not generated_tri.exists() or generated_tri.stat().st_mtime < max((UP/'graphics/SWTri.cpp').stat().st_mtime,(GRAPHICS/'memory_patches.py').stat().st_mtime):
+tri_dir=BUILD/'generated/SexyAppFramework/graphics'
+tri_dir.mkdir(parents=True,exist_ok=True)
+generated_tri=tri_dir/'SWTri.cpp'
+tri_patch=GRAPHICS/'additive_patches.py'
+if not generated_tri.exists() or generated_tri.stat().st_mtime < max((UP/'graphics/SWTri.cpp').stat().st_mtime,(GRAPHICS/'memory_patches.py').stat().st_mtime,tri_patch.stat().st_mtime):
     generated_tri.write_text((UP/'graphics/SWTri.cpp').read_text(encoding='utf-8'),encoding='utf-8')
+    shutil.copyfile(UP/'graphics/SWTri.h',tri_dir/'SWTri.h')
     shutil.copytree(UP/'graphics/SWTri',generated_tri.parent/'SWTri',dirs_exist_ok=True)
     for name in ('SWTri_Pixel8888.inc','SWTri_Pixel888.inc'):
         patches.patch_triangle_zero_alpha(generated_tri.parent/'SWTri'/name)
+    spec=importlib.util.spec_from_file_location('raster_test_additive',tri_patch)
+    additive=importlib.util.module_from_spec(spec);spec.loader.exec_module(additive)
+    additive.apply(BUILD/'generated')
 sources.append(generated_tri)
 
 generated_helpers=BUILD/'generated/ApplicationImageHelpers.cpp'
@@ -73,16 +80,19 @@ sources.append(generated_helpers)
 exe = BUILD / ('test_software.exe' if os.name=='nt' else 'test_software')
 flags = ['-std=c++20','-O1','-g','-ffunction-sections','-fdata-sections',
          '-I'+str(GRAPHICS/'tests/support'),'-I'+str(BUILD/'generated'),'-I'+str(ROOT/'platform'),
-         '-I'+str(ROOT/'platform/resources'),'-I'+str(UP),'-I'+str(UP/'graphics'),'-include',str(generated_header)]
+         '-I'+str(ROOT/'platform/resources'),'-I'+str(tri_dir.parent),'-I'+str(tri_dir),'-I'+str(UP),'-I'+str(UP/'graphics'),'-include',str(generated_header)]
 headers = [p for directory in (GRAPHICS,UP/'graphics',UP/'misc')
            for p in directory.rglob('*') if p.suffix in ('.h','.inc')]
-header_time = max([p.stat().st_mtime for p in headers]+[generated_header.stat().st_mtime])
+header_time = max([p.stat().st_mtime for p in headers]+[generated_header.stat().st_mtime,(tri_dir/'SWTri.h').stat().st_mtime,Path(__file__).stat().st_mtime])
 objects=[]
 for index, source in enumerate(sources):
     obj=BUILD/(str(index)+'-'+source.stem+'.o')
     if compiler_changed or not obj.exists() or obj.stat().st_mtime < max(source.stat().st_mtime,header_time):
         print('Compile '+source.name,flush=True)
-        subprocess.run([cc]+flags+['-c',str(source),'-o',str(obj)],check=True)
+        # Enable the exact additive shader in this original-texture ABI fixture;
+        # full reduced/paged texture ABI is covered by the complete game probes.
+        extra=['-DH1_PVZ_PORTABLE'] if source==generated_tri else []
+        subprocess.run([cc]+flags+extra+['-c',str(source),'-o',str(obj)],check=True)
     objects.append(obj)
 subprocess.run([cc,'-Wl,--gc-sections','-static-libstdc++','-static-libgcc']+list(map(str,objects))+['-o',str(exe)],check=True)
 compiler_stamp.write_text(cc)
@@ -93,16 +103,13 @@ report={'target':'Isolated host original MemoryImage/SWTri/Graphics regression, 
     'passed':True,'compiler':cc,'executable_sha256':hashlib.sha256(exe.read_bytes()).hexdigest(),
     'source_sha256':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
         (GRAPHICS/'MemoryImageCache.cpp',GRAPHICS/'memory_patches.py',GRAPHICS/'SoftwareRaster.cpp',GRAPHICS/'tests/test_software.cpp')},
-    'allocation_pressure_cases':['uninitialized callback does not allocate','no allocations while reclaiming',
-        'one eligible source per callback','cold sources before current-physical-frame completed sources',
-        'smallest actual backing-buffer fit before LRU fallback','sum of disjoint buffers does not count as contiguous fit',
-        '20-byte request retains large backgrounds when a small eligible source suffices',
-        'volatile native source-cache counters match existing recount/frame/pressure statistics',
-        'all eligible old-frame sources reclaimed','current GetBits/native/RL pointers readable',
-        'dynamic pixels preserved','old sources reload exact original pixels','recursive callback returns zero',
-        'draw-batch epoch callback allocates nothing, evicts nothing and does not present',
-        'completed-batch sources reclaimable while current-batch pointers remain readable',
-        'target pinned during alpha-row allocation','loaded target pinned during direct alpha update',
-        'raw palette source pinned before destination allocation','original CreateColorizedImage source pinned before allocation'],
+    'resource_lifetime_cases':['uninitialized callback does not allocate',
+        'frame completion does not evict owned pixels','shared owners reuse one backing',
+        'first release preserves other users','last owner release allocates nothing and frees pixels',
+        'explicit reload preserves original alpha/color and sanding recipe','mutable images remain Image-owned',
+        'large and small sources follow their owners rather than size/recency',
+        'pressure callback allocates nothing and releases no live source',
+        'GetBits/native/RL/palette/alpha-row/color-helper pointers remain valid',
+        'diagnostics show no automatic eviction'],
     'fixture_note':'Surrounding app/image fallback are test fixtures. The original color helper bodies are extracted from patched upstream. Unused Win32 service headers are omitted only in the isolated Common.h overlay to avoid GCC intrinsic-header ICEs.'}
 (BUILD/'verification.json').write_text(json.dumps(report,indent=2)+'\n')

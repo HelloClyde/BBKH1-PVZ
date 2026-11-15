@@ -38,8 +38,9 @@ def compile(src,name,extra=()):
     obj=OUT/(name+'.o');execute([cc,*flags,*extra,'-c',src,'-o',obj],name+'.compile.log');return obj
 common=[];pristine=[]
 for name in config['sources']+['platform/xmp_shared.c']:
-    src=ROOT/name;obj=ROOT/'build/xmp-shared-test'/(hashlib.sha1(str(src).encode()).hexdigest()[:10]+'.o')
-    assert obj.exists(),obj;identities[name]=dict(source_sha256=sha(src),object_sha256=sha(obj))
+    src=ROOT/name
+    obj=compile(src,'pristine-'+hashlib.sha1(name.encode()).hexdigest()[:10])
+    identities[name]=dict(source_sha256=sha(src),object_sha256=sha(obj))
     if src in overrides:pristine.append(obj)
     else:common.append(obj)
 candidate=[compile(src,'candidate-'+src.stem,['-DH1_PVZ_PORTABLE','-DPVZH1_XMP_NUMERIC_STATS']) for src in overrides.values()]
